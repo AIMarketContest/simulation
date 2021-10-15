@@ -3,28 +3,30 @@ python:
   - "3.9"
 
 branches:
-only:
-  - main
+  only:
+    - main
+    - CI
 
 # command to install dependencies
 install:
   - pip install -r requirements.txt
 
-# command to run tests
-script:
-  - pytest
-
-
 jobs:
   include:
     - stage: lint
       script:
-        - 
+        - pip install black codespell flake8 isort mypy
+        - codespell || true  # --ignore-words-list="" --skip=""
+        - mypy --install-types --non-interactive .
+        - black --check .
+        - flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --show-source --statistics
+        - isort --check-only --profile black . || true
 
     - stage: test
       script: 
-        - run: pip install pytest pyupgrade
-        - run: pip install -r requirements.txt
-        - run: pytest . || true
-        - run: pytest --doctest-modules . || true
-        - run: shopt -s globstar && pyupgrade --py39-plus **/*.py || true
+        - pip install pytest pyupgrade
+        - pip install -r requirements.txt
+        - pytest .
+        - pytest --doctest-modules .
+        - shopt -s globstar && pyupgrade --py39-plus **/*.py || true
