@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "simulation"
+version = "0.1.0"
+description = "AI contests for deep reinforcement learning bots in online markets"
+authors = ["Matteo Bongiovanni <mgb58@hotmail.co.uk>", "Ibraheem Wazir
+<ibraheem.wazir.uk@gmail.com>", "Jack Benham <jack.benham34@gmail.com>", "Pranav
+Maganti <pranav.magnati@gmail.com>", "Michael Clasby
+<michaelclasby@hotmail.com>", "Yash Yeola <yeolayash101@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+black = "^21.9b0"
+codespell = "^2.1.0"
+flake8 = "^4.0.1"
+isort = "^5.9.3"
+mypy = "^0.910"
+pytest = "^6.2.5"
+pyupgrade = "^2.29.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
