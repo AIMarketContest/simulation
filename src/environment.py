@@ -10,12 +10,14 @@ class Environment:
     ----------
     all_agents: list[Agent]
         Represents a list of all agents partaking in the simulation
-    hist_sales_made: list[dict[Agent, int]]
+    hist_sales_made: list[list[int]]
         The list represents the time slice of the simulation
-        For a time slice we can use the dict to find how many sales an agent made
-    hist_set_prices: list[dict[Agent, float]]
+        For a time slice we can use the inner list to find how many sales an
+        agent made using their index in all_agents.
+    hist_set_prices: list[list[float]]
         The list represents the time slice of the simulation
-        For a time slice we can use the dict to find what price an agent set
+        For a time slice we can use the list to find what price an agent set
+        using their index in all_agents.
             (These are separate attributes since we need to be able to give an agent
              hist_set_prices without letting them see hist_sales_made)
     simulation_length: int
@@ -28,8 +30,8 @@ class Environment:
 
     def __init__(self, simulation_length: int, demand: DemandFunction):
         self.all_agents: list[Agent] = []
-        self.hist_sales_made: list[dict[Agent, int]] = [{}]
-        self.hist_set_prices: list[dict[Agent, float]] = [{}]
+        self.hist_sales_made: list[list[int]] = [{}]
+        self.hist_set_prices: list[list[float]] = [{}]
         self.simulation_length: int = simulation_length
         self.time_step: int = 0
         self.demand: DemandFunction = demand
@@ -45,21 +47,21 @@ class Environment:
             The agent to be added
         """
         self.all_agents.append(agent)
-        index = max(self.time_step - 1, 0)
-        self.hist_sales_made[index][agent] = 0
 
-    def get_results(self) -> tuple[list[dict[Agent, float]], list[dict[Agent, int]]]:
+    def get_results(self) -> tuple[list[list[float]], list[list[int]]]:
         """
         Allows post-simulation analysis to be performed on sales figures and numbers
 
         Returns
         -------
-        self.hist_set_prices: list[dict[Agent, float]]
+        self.hist_set_prices: list[list[float]]
             The list represents the time slice of the simulation
-            For a time slice we can use the dict to find how many sales an agent made
-        self.hist_sales_made: list[dict[Agent, int]]
+            For a time slice we can use the inner list to find how many sales
+            an agent made using their index in all_agents.
+        self.hist_sales_made: list[list[int]]
             The list represents the time slice of the simulation
-            For a time slice we can use the dict to find what price an agent set
+            For a time slice we can use the list to find what price an agent
+            set using their index in all_agents.
         """
         return self.hist_set_prices, self.hist_sales_made
 
@@ -68,19 +70,24 @@ class Environment:
         Runs a time step for the simulation and appends results to the historic data
         """
 
-        self.time_step += 1
-        if self.time_step > self.simulation_length:
+        if self.time_step >= self.simulation_length:
             raise IndexError("Cannot run simulation beyond maximum time step")
 
-        current_prices: dict[Agent, float] = {}
+        if self.time_step == 0:
+            initial_price_list: list[int] = []
+            for agent in self.all_agents:
+                initial_price_list.append(agent.get_initial_price())
+        else:
+            current_prices: list[float] = []
 
-        prior_sales: dict[Agent, int] = self.hist_sales_made[-1]
+            prior_sales: list[int] = self.hist_sales_made[-1]
 
-        for agent in self.all_agents:
-            prior_sales_for_agent: int = prior_sales[agent]
-            current_prices[agent] = agent.get_price(
-                self.hist_set_prices, prior_sales_for_agent
-            )
+            for agent_index, agent in enumerate(self.all_agents):
+                prior_sales_for_agent: int = prior_sales[agent_index]
+                current_prices[agent_index] = agent.get_price(
+                    self.hist_set_prices, prior_sales_for_agent, agent_index
+                )
 
-        self.hist_set_prices.append(current_prices)
-        self.hist_sales_made.append(self.demand.get_sales(current_prices))
+            self.hist_set_prices.append(current_prices)
+            self.hist_sales_made.append(self.demand.get_sales(current_prices))
+        self.time_step += 1
