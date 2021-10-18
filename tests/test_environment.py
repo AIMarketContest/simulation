@@ -1,8 +1,10 @@
-﻿import pytest
-import src.environment as env
-import src.agent as agent
-import src.demandfunction as demandfunction
-from unittest import mock, TestCase
+﻿from unittest import TestCase, mock
+
+import pytest
+
+import agent as agent
+import demandfunction as demandfunction
+import environment as env
 
 
 class EnvironmentTest(TestCase):
@@ -13,7 +15,7 @@ class EnvironmentTest(TestCase):
         ev = env.Environment(self.simulation_length, self.demand_function)
         a = agent.Agent()
         ev.add_agent(a)
-        assert (len(ev.all_agents) == 1)
+        assert len(ev.all_agents) == 1
 
     def test_to_add_agents(self):
         ev = env.Environment(self.simulation_length, self.demand_function)
@@ -22,7 +24,7 @@ class EnvironmentTest(TestCase):
         ev.add_agent(a)
         ev.add_agent(a)
         ev.add_agent(a)
-        assert (len(ev.all_agents) == 4)
+        assert len(ev.all_agents) == 4
 
     def test_to_get_results(self):
         ev = env.Environment(self.simulation_length, self.demand_function)
@@ -33,7 +35,7 @@ class EnvironmentTest(TestCase):
         ev.hist_sales_made = dict_sales
 
         prices, sales = ev.get_results()
-        assert (prices == dict_price and sales == dict_sales)
+        assert prices == dict_price and sales == dict_sales
 
     def test_check_if_runs_simulation_for_correct_duration(self):
         ev = env.Environment(self.simulation_length, self.demand_function)
@@ -52,7 +54,8 @@ class EnvironmentTest(TestCase):
         test_agent_a.get_price.assert_called_once()
         test_agent_b.get_price.assert_called_once()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import sys
 
     pytest.main(sys.argv)
