@@ -1,5 +1,5 @@
-from agent import Agent
-from demandfunction import DemandFunction
+from src.agent import Agent
+from src.demandfunction import DemandFunction
 
 
 class Environment:
@@ -26,10 +26,10 @@ class Environment:
         Holds the class responsible for generating a demand function (interchangeable)
     """
 
-    def __self__(self, simulation_length: int, demand: DemandFunction):
+    def __init__(self, simulation_length: int, demand: DemandFunction):
         self.all_agents: list[Agent] = []
-        self.hist_sales_made: list[dict[Agent, int]] = []
-        self.hist_set_prices: list[dict[Agent, float]] = []
+        self.hist_sales_made: list[dict[Agent, int]] = [{}]
+        self.hist_set_prices: list[dict[Agent, float]] = [{}]
         self.simulation_length: int = simulation_length
         self.time_step: int = 0
         self.demand: DemandFunction = demand
@@ -45,6 +45,8 @@ class Environment:
             The agent to be added
         """
         self.all_agents.append(agent)
+        index = max(self.time_step - 1, 0)
+        self.hist_sales_made[index][agent] = 0
 
     def get_results(self) -> tuple[list[dict[Agent, float]], list[dict[Agent, int]]]:
         """
@@ -69,11 +71,12 @@ class Environment:
             raise IndexError('Cannot run simulation beyond maximum time step')
 
         current_prices: dict[Agent, int] = {}
+
         prior_sales: dict[Agent, int] = self.hist_sales_made[-1]
 
         for agent in self.all_agents:
             prior_sales_for_agent: int = prior_sales[agent]
             current_prices[agent]: dict[Agent, float] = agent.get_price(self.hist_set_prices, prior_sales_for_agent)
 
-        self.lst_prices.append(current_prices)
+        self.hist_set_prices.append(current_prices)
         self.hist_sales_made.append(self.demand.get_sales(current_prices))
