@@ -31,3 +31,15 @@ class DemandFunction(metaclass=ABCMeta):
         """
 
         raise NotImplementedError
+
+    @classmethod
+    def __subclasshook__(cls, subclass):
+        return (
+            all(
+                [
+                    hasattr(subclass, "get_sales"),
+                    callable(getattr(subclass, "get_sales")),
+                ]
+            )
+            or NotImplemented
+        )
