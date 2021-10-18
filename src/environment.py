@@ -1,5 +1,5 @@
-from src.agent import Agent
-from src.demandfunction import DemandFunction
+from agent import Agent
+from demandfunction import DemandFunction
 
 
 class Environment:
@@ -68,15 +68,17 @@ class Environment:
         Runs a time step for the simulation and appends results to the historic data
         """
         if ++self.time_step >= self.simulation_length:
-            raise IndexError('Cannot run simulation beyond maximum time step')
+            raise IndexError("Cannot run simulation beyond maximum time step")
 
-        current_prices: dict[Agent, int] = {}
+        current_prices: dict[Agent, float] = {}
 
         prior_sales: dict[Agent, int] = self.hist_sales_made[-1]
 
         for agent in self.all_agents:
             prior_sales_for_agent: int = prior_sales[agent]
-            current_prices[agent]: dict[Agent, float] = agent.get_price(self.hist_set_prices, prior_sales_for_agent)
+            current_prices[agent] = agent.get_price(
+                self.hist_set_prices, prior_sales_for_agent
+            )
 
         self.hist_set_prices.append(current_prices)
         self.hist_sales_made.append(self.demand.get_sales(current_prices))
