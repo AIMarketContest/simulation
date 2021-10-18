@@ -35,6 +35,6 @@ jobs:
         - pip install poetry
         - poetry install -v
       script:
-        - pytest tests/
+        - pytest
         - pytest --doctest-modules .
         - shopt -s globstar && pyupgrade --py39-plus **/*.py || true
