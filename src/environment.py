@@ -67,7 +67,9 @@ class Environment:
         """
         Runs a time step for the simulation and appends results to the historic data
         """
-        if ++self.time_step >= self.simulation_length:
+
+        self.time_step += 1
+        if self.time_step > self.simulation_length:
             raise IndexError("Cannot run simulation beyond maximum time step")
 
         current_prices: dict[Agent, float] = {}

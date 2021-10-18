@@ -2,8 +2,8 @@
 
 import pytest
 
-import agent as agent
-import demandfunction as demandfunction
+import agent
+import demandfunction
 import environment as env
 
 
