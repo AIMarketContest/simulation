@@ -1,8 +1,8 @@
 ﻿from unittest import TestCase, mock
 
-from agent import Agent
 import demandfunction
 import environment as env
+from agent import Agent
 
 
 class EnvironmentTest(TestCase):
@@ -18,10 +18,14 @@ class EnvironmentTest(TestCase):
     def test_to_add_agents(self):
         ev = env.Environment(self.simulation_length, self.demand_function)
         a = Agent()
+        b = Agent()
+        c = Agent()
+        d = Agent()
+
         ev.add_agent(a)
-        ev.add_agent(a)
-        ev.add_agent(a)
-        ev.add_agent(a)
+        ev.add_agent(b)
+        ev.add_agent(c)
+        ev.add_agent(d)
         assert len(ev.all_agents) == 4
 
     def test_to_get_results(self):
