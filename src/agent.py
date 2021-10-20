@@ -1,6 +1,4 @@
-from typing import TypeVar
-
-agent = TypeVar("agent")
+from __future__ import annotations
 
 
 class Agent:
@@ -10,6 +8,6 @@ class Agent:
     # prior_sales_for_agent : int for prior sales
 
     def get_price(
-        self, historic_set_prices: list[dict[agent, float]], prior_sales_for_agent: int
+        self, historic_set_prices: list[dict[Agent, float]], prior_sales_for_agent: int
     ) -> float:
         pass
