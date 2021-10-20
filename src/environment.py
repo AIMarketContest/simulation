@@ -16,14 +16,14 @@ class Environment:
     hist_set_prices: list[dict[Agent, float]]
         The list represents the time slice of the simulation
         For a time slice we can use the dict to find what price an agent set
-            (These are separate attributes since we need to be able to give an agent ...
-            ... hist_set_prices without letting them see hist_sales_made)
+            (These are separate attributes since we need to be able to give an agent
+             hist_set_prices without letting them see hist_sales_made)
     simulation_length: int
-        Used to keep track of when the simulation is "complete"
+        Used to keep track of when the simulation is "complete". Must be positive
     time_step: int
-        Used to keep track of the simulation time elapsed
+        Used to keep track of the simulation time elapsed. Must be positive
     demand: DemandFunction
-        Holds the class responsible for generating a demand function (interchangeable)
+        Reposible for generating a demand function (interchangeable)
     """
 
     def __init__(self, simulation_length: int, demand: DemandFunction):
