@@ -1,8 +1,8 @@
 ﻿from unittest import TestCase, mock
 
 import demandfunction
-from zero_agent import ZeroAgent
 from environment import Environment
+from zero_agent import ZeroAgent
 
 
 class EnvironmentTest(TestCase):

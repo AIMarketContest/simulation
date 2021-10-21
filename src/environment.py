@@ -30,8 +30,8 @@ class Environment:
 
     def __init__(self, simulation_length: int, demand: DemandFunction):
         self.all_agents: list[Agent] = []
-        self.hist_sales_made: list[list[int]] = [{}]
-        self.hist_set_prices: list[list[float]] = [{}]
+        self.hist_sales_made: list[list[int]] = []
+        self.hist_set_prices: list[list[float]] = []
         self.simulation_length: int = simulation_length
         self.time_step: int = 0
         self.demand: DemandFunction = demand
@@ -73,21 +73,21 @@ class Environment:
         if self.time_step >= self.simulation_length:
             raise IndexError("Cannot run simulation beyond maximum time step")
 
+        current_prices: list[float] = []
         if self.time_step == 0:
-            initial_price_list: list[int] = []
             for agent in self.all_agents:
-                initial_price_list.append(agent.get_initial_price())
+                current_prices.append(agent.get_initial_price())
         else:
-            current_prices: list[float] = []
-
             prior_sales: list[int] = self.hist_sales_made[-1]
 
             for agent_index, agent in enumerate(self.all_agents):
                 prior_sales_for_agent: int = prior_sales[agent_index]
-                current_prices[agent_index] = agent.get_price(
-                    self.hist_set_prices, prior_sales_for_agent, agent_index
+                current_prices.append(
+                    agent.get_price(
+                        self.hist_set_prices, prior_sales_for_agent, agent_index
+                    )
                 )
 
-            self.hist_set_prices.append(current_prices)
-            self.hist_sales_made.append(self.demand.get_sales(current_prices))
+        self.hist_set_prices.append(current_prices)
+        self.hist_sales_made.append(self.demand.get_sales(current_prices))
         self.time_step += 1
