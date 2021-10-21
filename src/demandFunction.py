@@ -6,13 +6,14 @@ class DemandFunction(metaclass=ABCMeta):
     The demand function is a map of the price of a product to its sales.
 
     The demand function must give the quantity of the product
-    that will be sold by any agent in the market at a given price
+    that will be sold by any agent in the market at a given price.
     """
 
     @abstractmethod
     def get_sales(round_prices: list[float]) -> list[int]:
         """
-        Calculates the quantity of the product that will be sold at a given price
+        Calculates the quantity of the product that will be sold at a given
+        price.
 
         Parameters
         __________
