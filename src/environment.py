@@ -84,7 +84,7 @@ class Environment:
                 prior_sales_for_agent: int = prior_sales[agent_index]
                 current_prices.append(
                     agent.get_price(
-                        self.hist_set_prices, prior_sales_for_agent, agent_index
+                        self.hist_set_prices[-1], prior_sales_for_agent, agent_index
                     )
                 )
 
