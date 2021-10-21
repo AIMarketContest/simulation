@@ -33,7 +33,7 @@ class Agent(metaclass=ABCMeta):
     @abstractmethod
     def get_price(
         self,
-        last_round_all_agents_prices: list[float],
+        last_round_agents_prices: list[float],
         last_round_sales: int,
         identity_index: int,
     ) -> float:
