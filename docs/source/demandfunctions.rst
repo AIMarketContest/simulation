@@ -12,6 +12,14 @@ demandfunctions.fixed\_demand\_function module
    :undoc-members:
    :show-inheritance:
 
+demandfunctions.gaussian\_demand\_function module
+-------------------------------------------------
+
+.. automodule:: demandfunctions.gaussian_demand_function
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
