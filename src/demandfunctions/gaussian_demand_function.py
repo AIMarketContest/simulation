@@ -36,13 +36,7 @@ class GaussianDemandFunction(DemandFunction):
     def get_sales(self, current_prices: list[float]) -> list[int]:
 
         N: int = len(current_prices)
-        mean: float = sum(current_prices) / N
-        standard_deviation: float = sum(
-            map(lambda x: pow(x, 2), current_prices)
-        ) / N - pow(mean, 2)
-        if standard_deviation == 0:
-            return [self.max_sales_scale_factor/N for i in range(N)]
-        gaussian_distribution: "norm" = norm(mean, standard_deviation)
+        gaussian_distribution: "norm" = norm(0.5, 1)
         return [
             int((1 - gaussian_distribution.cdf(price)) * self.max_sales_scale_factor)
             for price in current_prices
