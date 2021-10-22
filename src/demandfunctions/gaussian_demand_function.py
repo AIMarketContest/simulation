@@ -1,5 +1,6 @@
-from demand_function import DemandFunction
 from statistics import NormalDist
+
+from demand_function import DemandFunction
 
 
 class GaussianDemandFunction(DemandFunction):
