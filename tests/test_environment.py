@@ -1,12 +1,12 @@
 ﻿from unittest import TestCase, mock
 
 from agents.fixed_agent import FixedAgent
-from demandfunction import DemandFunction
+from demandfunctions.fixed_demand_function import FixedDemandFunction
 from environment import Environment
 
 
 class EnvironmentTest(TestCase):
-    demand_function = DemandFunction()
+    demand_function = FixedDemandFunction()
     simulation_length = 5
 
     def test_to_add_agent(self):

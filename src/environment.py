@@ -1,5 +1,5 @@
 from agent import Agent
-from demandfunction import DemandFunction
+from demand_function import DemandFunction
 
 
 class Environment:
