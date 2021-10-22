@@ -10,14 +10,14 @@ class DemandFunction(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def get_sales(round_prices: list[float]) -> list[int]:
+    def get_sales(self, current_prices: list[float]) -> list[int]:
         """
         Calculates the quantity of the product that will be sold at a given
         price.
 
         Parameters
         __________
-        round_prices : list[float]
+        current_prices : list[float]
             The current price of the product set by all agents.
 
         Returns
