@@ -8,7 +8,8 @@ class FixedDemandFunction(DemandFunction):
     Attributes
     ----------
     fixed_quantity: int
-        A positive integer representing the quantity to demand from each agent.
+        A positive integer representing the quantity to be purchased from each
+        agent every round.
 
     """
 

@@ -13,7 +13,7 @@ class DemandFunction(metaclass=ABCMeta):
     def get_sales(self, current_prices: list[float]) -> list[int]:
         """
         Calculates the quantity of the product that will be sold at a given
-        price.
+        price for each agent.
 
         Parameters
         __________
@@ -24,7 +24,7 @@ class DemandFunction(metaclass=ABCMeta):
         _______
         list[int]
             The quantity of item sold by each agent, indexed by where their
-            price appeared in `round_prices`.
+            price appeared in `current_prices` argument.
 
         Raises
         ______
