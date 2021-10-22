@@ -11,8 +11,7 @@ class GaussianDemandFunction(DemandFunction):
     ----------
     max_sales_scale_factor: int
         A positive integer representing the quantity to be sold
-        from an agent selling the product at price = 0
-
+        from an agent selling the product at price = 0.
     """
 
     def __init__(self, max_sales_scale_factor: int = 1000):
@@ -22,7 +21,7 @@ class GaussianDemandFunction(DemandFunction):
         max_scale_factor: int, default=1000
             A positive integer representing the quantity to be sold
             from an agent if there was no price competiton
-            i.e. all agents set the same price
+            i.e. all agents set the same price.
 
         Raises
         ______

@@ -10,7 +10,6 @@ class FixedDemandFunction(DemandFunction):
     fixed_quantity: int
         A positive integer representing the quantity to be purchased from each
         agent every round.
-
     """
 
     def __init__(self, fixed_quantity: int = 1):
