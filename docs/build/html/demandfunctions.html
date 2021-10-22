@@ -80,6 +80,50 @@ price appeared in <cite>current_prices</cite> argument.</p>
 </dd></dl>
 
 </section>
+<section id="module-demandfunctions.gaussian_demand_function">
+<span id="demandfunctions-gaussian-demand-function-module"></span><h2>demandfunctions.gaussian_demand_function module<a class="headerlink" href="#module-demandfunctions.gaussian_demand_function" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="demandfunctions.gaussian_demand_function.GaussianDemandFunction">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">demandfunctions.gaussian_demand_function.</span></span><span class="sig-name descname"><span class="pre">GaussianDemandFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_sales_scale_factor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#demandfunctions.gaussian_demand_function.GaussianDemandFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="demand_function.html#demand_function.DemandFunction" title="demand_function.DemandFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">demand_function.DemandFunction</span></code></a></p>
+<p>A demand function which determines the price using a Gaussian distribution.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="demandfunctions.gaussian_demand_function.GaussianDemandFunction.max_sales_scale_factor">
+<span class="sig-name descname"><span class="pre">max_sales_scale_factor</span></span><a class="headerlink" href="#demandfunctions.gaussian_demand_function.GaussianDemandFunction.max_sales_scale_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>A positive integer representing the quantity to be sold
+from an agent selling the product at price = 0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="demandfunctions.gaussian_demand_function.GaussianDemandFunction.get_sales">
+<span class="sig-name descname"><span class="pre">get_sales</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_prices</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#demandfunctions.gaussian_demand_function.GaussianDemandFunction.get_sales" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the quantity of the product that will be sold at a given
+price for each agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>current_prices</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – The current price of the product set by all agents.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The quantity of item sold by each agent, indexed by where their
+price appeared in <cite>current_prices</cite> argument.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[int]</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If concrete class does not override method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-demandfunctions">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-demandfunctions" title="Permalink to this headline">¶</a></h2>
 </section>
