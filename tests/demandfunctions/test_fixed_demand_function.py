@@ -1,6 +1,6 @@
 ﻿from unittest import TestCase
 
-from demandfunctions.demand_function import DemandFunction
+from demand_function import DemandFunction
 from demandfunctions.fixed_demand_function import FixedDemandFunction
 
 
