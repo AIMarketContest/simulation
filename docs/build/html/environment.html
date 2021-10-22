@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>environment module &#8212; simulation 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-environment">
+<span id="environment-module"></span><h1>environment module<a class="headerlink" href="#module-environment" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="environment.Environment">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">environment.</span></span><span class="sig-name descname"><span class="pre">Environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation_length</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">demand</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="demand_function.html#demand_function.DemandFunction" title="demand_function.DemandFunction"><span class="pre">demand_function.DemandFunction</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#environment.Environment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The backbone of the simulation - responsible for tying most other elements together</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="environment.Environment.all_agents">
+<span class="sig-name descname"><span class="pre">all_agents</span></span><a class="headerlink" href="#environment.Environment.all_agents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a list of all agents partaking in the simulation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="agent.html#agent.Agent" title="agent.Agent">Agent</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="environment.Environment.hist_sales_made">
+<span class="sig-name descname"><span class="pre">hist_sales_made</span></span><a class="headerlink" href="#environment.Environment.hist_sales_made" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list represents the time slice of the simulation
+For a time slice we can use the inner list to find how many sales an
+agent made using their index in all_agents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list[list[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="environment.Environment.hist_set_prices">
+<span class="sig-name descname"><span class="pre">hist_set_prices</span></span><a class="headerlink" href="#environment.Environment.hist_set_prices" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list represents the time slice of the simulation
+For a time slice we can use the list to find what price an agent set
+using their index in all_agents.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>(These are separate attributes since we need to be able to give an agent</dt><dd><p>hist_set_prices without letting them see hist_sales_made)</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list[list[float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="environment.Environment.simulation_length">
+<span class="sig-name descname"><span class="pre">simulation_length</span></span><a class="headerlink" href="#environment.Environment.simulation_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to keep track of when the simulation is “complete”. Must be positive</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="environment.Environment.time_step">
+<span class="sig-name descname"><span class="pre">time_step</span></span><a class="headerlink" href="#environment.Environment.time_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to keep track of the simulation time elapsed. Must be positive</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="environment.Environment.demand">
+<span class="sig-name descname"><span class="pre">demand</span></span><a class="headerlink" href="#environment.Environment.demand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reposible for generating a demand function (interchangeable)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="demand_function.html#demand_function.DemandFunction" title="demand_function.DemandFunction">DemandFunction</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="environment.Environment.add_agent">
+<span class="sig-name descname"><span class="pre">add_agent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="agent.html#agent.Agent" title="agent.Agent"><span class="pre">agent.Agent</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#environment.Environment.add_agent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an agent to the simulation.
+Separated from constructor to allow mid-simulation entries</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>agent</strong> (<a class="reference internal" href="agent.html#agent.Agent" title="agent.Agent"><em>Agent</em></a>) – The agent to be added</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="environment.Environment.get_results">
+<span class="sig-name descname"><span class="pre">get_results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#environment.Environment.get_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows post-simulation analysis to be performed on sales figures and numbers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>self.hist_set_prices</strong> (<em>list[list[float]]</em>) – The list represents the time slice of the simulation
+For a time slice we can use the inner list to find how many sales
+an agent made using their index in all_agents.</p></li>
+<li><p><strong>self.hist_sales_made</strong> (<em>list[list[int]]</em>) – The list represents the time slice of the simulation
+For a time slice we can use the list to find what price an agent
+set using their index in all_agents.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="environment.Environment.run_next_time_step">
+<span class="sig-name descname"><span class="pre">run_next_time_step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#environment.Environment.run_next_time_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs a time step for the simulation and appends results to the historic data</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">simulation</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Matteo Bongiovanni <mgb58@hotmail.co.uk>, Ibraheem Wazir <ibraheem.wazir.uk@gmail.com>, Jack Benham <jack.benham34@gmail.com>, Pranav Maganti <pranav.magnati@gmail.com>, Michael Clasby <michaelclasby@hotmail.com>, Yash Yeola <yeolayash101@gmail.com>.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/environment.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
