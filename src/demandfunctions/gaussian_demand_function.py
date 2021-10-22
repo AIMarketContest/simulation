@@ -3,17 +3,43 @@ from scipy.stats import norm
 
 
 class GaussianDemandFunction(DemandFunction):
-    
+    """
+    A demand function which determines the price using a Gaussian distribution.
+
+    Attributes
+    ----------
+    max_sales_scale_factor: int
+        A positive integer representing the quantity to be sold
+        from an agent selling the product at price = 0
+
+    """
+
     def __init__(self, max_sales_scale_factor: int = 1000):
+        """
+        Parameters
+        ----------
+        max_scale_factor: int, default=1
+            A positive integer representing the quantity to be sold
+            from an agent selling the product at price = 0
+
+        Raises
+        ______
+        ValueError
+            When scale_factor given is less than or equal to 0.
+        """
+
+        if max_sales_scale_factor <= 0:
+            raise ValueError("max_sales_scale_factor must be greater than 0")
         self.max_sales_scale_factor = max_sales_scale_factor
 
     def get_sales(self, current_prices: list[float]) -> list[int]:
+
         N: int = len(current_prices)
         mean: float = sum(current_prices) / N
         standard_deviation: float = sum(
             map(lambda x: pow(x, 2), current_prices)
         ) / N - pow(mean, 2)
-        gaussian_distribution : 'norm' = norm(mean, standard_deviation)
+        gaussian_distribution: "norm" = norm(mean, standard_deviation)
         return [
             int((1 - gaussian_distribution.cdf(price)) * self.max_sales_scale_factor)
             for price in current_prices
