@@ -20,7 +20,8 @@ class GaussianDemandFunction(DemandFunction):
         ----------
         max_scale_factor: int, default=1
             A positive integer representing the quantity to be sold
-            from an agent selling the product at price = 0
+            from an agent if there was no price competiton
+            i.e. all agents set the same price
 
         Raises
         ______
@@ -39,6 +40,8 @@ class GaussianDemandFunction(DemandFunction):
         standard_deviation: float = sum(
             map(lambda x: pow(x, 2), current_prices)
         ) / N - pow(mean, 2)
+        if standard_deviation == 0:
+            return [self.max_sales_scale_factor/N for i in range(N)]
         gaussian_distribution: "norm" = norm(mean, standard_deviation)
         return [
             int((1 - gaussian_distribution.cdf(price)) * self.max_sales_scale_factor)
