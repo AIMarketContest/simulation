@@ -32,5 +32,5 @@ class FixedDemandFunction(DemandFunction):
         self.fixed_quantity: int = fixed_quantity
 
     def get_sales(self, current_prices: list[float]) -> list[int]:
-        demand_list = [self.fixed_quantity for _ in current_prices]
+        demand_list = [self.fixed_quantity] * len(current_prices)
         return demand_list
