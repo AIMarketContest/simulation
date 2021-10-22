@@ -4,8 +4,6 @@ from agent import Agent
 class FixedAgent(Agent):
     """
     An agent that always returns the same price.
-
-
     """
 
     def __init__(self, price: float = 0.5):

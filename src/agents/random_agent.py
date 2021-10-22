@@ -9,7 +9,7 @@ class RandomAgent(Agent):
     """
 
     def get_initial_price(self) -> float:
-        return 0
+        return random.random()
 
     def get_price(
         self,

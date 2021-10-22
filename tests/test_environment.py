@@ -1,26 +1,26 @@
 ﻿from unittest import TestCase, mock
 
-import demandfunction
+from agents.fixed_agent import FixedAgent
+from demandfunction import DemandFunction
 from environment import Environment
-from zero_agent import ZeroAgent
 
 
 class EnvironmentTest(TestCase):
-    demand_function = demandfunction.DemandFunction()
+    demand_function = DemandFunction()
     simulation_length = 5
 
     def test_to_add_agent(self):
         env = Environment(self.simulation_length, self.demand_function)
-        a = ZeroAgent()
+        a = FixedAgent()
         env.add_agent(a)
         assert len(env.all_agents) == 1
 
     def test_to_add_agents(self):
         env = Environment(self.simulation_length, self.demand_function)
-        a = ZeroAgent()
-        b = ZeroAgent()
-        c = ZeroAgent()
-        d = ZeroAgent()
+        a = FixedAgent()
+        b = FixedAgent()
+        c = FixedAgent()
+        d = FixedAgent()
 
         env.add_agent(a)
         env.add_agent(b)
@@ -30,9 +30,10 @@ class EnvironmentTest(TestCase):
 
     def test_to_get_results(self):
         env = Environment(self.simulation_length, self.demand_function)
-        a = ZeroAgent()
-        test_set_prices = [{a: 1.00}]
-        test_sales = [{a: 4}]
+        a = FixedAgent()
+        env.add_agent(a)
+        test_set_prices = [[1.00]]
+        test_sales = [[4]]
         env.hist_set_prices = test_set_prices
         env.hist_sales_made = test_sales
 
@@ -47,8 +48,8 @@ class EnvironmentTest(TestCase):
 
     def test_check_if_gets_price_called_on_time_step(self):
         env = Environment(self.simulation_length, self.demand_function)
-        test_agent_a = mock.Mock(spec=ZeroAgent)
-        test_agent_b = mock.Mock(spec=ZeroAgent)
+        test_agent_a = mock.Mock(spec=FixedAgent)
+        test_agent_b = mock.Mock(spec=FixedAgent)
 
         env.add_agent(test_agent_a)
         env.add_agent(test_agent_b)
