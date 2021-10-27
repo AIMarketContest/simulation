@@ -24,6 +24,12 @@ class GaussianDemandFunction(DemandFunction):
             A positive integer representing the quantity to be sold
             from an agent if there was no price competiton
             i.e. all agents set the same price.
+        mu: float, default=0.5
+            A number between 0 and 1 (inclusive) representing the mean
+            price in the gaussian distribution model.
+        sigma: float, default=1.0
+            A positive number representing the standard deviation
+            in the gaussian distribution model.
 
         Raises
         ______
