@@ -14,7 +14,9 @@ class GaussianDemandFunction(DemandFunction):
         from an agent selling the product at price = 0.
     """
 
-    def __init__(self, max_sales_scale_factor: int = 1000):
+    def __init__(
+        self, max_sales_scale_factor: int = 1000, mu: float = 0.5, sigma: float = 1.0
+    ):
         """
         Parameters
         ----------
@@ -31,10 +33,16 @@ class GaussianDemandFunction(DemandFunction):
 
         if max_sales_scale_factor <= 0:
             raise ValueError("max_sales_scale_factor must be greater than 0")
-        self.max_sales_scale_factor = max_sales_scale_factor
+        if sigma <= 0:
+            raise ValueError("sigma must be greater than 0")
+        if not 0 <= mu <= 1:
+            raise ValueError("mu must be between 0 and 1 (inclusive)")
+        self.max_sales_scale_factor: int = max_sales_scale_factor
+        self.mu: float = mu
+        self.sigma: float = sigma
 
     def get_sales(self, current_prices: list[float]) -> list[int]:
-        gaussian_distribution: "NormalDist" = NormalDist(mu=0.5, sigma=1)
+        gaussian_distribution: "NormalDist" = NormalDist(mu=self.mu, sigma=self.sigma)
         return [
             int((1 - gaussian_distribution.cdf(price)) * self.max_sales_scale_factor)
             for price in current_prices
