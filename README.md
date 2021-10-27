@@ -10,3 +10,11 @@ make use of this you should:
 1. run `poetry shell` to enter the virtual environment with access to the
    dependencies
 
+# Developer tools
+## Styling
+When in the poetry virtual environment, [black](https://black.readthedocs.io/en/stable/) should be available and can be run
+with `black .`.
+Furthermore, it is advisable to set up a pre-commit hook with black by running
+the following in the poetry virtual environment:
+`pre-commit install`.
+
