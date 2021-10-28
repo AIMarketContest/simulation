@@ -12,13 +12,13 @@ class FixedAgent(Agent):
 
         self.price = price
 
-    def get_initial_price(self) -> float:
-        return self.price
+    def update(
+            self,
+            last_round_agents_prices: list[float],
+            last_round_sales: int,
+            identity_index: int
+    ) -> None:
+        pass
 
-    def get_price(
-        self,
-        last_round_agents_prices: list[float],
-        last_round_sales: int,
-        identity_index: int,
-    ) -> float:
+    def policy(self) -> float:
         return self.price
