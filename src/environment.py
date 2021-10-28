@@ -1,8 +1,29 @@
+from typing import Dict, List
+from gym import spaces
 from agent import Agent
 from demand_function import DemandFunction
+from pettingzoo import AECEnv
+
+from pettingzoo.utils import wrappers
 
 
-class Environment:
+def env(simulation_length: int, demand: DemandFunction):
+    """
+    The env function wraps the environment in 3 wrappers by default. These
+    wrappers contain logic that is common to many pettingzoo environments.
+    We recommend you use at least the OrderEnforcingWrapper on your own environment
+    to provide sane error messages. You can find full documentation for these methods
+    elsewhere in the developer documentation.
+    """
+    env = Environment(simulation_length, demand)
+    env = wrappers.CaptureStdoutWrapper(env)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+
+    return env
+
+
+class Environment(AECEnv):
     """
     The backbone of the simulation - responsible for tying most other elements together
 
@@ -29,7 +50,9 @@ class Environment:
     """
 
     def __init__(self, simulation_length: int, demand: DemandFunction):
-        self.all_agents: list[Agent] = []
+        self.possible_agents: List[Agent] = []
+        self.action_spaces: Dict[Agent, spaces.Discrete] = {}
+        self.observation_spaces: Dict[Agent, spaces.Discrete] = {}
         self.hist_sales_made: list[list[int]] = []
         self.hist_set_prices: list[list[float]] = []
         self.simulation_length: int = simulation_length
@@ -46,7 +69,9 @@ class Environment:
         agent: Agent
             The agent to be added
         """
-        self.all_agents.append(agent)
+        self.possible_agents.append(agent)
+        self.action_spaces[agent] = spaces.Discrete(100)
+        self.observation_spaces[agent] = spaces.Discrete(100)
 
     def get_results(self) -> tuple[list[list[float]], list[list[int]]]:
         """
@@ -65,7 +90,21 @@ class Environment:
         """
         return self.hist_set_prices, self.hist_sales_made
 
-    def run_next_time_step(self) -> None:
+    def observe(self, agent: Agent) -> List[float]:
+        agent_id = self.possible_agents.index(agent)
+        return [
+            self.hist_set_prices[x][agent_id] for x in range(len(self.hist_set_prices))
+        ]
+
+    def reset(self):
+        self.possible_agents = []
+        self.action_spaces = {}
+        self.observation_spaces = {}
+        self.hist_sales_made = []
+        self.hist_set_prices = []
+        self.time_step = 0
+
+    def step(self) -> None:
         """
         Runs a time step for the simulation and appends results to the historic data
         """
@@ -75,12 +114,12 @@ class Environment:
 
         current_prices: list[float] = []
         if self.time_step == 0:
-            for agent in self.all_agents:
+            for agent in self.possible_agents:
                 current_prices.append(agent.get_initial_price())
         else:
             prior_sales: list[int] = self.hist_sales_made[-1]
 
-            for agent_index, agent in enumerate(self.all_agents):
+            for agent_index, agent in enumerate(self.possible_agents):
                 prior_sales_for_agent: int = prior_sales[agent_index]
                 current_prices.append(
                     agent.get_price(

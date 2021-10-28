@@ -63,6 +63,17 @@ class Agent(metaclass=ABCMeta):
 
         raise NotImplementedError
 
+    def learning_has_converged(self):
+        """
+        Check if the agent's learning has converged.
+
+        Returns
+        -------
+        bool : True if the agent learning has converged, False otherwise.
+        """
+        return False
+
+
     @classmethod
     def __subclasshook__(cls, subclass):
         return (

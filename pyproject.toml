@@ -12,6 +12,7 @@ authors = ["Matteo Bongiovanni <mgb58@hotmail.co.uk>",
 [tool.poetry.dependencies]
 python = ">=3.9,<3.10"
 Sphinx = "^4.2.0"
+PettingZoo = "^1.13.1"
 
 
 [tool.poetry.dev-dependencies]
