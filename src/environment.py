@@ -112,21 +112,19 @@ class Environment(AECEnv):
         if self.time_step >= self.simulation_length:
             raise IndexError("Cannot run simulation beyond maximum time step")
 
+        # Run current time step
         current_prices: list[float] = []
-        if self.time_step == 0:
-            for agent in self.possible_agents:
-                current_prices.append(agent.get_initial_price())
-        else:
-            prior_sales: list[int] = self.hist_sales_made[-1]
-
-            for agent_index, agent in enumerate(self.possible_agents):
-                prior_sales_for_agent: int = prior_sales[agent_index]
-                current_prices.append(
-                    agent.get_price(
-                        self.hist_set_prices[-1], prior_sales_for_agent, agent_index
-                    )
-                )
+        for agent in self.possible_agents:
+            current_prices.append(agent.policy())
 
         self.hist_set_prices.append(current_prices)
         self.hist_sales_made.append(self.demand.get_sales(current_prices))
+
+        # Provide agent feedback on step
+        sales: list[int] = self.hist_sales_made[-1]
+        for agent_index, agent in enumerate(self.possible_agents):
+            agent.update(
+                self.hist_set_prices[-1], sales[agent_index], agent_index
+            )
+
         self.time_step += 1

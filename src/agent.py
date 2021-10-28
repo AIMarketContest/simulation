@@ -13,14 +13,14 @@ class Agent(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def get_initial_price(self) -> float:
+    def policy(self) -> float:
         """
-        Represents the initial price of the product set by the agent (at timestep = 0).
+        Query the agent for the next price to set.
 
         Returns
         -------
         float
-            Price of the product set by the agent at timestep = 0, discretised within [0,1].
+            Price of the product set by the agent at the current timestep, discretised within [0,1].
 
         Raises
         ______
@@ -31,14 +31,14 @@ class Agent(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def get_price(
+    def update(
         self,
         last_round_agents_prices: list[float],
         last_round_sales: int,
-        identity_index: int,
-    ) -> float:
+        identity_index: int
+    ) -> None:
         """
-        Calculate the agent's price at the current timestep using data from the previous timestep.
+        Feeds data from the previous timestep into the agent allowing it to adjust it's strategy.
 
         Parameters
         __________
@@ -49,11 +49,6 @@ class Agent(metaclass=ABCMeta):
         identity_index: int
             A positive integer that tells the agent which index in the list
             corresponds to themself.
-
-        Returns
-        -------
-        float
-            Price of the product set by the agent at the current timestep, discretised within [0,1].
 
         Raises
         ______
@@ -79,10 +74,10 @@ class Agent(metaclass=ABCMeta):
         return (
             all(
                 [
-                    hasattr(subclass, "get_initial_price"),
-                    callable(subclass.get_initial_price),
-                    hasattr(subclass, "get_price"),
-                    callable(subclass.get_price),
+                    hasattr(subclass, "policy"),
+                    callable(subclass.policy),
+                    hasattr(subclass, "update"),
+                    callable(subclass.update),
                 ]
             )
             or NotImplemented
