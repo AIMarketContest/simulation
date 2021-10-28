@@ -1,11 +1,32 @@
 import numpy as np
 from numpy.typing import NDArray
 
+from typing import Dict, List
+from gym import spaces
 from agent import Agent
 from demand_function import DemandFunction
+from pettingzoo import AECEnv
+
+from pettingzoo.utils import wrappers
 
 
-class Environment:
+def env(simulation_length: int, demand: DemandFunction):
+    """
+    The env function wraps the environment in 3 wrappers by default. These
+    wrappers contain logic that is common to many pettingzoo environments.
+    We recommend you use at least the OrderEnforcingWrapper on your own environment
+    to provide sane error messages. You can find full documentation for these methods
+    elsewhere in the developer documentation.
+    """
+    env = Environment(simulation_length, demand)
+    env = wrappers.CaptureStdoutWrapper(env)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+
+    return env
+
+
+class Environment(AECEnv):
     """
     The backbone of the simulation - responsible for tying most other elements together
 
@@ -35,8 +56,10 @@ class Environment:
         The number of agents currently in the simulation
     """
 
-    def __init__(self, simulation_length: int, demand: DemandFunction, max_agents: int):
-        self.all_agents: NDArray = np.empty((max_agents,), dtype=object)
+    def __init__(self, simulation_length: int, demand: DemandFunction):
+        self.possible_agents: NDArray = np.empty((max_agents,), dtype=object)
+        self.action_spaces: Dict[Agent, spaces.Discrete] = {}
+        self.observation_spaces: Dict[Agent, spaces.Discrete] = {}
         self.hist_sales_made: NDArray = np.zeros(
             (simulation_length, max_agents), dtype=int
         )
@@ -73,6 +96,8 @@ class Environment:
             raise RuntimeError("Cannot add more agents to simulation")
 
         self.all_agents[self.agent_count] = agent
+        self.action_spaces[agent] = spaces.Discrete(100)
+        self.observation_spaces[agent] = spaces.Discrete(100)
         self.agent_count += 1
 
         return self.agent_count - 1
@@ -94,7 +119,21 @@ class Environment:
         """
         return self.hist_set_prices, self.hist_sales_made
 
-    def run_next_time_step(self) -> None:
+    def observe(self, agent: Agent) -> List[float]:
+        agent_id = self.possible_agents.index(agent)
+        return [
+            self.hist_set_prices[x][agent_id] for x in range(len(self.hist_set_prices))
+        ]
+
+    def reset(self):
+        self.possible_agents = []
+        self.action_spaces = {}
+        self.observation_spaces = {}
+        self.hist_sales_made = []
+        self.hist_set_prices = []
+        self.time_step = 0
+
+    def step(self) -> None:
         """
         Runs a time step for the simulation and appends results to the historic data
         """
@@ -104,12 +143,12 @@ class Environment:
 
         current_prices: list[float] = [0.0] * self.agent_count
         if self.time_step == 0:
-            for agent_index, agent in enumerate(self.all_agents):
+            for agent_index, agent in enumerate(self.possible_agents):
                 current_prices[agent_index] = agent.get_initial_price()
         else:
             prior_sales: list[int] = self.hist_sales_made[self.time_step - 1]
 
-            for agent_index, agent in enumerate(self.all_agents):
+            for agent_index, agent in enumerate(self.possible_agents):
                 prior_sales_for_agent: int = prior_sales[agent_index]
                 current_prices[agent_index] = agent.get_price(
                     self.hist_set_prices[self.time_step - 1],
