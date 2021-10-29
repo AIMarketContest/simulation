@@ -15,7 +15,7 @@ class EnvironmentTest(TestCase):
         env = Environment(self.simulation_length, self.demand_function, 1)
         a = FixedAgent()
         env.add_agent(a)
-        assert len(env.all_agents) == 1
+        assert len(env.possible_agents) == 1
 
     def test_to_add_agents(self):
         env = Environment(self.simulation_length, self.demand_function, 4)
@@ -28,7 +28,7 @@ class EnvironmentTest(TestCase):
         env.add_agent(b)
         env.add_agent(c)
         env.add_agent(d)
-        assert len(env.all_agents) == 4
+        assert len(env.possible_agents) == 4
 
     def test_to_get_results(self):
         env = Environment(self.simulation_length, self.demand_function, 1)
@@ -46,7 +46,7 @@ class EnvironmentTest(TestCase):
         env = Environment(self.simulation_length, self.demand_function, 0)
         with self.assertRaises(IndexError):
             for _ in range(6):
-                env.run_next_time_step()
+                env.step()
 
     def test_check_if_gets_price_called_on_time_step(self):
         env = Environment(self.simulation_length, self.demand_function, 2)
@@ -61,12 +61,14 @@ class EnvironmentTest(TestCase):
 
         env.add_agent(test_agent_a)
         env.add_agent(test_agent_b)
-        env.run_next_time_step()
-        test_agent_a.get_initial_price.assert_called_once()
-        test_agent_b.get_initial_price.assert_called_once()
-        env.run_next_time_step()
-        test_agent_a.get_price.assert_called_once()
-        test_agent_b.get_price.assert_called_once()
+        env.step()
+        test_agent_a.policy.assert_called_once()
+        test_agent_b.policy.assert_called_once()
+        env.step()
+        # If anyone can find a better way to test a mock is called twice
+        # then please replace the below
+        self.assertEqual(test_agent_a.policy.call_count, 2)
+        self.assertEqual(test_agent_b.policy.call_count, 2)
 
     def test_runtime_exception_when_too_many_agents_added(self):
         env = Environment(self.simulation_length, self.demand_function, 2)
