@@ -1,9 +1,10 @@
+from abc import ABC
 from typing import Dict, List
 from gym import spaces
-from agent import Agent
-from demand_function import DemandFunction
+from src.agent import Agent
+from src.demand_function import DemandFunction
 from pettingzoo import AECEnv
-
+import numpy as np
 from pettingzoo.utils import wrappers
 
 
@@ -48,16 +49,20 @@ class Environment(AECEnv):
     demand: DemandFunction
         Reposible for generating a demand function (interchangeable)
     """
+    START_VAL = 0.5
 
     def __init__(self, simulation_length: int, demand: DemandFunction):
         self.possible_agents: List[Agent] = []
-        self.action_spaces: Dict[Agent, spaces.Discrete] = {}
-        self.observation_spaces: Dict[Agent, spaces.Discrete] = {}
+        self.action_space: spaces.Discrete = spaces.Discrete(1000)  # possible actions - from 0.000 in 0.001 increments
+        self.observation_spaces: spaces.MultiDiscrete = spaces.MultiDiscrete([self.START_VAL] * len(
+            self.possible_agents))
         self.hist_sales_made: list[list[int]] = []
         self.hist_set_prices: list[list[float]] = []
         self.simulation_length: int = simulation_length
         self.time_step: int = 0
         self.demand: DemandFunction = demand
+        self.done: bool = False
+        self.state = 0
 
     def add_agent(self, agent: Agent) -> None:
         """
@@ -70,8 +75,8 @@ class Environment(AECEnv):
             The agent to be added
         """
         self.possible_agents.append(agent)
-        self.action_spaces[agent] = spaces.Discrete(100)
-        self.observation_spaces[agent] = spaces.Discrete(100)
+        self.action_space = spaces.Discrete(1000)
+        self.observation_spaces = spaces.Discrete(1000)
 
     def get_results(self) -> tuple[list[list[float]], list[list[int]]]:
         """
@@ -96,21 +101,25 @@ class Environment(AECEnv):
             self.hist_set_prices[x][agent_id] for x in range(len(self.hist_set_prices))
         ]
 
-    def reset(self):
+    def reset(self) -> int:
         self.possible_agents = []
         self.action_spaces = {}
         self.observation_spaces = {}
         self.hist_sales_made = []
         self.hist_set_prices = []
         self.time_step = 0
+        self.hist_set_prices = []
+        self.state = np.random.randint(0, 1000, size=1)
 
-    def step(self) -> None:
+        return self.state
+
+    def step(self, actions) -> tuple[list[float], list[int], bool]:
         """
         Runs a time step for the simulation and appends results to the historic data
         """
-
         if self.time_step >= self.simulation_length:
-            raise IndexError("Cannot run simulation beyond maximum time step")
+            # raise IndexError("Cannot run simulation beyond maximum time step")
+            self.done = True
 
         # Run current time step
         current_prices: list[float] = []
@@ -128,3 +137,6 @@ class Environment(AECEnv):
             )
 
         self.time_step += 1
+        demands = self.demand.get_sales(current_prices)
+        rewards = [a * b for a, b in zip(demands, current_prices)]
+        return current_prices, demands, self.done
