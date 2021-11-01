@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "simulation"
+name = "ai_market_contest"
 version = "0.1.0"
 description = "AI contests for deep reinforcement learning bots in online markets"
 authors = ["Matteo Bongiovanni <mgb58@hotmail.co.uk>",
