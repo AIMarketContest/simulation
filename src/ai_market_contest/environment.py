@@ -1,12 +1,13 @@
 import numpy as np
 from numpy.typing import NDArray
 
+from abc import ABC
 from typing import Dict, List
 from gym import spaces
-from agent import Agent
-from demand_function import DemandFunction
+from src.agent import Agent
+from src.demand_function import DemandFunction
 from pettingzoo import AECEnv
-
+import numpy as np
 from pettingzoo.utils import wrappers
 
 
@@ -55,6 +56,7 @@ class Environment(AECEnv):
     agent_count: int
         The number of agents currently in the simulation
     """
+    START_VAL = 0.5
 
     def __init__(self, simulation_length: int, demand: DemandFunction):
         self.possible_agents: NDArray = np.empty((max_agents,), dtype=object)
@@ -125,21 +127,25 @@ class Environment(AECEnv):
             self.hist_set_prices[x][agent_id] for x in range(len(self.hist_set_prices))
         ]
 
-    def reset(self):
+    def reset(self) -> int:
         self.possible_agents = []
         self.action_spaces = {}
         self.observation_spaces = {}
         self.hist_sales_made = []
         self.hist_set_prices = []
         self.time_step = 0
+        self.hist_set_prices = []
+        self.state = np.random.randint(0, 1000, size=1)
 
-    def step(self) -> None:
+        return self.state
+
+    def step(self, actions) -> tuple[list[float], list[int], bool]:
         """
         Runs a time step for the simulation and appends results to the historic data
         """
-
         if self.time_step >= self.simulation_length:
-            raise IndexError("Cannot run simulation beyond maximum time step")
+            # raise IndexError("Cannot run simulation beyond maximum time step")
+            self.done = True
 
         # Run current time step
         current_prices: list[float] = []
@@ -157,3 +163,6 @@ class Environment(AECEnv):
             )
 
         self.time_step += 1
+        demands = self.demand.get_sales(current_prices)
+        rewards = [a * b for a, b in zip(demands, current_prices)]
+        return current_prices, demands, self.done
