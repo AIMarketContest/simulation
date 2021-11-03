@@ -65,16 +65,22 @@ def make_config_file(proj_dir, agent_name, authors):
         config.write(config_file)
 
 
+def remove_proj_dir(proj_dir):
+    if proj_dir.is_dir():
+        shutil.rmtree(proj_dir)
+
+
 def initialise_file_structure(path):
     proj_dir = path / "aicontest"
-    path_is_dir: bool = path.is_dir()
-    make_proj_dir(path_is_dir, proj_dir)
+    atexit.register(remove_proj_dir, proj_dir)
+    make_proj_dir(path.is_dir(), proj_dir)
     print("Enter name of the agent ", end="")
     agent_name: str = input()
     print("Enter name(s) of the author(s): ", end="")
     authors: list[str] = input().split(",")
     make_agent_class(proj_dir, agent_name)
     make_config_file(proj_dir, agent_name, authors)
+    atexit.unregister(remove_proj_dir)
 
 
 def create_subparser(subparsers):

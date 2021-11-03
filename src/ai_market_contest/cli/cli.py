@@ -8,7 +8,6 @@ def initialise_parser():
     )
     subparsers = parser.add_subparsers()
 
-    # create the parser for the init command
     initsubcommand.create_subparser(subparsers)
     return parser
 
@@ -16,7 +15,6 @@ def initialise_parser():
 def main():
     parser = initialise_parser()
     args = parser.parse_args()
-    print(args)
     args.func(args.path)
 
 
