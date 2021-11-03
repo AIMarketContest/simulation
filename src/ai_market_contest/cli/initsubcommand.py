@@ -3,6 +3,7 @@ import pathlib
 import shutil
 import sys
 import atexit
+import configparser
 
 
 def make_agent_classname_camelcase(agent_name):
@@ -55,6 +56,15 @@ def make_proj_dir(path_exists, proj_dir):
     os.mkdir(proj_dir)
 
 
+def make_config_file(proj_dir, agent_name, authors):
+    config = configparser.ConfigParser()
+    config["agent"] = {"name": agent_name, "authors": authors}
+    c_file = proj_dir / "config.ini"
+    c_file.touch()
+    with c_file.open("w") as config_file:
+        config.write(config_file)
+
+
 def initialise_file_structure(path):
     proj_dir = path / "aicontest"
     make_proj_dir(path.is_dir(), proj_dir)
@@ -63,6 +73,7 @@ def initialise_file_structure(path):
     print("Enter name(s) of the author(s): ", end="")
     authors = input().split(",")
     make_agent_class(proj_dir, agent_name)
+    make_config_file(proj_dir, agent_name, authors)
 
 
 def create_subparser(subparsers):
