@@ -15,10 +15,10 @@ def make_agent_classname_camelcase(agent_name):
 
 
 def make_agent_class(proj_dir: pathlib.Path, agent_name: str):
-    IMPORT_STR = "import"
-    AGENT_STR = "Agent"
-    ABS_METHOD_STR = "abstractmethod"
-    CLASS_METHOD_STR = "classmethod"
+    IMPORT_STR: str = "import"
+    AGENT_STR: str = "Agent"
+    ABS_METHOD_STR: str = "abstractmethod"
+    CLASS_METHOD_STR: str = "classmethod"
     agent_filename: str = agent_name + ".py"
     agent_file: pathlib.Path = proj_dir / agent_filename
     agent_file.touch()
@@ -57,9 +57,9 @@ def make_proj_dir(path_exists, proj_dir):
 
 
 def make_config_file(proj_dir, agent_name, authors):
-    config = configparser.ConfigParser()
+    config: configparser.ConfigParser = configparser.ConfigParser()
     config["agent"] = {"name": agent_name, "authors": authors}
-    c_file = proj_dir / "config.ini"
+    c_file: pathlib.Path = proj_dir / "config.ini"
     c_file.touch()
     with c_file.open("w") as config_file:
         config.write(config_file)
@@ -67,11 +67,12 @@ def make_config_file(proj_dir, agent_name, authors):
 
 def initialise_file_structure(path):
     proj_dir = path / "aicontest"
-    make_proj_dir(path.is_dir(), proj_dir)
+    path_is_dir: bool = path.is_dir()
+    make_proj_dir(path_is_dir, proj_dir)
     print("Enter name of the agent ", end="")
-    agent_name = input()
+    agent_name: str = input()
     print("Enter name(s) of the author(s): ", end="")
-    authors = input().split(",")
+    authors: list[str] = input().split(",")
     make_agent_class(proj_dir, agent_name)
     make_config_file(proj_dir, agent_name, authors)
 
