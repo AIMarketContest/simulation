@@ -14,35 +14,40 @@ def make_agent_classname_camelcase(agent_name):
     return agent_name_cc[0].upper() + agent_name_cc[1:]
 
 
-def make_agent_class(proj_dir: pathlib.Path, agent_name: str):
+def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
     IMPORT_STR: str = "import"
     AGENT_STR: str = "Agent"
     ABS_METHOD_STR: str = "abstractmethod"
     CLASS_METHOD_STR: str = "classmethod"
-    agent_filename: str = agent_name + ".py"
-    agent_file: pathlib.Path = proj_dir / agent_filename
-    agent_file.touch()
-    with agent_file.open("w") as f1:
-        f1.write("from agent import Agent\n")
-        with open("../agent.py", "r") as f2:
-            for line in f2:
-                if line != None:
-                    if CLASS_METHOD_STR in line:
-                        break
-                    if IMPORT_STR in line:
-                        continue
-                    if ABS_METHOD_STR in line:
-                        continue
-                    if AGENT_STR in line:
-                        f1.write(
-                            "class "
-                            + make_agent_classname_camelcase(agent_name)
-                            + "(Agent):\n"
-                        )
-                    else:
-                        f1.write(line)
-        f2.close()
-    f1.close()
+    for agent_name in agents_names:
+        agent_filename: str = agent_name + ".py"
+        agent_file: pathlib.Path = proj_dir / agent_filename
+        agent_file.touch()
+        class_line_tab = False
+        with agent_file.open("w") as f1:
+            f1.write("from agent import Agent\n")
+            with open("../agent.py", "r") as f2:
+                for line in f2:
+                    if line != None:
+                        if CLASS_METHOD_STR in line:
+                            break
+                        if IMPORT_STR in line:
+                            continue
+                        if ABS_METHOD_STR in line:
+                            continue
+                        if AGENT_STR in line:
+                            tab = "\t" if class_line_tab else ""
+                            f1.write(
+                                tab
+                                + "class "
+                                + make_agent_classname_camelcase(agent_name)
+                                + "(Agent):\n"
+                            )
+                            class_line_tab = True
+                        else:
+                            f1.write(line)
+            f2.close()
+        f1.close()
 
 
 def make_proj_dir(path_exists, proj_dir):
@@ -56,9 +61,9 @@ def make_proj_dir(path_exists, proj_dir):
     os.mkdir(proj_dir)
 
 
-def make_config_file(proj_dir, agent_name, authors):
+def make_config_file(proj_dir, agents_names, authors):
     config: configparser.ConfigParser = configparser.ConfigParser()
-    config["agent"] = {"name": agent_name, "authors": authors}
+    config["agent"] = {"agents": agents_names, "authors": authors}
     c_file: pathlib.Path = proj_dir / "config.ini"
     c_file.touch()
     with c_file.open("w") as config_file:
@@ -70,16 +75,20 @@ def remove_proj_dir(proj_dir):
         shutil.rmtree(proj_dir)
 
 
-def initialise_file_structure(path):
+def initialise_file_structure(args):
+    path = args.path
     proj_dir = path / "aicontest"
     atexit.register(remove_proj_dir, proj_dir)
     make_proj_dir(path.is_dir(), proj_dir)
-    print("Enter name of the agent ", end="")
-    agent_name: str = input()
+    agents_names: list[str] = []
+    for agent_number in range(1, args.number_of_agents + 1):
+        print(f"Enter name of agent {agent_number}: ", end="")
+        agent_name: str = input()
+        agents_names.append(agent_name)
     print("Enter name(s) of the author(s): ", end="")
     authors: list[str] = input().split(",")
-    make_agent_class(proj_dir, agent_name)
-    make_config_file(proj_dir, agent_name, authors)
+    make_agents_classes(proj_dir, agents_names)
+    make_config_file(proj_dir, agents_names, authors)
     atexit.unregister(remove_proj_dir)
 
 
@@ -88,5 +97,13 @@ def create_subparser(subparsers):
         "init",
         help="Initialises a folder structure for a project",
     )
-    parser_init.add_argument("path", type=pathlib.Path, default="."),
+    parser_init.add_argument("path", type=pathlib.Path, default=".")
+    parser_init.add_argument(
+        "-n",
+        metavar="number_of_agents",
+        type=int,
+        help="Number of agent templates to make",
+        default=1,
+        dest="number_of_agents",
+    )
     parser_init.set_defaults(func=initialise_file_structure)

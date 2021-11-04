@@ -15,7 +15,7 @@ def initialise_parser():
 def main():
     parser = initialise_parser()
     args = parser.parse_args()
-    args.func(args.path)
+    args.func(args)
 
 
 if __name__ == "__main__":
