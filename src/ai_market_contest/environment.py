@@ -164,11 +164,11 @@ class Environment(AECEnv):
         if self.time_step > 1:
             for agent_index, agent in enumerate(self.possible_agents):
                 agent.update(
-                    previous_prices,
-                    self.hist_sales_made[-1][agent_index],
                     self.hist_set_prices[-2],
                     self.hist_sales_made[-2][agent_index],
-                    agent_index
+                    previous_prices,
+                    self.hist_sales_made[-1][agent_index],
+                    agent_index,
                 )
 
         self.time_step += 1
