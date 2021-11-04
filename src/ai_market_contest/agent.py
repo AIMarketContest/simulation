@@ -33,10 +33,8 @@ class Agent(metaclass=ABCMeta):
     def update(
         self,
         s1: list[float],
-        a1: int,
         r1: int,
         s2: list[float],
-        a2: int,
         r2: int,
         identity_index: int,
     ) -> None:

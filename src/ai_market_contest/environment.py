@@ -142,7 +142,7 @@ class Environment(AECEnv):
 
         return self.state
 
-    def step(self, actions) -> tuple[list[float], list[int], bool]:
+    def step(self) -> tuple[list[float], list[int], bool]:
         """
         Runs a time step for the simulation and appends results to the historic data
         """
@@ -150,20 +150,28 @@ class Environment(AECEnv):
             # raise IndexError("Cannot run simulation beyond maximum time step")
             self.done = True
 
+        previous_prices = self.hist_set_prices[-1] if self.hist_set_prices else []
+
         # Run current time step
         current_prices: list[float] = []
         for agent in self.possible_agents:
-            current_prices.append(agent.policy())
+            current_prices.append(agent.policy(previous_prices))
 
         self.hist_set_prices.append(current_prices)
         self.hist_sales_made.append(self.demand.get_sales(current_prices))
 
         # Provide agent feedback on step
-        sales: list[int] = self.hist_sales_made[-1]
-        for agent_index, agent in enumerate(self.possible_agents):
-            agent.update(self.hist_set_prices[-1], sales[agent_index], agent_index)
+        if self.time_step > 1:
+            for agent_index, agent in enumerate(self.possible_agents):
+                agent.update(
+                    previous_prices,
+                    self.hist_sales_made[-1][agent_index],
+                    self.hist_set_prices[-2],
+                    self.hist_sales_made[-2][agent_index],
+                    agent_index
+                )
 
         self.time_step += 1
         demands = self.demand.get_sales(current_prices)
         rewards = [a * b for a, b in zip(demands, current_prices)]
-        return current_prices, demands, self.done
+        return current_prices, rewards, self.done
