@@ -4,8 +4,8 @@ from numpy.typing import NDArray
 from abc import ABC
 from typing import Dict, List
 from gym import spaces
-from src.agent import Agent
-from src.demand_function import DemandFunction
+from agent import Agent
+from demand_function import DemandFunction
 from pettingzoo import AECEnv
 import numpy as np
 from pettingzoo.utils import wrappers
@@ -56,6 +56,7 @@ class Environment(AECEnv):
     agent_count: int
         The number of agents currently in the simulation
     """
+
     START_VAL = 0.5
 
     def __init__(self, simulation_length: int, demand: DemandFunction):
@@ -158,9 +159,7 @@ class Environment(AECEnv):
         # Provide agent feedback on step
         sales: list[int] = self.hist_sales_made[-1]
         for agent_index, agent in enumerate(self.possible_agents):
-            agent.update(
-                self.hist_set_prices[-1], sales[agent_index], agent_index
-            )
+            agent.update(self.hist_set_prices[-1], sales[agent_index], agent_index)
 
         self.time_step += 1
         demands = self.demand.get_sales(current_prices)
