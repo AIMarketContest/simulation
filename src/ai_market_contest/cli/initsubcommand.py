@@ -55,7 +55,7 @@ def make_proj_dir(path_exists, proj_dir):
         raise IllegalArgumentError
     if proj_dir.is_dir():
         print(
-            "Agent already initialised\nIf you want to delete the current agent and start a new one,\nedit the agent.ini file\nthen run the command ai-market-contest restart <path>"
+            "Agent already initialised\nTo delete the current agent and start a new one,\nedit the agent.ini file\nthen run the command ai-market-contest restart <path>\nTo just delete the current agent run ai-market-contest reset <path>"
         )
         sys.exit(2)
     os.mkdir(proj_dir)
@@ -83,8 +83,8 @@ def include_example(proj_dir):
 def initialise_file_structure(args):
     path = args.path
     proj_dir = path / "aicontest"
+    make_proj_dir(path.is_dir(), proj_dir) 
     atexit.register(remove_proj_dir, proj_dir)
-    make_proj_dir(path.is_dir(), proj_dir)
     agents_names: list[str] = []
     for agent_number in range(1, args.number_of_agents + 1):
         print(f"Enter name of agent {agent_number}: ", end="")
