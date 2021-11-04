@@ -10,6 +10,8 @@ from pettingzoo import AECEnv
 import numpy as np
 from pettingzoo.utils import wrappers
 
+NUMBER_OF_DISCRETE_PRICES = 100
+
 
 def env(simulation_length: int, demand: DemandFunction):
     """
@@ -98,9 +100,9 @@ class Environment(AECEnv):
         if self.agent_count >= self.max_agents:
             raise RuntimeError("Cannot add more agents to simulation")
 
-        self.all_agents[self.agent_count] = agent
-        self.action_spaces[agent] = spaces.Discrete(100)
-        self.observation_spaces[agent] = spaces.Discrete(100)
+        self.possible_agents[self.agent_count] = agent
+        self.action_spaces[agent] = spaces.Discrete(NUMBER_OF_DISCRETE_PRICES)
+        self.observation_spaces[agent] = spaces.Discrete(NUMBER_OF_DISCRETE_PRICES)
         self.agent_count += 1
 
         return self.agent_count - 1
@@ -136,7 +138,7 @@ class Environment(AECEnv):
         self.hist_set_prices = []
         self.time_step = 0
         self.hist_set_prices = []
-        self.state = np.random.randint(0, 1000, size=1)
+        self.state = np.random.randint(0, NUMBER_OF_DISCRETE_PRICES, size=1)
 
         return self.state
 
