@@ -28,7 +28,6 @@ class GaussianDemandFunction(DemandFunction):
         ValueError
             When scale_factor given is less than or equal to 0.
         """
-
         if max_sales_scale_factor <= 0:
             raise ValueError("max_sales_scale_factor must be greater than 0")
         self.max_sales_scale_factor = max_sales_scale_factor
