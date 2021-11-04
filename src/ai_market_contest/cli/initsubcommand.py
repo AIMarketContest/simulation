@@ -74,6 +74,11 @@ def remove_proj_dir(proj_dir):
     if proj_dir.is_dir():
         shutil.rmtree(proj_dir)
 
+def include_example(proj_dir):
+    shutil.copy("../example_main.py", proj_dir / "example_main.py")
+    print("The example on how to setup the environment can be found in example_main.py.")
+
+
 
 def initialise_file_structure(args):
     path = args.path
@@ -89,8 +94,9 @@ def initialise_file_structure(args):
     authors: list[str] = input().split(",")
     make_agents_classes(proj_dir, agents_names)
     make_config_file(proj_dir, agents_names, authors)
+    if args.include_example:
+        include_example(proj_dir)
     atexit.unregister(remove_proj_dir)
-
 
 def create_subparser(subparsers):
     parser_init = subparsers.add_parser(
@@ -106,4 +112,5 @@ def create_subparser(subparsers):
         default=1,
         dest="number_of_agents",
     )
+    parser_init.add_argument("--include-example", action="store_true", help="Includes an example showing how to setup the environment")
     parser_init.set_defaults(func=initialise_file_structure)
