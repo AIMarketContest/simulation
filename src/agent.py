@@ -11,9 +11,8 @@ class Agent(metaclass=ABCMeta):
     and all prices set by competitors in that round
     it must give its new price.
     """
-
     @abstractmethod
-    def policy(self, state: list[float]) -> float:
+    def policy(self, last_round_agents_prices: list[float]) -> float:
         """
         Query the agent for the next price to set.
 
@@ -33,9 +32,13 @@ class Agent(metaclass=ABCMeta):
     @abstractmethod
     def update(
         self,
-        last_round_agents_prices: list[float],
-        last_round_sales: int,
-        identity_index: int
+        s1: list[float],
+        a1: int,
+        r1: int,
+        s2: list[float],
+        a2: int,
+        r2: int,
+        identity_index: int,
     ) -> None:
         """
         Feeds data from the previous timestep into the agent allowing it to adjust it's strategy.
@@ -55,7 +58,6 @@ class Agent(metaclass=ABCMeta):
         NotImplementedError
             If concrete class does not override method.
         """
-
         raise NotImplementedError
 
     def learning_has_converged(self):

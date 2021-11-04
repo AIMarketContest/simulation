@@ -6,6 +6,8 @@ from pettingzoo import AECEnv
 import numpy as np
 from pettingzoo.utils import wrappers
 
+NUMBER_OF_DISCRETE_PRICES = 100
+
 
 def env(simulation_length: int, demand: DemandFunction):
     """
@@ -54,7 +56,7 @@ class Environment(AECEnv):
     def __init__(self, simulation_length: int, demand: DemandFunction):
         self.possible_agents: List[Agent] = []
         self.action_space: spaces.Discrete = spaces.Discrete(
-            1000
+            NUMBER_OF_DISCRETE_PRICES
         )  # possible actions - from 0.000 in 0.001 increments
         self.observation_spaces: spaces.MultiDiscrete = spaces.MultiDiscrete(
             [self.START_VAL] * len(self.possible_agents)
@@ -78,8 +80,8 @@ class Environment(AECEnv):
             The agent to be added
         """
         self.possible_agents.append(agent)
-        self.action_space = spaces.Discrete(1000)
-        self.observation_spaces = spaces.Discrete(1000)
+        self.action_space = spaces.Discrete(NUMBER_OF_DISCRETE_PRICES)
+        self.observation_spaces = spaces.Discrete(NUMBER_OF_DISCRETE_PRICES)
 
     def get_results(self) -> tuple[list[list[float]], list[list[int]]]:
         """
@@ -112,7 +114,7 @@ class Environment(AECEnv):
         self.hist_set_prices = []
         self.time_step = 0
         self.hist_set_prices = []
-        self.state = np.random.randint(0, 1000, size=1)
+        self.state = np.random.randint(0, NUMBER_OF_DISCRETE_PRICES, size=1)
 
         return self.state
 
