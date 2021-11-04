@@ -1,5 +1,5 @@
 import numpy as np
-import numpy.typing as npt
+from numpy.typing import NDArray
 
 from agent import Agent
 from demand_function import DemandFunction
@@ -36,11 +36,11 @@ class Environment:
     """
 
     def __init__(self, simulation_length: int, demand: DemandFunction, max_agents: int):
-        self.all_agents: npt.NDArray = np.empty((max_agents,), dtype=object)
-        self.hist_sales_made: npt.NDArray = np.zeros(
+        self.all_agents: NDArray = np.empty((max_agents,), dtype=object)
+        self.hist_sales_made: NDArray = np.zeros(
             (simulation_length, max_agents), dtype=int
         )
-        self.hist_set_prices: npt.NDArray = np.zeros(
+        self.hist_set_prices: NDArray = np.zeros(
             (simulation_length, max_agents), dtype=float
         )
         self.simulation_length: int = simulation_length
@@ -61,17 +61,23 @@ class Environment:
 
         Returns
         -------
-        new_agent_id: int
+        int
             The id of the new agent added
-        """
-        new_agent_id: int = -1
-        if self.agent_count < self.max_agents:
-            new_agent_id = self.agent_count
-            self.all_agents[new_agent_id] = agent
-            self.agent_count += 1
-        return new_agent_id
 
-    def get_results(self) -> tuple[npt.NDArray, npt.NDArray]:
+        Raises
+        ------
+        IndexError
+            If the simulation cannot handle any more agents.
+        """
+        if self.agent_count >= self.max_agents:
+            raise IndexError("Cannot add more agents to simulation")
+
+        self.all_agents[self.agent_count] = agent
+        self.agent_count += 1
+
+        return self.agent_count - 1
+
+    def get_results(self) -> tuple[NDArray, NDArray]:
         """
         Allows post-simulation analysis to be performed on sales figures and numbers
 
