@@ -13,7 +13,7 @@ class Agent(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def policy(self) -> float:
+    def policy(self, state: list[float]) -> float:
         """
         Query the agent for the next price to set.
 

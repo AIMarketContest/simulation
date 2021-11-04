@@ -13,6 +13,8 @@ authors = ["Matteo Bongiovanni <mgb58@hotmail.co.uk>",
 python = ">=3.9,<3.10"
 Sphinx = "^4.2.0"
 PettingZoo = "^1.13.1"
+matplotlib = "^3.4.3"
+pandas = "^1.3.4"
 
 
 [tool.poetry.dev-dependencies]

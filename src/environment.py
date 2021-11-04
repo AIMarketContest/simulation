@@ -1,8 +1,7 @@
-from abc import ABC
-from typing import Dict, List
+from typing import List
 from gym import spaces
-from src.agent import Agent
-from src.demand_function import DemandFunction
+from agent import Agent
+from demand_function import DemandFunction
 from pettingzoo import AECEnv
 import numpy as np
 from pettingzoo.utils import wrappers
@@ -49,13 +48,17 @@ class Environment(AECEnv):
     demand: DemandFunction
         Reposible for generating a demand function (interchangeable)
     """
+
     START_VAL = 0.5
 
     def __init__(self, simulation_length: int, demand: DemandFunction):
         self.possible_agents: List[Agent] = []
-        self.action_space: spaces.Discrete = spaces.Discrete(1000)  # possible actions - from 0.000 in 0.001 increments
-        self.observation_spaces: spaces.MultiDiscrete = spaces.MultiDiscrete([self.START_VAL] * len(
-            self.possible_agents))
+        self.action_space: spaces.Discrete = spaces.Discrete(
+            1000
+        )  # possible actions - from 0.000 in 0.001 increments
+        self.observation_spaces: spaces.MultiDiscrete = spaces.MultiDiscrete(
+            [self.START_VAL] * len(self.possible_agents)
+        )
         self.hist_sales_made: list[list[int]] = []
         self.hist_set_prices: list[list[float]] = []
         self.simulation_length: int = simulation_length
@@ -132,9 +135,7 @@ class Environment(AECEnv):
         # Provide agent feedback on step
         sales: list[int] = self.hist_sales_made[-1]
         for agent_index, agent in enumerate(self.possible_agents):
-            agent.update(
-                self.hist_set_prices[-1], sales[agent_index], agent_index
-            )
+            agent.update(self.hist_set_prices[-1], sales[agent_index], agent_index)
 
         self.time_step += 1
         demands = self.demand.get_sales(current_prices)
