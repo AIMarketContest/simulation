@@ -1,6 +1,7 @@
 ﻿import argparse
 import initsubcommand
 import resetsubcommand
+import addagentsubcommand
 
 
 def initialise_parser():
@@ -11,6 +12,7 @@ def initialise_parser():
 
     initsubcommand.create_subparser(subparsers)
     resetsubcommand.create_subparser(subparsers)
+    addagentsubcommand.create_subparser(subparsers)
     return parser
 
 
