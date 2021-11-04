@@ -6,6 +6,7 @@ import atexit
 import configparser
 from cli_config import PROJ_DIR_NAME
 
+
 def make_agent_classname_camelcase(agent_name):
     AGENT_STR = "agent"
     agent_name_cc = agent_name.lower()
@@ -52,7 +53,8 @@ def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
 
 def make_proj_dir(path_exists, proj_dir):
     if not path_exists:
-        raise IllegalArgumentError
+        print("Illegal argument: Argument must be an existing directort")
+        sys.exit(2)
     if proj_dir.is_dir():
         print(
             "Agent already initialised\nTo delete the current agent and start a new one,\nedit the agent.ini file\nthen run the command ai-market-contest restart <path>\nTo just delete the current agent run ai-market-contest reset <path>"
@@ -74,16 +76,18 @@ def remove_proj_dir(proj_dir):
     if proj_dir.is_dir():
         shutil.rmtree(proj_dir)
 
+
 def include_example(proj_dir):
     shutil.copy("../example_main.py", proj_dir / "example_main.py")
-    print("The example on how to setup the environment can be found in example_main.py.")
-
+    print(
+        "The example on how to setup the environment can be found in example_main.py."
+    )
 
 
 def initialise_file_structure(args):
     path = args.path
     proj_dir = path / PROJ_DIR_NAME
-    make_proj_dir(path.is_dir(), proj_dir) 
+    make_proj_dir(path.is_dir(), proj_dir)
     atexit.register(remove_proj_dir, proj_dir)
     agents_names: list[str] = []
     for agent_number in range(1, args.number_of_agents + 1):
@@ -97,6 +101,7 @@ def initialise_file_structure(args):
     if args.include_example:
         include_example(proj_dir)
     atexit.unregister(remove_proj_dir)
+
 
 def create_subparser(subparsers):
     parser_init = subparsers.add_parser(
@@ -112,5 +117,9 @@ def create_subparser(subparsers):
         default=1,
         dest="number_of_agents",
     )
-    parser_init.add_argument("--include-example", action="store_true", help="Includes an example showing how to setup the environment")
+    parser_init.add_argument(
+        "--include-example",
+        action="store_true",
+        help="Includes an example showing how to setup the environment",
+    )
     parser_init.set_defaults(func=initialise_file_structure)
