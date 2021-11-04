@@ -4,7 +4,7 @@ import shutil
 import sys
 import atexit
 import configparser
-
+from cli_config import PROJ_DIR_NAME
 
 def make_agent_classname_camelcase(agent_name):
     AGENT_STR = "agent"
@@ -82,7 +82,7 @@ def include_example(proj_dir):
 
 def initialise_file_structure(args):
     path = args.path
-    proj_dir = path / "aicontest"
+    proj_dir = path / PROJ_DIR_NAME
     make_proj_dir(path.is_dir(), proj_dir) 
     atexit.register(remove_proj_dir, proj_dir)
     agents_names: list[str] = []
