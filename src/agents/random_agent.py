@@ -9,10 +9,10 @@ class RandomAgent(Agent):
     """
 
     def update(
-            self,
-            last_round_agents_prices: list[float],
-            last_round_sales: int,
-            identity_index: int
+        self,
+        last_round_agents_prices: list[float],
+        last_round_sales: int,
+        identity_index: int,
     ) -> None:
         pass
 

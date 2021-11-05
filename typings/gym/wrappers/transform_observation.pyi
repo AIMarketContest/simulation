@@ -20,11 +20,5 @@ class TransformObservation(ObservationWrapper):
         f (callable): a function that transforms the observation
 
     """
-    def __init__(self, env, f) -> None:
-        ...
-    
-    def observation(self, observation):
-        ...
-    
-
-
+    def __init__(self, env, f) -> None: ...
+    def observation(self, observation): ...

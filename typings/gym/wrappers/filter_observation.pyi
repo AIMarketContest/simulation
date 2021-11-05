@@ -18,11 +18,6 @@ class FilterObservation(ObservationWrapper):
             the original `env`'s observation space
 
     """
-    def __init__(self, env, filter_keys=...) -> None:
-        ...
-    
-    def observation(self, observation): # -> Any:
-        ...
-    
 
-
+    def __init__(self, env, filter_keys=...) -> None: ...
+    def observation(self, observation): ...

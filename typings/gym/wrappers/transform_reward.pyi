@@ -22,11 +22,5 @@ class TransformReward(RewardWrapper):
         f (callable): a function that transforms the reward
 
     """
-    def __init__(self, env, f) -> None:
-        ...
-    
-    def reward(self, reward):
-        ...
-    
-
-
+    def __init__(self, env, f) -> None: ...
+    def reward(self, reward): ...

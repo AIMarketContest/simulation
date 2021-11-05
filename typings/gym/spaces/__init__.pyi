@@ -11,4 +11,16 @@ from gym.spaces.tuple import Tuple
 from gym.spaces.dict import Dict
 from gym.spaces.utils import flatdim, flatten, flatten_space, unflatten
 
-__all__ = ["Space", "Box", "Discrete", "MultiDiscrete", "MultiBinary", "Tuple", "Dict", "flatdim", "flatten_space", "flatten", "unflatten"]
+__all__ = [
+    "Space",
+    "Box",
+    "Discrete",
+    "MultiDiscrete",
+    "MultiBinary",
+    "Tuple",
+    "Dict",
+    "flatdim",
+    "flatten_space",
+    "flatten",
+    "unflatten",
+]

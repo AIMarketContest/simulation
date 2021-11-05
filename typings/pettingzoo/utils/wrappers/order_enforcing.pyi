@@ -6,7 +6,7 @@ from ..env import AECIterable, AECIterator
 from .base import BaseWrapper
 
 class OrderEnforcingWrapper(BaseWrapper):
-    '''
+    """
     check all call orders:
 
     * error on getting rewards, dones, infos, agent_selection before reset
@@ -14,52 +14,26 @@ class OrderEnforcingWrapper(BaseWrapper):
     * error on iterating without stepping or resetting environment.
     * warn on calling close before render or reset
     * warn on calling step after environment is done
-    '''
-    def __init__(self, env) -> None:
-        ...
-    
+    """
+
+    def __init__(self, env) -> None: ...
     def __getattr__(self, value):
-        '''
+        """
         raises an error message when data is gotten from the env
         which should only be gotten after reset
-        '''
+        """
         ...
-    
-    def seed(self, seed=...): # -> None:
-        ...
-    
-    def render(self, mode=...):
-        ...
-    
-    def step(self, action): # -> None:
-        ...
-    
-    def observe(self, agent):
-        ...
-    
-    def state(self):
-        ...
-    
-    def agent_iter(self, max_iter=...): # -> AECOrderEnforcingIterable:
-        ...
-    
-    def reset(self): # -> None:
-        ...
-    
-    def __str__(self) -> str:
-        ...
-    
-
+    def seed(self, seed=...): ...
+    def render(self, mode=...): ...
+    def step(self, action): ...
+    def observe(self, agent): ...
+    def state(self): ...
+    def agent_iter(self, max_iter=...): ...
+    def reset(self): ...
+    def __str__(self) -> str: ...
 
 class AECOrderEnforcingIterable(AECIterable):
-    def __iter__(self): # -> AECOrderEnforcingIterator:
-        ...
-    
-
+    def __iter__(self): ...
 
 class AECOrderEnforcingIterator(AECIterator):
-    def __next__(self):
-        ...
-    
-
-
+    def __next__(self): ...

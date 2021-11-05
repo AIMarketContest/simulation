@@ -11,6 +11,7 @@ class Agent(metaclass=ABCMeta):
     and all prices set by competitors in that round
     it must give its new price.
     """
+
     @abstractmethod
     def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
         """
@@ -67,7 +68,6 @@ class Agent(metaclass=ABCMeta):
         bool : True if the agent learning has converged, False otherwise.
         """
         return False
-
 
     @classmethod
     def __subclasshook__(cls, subclass):

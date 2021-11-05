@@ -28,25 +28,15 @@ class Closer:
     - unregister() themselves upon close()
     - include a __del__ method which close()'s the object
     """
-    def __init__(self, atexit_register=...) -> None:
-        ...
-    
-    def generate_next_id(self): # -> int:
-        ...
-    
-    def register(self, closeable): # -> int:
+
+    def __init__(self, atexit_register=...) -> None: ...
+    def generate_next_id(self): ...
+    def register(self, closeable):  # -> int:
         """Registers an object with a 'close' method.
 
         Returns:
             int: The registration ID of this object. It is the caller's responsibility to save this ID if early closing is desired.
         """
         ...
-    
-    def unregister(self, id): # -> None:
-        ...
-    
-    def close(self): # -> None:
-        ...
-    
-
-
+    def unregister(self, id): ...
+    def close(self): ...
