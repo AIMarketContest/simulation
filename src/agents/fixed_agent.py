@@ -19,5 +19,5 @@ class FixedAgent(Agent):
     ) -> None:
         pass
 
-    def policy(self, last_round_agents_prices: list[float]) -> float:
+    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
         return self.price

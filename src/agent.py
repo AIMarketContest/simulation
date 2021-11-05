@@ -12,7 +12,7 @@ class Agent(metaclass=ABCMeta):
     it must give its new price.
     """
     @abstractmethod
-    def policy(self, last_round_agents_prices: list[float]) -> float:
+    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
         """
         Query the agent for the next price to set.
 

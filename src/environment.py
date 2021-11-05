@@ -130,8 +130,8 @@ class Environment(AECEnv):
 
         # Run current time step
         current_prices: list[float] = []
-        for agent in self.possible_agents:
-            current_prices.append(agent.policy(previous_prices))
+        for index, agent in enumerate(self.possible_agents):
+            current_prices.append(agent.policy(previous_prices, index))
 
         self.hist_set_prices.append(current_prices)
         self.hist_sales_made.append(self.demand.get_sales(current_prices))
