@@ -3,8 +3,9 @@ import sys
 import shutil
 import configparser
 import ast
-from cli_config import PROJ_DIR_NAME, CONFIG_FILENAME
+from cli_config import PROJ_DIR_NAME, CONFIG_FILENAME, AGENT_FILE
 from initsubcommand import make_agent_classname_camelcase
+
 
 def create_agent_class(agent_name, proj_dir):
     IMPORT_STR: str = "import"
@@ -14,19 +15,21 @@ def create_agent_class(agent_name, proj_dir):
     agent_filename: str = agent_name + ".py"
     agent_file: pathlib.Path = proj_dir / agent_filename
     if agent_file.is_file():
-        overwrite = 'x'
-        while overwrite != 'y' and overwrite != 'n':
-            overwrite = input(f"{agent_filename} already exists, are you sure you want to override the existing file? (y/n): ")
-            if overwrite == 'y':
+        overwrite = "x"
+        while overwrite != "y" and overwrite != "n":
+            overwrite = input(
+                f"{agent_filename} already exists, are you sure you want to override the existing file? (y/n): "
+            )
+            if overwrite == "y":
                 break
-            if overwrite == 'n':
+            if overwrite == "n":
                 sys.exit(0)
-            
+
     agent_file.touch()
     class_line_tab = False
     with agent_file.open("w") as f1:
         f1.write("from agent import Agent\n")
-        with open("../agent.py", "r") as f2:
+        with AGENT_FILE.open("r") as f2:
             for line in f2:
                 if line != None:
                     if CLASS_METHOD_STR in line:

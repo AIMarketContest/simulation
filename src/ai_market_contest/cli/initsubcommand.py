@@ -3,7 +3,13 @@ import shutil
 import sys
 import atexit
 import configparser
-from cli_config import PROJ_DIR_NAME
+from cli_config import (
+    PROJ_DIR_NAME,
+    AGENT_FILE,
+    EXAMPLE_MAIN_FILENAME,
+    EXAMPLE_MAIN_FILE,
+    CONFIG_FILENAME,
+)
 
 
 def make_agent_classname_camelcase(agent_name):
@@ -28,7 +34,7 @@ def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
         class_line_tab = False
         with agent_file.open("w") as f1:
             f1.write("from agent import Agent\n")
-            with open("../agent.py", "r") as f2:
+            with AGENT_FILE.open("r") as f2:
                 for line in f2:
                     if line != None:
                         if CLASS_METHOD_STR in line:
@@ -64,7 +70,7 @@ def make_proj_dir(proj_dir):
 def make_config_file(proj_dir, agents_names, authors):
     config: configparser.ConfigParser = configparser.ConfigParser()
     config["agent"] = {"agents": agents_names, "authors": authors}
-    c_file: pathlib.Path = proj_dir / "config.ini"
+    c_file: pathlib.Path = proj_dir / CONFIG_FILENAME
     c_file.touch()
     with c_file.open("w") as config_file:
         config.write(config_file)
@@ -75,8 +81,9 @@ def remove_proj_dir(proj_dir):
         shutil.rmtree(proj_dir)
 
 
-def include_example(proj_dir): 
-    shutil.copy("../example_main.py", proj_dir / "example_main.py")
+def include_example(proj_dir):
+
+    shutil.copy(EXAMPLE_MAIN_FILE, proj_dir / EXAMPLE_MAIN_FILENAME)
     print(
         "The example on how to setup the environment can be found in example_main.py."
     )
