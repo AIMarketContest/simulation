@@ -6,11 +6,5 @@ from gym import ObservationWrapper
 
 class GrayScaleObservation(ObservationWrapper):
     r"""Convert the image observation from RGB to gray scale."""
-    def __init__(self, env, keep_dim=...) -> None:
-        ...
-    
-    def observation(self, observation):
-        ...
-    
-
-
+    def __init__(self, env, keep_dim=...) -> None: ...
+    def observation(self, observation): ...

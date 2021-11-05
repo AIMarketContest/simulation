@@ -3,14 +3,14 @@ from collections import defaultdict
 import numpy as np
 
 
-class QAgent(Agent):
+class SarsaAgent(Agent):
     def __init__(self, action_spaces: int):
         self.cost = 0.3
         self.actions_spaces = action_spaces
         self.Q = defaultdict(lambda: defaultdict(int))
         self.alpha = 0.3
         self.gamma = 0.9
-        self.theta = 0.0005
+        self.theta = 0.001
         self.time = 0
 
     def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
@@ -54,9 +54,7 @@ class QAgent(Agent):
         s2 = s2[:identity_index] + s2[identity_index + 1 :]
 
         self.Q[tuple(s1)][a1] += self.alpha * (
-            (r1 * a1)
-            + self.gamma * np.argmax(self.Q[tuple(s2)])
-            - self.Q[tuple(s1)][a1]
+            (r1 * a1) + self.gamma * self.Q[tuple(s2)][a2] - self.Q[tuple(s1)][a1]
         )
 
     def probability_exploration(self):

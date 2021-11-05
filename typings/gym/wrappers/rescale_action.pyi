@@ -13,11 +13,5 @@ class RescaleAction(gym.ActionWrapper):
         True
 
     """
-    def __init__(self, env, min_action, max_action) -> None:
-        ...
-    
-    def action(self, action): # -> Any:
-        ...
-    
-
-
+    def __init__(self, env, min_action, max_action) -> None: ...
+    def action(self, action): ...

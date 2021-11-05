@@ -14,13 +14,6 @@ NUMBER_OF_DISCRETE_PRICES = 100
 
 
 def env(simulation_length: int, demand: DemandFunction):
-    """
-    The env function wraps the environment in 3 wrappers by default. These
-    wrappers contain logic that is common to many pettingzoo environments.
-    We recommend you use at least the OrderEnforcingWrapper on your own environment
-    to provide sane error messages. You can find full documentation for these methods
-    elsewhere in the developer documentation.
-    """
     env = Environment(simulation_length, demand)
     env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.AssertOutOfBoundsWrapper(env)
@@ -45,8 +38,8 @@ class Environment(AECEnv):
         The list represents the time slice of the simulation
         For a time slice we can use the list to find what price an agent set
         using their index in all_agents.
-            (These are separate attributes since we need to be able to give an agent
-             hist_set_prices without letting them see hist_sales_made)
+        (These are separate attributes since we need to be able to give an agent
+        hist_set_prices without letting them see hist_sales_made)
     simulation_length: int
         Used to keep track of when the simulation is "complete". Must be positive
     time_step: int

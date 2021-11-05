@@ -6,11 +6,5 @@ from gym import ObservationWrapper
 
 class FlattenObservation(ObservationWrapper):
     r"""Observation wrapper that flattens the observation."""
-    def __init__(self, env) -> None:
-        ...
-    
-    def observation(self, observation): # -> ndarray[Unknown, Unknown]:
-        ...
-    
-
-
+    def __init__(self, env) -> None: ...
+    def observation(self, observation): ...

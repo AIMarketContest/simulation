@@ -35,14 +35,16 @@ class AtariPreprocessing(gym.Wrapper):
         scale_obs (bool): if True, then observation normalized in range [0,1] is returned. It also limits memory
             optimization benefits of FrameStack Wrapper.
     """
-    def __init__(self, env, noop_max=..., frame_skip=..., screen_size=..., terminal_on_life_loss=..., grayscale_obs=..., grayscale_newaxis=..., scale_obs=...) -> None:
-        ...
-    
-    def step(self, action):
-        ...
-    
-    def reset(self, **kwargs): # -> NDArray[floating[Any]] | ndarray[Unknown, Unknown]:
-        ...
-    
-
-
+    def __init__(
+        self,
+        env,
+        noop_max=...,
+        frame_skip=...,
+        screen_size=...,
+        terminal_on_life_loss=...,
+        grayscale_obs=...,
+        grayscale_newaxis=...,
+        scale_obs=...,
+    ) -> None: ...
+    def step(self, action): ...
+    def reset(self, **kwargs): ...
