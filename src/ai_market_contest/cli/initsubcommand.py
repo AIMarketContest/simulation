@@ -1,4 +1,3 @@
-import os
 import pathlib
 import shutil
 import sys
@@ -9,6 +8,8 @@ from cli_config import PROJ_DIR_NAME
 
 def make_agent_classname_camelcase(agent_name):
     AGENT_STR = "agent"
+    if AGENT_STR.capitalize() in agent_name:
+        return agent_name
     agent_name_cc = agent_name.lower()
     if AGENT_STR in agent_name_cc:
         agent_name_cc = agent_name_cc.replace(AGENT_STR, AGENT_STR.capitalize())
@@ -74,7 +75,7 @@ def remove_proj_dir(proj_dir):
         shutil.rmtree(proj_dir)
 
 
-def include_example(proj_dir):
+def include_example(proj_dir): 
     shutil.copy("../example_main.py", proj_dir / "example_main.py")
     print(
         "The example on how to setup the environment can be found in example_main.py."
