@@ -51,16 +51,13 @@ def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
         f1.close()
 
 
-def make_proj_dir(path_exists, proj_dir):
-    if not path_exists:
-        print("Illegal argument: Argument must be an existing directort")
-        sys.exit(2)
+def make_proj_dir(proj_dir):
     if proj_dir.is_dir():
         print(
             "Agent already initialised\nTo delete the current agent and start a new one,\nedit the agent.ini file\nthen run the command ai-market-contest restart <path>\nTo just delete the current agent run ai-market-contest reset <path>"
         )
         sys.exit(2)
-    os.mkdir(proj_dir)
+    proj_dir.mkdir(parents=True)
 
 
 def make_config_file(proj_dir, agents_names, authors):
@@ -87,7 +84,7 @@ def include_example(proj_dir):
 def initialise_file_structure(args):
     path = args.path
     proj_dir = path / PROJ_DIR_NAME
-    make_proj_dir(path.is_dir(), proj_dir)
+    make_proj_dir(proj_dir)
     atexit.register(remove_proj_dir, proj_dir)
     agents_names: list[str] = []
     for agent_number in range(1, args.number_of_agents + 1):
