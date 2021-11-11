@@ -70,7 +70,7 @@ class Environment:
             If the simulation cannot handle any more agents.
         """
         if self.agent_count >= self.max_agents:
-            raise IndexError("Cannot add more agents to simulation")
+            raise RuntimeError("Cannot add more agents to simulation")
 
         self.all_agents[self.agent_count] = agent
         self.agent_count += 1

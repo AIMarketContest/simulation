@@ -67,3 +67,11 @@ class EnvironmentTest(TestCase):
         env.run_next_time_step()
         test_agent_a.get_price.assert_called_once()
         test_agent_b.get_price.assert_called_once()
+
+    def test_runtime_exception_when_too_many_agents_added(self):
+        env = Environment(self.simulation_length, self.demand_function, 2)
+        env.add_agent(FixedAgent())
+        env.add_agent(FixedAgent())
+
+        with self.assertRaises(RuntimeError):
+            env.add_agent(FixedAgent())
