@@ -41,7 +41,7 @@ class Agent(metaclass=ABCMeta):
         Calculate the agent's price at the current timestep using data from the previous timestep.
 
         Parameters
-        __________
+        ----------
         last_round_all_agents_prices : list of float
             List of all the prices set by all agents in the previous timestep.
         last_round_sales: int
@@ -56,7 +56,7 @@ class Agent(metaclass=ABCMeta):
             Price of the product set by the agent at the current timestep, discretised within [0,1].
 
         Raises
-        ______
+        ------
         NotImplementedError
             If concrete class does not override method.
         """
