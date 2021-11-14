@@ -10,11 +10,13 @@ class RandomAgent(Agent):
 
     def update(
         self,
-        last_round_agents_prices: list[float],
-        last_round_sales: int,
+        s1: list[float],
+        r1: int,
+        s2: list[float],
+        r2: int,
         identity_index: int,
     ) -> None:
         pass
 
-    def policy(self) -> float:
+    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
         return random.random()

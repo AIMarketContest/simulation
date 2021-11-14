@@ -1,13 +1,17 @@
-from agent import Agent
 from collections import defaultdict
+from typing import Dict, Sequence
+
 import numpy as np
+from agent import Agent
 
 
 class SarsaAgent(Agent):
     def __init__(self, action_spaces: int):
         self.cost = 0.3
         self.actions_spaces = action_spaces
-        self.Q = defaultdict(lambda: defaultdict(int))
+        self.Q: Dict[Sequence[float], Dict[float, float]] = defaultdict(
+            lambda: defaultdict(float)
+        )
         self.alpha = 0.3
         self.gamma = 0.9
         self.theta = 0.001
@@ -25,8 +29,8 @@ class SarsaAgent(Agent):
         ):
             previous_actions_for_state = self.Q[tuple(other_agent_prices)]
 
-            max_profit = 0
-            best_price = 0
+            max_profit = 0.0
+            best_price = 0.0
             for price, profit in previous_actions_for_state.items():
                 if profit > max_profit:
                     max_profit = profit
@@ -36,7 +40,6 @@ class SarsaAgent(Agent):
 
         return np.random.randint(0, self.actions_spaces)
 
-    ## TODO :: Change r1 to be sales figures (i.e. reward_signal = [price-cost]*r1)
     def update(
         self,
         s1: list[float],

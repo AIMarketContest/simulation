@@ -1,7 +1,8 @@
 ﻿import argparse
-import initsubcommand
-import resetsubcommand
-import addagentsubcommand
+
+import cli.addagentsubcommand
+import cli.initsubcommand
+import cli.resetsubcommand
 
 
 def initialise_parser():
@@ -10,9 +11,9 @@ def initialise_parser():
     )
     subparsers = parser.add_subparsers()
 
-    initsubcommand.create_subparser(subparsers)
-    resetsubcommand.create_subparser(subparsers)
-    addagentsubcommand.create_subparser(subparsers)
+    cli.initsubcommand.create_subparser(subparsers)
+    cli.resetsubcommand.create_subparser(subparsers)
+    cli.addagentsubcommand.create_subparser(subparsers)
     return parser
 
 

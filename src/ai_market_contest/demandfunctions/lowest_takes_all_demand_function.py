@@ -1,5 +1,5 @@
-from demand_function import DemandFunction
 import numpy as np
+from demand_function import DemandFunction
 
 
 class LowestTakesAllDemandFunction(DemandFunction):

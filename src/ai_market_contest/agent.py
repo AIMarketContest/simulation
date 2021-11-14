@@ -13,14 +13,15 @@ class Agent(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def policy(self, last_round_agents_prices: list[float]) -> float:
+    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
         """
         Query the agent for the next price to set.
 
         Returns
         -------
         float
-            Price of the product set by the agent at the current timestep, discretised within [0,1].
+            Price of the product set by the agent at the current timestep,
+            discretised within [0,1].
 
         Raises
         ______
@@ -40,14 +41,16 @@ class Agent(metaclass=ABCMeta):
         identity_index: int,
     ) -> None:
         """
-        Feeds data from the previous timestep into the agent allowing it to adjust it's strategy.
+        Feeds data from the previous timestep into the agent allowing it
+        to adjust it's strategy.
 
         Parameters
         ----------
         last_round_all_agents_prices : list of float
             List of all the prices set by all agents in the previous timestep.
         last_round_sales: int
-            A positive integer representing the number of sales the agent made in the previous timestep.
+            A positive integer representing the number of sales the agent
+            made in the previous timestep.
         identity_index: int
             A positive integer that tells the agent which index in the list
             corresponds to themself.

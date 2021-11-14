@@ -1,13 +1,12 @@
-import numpy as np
-from numpy.typing import NDArray
+from typing import Any, Dict, List, Optional
 
-from typing import Any, Dict, List
-from gym import spaces
+import numpy as np
 from agent import Agent
 from demand_function import DemandFunction
-from pettingzoo import ParallelEnv
-import numpy as np
-from pettingzoo.utils import wrappers, from_parallel
+from gym import spaces  # type: ignore
+from numpy.typing import NDArray
+from pettingzoo import ParallelEnv  # type: ignore
+from pettingzoo.utils import from_parallel, wrappers  # type: ignore
 
 
 class Environment(ParallelEnv):
@@ -51,7 +50,7 @@ class Environment(ParallelEnv):
         self.reset()
 
     def reset(self) -> Dict[Agent, float]:
-        self.possible_agents: List[Agent] = []
+        self.possible_agents: List[Optional[Agent]] = [None] * self.max_agents
         self.action_spaces: Dict[Agent, spaces.Discrete] = {}
         self.observation_spaces: Dict[Agent, spaces.Discrete] = {}
         self.hist_set_prices: NDArray[np.float32] = np.zeros(
@@ -62,7 +61,7 @@ class Environment(ParallelEnv):
         )
         self.time_step: int = 0
 
-        return {agent: 0.0 for agent in self.possible_agents}
+        return {agent: 0.0 for agent in self.possible_agents if agent is not None}
 
     def add_agent(self, agent: Agent) -> int:
         """
@@ -118,34 +117,36 @@ class Environment(ParallelEnv):
         ]
 
     def step(
-        self, actions: Dict[Agent, int]
+        self, actions: Dict[Agent, float]
     ) -> tuple[
         Dict[Agent, float], Dict[Agent, float], Dict[Agent, bool], Dict[Agent, Any]
     ]:
         """
         Runs a time step for the simulation and appends results to the historic data
         """
-        demands = self.demand.get_sales(
-            [actions[agent] for agent in self.possible_agents]
-        )
-        self.hist_set_prices.append(actions)
-        self.hist_sales_made.append(demands)
+        current_prices = [
+            actions[agent] for agent in self.possible_agents if agent is not None
+        ]
+        demands = self.demand.get_sales(current_prices)
+        self.hist_set_prices[self.time_step] = current_prices
+        self.hist_sales_made[self.time_step] = demands
 
         self.time_step += 1
         if self.time_step >= self.simulation_length:
             # raise IndexError("Cannot run simulation beyond maximum time step")
             self.done = True
 
-        observations = {
-            agent: price for agent, price in zip(self.possible_agents, actions)
-        }
+        observations: Dict[Agent, float] = {}
+        rewards: Dict[Agent, float] = {}
+        dones: Dict[Agent, bool] = {}
+        infos: Dict[Agent, Any] = {}
 
-        rewards = {}
         for index, agent in enumerate(self.possible_agents):
-            rewards[agent] = demands[index] * actions[agent]
-
-        dones = {agent: self.done for agent in self.possible_agents}
-        infos: Dict[Agent, Any] = {agent: {} for agent in self.possible_agents}
+            if agent is not None:
+                observations[agent] = demands[index]
+                rewards[agent] = demands[index] * actions[agent]
+                dones[agent] = self.done
+                infos[agent] = {}
 
         return observations, rewards, dones, infos
 

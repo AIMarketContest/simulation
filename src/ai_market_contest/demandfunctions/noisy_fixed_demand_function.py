@@ -14,6 +14,6 @@ class NoisyFixedDemandFunction(DemandFunction):
 
     def get_sales(self, current_prices: list[float]) -> list[int]:
         return [
-            randint(0, 100) / 100.0 + self.fixed_quantity
+            int(randint(0, 100) / 100.0 + self.fixed_quantity)
             for _ in range(len(current_prices))
         ]
