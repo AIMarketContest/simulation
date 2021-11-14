@@ -1,28 +1,16 @@
 import numpy as np
 from numpy.typing import NDArray
 
-from abc import ABC
-from typing import Dict, List
+from typing import Any, Dict, List
 from gym import spaces
 from agent import Agent
 from demand_function import DemandFunction
-from pettingzoo import AECEnv
+from pettingzoo import ParallelEnv
 import numpy as np
-from pettingzoo.utils import wrappers
-
-NUMBER_OF_DISCRETE_PRICES = 100
+from pettingzoo.utils import wrappers, from_parallel
 
 
-def env(simulation_length: int, demand: DemandFunction):
-    env = Environment(simulation_length, demand)
-    env = wrappers.CaptureStdoutWrapper(env)
-    env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.OrderEnforcingWrapper(env)
-
-    return env
-
-
-class Environment(AECEnv):
+class Environment(ParallelEnv):
     """
     The backbone of the simulation - responsible for tying most other elements together
 
@@ -53,22 +41,28 @@ class Environment(AECEnv):
     """
 
     START_VAL = 0.5
+    NUMBER_OF_DISCRETE_PRICES = 100
 
-    def __init__(self, simulation_length: int, demand: DemandFunction):
-        self.possible_agents: NDArray = np.empty((max_agents,), dtype=object)
-        self.action_spaces: Dict[Agent, spaces.Discrete] = {}
-        self.observation_spaces: Dict[Agent, spaces.Discrete] = {}
-        self.hist_sales_made: NDArray = np.zeros(
-            (simulation_length, max_agents), dtype=int
-        )
-        self.hist_set_prices: NDArray = np.zeros(
-            (simulation_length, max_agents), dtype=float
-        )
+    def __init__(self, simulation_length: int, demand: DemandFunction, max_agents: int):
+        self.max_agents: int = max_agents
         self.simulation_length: int = simulation_length
-        self.time_step: int = 0
         self.demand: DemandFunction = demand
         self.agent_count: int = 0
-        self.max_agents: int = max_agents
+        self.reset()
+
+    def reset(self) -> Dict[Agent, float]:
+        self.possible_agents: List[Agent] = []
+        self.action_spaces: Dict[Agent, spaces.Discrete] = {}
+        self.observation_spaces: Dict[Agent, spaces.Discrete] = {}
+        self.hist_set_prices: NDArray[np.float32] = np.zeros(
+            (self.simulation_length, self.max_agents), dtype=np.float32
+        )
+        self.hist_sales_made: NDArray[np.int32] = np.zeros(
+            (self.simulation_length, self.max_agents), dtype=np.int32
+        )
+        self.time_step: int = 0
+
+        return {agent: 0.0 for agent in self.possible_agents}
 
     def add_agent(self, agent: Agent) -> int:
         """
@@ -94,13 +88,13 @@ class Environment(AECEnv):
             raise RuntimeError("Cannot add more agents to simulation")
 
         self.possible_agents[self.agent_count] = agent
-        self.action_spaces[agent] = spaces.Discrete(NUMBER_OF_DISCRETE_PRICES)
-        self.observation_spaces[agent] = spaces.Discrete(NUMBER_OF_DISCRETE_PRICES)
+        self.action_spaces[agent] = spaces.Discrete(self.NUMBER_OF_DISCRETE_PRICES)
+        self.observation_spaces[agent] = spaces.Discrete(self.NUMBER_OF_DISCRETE_PRICES)
         self.agent_count += 1
 
         return self.agent_count - 1
 
-    def get_results(self) -> tuple[NDArray, NDArray]:
+    def get_results(self) -> tuple[NDArray[np.float32], NDArray[np.int32]]:
         """
         Allows post-simulation analysis to be performed on sales figures and numbers
 
@@ -123,48 +117,46 @@ class Environment(AECEnv):
             self.hist_set_prices[x][agent_id] for x in range(len(self.hist_set_prices))
         ]
 
-    def reset(self) -> int:
-        self.possible_agents = []
-        self.action_spaces = {}
-        self.observation_spaces = {}
-        self.hist_sales_made = []
-        self.hist_set_prices = []
-        self.time_step = 0
-        self.hist_set_prices = []
-        self.state = np.random.randint(0, NUMBER_OF_DISCRETE_PRICES, size=1)
-
-        return self.state
-
-    def step(self) -> tuple[list[float], list[int], bool]:
+    def step(
+        self, actions: Dict[Agent, int]
+    ) -> tuple[
+        Dict[Agent, float], Dict[Agent, float], Dict[Agent, bool], Dict[Agent, Any]
+    ]:
         """
         Runs a time step for the simulation and appends results to the historic data
         """
+        demands = self.demand.get_sales(
+            [actions[agent] for agent in self.possible_agents]
+        )
+        self.hist_set_prices.append(actions)
+        self.hist_sales_made.append(demands)
+
+        self.time_step += 1
         if self.time_step >= self.simulation_length:
             # raise IndexError("Cannot run simulation beyond maximum time step")
             self.done = True
 
-        previous_prices = self.hist_set_prices[-1] if self.hist_set_prices else []
+        observations = {
+            agent: price for agent, price in zip(self.possible_agents, actions)
+        }
 
-        # Run current time step
-        current_prices: list[float] = []
-        for agent in self.possible_agents:
-            current_prices.append(agent.policy(previous_prices))
+        rewards = {}
+        for index, agent in enumerate(self.possible_agents):
+            rewards[agent] = demands[index] * actions[agent]
 
-        self.hist_set_prices.append(current_prices)
-        self.hist_sales_made.append(self.demand.get_sales(current_prices))
+        dones = {agent: self.done for agent in self.possible_agents}
+        infos: Dict[Agent, Any] = {agent: {} for agent in self.possible_agents}
 
-        # Provide agent feedback on step
-        if self.time_step > 1:
-            for agent_index, agent in enumerate(self.possible_agents):
-                agent.update(
-                    self.hist_set_prices[-2],
-                    self.hist_sales_made[-2][agent_index],
-                    previous_prices,
-                    self.hist_sales_made[-1][agent_index],
-                    agent_index,
-                )
+        return observations, rewards, dones, infos
 
-        self.time_step += 1
-        demands = self.demand.get_sales(current_prices)
-        rewards = [a * b for a, b in zip(demands, current_prices)]
-        return current_prices, rewards, self.done
+
+def init_env(
+    simulation_length: int, demand: DemandFunction, max_agents: int
+) -> Environment:
+    env = Environment(simulation_length, demand, max_agents)
+    env = from_parallel(env)
+    env = wrappers.CaptureStdoutWrapper(env)
+    env = wrappers.AssertOutOfBoundsWrapper(env)
+    env = wrappers.OrderEnforcingWrapper(env)
+
+    return env

@@ -1,4 +1,6 @@
 from abc import ABCMeta, abstractmethod
+import numpy as np
+from numpy.typing import NDArray
 
 
 class DemandFunction(metaclass=ABCMeta):
