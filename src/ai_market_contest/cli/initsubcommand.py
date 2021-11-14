@@ -1,18 +1,20 @@
+import atexit
+import configparser
 import pathlib
 import shutil
 import sys
-import atexit
-import configparser
-from cli_config import (
-    PROJ_DIR_NAME,
+from typing import Any, List
+
+from cli.cli_config import (
     AGENT_FILE,
-    EXAMPLE_MAIN_FILENAME,
-    EXAMPLE_MAIN_FILE,
     CONFIG_FILENAME,
+    EXAMPLE_MAIN_FILE,
+    EXAMPLE_MAIN_FILENAME,
+    PROJ_DIR_NAME,
 )
 
 
-def make_agent_classname_camelcase(agent_name):
+def make_agent_classname_camelcase(agent_name: str):
     AGENT_STR = "agent"
     if AGENT_STR.capitalize() in agent_name:
         return agent_name
@@ -36,7 +38,7 @@ def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
             f1.write("from agent import Agent\n")
             with AGENT_FILE.open("r") as f2:
                 for line in f2:
-                    if line != None:
+                    if line is not None:
                         if CLASS_METHOD_STR in line:
                             break
                         if IMPORT_STR in line:
@@ -58,39 +60,44 @@ def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
         f1.close()
 
 
-def make_proj_dir(proj_dir):
+def make_proj_dir(proj_dir: pathlib.Path):
     if proj_dir.is_dir():
         print(
-            "Agent already initialised\nTo delete the current agent and start a new one,\nedit the agent.ini file\nthen run the command ai-market-contest restart <path>\nTo just delete the current agent run ai-market-contest reset <path>"
+            """Agent already initialised
+            To delete the current agent and start a new one,
+            edit the agent.ini file
+            then run the command ai-market-contest restart <path>
+            To just delete the current agent run ai-market-contest reset <path>"""
         )
         sys.exit(2)
     proj_dir.mkdir(parents=True)
 
 
-def make_config_file(proj_dir, agents_names, authors):
+def make_config_file(
+    proj_dir: pathlib.Path, agents_names: List[str], authors: List[str]
+):
     config: configparser.ConfigParser = configparser.ConfigParser()
-    config["agent"] = {"agents": agents_names, "authors": authors}
+    config["agent"] = {"agents": agents_names, "authors": authors}  # type: ignore
     c_file: pathlib.Path = proj_dir / CONFIG_FILENAME
     c_file.touch()
     with c_file.open("w") as config_file:
         config.write(config_file)
 
 
-def remove_proj_dir(proj_dir):
+def remove_proj_dir(proj_dir: pathlib.Path):
     if proj_dir.is_dir():
         shutil.rmtree(proj_dir)
 
 
-def include_example(proj_dir):
-
+def include_example(proj_dir: pathlib.Path):
     shutil.copy(EXAMPLE_MAIN_FILE, proj_dir / EXAMPLE_MAIN_FILENAME)
     print(
         "The example on how to setup the environment can be found in example_main.py."
     )
 
 
-def initialise_file_structure(args):
-    path = args.path
+def initialise_file_structure(args: Any):
+    path: pathlib.Path = args.path
     proj_dir = path / PROJ_DIR_NAME
     make_proj_dir(proj_dir)
     atexit.register(remove_proj_dir, proj_dir)
@@ -108,7 +115,7 @@ def initialise_file_structure(args):
     atexit.unregister(remove_proj_dir)
 
 
-def create_subparser(subparsers):
+def create_subparser(subparsers: Any):  # type: ignore
     parser_init = subparsers.add_parser(
         "init",
         help="Initialises a folder structure for a project",

@@ -8,24 +8,24 @@ agents = [rand_agent, fixed_agent]
 
 
 def test_fixed_price_agent_gives_returns_fixed_price():
-    first_inital_price = fixed_agent.get_initial_price()
-    second_initial_price = fixed_agent.get_initial_price()
+    first_price = fixed_agent.policy([], 0)
+    second_price = fixed_agent.policy([], 0)
 
-    assert first_inital_price == second_initial_price
+    fixed_agent.update([0], 10, [0], 10, 4)
 
-    first_price = fixed_agent.get_price([0], 10, 0)
-    second_price = fixed_agent.get_price([0], 10, 0)
+    third_price = fixed_agent.policy([], 0)
 
     assert first_price == second_price
+    assert first_price == third_price
 
 
 def test_random_agent_uses_generates_different_prices():
-    first_inital_price = rand_agent.get_initial_price()
-    second_initial_price = rand_agent.get_initial_price()
+    first_price = rand_agent.policy([], 0)
+    second_price = rand_agent.policy([], 0)
 
-    assert first_inital_price != second_initial_price
+    rand_agent.update([0], 10, [0], 10, 0)
 
-    first_price = rand_agent.get_price([0], 10, 0)
-    second_price = rand_agent.get_price([0], 10, 0)
+    third_price = rand_agent.policy([], 0)
 
     assert first_price != second_price
+    assert first_price != third_price

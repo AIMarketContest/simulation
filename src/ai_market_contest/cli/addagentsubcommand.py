@@ -1,24 +1,27 @@
+import ast
+import configparser
 import pathlib
 import sys
-import shutil
-import configparser
-import ast
-from cli_config import PROJ_DIR_NAME, CONFIG_FILENAME, AGENT_FILE
-from initsubcommand import make_agent_classname_camelcase
+from typing import Any
+
+from cli.cli_config import AGENT_FILE, CONFIG_FILENAME, PROJ_DIR_NAME
+from cli.initsubcommand import make_agent_classname_camelcase
+
+IMPORT_STR: str = "import"
+AGENT_STR: str = "Agent"
+ABS_METHOD_STR: str = "abstractmethod"
+CLASS_METHOD_STR: str = "classmethod"
 
 
-def create_agent_class(agent_name, proj_dir):
-    IMPORT_STR: str = "import"
-    AGENT_STR: str = "Agent"
-    ABS_METHOD_STR: str = "abstractmethod"
-    CLASS_METHOD_STR: str = "classmethod"
+def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
     agent_filename: str = agent_name + ".py"
     agent_file: pathlib.Path = proj_dir / agent_filename
     if agent_file.is_file():
         overwrite = "x"
         while overwrite != "y" and overwrite != "n":
             overwrite = input(
-                f"{agent_filename} already exists, are you sure you want to override the existing file? (y/n): "
+                f"{agent_filename} already exists, are you sure you want"
+                + " to override the existing file? (y/n): "
             )
             if overwrite == "y":
                 break
@@ -26,12 +29,15 @@ def create_agent_class(agent_name, proj_dir):
                 sys.exit(0)
 
     agent_file.touch()
+
+
+def write_to_new_agent_file(agent_file: pathlib.Path, agent_name: str):
     class_line_tab = False
     with agent_file.open("w") as f1:
         f1.write("from agent import Agent\n")
         with AGENT_FILE.open("r") as f2:
             for line in f2:
-                if line != None:
+                if line is not None:
                     if CLASS_METHOD_STR in line:
                         break
                     if IMPORT_STR in line:
@@ -49,19 +55,18 @@ def create_agent_class(agent_name, proj_dir):
                         class_line_tab = True
                     else:
                         f1.write(line)
-        f2.close()
-    f1.close()
 
 
-def add_agent(args):
-    path = args.path
+def add_agent(args: Any):
+    path: pathlib.Path = args.path
     if not path.is_dir():
         print("Illegal argument: Argument must be an existing directory")
         sys.exit(2)
     proj_dir = path / PROJ_DIR_NAME
     if not proj_dir.is_dir():
         print(
-            "No project has been initialised in the directory.\nTo initialise a project run aicontest init <path>"
+            """No project has been initialised in the directory.
+            To initialise a project run aicontest init <path>"""
         )
         sys.exit(2)
     agent_name = input("Enter name of new agent: ")
@@ -70,14 +75,14 @@ def add_agent(args):
     config = configparser.ConfigParser()
     config.read(c_file)
     agents = ast.literal_eval(config["agent"]["agents"])
-    if not agent_name in agents:
+    if agent_name not in agents:
         agents.append(agent_name)
     config["agent"]["agents"] = str(agents)
     with c_file.open("w") as config_file:
         config.write(config_file)
 
 
-def create_subparser(subparsers):
+def create_subparser(subparsers: Any):  # type: ignore
     parser_addagent = subparsers.add_parser(
         "add-agent", help="Adds an agent to an initialised project"
     )

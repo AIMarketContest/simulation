@@ -8,13 +8,15 @@ class RandomAgent(Agent):
     An agent which returns a random price.
     """
 
-    def get_initial_price(self) -> float:
-        return random.random()
-
-    def get_price(
+    def update(
         self,
-        last_round_agents_prices: list[float],
-        last_round_sales: int,
+        s1: list[float],
+        r1: int,
+        s2: list[float],
+        r2: int,
         identity_index: int,
-    ) -> float:
+    ) -> None:
+        pass
+
+    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
         return random.random()

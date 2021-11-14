@@ -6,19 +6,18 @@ class FixedAgent(Agent):
     An agent that always returns the same price.
     """
 
-    def __init__(self, price: float = 0.5):
-        if not 0 <= price <= 1:
-            raise ValueError("Price must be between 0 and 1")
-
+    def __init__(self, price: int = 50):
         self.price = price
 
-    def get_initial_price(self) -> float:
-        return self.price
-
-    def get_price(
+    def update(
         self,
-        last_round_agents_prices: list[float],
-        last_round_sales: int,
+        s1: list[float],
+        r1: int,
+        s2: list[float],
+        r2: int,
         identity_index: int,
-    ) -> float:
+    ) -> None:
+        pass
+
+    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
         return self.price
