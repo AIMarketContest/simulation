@@ -4,8 +4,8 @@ import pathlib
 import sys
 from typing import Any
 
-from cli.cli_config import AGENT_FILE, CONFIG_FILENAME, PROJ_DIR_NAME
-from cli.initsubcommand import make_agent_classname_camelcase
+from config import AGENT_FILE, CONFIG_FILENAME, PROJ_DIR_NAME
+from initsubcommand import make_agent_classname_camelcase
 
 IMPORT_STR: str = "import"
 AGENT_STR: str = "Agent"
