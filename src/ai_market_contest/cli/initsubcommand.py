@@ -5,7 +5,7 @@ import shutil
 import sys
 from typing import Any, List
 
-from cli.cli_config import (
+from config import (
     AGENT_FILE,
     CONFIG_FILENAME,
     EXAMPLE_MAIN_FILE,
