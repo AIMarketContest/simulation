@@ -3,7 +3,7 @@ import shutil
 import sys
 from typing import Any
 
-from config import PROJ_DIR_NAME
+from cli_config import PROJ_DIR_NAME
 
 
 def remove_proj_dir(path_exists: bool, proj_dir: pathlib.Path):
