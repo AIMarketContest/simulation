@@ -134,3 +134,6 @@ dmypy.json
 aicontest/
 # vscode
 .vscode/
+
+# vim swap files
+*.swp
