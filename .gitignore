@@ -134,3 +134,10 @@ dmypy.json
 aicontest/
 # vscode
 .vscode/
+
+# vim swap and merge files
+*.swp
+*.orig
+
+# Jetbrains folder
+.idea
