@@ -4,19 +4,15 @@ import pathlib
 import sys
 from typing import Any
 
-from config import AGENT_FILE, CONFIG_FILENAME, PROJ_DIR_NAME
-from initsubcommand import make_agent_classname_camelcase
-
-IMPORT_STR: str = "import"
-AGENT_STR: str = "Agent"
-ABS_METHOD_STR: str = "abstractmethod"
-CLASS_METHOD_STR: str = "classmethod"
+from cli_config import AGENT_FILE, CONFIG_FILENAME, PROJ_DIR_NAME
+from utils import write_to_new_agent_file
 
 
 def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
     agent_filename: str = agent_name + ".py"
-    agent_file: pathlib.Path = proj_dir / agent_filename
-    if agent_file.is_file():
+    agent_dir: pathlib.Path = proj_dir / agent_name
+    agent_file: pathlib.Path = agent_dir / agent_filename
+    if agent_dir.is_dir():
         overwrite = "x"
         while overwrite != "y" and overwrite != "n":
             overwrite = input(
@@ -27,34 +23,8 @@ def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
                 break
             if overwrite == "n":
                 sys.exit(0)
-
+    agent_dir.mkdir(parents=True)
     agent_file.touch()
-
-
-def write_to_new_agent_file(agent_file: pathlib.Path, agent_name: str):
-    class_line_tab = False
-    with agent_file.open("w") as f1:
-        f1.write("from agent import Agent\n")
-        with AGENT_FILE.open("r") as f2:
-            for line in f2:
-                if line is not None:
-                    if CLASS_METHOD_STR in line:
-                        break
-                    if IMPORT_STR in line:
-                        continue
-                    if ABS_METHOD_STR in line:
-                        continue
-                    if AGENT_STR in line:
-                        tab = "\t" if class_line_tab else ""
-                        f1.write(
-                            tab
-                            + "class "
-                            + make_agent_classname_camelcase(agent_name)
-                            + "(Agent):\n"
-                        )
-                        class_line_tab = True
-                    else:
-                        f1.write(line)
 
 
 def add_agent(args: Any):
