@@ -32,8 +32,30 @@ def test_init_creates_aicontest_folder_at_given_path(tmp_path, parser):
     assert os.path.isdir(tmp_path / "aicontest")
 
 
-def test_can_specify_number_of_agents_to_initialise_with_using_n_flag():
-    raise NotImplementedError
+def test_can_specify_number_of_agents_to_initialise_with_using_n_flag(
+    tmp_path, parser
+):
+    agent_names = ["AgentMatteo", "AgentIbraheem", "AgentPranav"]
+
+    # parse arguments
+    args = parser.parse_args(
+        ["init", str(tmp_path), "-n", str(len(agent_names))]
+    )
+
+    sys.stdin = io.StringIO("\n".join(agent_names) + "\nAuthor Name\n")
+    args.func(args)
+
+    agent_files = os.listdir(tmp_path / "aicontest")
+
+    for agent_name in agent_names:
+        # checks a directory with the agent name exists and is a directory
+        assert agent_name in agent_files
+        assert os.path.isdir(tmp_path / "aicontest" / agent_name)
+
+        # checks that the agent file is within the directory
+        assert os.path.isfile(
+            tmp_path / "aicontest" / agent_name / f"{agent_name}.py"
+        )
 
 
 def test_default_number_of_agents_to_create_is_one():
