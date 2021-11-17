@@ -30,6 +30,18 @@ def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
     write_agent_config_file(agent_config_file)
 
 
+def edit_project_config_file(agent_name: str, proj_dir: pathlib.Path):
+    config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    config.read(config_file)
+    agents: list[str] = ast.literal_eval(config["agent"]["agents"])
+    if agent_name not in agents:
+        agents.append(agent_name)
+    config["agent"]["agents"] = str(agents)
+    with config_file.open("w") as c_file:
+        config.write(c_file)
+
+
 def add_agent(args: Any):
     path: pathlib.Path = args.path
     if not path.is_dir():
@@ -44,15 +56,7 @@ def add_agent(args: Any):
         sys.exit(2)
     agent_name = input("Enter name of new agent: ")
     create_agent_class(agent_name, proj_dir)
-    config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
-    config: configparser.ConfigParser = configparser.ConfigParser()
-    config.read(config_file)
-    agents = ast.literal_eval(config["agent"]["agents"])
-    if agent_name not in agents:
-        agents.append(agent_name)
-    config["agent"]["agents"] = str(agents)
-    with config_file.open("w") as c_file:
-        config.write(c_file)
+    edit_project_config_file(agent_name, proj_dir)
 
 
 def create_subparser(subparsers: Any):  # type: ignore

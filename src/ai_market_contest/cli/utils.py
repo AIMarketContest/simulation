@@ -48,7 +48,7 @@ def write_to_new_agent_file(agent_file: pathlib.Path, agent_name: str):
                         f1.write(line)
 
 
-def write_agent_config_file(agent_config_file):
+def write_agent_config_file(agent_config_file: pathlib.Path):
     config: configparser.ConfigParser = configparser.ConfigParser()
     with agent_config_file.open("w"):
         config.write(agent_config_file)
