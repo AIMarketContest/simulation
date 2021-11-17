@@ -12,14 +12,6 @@ import os
 import os.path
 import sys
 
-import pytest
-from cli import initialise_parser
-
-
-@pytest.fixture
-def parser():
-    return initialise_parser()
-
 
 def test_init_creates_aicontest_folder_at_given_path(tmp_path, parser):
     # parse arguments
