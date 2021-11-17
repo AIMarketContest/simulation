@@ -13,11 +13,9 @@ repos:
     hooks:
       - id: isort
         name: isort (python)
-        args: ["--profile", "black"]
       - id: isort
         name: isort (cython)
         types: [cython]
       - id: isort
         name: isort (pyi)
         types: [pyi]
-
