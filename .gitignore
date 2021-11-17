@@ -135,5 +135,7 @@ aicontest/
 # vscode
 .vscode/
 
-# vim swap files
+# vim swap and merge files
 *.swp
+*.orig
+
