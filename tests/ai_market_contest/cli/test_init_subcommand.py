@@ -12,7 +12,7 @@ import os
 import os.path
 import sys
 
-from cli_test_utils import initialise_main_folder
+from cli_test_utils import check_is_agent, initialise_main_folder
 
 
 def test_init_creates_aicontest_folder_at_given_path(tmp_path, parser):
@@ -41,37 +41,15 @@ def test_can_specify_number_of_agents_to_initialise_with_using_n_flag(
     sys.stdin = io.StringIO("\n".join(agent_names) + "\nAuthor Name\n")
     args.func(args)
 
-    agent_files = os.listdir(tmp_path / "aicontest")
-
     for agent_name in agent_names:
-        # checks a directory with the agent name exists and is a directory
-        assert agent_name in agent_files, "given agent name does not exist"
-        assert os.path.isdir(
-            tmp_path / "aicontest" / agent_name
-        ), "given agent is not represented as a folder"
-
-        # checks that the agent file is within the directory
-        assert os.path.isfile(
-            tmp_path / "aicontest" / agent_name / f"{agent_name}.py"
-        ), "agent folder does not have a template for the user"
+        check_is_agent(tmp_path, agent_name)
 
 
 def test_default_number_of_agents_to_create_is_one(parser, tmp_path):
     agent_name = "AgentName"
     initialise_main_folder(parser, tmp_path, agent_name=agent_name)
 
-    # checks a directory with the agent name exists and is a directory
-    assert agent_name in os.listdir(
-        tmp_path / "aicontest"
-    ), "given agent name is not in the folder structure"
-    assert os.path.isdir(
-        tmp_path / "aicontest" / agent_name
-    ), "given agent not represented as a folder"
-
-    # checks that the agent file is within the directory
-    assert os.path.isfile(
-        tmp_path / "aicontest" / agent_name / f"{agent_name}.py"
-    ), "agent folder does not have a template for the user"
+    check_is_agent(tmp_path, agent_name)
 
 
 def test_will_copy_example_usage_with_include_example_tag(parser, tmp_path):
