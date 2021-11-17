@@ -12,6 +12,8 @@ import os
 import os.path
 import sys
 
+from cli_test_utils import initialise_main_folder
+
 
 def test_init_creates_aicontest_folder_at_given_path(tmp_path, parser):
     # parse arguments
@@ -55,13 +57,8 @@ def test_can_specify_number_of_agents_to_initialise_with_using_n_flag(
 
 
 def test_default_number_of_agents_to_create_is_one(parser, tmp_path):
-    # parse arguments
-    args = parser.parse_args(["init", str(tmp_path)])
-
     agent_name = "AgentName"
-    # input for the program once it runs with only one agent
-    sys.stdin = io.StringIO(f"{agent_name}\nAuthor Name\n")
-    args.func(args)
+    initialise_main_folder(parser, tmp_path, agent_name=agent_name)
 
     # checks a directory with the agent name exists and is a directory
     assert agent_name in os.listdir(
