@@ -13,7 +13,7 @@ from cli_config import (
     PROJ_DIR_NAME,
 )
 
-from utils import write_to_new_agent_file
+from utils import write_to_new_agent_file, write_agent_config_file
 
 
 def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
@@ -23,7 +23,9 @@ def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
         agent_dir.mkdir(parents=True)
         agent_file: pathlib.Path = agent_dir / agent_filename
         agent_file.touch()
+        agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
         write_to_new_agent_file(agent_file, agent_name)
+        write_agent_config_file(agent_config_file)
 
 
 def make_proj_dir(proj_dir: pathlib.Path):

@@ -5,7 +5,7 @@ import sys
 from typing import Any
 
 from cli_config import AGENT_FILE, CONFIG_FILENAME, PROJ_DIR_NAME
-from utils import write_to_new_agent_file
+from utils import write_to_new_agent_file, write_agent_config_file
 
 
 def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
@@ -25,6 +25,9 @@ def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
                 sys.exit(0)
     agent_dir.mkdir(parents=True)
     agent_file.touch()
+    write_to_new_agent_file(agent_file, agent_name)
+    agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
+    write_agent_config_file(agent_config_file)
 
 
 def add_agent(args: Any):
@@ -41,15 +44,15 @@ def add_agent(args: Any):
         sys.exit(2)
     agent_name = input("Enter name of new agent: ")
     create_agent_class(agent_name, proj_dir)
-    c_file = proj_dir / CONFIG_FILENAME
-    config = configparser.ConfigParser()
-    config.read(c_file)
+    config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    config.read(config_file)
     agents = ast.literal_eval(config["agent"]["agents"])
     if agent_name not in agents:
         agents.append(agent_name)
     config["agent"]["agents"] = str(agents)
-    with c_file.open("w") as config_file:
-        config.write(config_file)
+    with config_file.open("w") as c_file:
+        config.write(c_file)
 
 
 def create_subparser(subparsers: Any):  # type: ignore

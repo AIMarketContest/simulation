@@ -1,4 +1,5 @@
 import pathlib
+import configparser
 
 from cli_config import (
     AGENT_FILE,
@@ -45,3 +46,9 @@ def write_to_new_agent_file(agent_file: pathlib.Path, agent_name: str):
                         class_line_tab = True
                     else:
                         f1.write(line)
+
+
+def write_agent_config_file(agent_config_file):
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    with agent_config_file.open("w"):
+        config.write(agent_config_file)
