@@ -12,16 +12,17 @@ import os
 import os.path
 import sys
 
-from cli_test_utils import check_is_agent, initialise_main_folder
+from cli_test_utils import (
+    check_is_agent,
+    initialise_main_folder,
+    run_cli_command,
+)
 
 
 def test_init_creates_aicontest_folder_at_given_path(tmp_path, parser):
-    # parse arguments
-    args = parser.parse_args(["init", str(tmp_path)])
-
     # input for the program once it runs
     sys.stdin = io.StringIO("AgentName\nAuthor Name\n")
-    args.func(args)
+    run_cli_command(parser, ["init", str(tmp_path)])
 
     assert os.path.isdir(
         tmp_path / "aicontest"
@@ -33,13 +34,10 @@ def test_can_specify_number_of_agents_to_initialise_with_using_n_flag(
 ):
     agent_names = ["AgentMatteo", "AgentIbraheem", "AgentPranav"]
 
-    # parse arguments
-    args = parser.parse_args(
-        ["init", str(tmp_path), "-n", str(len(agent_names))]
-    )
-
     sys.stdin = io.StringIO("\n".join(agent_names) + "\nAuthor Name\n")
-    args.func(args)
+    run_cli_command(
+        parser, ["init", str(tmp_path), "-n", str(len(agent_names))]
+    )
 
     for agent_name in agent_names:
         check_is_agent(tmp_path, agent_name)
@@ -53,11 +51,8 @@ def test_default_number_of_agents_to_create_is_one(parser, tmp_path):
 
 
 def test_will_copy_example_usage_with_include_example_tag(parser, tmp_path):
-    # parse arguments
-    args = parser.parse_args(["init", str(tmp_path), "--include-example"])
-
     # input for the program once it runs
     sys.stdin = io.StringIO("AgentName\nAuthor Name\n")
-    args.func(args)
+    run_cli_command(parser, ["init", str(tmp_path), "--include-example"])
 
     assert os.path.isfile(tmp_path / "aicontest/example_main.py")

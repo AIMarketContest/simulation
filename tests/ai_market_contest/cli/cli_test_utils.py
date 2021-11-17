@@ -3,15 +3,20 @@ import os
 import sys
 
 
+def run_cli_command(parser, list_of_arguments):
+    # parse arguments
+    args = parser.parse_args(list_of_arguments)
+
+    args.func(args)
+
+
 def initialise_main_folder(
     parser, path, agent_name="AgentName", author_name="Author Name"
 ):
-    # parse arguments
-    args = parser.parse_args(["init", str(path)])
-
     # input for the program once it runs
     sys.stdin = io.StringIO(f"{agent_name}\n{author_name}\n")
-    args.func(args)
+
+    run_cli_command(parser, ["init", str(path)])
 
 
 def check_is_agent(path_to_project, agent_name):
