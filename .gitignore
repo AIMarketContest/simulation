@@ -139,3 +139,5 @@ aicontest/
 *.swp
 *.orig
 
+# Jetbrains folder
+.idea
