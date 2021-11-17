@@ -77,5 +77,12 @@ def test_default_number_of_agents_to_create_is_one(parser, tmp_path):
     )
 
 
-def test_will_copy_example_usage_with_include_example_tag():
-    raise NotImplementedError
+def test_will_copy_example_usage_with_include_example_tag(parser, tmp_path):
+    # parse arguments
+    args = parser.parse_args(["init", str(tmp_path), "--include-example"])
+
+    # input for the program once it runs
+    sys.stdin = io.StringIO("AgentName\nAuthor Name\n")
+    args.func(args)
+
+    assert os.path.isfile(tmp_path / "aicontest/example_main.py")
