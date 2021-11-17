@@ -58,8 +58,23 @@ def test_can_specify_number_of_agents_to_initialise_with_using_n_flag(
         )
 
 
-def test_default_number_of_agents_to_create_is_one():
-    raise NotImplementedError
+def test_default_number_of_agents_to_create_is_one(parser, tmp_path):
+    # parse arguments
+    args = parser.parse_args(["init", str(tmp_path)])
+
+    agent_name = "AgentName"
+    # input for the program once it runs with only one agent
+    sys.stdin = io.StringIO(f"{agent_name}\nAuthor Name\n")
+    args.func(args)
+
+    # checks a directory with the agent name exists and is a directory
+    assert agent_name in os.listdir(tmp_path / "aicontest")
+    assert os.path.isdir(tmp_path / "aicontest" / agent_name)
+
+    # checks that the agent file is within the directory
+    assert os.path.isfile(
+        tmp_path / "aicontest" / agent_name / f"{agent_name}.py"
+    )
 
 
 def test_will_copy_example_usage_with_include_example_tag():
