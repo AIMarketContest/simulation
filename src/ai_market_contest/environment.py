@@ -45,6 +45,14 @@ class Environment(ParallelEnv):
 
     def __init__(self, simulation_length: int, demand: DemandFunction, max_agents: int):
         self.max_agents: int = max_agents
+        self.possible_agents: List[str] = []
+        self.agent_name_mapping: Dict[str, Agent] = {}
+        self.action_spaces: Dict[
+            Agent, spaces.Discrete
+        ] = {}  # possible actions - from 0.000 in 0.001 increments
+        self.observation_spaces: Dict[Agent, spaces.Discrete] = {}
+        self.hist_sales_made: list[list[int]] = []
+        self.hist_set_prices: list[list[float]] = []
         self.simulation_length: int = simulation_length
         self.demand: DemandFunction = demand
         self.agent_count: int = 0
@@ -87,7 +95,7 @@ class Environment(ParallelEnv):
         if self.agent_count >= self.max_agents:
             raise RuntimeError("Cannot add more agents to simulation")
 
-        self.possible_agents[self.agent_count] = agent
+        self.possible_agents[self.agent_count] = f"agent_{self.agent_count}"
         self.action_spaces[agent] = spaces.Discrete(self.NUMBER_OF_DISCRETE_PRICES)
         self.observation_spaces[agent] = spaces.Discrete(self.NUMBER_OF_DISCRETE_PRICES)
         self.agent_count += 1
