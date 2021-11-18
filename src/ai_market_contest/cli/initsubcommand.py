@@ -75,7 +75,7 @@ def initialise_file_structure(args: Any):
     agents_names: list[str] = []
     for agent_number in range(1, args.number_of_agents + 1):
         print(f"Enter name of agent {agent_number}: ", end="")
-        agent_name = input_agent_name()
+        agent_name = input_agent_name(agents_names)
         agents_names.append(agent_name)
     print("Enter name(s) of the author(s): ", end="")
     authors: list[str] = input().split(",")

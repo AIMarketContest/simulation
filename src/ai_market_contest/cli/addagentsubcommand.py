@@ -5,12 +5,8 @@ import pathlib
 import sys
 from typing import Any
 
-from cli_config import (AGENT_FILE, CONFIG_FILENAME, PROJ_DIR_NAME, AGENTS_DIR_NAME)
-from utils import (
-    write_to_new_agent_file,
-    write_agent_config_file,
-    input_agent_name
-)
+from cli_config import AGENT_FILE, CONFIG_FILENAME, PROJ_DIR_NAME, AGENTS_DIR_NAME
+from utils import write_to_new_agent_file, write_agent_config_file, input_agent_name
 
 
 def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
@@ -75,8 +71,8 @@ def add_agent(args: Any):
             To initialise a project run aicontest init <path>"""
         )
         sys.exit(2)
-    print("Enter name of new agent: ")
-    agent_name = input_agent_name()
+    print("Enter name of new agent: ", end="")
+    agent_name = input_agent_name([])
     atexit.register(remove_agent_dir, agent_name, proj_dir)
     create_agent_class(agent_name, proj_dir)
     edit_project_config_file(agent_name, proj_dir)
