@@ -3,16 +3,14 @@ from typing import Any, List, Optional, Union
 import dm_env
 from mava.wrappers import (PettingZooAECEnvWrapper,
                            PettingZooParallelEnvWrapper)
-from supersuit import black_death_v1
 
-from environment import Environment
-
+from environment import init_env, Environment
+from demandfunctions.fixed_demand_function import FixedDemandFunction
 
 def make_environment(
     evaluation: bool = False,
     env_type: str = "parallel",
-    env_module: Environment = Environment(),
-    env_preprocess_wrappers: Optional[List] = [(black_death_v1, None)],
+    env_module: Environment = init_env(100, FixedDemandFunction(), 10),
     random_seed: Optional[int] = None,
     **kwargs: Any,
 ) -> dm_env.Environment:
@@ -25,18 +23,14 @@ def make_environment(
     """
     del evaluation
 
+    environment: Optional[dm_env.Environment] = None
+
     if env_type == "parallel":
         env = env_module.parallel_env(**kwargs)  # type: ignore
-        # wrap parallel environment
-        environment = PettingZooParallelEnvWrapper(
-            env, env_preprocess_wrappers=env_preprocess_wrappers
-        )
+        environment = PettingZooParallelEnvWrapper(env)
     elif env_type == "sequential":
         env = env_module.env(**kwargs)  # type: ignore
-        # wrap sequential environment
-        environment = PettingZooAECEnvWrapper(
-            env, env_preprocess_wrappers=env_preprocess_wrappers
-        )
+        environment = PettingZooAECEnvWrapper(env)
 
     if random_seed and hasattr(environment, "seed"):
         environment.seed(random_seed)
