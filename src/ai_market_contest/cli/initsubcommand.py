@@ -12,6 +12,7 @@ from cli_config import (
     EXAMPLE_MAIN_FILENAME,
     PROJ_DIR_NAME,
     AGENTS_DIR_NAME,
+    ENVS_DIR_NAME,
 )
 
 from utils import write_to_new_agent_file, write_agent_config_file, input_agent_name
@@ -41,7 +42,9 @@ def make_proj_dir(proj_dir: pathlib.Path):
         )
         sys.exit(2)
     agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
+    environments_dir: pathlib.Path = proj_dir / ENVS_DIR_NAME
     agents_dir.mkdir(parents=True)
+    environments_dir.mkdir()
 
 
 def make_config_file(
