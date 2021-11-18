@@ -5,16 +5,18 @@ import pathlib
 import sys
 from typing import Any
 
-from cli_config import AGENT_FILE, CONFIG_FILENAME, PROJ_DIR_NAME
+from cli_config import (AGENT_FILE, CONFIG_FILENAME, PROJ_DIR_NAME, AGENTS_DIR_NAME)
 from utils import (
     write_to_new_agent_file,
     write_agent_config_file,
+    input_agent_name
 )
 
 
 def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
+    agents_dir = proj_dir / AGENTS_DIR_NAME
     agent_filename: str = agent_name + ".py"
-    agent_dir: pathlib.Path = proj_dir / agent_name
+    agent_dir: pathlib.Path = agents_dir / agent_name
     agent_file: pathlib.Path = agent_dir / agent_filename
     if agent_dir.is_dir():
         overwrite = "x"
@@ -47,7 +49,8 @@ def edit_project_config_file(agent_name: str, proj_dir: pathlib.Path):
 
 
 def remove_agent_dir(agent_name, proj_dir):
-    agent_dir = proj_dir / agent_name
+    agents_dir = proj_dir / AGENTS_DIR_NAME
+    agent_dir = agents_dir / agent_name
     if agent_dir.is_dir():
         shutil.rmtree(agent_dir)
     config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
@@ -72,7 +75,8 @@ def add_agent(args: Any):
             To initialise a project run aicontest init <path>"""
         )
         sys.exit(2)
-    agent_name = input("Enter name of new agent: ")
+    print("Enter name of new agent: ")
+    agent_name = input_agent_name()
     atexit.register(remove_agent_dir, agent_name, proj_dir)
     create_agent_class(agent_name, proj_dir)
     edit_project_config_file(agent_name, proj_dir)
