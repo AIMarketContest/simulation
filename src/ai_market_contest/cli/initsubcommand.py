@@ -11,15 +11,17 @@ from cli_config import (
     EXAMPLE_MAIN_FILE,
     EXAMPLE_MAIN_FILENAME,
     PROJ_DIR_NAME,
+    AGENTS_DIR_NAME,
 )
 
 from utils import write_to_new_agent_file, write_agent_config_file
 
 
 def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
+    agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
     for agent_name in agents_names:
         agent_filename: str = agent_name + ".py"
-        agent_dir = proj_dir / agent_name
+        agent_dir = agents_dir / agent_name
         agent_dir.mkdir(parents=True)
         agent_file: pathlib.Path = agent_dir / agent_filename
         agent_file.touch()
@@ -38,7 +40,8 @@ def make_proj_dir(proj_dir: pathlib.Path):
             To just delete the current agent run ai-market-contest reset <path>"""
         )
         sys.exit(2)
-    proj_dir.mkdir(parents=True)
+    agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
+    agents_dir.mkdir(parents=True)
 
 
 def make_config_file(
