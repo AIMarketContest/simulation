@@ -11,6 +11,11 @@ from cli_config import (
     AGENT_STR,
 )
 
+def remove_underscores(string: str):
+    return string.replace("_", "")
+
+def is_valid_agent_name(agent_name: str):
+    return agent_name[0].isalpha() and remove_underscores(agent_name).isalnum()
 
 def make_agent_classname_camelcase(agent_name: str):
     AGENT_STR = "agent"
