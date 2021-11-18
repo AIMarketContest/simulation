@@ -1,5 +1,6 @@
 import pathlib
 
+COMMAND_NAME: str = "ai-market-contest"
 CLI_FILENAME: str = "cli.py"
 CLI_DIR: pathlib.Path = pathlib.Path(__file__).parent
 PROJ_DIR_NAME: str = "aicontest"

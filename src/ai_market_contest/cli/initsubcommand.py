@@ -8,6 +8,7 @@ from typing import Any, List
 from cli_config import (
     AGENT_FILE,
     CONFIG_FILENAME,
+    COMMAND_NAME,
     EXAMPLE_MAIN_FILE,
     EXAMPLE_MAIN_FILENAME,
     PROJ_DIR_NAME,
@@ -34,11 +35,9 @@ def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
 def make_proj_dir(proj_dir: pathlib.Path):
     if proj_dir.is_dir():
         print(
-            """Agent already initialised
-            To delete the current agent and start a new one,
-            edit the agent.ini file
-            then run the command ai-market-contest restart <path>
-            To just delete the current agent run ai-market-contest reset <path>"""
+            f"""{PROJ_DIR_NAME} project already initialised in the given directory 
+            To delete the current project run {COMMAND_NAME} reset <path> 
+            To add an agent to the project run {COMMAND_NAME} add-agent <path>"""
         )
         sys.exit(2)
     agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME

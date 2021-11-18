@@ -1,8 +1,11 @@
 ﻿import argparse
+import sys
 
 import addagentsubcommand
 import initsubcommand
 import resetsubcommand
+
+KEYBOARD_INTERRUPT_MSG = "Operation aborted."
 
 
 def initialise_parser():
@@ -24,4 +27,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print()  # print new line
+        print(KEYBOARD_INTERRUPT_MSG)
+        sys.exit(0)
