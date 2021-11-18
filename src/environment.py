@@ -1,10 +1,11 @@
-from typing import List
+from typing import List, Dict
 from gym import spaces
-from agent import Agent
-from demand_function import DemandFunction
+from src.agent import Agent
+from src.demand_function import DemandFunction
 from pettingzoo import AECEnv
 import numpy as np
 from pettingzoo.utils import wrappers
+import numpy as np
 
 NUMBER_OF_DISCRETE_PRICES = 100
 
@@ -47,13 +48,10 @@ class Environment(AECEnv):
     START_VAL = 0.5
 
     def __init__(self, simulation_length: int, demand: DemandFunction):
-        self.possible_agents: List[Agent] = []
-        self.action_space: spaces.Discrete = spaces.Discrete(
-            NUMBER_OF_DISCRETE_PRICES
-        )  # possible actions - from 0.000 in 0.001 increments
-        self.observation_spaces: spaces.MultiDiscrete = spaces.MultiDiscrete(
-            [self.START_VAL] * len(self.possible_agents)
-        )
+        self.possible_agents: List[str] = []
+        self.agent_name_mapping: Dict[str, Agent] = {}
+        self.action_spaces: Dict[Agent, spaces.Discrete] = {}  # possible actions - from 0.000 in 0.001 increments
+        self.observation_spaces: Dict[Agent, spaces.Discrete] = {}
         self.hist_sales_made: list[list[int]] = []
         self.hist_set_prices: list[list[float]] = []
         self.simulation_length: int = simulation_length
@@ -72,9 +70,9 @@ class Environment(AECEnv):
         agent: Agent
             The agent to be added
         """
-        self.possible_agents.append(agent)
-        self.action_space = spaces.Discrete(NUMBER_OF_DISCRETE_PRICES)
-        self.observation_spaces = spaces.Discrete(NUMBER_OF_DISCRETE_PRICES)
+        self.possible_agents.append("agent_"+str(len(self.possible_agents)))
+        self.action_spaces[agent] = spaces.Discrete(NUMBER_OF_DISCRETE_PRICES)
+        self.observation_spaces[agent] = spaces.Discrete(NUMBER_OF_DISCRETE_PRICES)
 
     def get_results(self) -> tuple[list[list[float]], list[list[int]]]:
         """
