@@ -1,11 +1,15 @@
 import ast
+import atexit
 import configparser
 import pathlib
 import sys
 from typing import Any
 
 from cli_config import AGENT_FILE, CONFIG_FILENAME, PROJ_DIR_NAME
-from utils import write_to_new_agent_file, write_agent_config_file
+from utils import (
+    write_to_new_agent_file,
+    write_agent_config_file,
+)
 
 
 def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
@@ -42,6 +46,20 @@ def edit_project_config_file(agent_name: str, proj_dir: pathlib.Path):
         config.write(c_file)
 
 
+def remove_agent_dir(agent_name, proj_dir):
+    agent_dir = proj_dir / agent_name
+    if agent_dir.is_dir():
+        shutil.rmtree(agent_dir)
+    config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    config.read(config_file)
+    agents: list[str] = ast.lteral_eval(config["agent"]["agents"])
+    agents.remove(agent_name)
+    config["agent"]["agents"] = str(agents)
+    with config_file.open("w") as c_file:
+        config.write(c_file)
+
+
 def add_agent(args: Any):
     path: pathlib.Path = args.path
     if not path.is_dir():
@@ -55,8 +73,10 @@ def add_agent(args: Any):
         )
         sys.exit(2)
     agent_name = input("Enter name of new agent: ")
+    atexit.register(remove_agent_dir, agent_name, proj_dir)
     create_agent_class(agent_name, proj_dir)
     edit_project_config_file(agent_name, proj_dir)
+    atexit.unregister(remove_agent_dir)
 
 
 def create_subparser(subparsers: Any):  # type: ignore
