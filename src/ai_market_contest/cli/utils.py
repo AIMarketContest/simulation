@@ -11,11 +11,25 @@ from cli_config import (
     AGENT_STR,
 )
 
+
 def remove_underscores(string: str):
     return string.replace("_", "")
 
+
 def is_valid_agent_name(agent_name: str):
     return agent_name[0].isalpha() and remove_underscores(agent_name).isalnum()
+
+
+def input_agent_name():
+    while True:
+        agent_name: str = input()
+        if is_valid_agent_name(agent_name):
+            break
+        print(
+            "Agent name must begin with a letter and can only contain letters, numbers and underscores"
+        )
+        print("Enter a valid agent name: ", end="")
+    return agent_name
 
 def make_agent_classname_camelcase(agent_name: str):
     AGENT_STR = "agent"

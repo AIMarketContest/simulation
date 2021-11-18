@@ -14,7 +14,7 @@ from cli_config import (
     AGENTS_DIR_NAME,
 )
 
-from utils import write_to_new_agent_file, write_agent_config_file
+from utils import write_to_new_agent_file, write_agent_config_file, input_agent_name
 
 
 def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
@@ -75,7 +75,7 @@ def initialise_file_structure(args: Any):
     agents_names: list[str] = []
     for agent_number in range(1, args.number_of_agents + 1):
         print(f"Enter name of agent {agent_number}: ", end="")
-        agent_name: str = input()
+        agent_name = input_agent_name()
         agents_names.append(agent_name)
     print("Enter name(s) of the author(s): ", end="")
     authors: list[str] = input().split(",")
