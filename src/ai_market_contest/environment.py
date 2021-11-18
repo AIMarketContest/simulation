@@ -51,24 +51,27 @@ class Environment(ParallelEnv):
             Agent, spaces.Discrete
         ] = {}  # possible actions - from 0.000 in 0.001 increments
         self.observation_spaces: Dict[Agent, spaces.Discrete] = {}
-        self.hist_sales_made: list[list[int]] = []
-        self.hist_set_prices: list[list[float]] = []
-        self.simulation_length: int = simulation_length
-        self.demand: DemandFunction = demand
-        self.agent_count: int = 0
-        self.reset()
-
-    def reset(self) -> Dict[Agent, float]:
-        self.possible_agents: List[Optional[Agent]] = [None] * self.max_agents
-        self.action_spaces: Dict[Agent, spaces.Discrete] = {}
-        self.observation_spaces: Dict[Agent, spaces.Discrete] = {}
         self.hist_set_prices: NDArray[np.float32] = np.zeros(
             (self.simulation_length, self.max_agents), dtype=np.float32
         )
         self.hist_sales_made: NDArray[np.int32] = np.zeros(
             (self.simulation_length, self.max_agents), dtype=np.int32
         )
-        self.time_step: int = 0
+        self.simulation_length: int = simulation_length
+        self.demand: DemandFunction = demand
+        self.agent_count: int = 0
+
+    def reset(self) -> Dict[Agent, float]:
+        self.possible_agents = []
+        self.action_spaces = {}
+        self.observation_spaces = {}
+        self.hist_set_prices = np.zeros(
+            (self.simulation_length, self.max_agents), dtype=np.float32
+        )
+        self.hist_sales_made = np.zeros(
+            (self.simulation_length, self.max_agents), dtype=np.int32
+        )
+        self.time_step = 0
 
         return {agent: 0.0 for agent in self.possible_agents if agent is not None}
 
