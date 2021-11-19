@@ -3,19 +3,16 @@ import configparser
 import pathlib
 import shutil
 import sys
-from typing import (
-    Any,
-    List,
-)
+from typing import Any, List
 
-from ai_market_contest.cli.cli_config import ( # type: ignore
+from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENT_FILE,
     CONFIG_FILENAME,
     EXAMPLE_MAIN_FILE,
     EXAMPLE_MAIN_FILENAME,
     PROJ_DIR_NAME,
 )
-from ai_market_contest.cli.utils import write_to_new_agent_file # type: ignore
+from ai_market_contest.cli.utils import write_to_new_agent_file  # type: ignore
 
 
 def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):

@@ -4,9 +4,7 @@ import numpy as np
 
 from ai_market_contest.agents.fixed_agent import FixedAgent
 from ai_market_contest.demand_function import DemandFunction
-from ai_market_contest.demandfunctions.fixed_demand_function import (
-    FixedDemandFunction,
-)
+from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction
 from ai_market_contest.environment import Environment
 
 

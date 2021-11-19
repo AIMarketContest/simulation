@@ -6,11 +6,7 @@
 import io
 import sys
 
-from cli_test_utils import (
-    check_is_agent,
-    initialise_main_folder,
-    run_cli_command,
-)
+from cli_test_utils import check_is_agent, initialise_main_folder, run_cli_command
 
 
 def test_adds_agent_to_given_path(parser, tmp_path):

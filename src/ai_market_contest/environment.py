@@ -1,18 +1,10 @@
-from typing import (
-    Any,
-    Dict,
-    List,
-    Optional,
-)
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 from gym import spaces  # type: ignore
 from numpy.typing import NDArray
 from pettingzoo import ParallelEnv  # type: ignore
-from pettingzoo.utils import (  # type: ignore
-    from_parallel,
-    wrappers,
-)
+from pettingzoo.utils import from_parallel, wrappers  # type: ignore
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.demand_function import DemandFunction
@@ -51,9 +43,7 @@ class Environment(ParallelEnv):
     START_VAL = 0.5
     NUMBER_OF_DISCRETE_PRICES = 100
 
-    def __init__(
-        self, simulation_length: int, demand: DemandFunction, max_agents: int
-    ):
+    def __init__(self, simulation_length: int, demand: DemandFunction, max_agents: int):
         self.max_agents: int = max_agents
         self.simulation_length: int = simulation_length
         self.demand: DemandFunction = demand
@@ -72,9 +62,7 @@ class Environment(ParallelEnv):
         )
         self.time_step: int = 0
 
-        return {
-            agent: 0.0 for agent in self.possible_agents if agent is not None
-        }
+        return {agent: 0.0 for agent in self.possible_agents if agent is not None}
 
     def add_agent(self, agent: Agent) -> int:
         """
@@ -100,12 +88,8 @@ class Environment(ParallelEnv):
             raise RuntimeError("Cannot add more agents to simulation")
 
         self.possible_agents[self.agent_count] = agent
-        self.action_spaces[agent] = spaces.Discrete(
-            self.NUMBER_OF_DISCRETE_PRICES
-        )
-        self.observation_spaces[agent] = spaces.Discrete(
-            self.NUMBER_OF_DISCRETE_PRICES
-        )
+        self.action_spaces[agent] = spaces.Discrete(self.NUMBER_OF_DISCRETE_PRICES)
+        self.observation_spaces[agent] = spaces.Discrete(self.NUMBER_OF_DISCRETE_PRICES)
         self.agent_count += 1
 
         return self.agent_count - 1
@@ -130,8 +114,7 @@ class Environment(ParallelEnv):
     def observe(self, agent: Agent) -> List[float]:
         agent_id = self.possible_agents.index(agent)
         return [
-            self.hist_set_prices[x][agent_id]
-            for x in range(len(self.hist_set_prices))
+            self.hist_set_prices[x][agent_id] for x in range(len(self.hist_set_prices))
         ]
 
     def step(
@@ -146,9 +129,7 @@ class Environment(ParallelEnv):
         Runs a time step for the simulation and appends results to the historic data
         """
         current_prices = [
-            actions[agent]
-            for agent in self.possible_agents
-            if agent is not None
+            actions[agent] for agent in self.possible_agents if agent is not None
         ]
         demands = self.demand.get_sales(current_prices)
         self.hist_set_prices[self.time_step] = current_prices

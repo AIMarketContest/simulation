@@ -18,7 +18,5 @@ class RandomAgent(Agent):
     ) -> None:
         pass
 
-    def policy(
-        self, last_round_agents_prices: list[float], agent_index: int
-    ) -> float:
+    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
         return random.random()

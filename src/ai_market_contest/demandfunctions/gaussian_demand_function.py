@@ -50,13 +50,8 @@ class GaussianDemandFunction(DemandFunction):
         self.sigma: float = sigma
 
     def get_sales(self, current_prices: list[float]) -> list[int]:
-        gaussian_distribution: "NormalDist" = NormalDist(
-            mu=self.mu, sigma=self.sigma
-        )
+        gaussian_distribution: "NormalDist" = NormalDist(mu=self.mu, sigma=self.sigma)
         return [
-            int(
-                (1 - gaussian_distribution.cdf(price))
-                * self.max_sales_scale_factor
-            )
+            int((1 - gaussian_distribution.cdf(price)) * self.max_sales_scale_factor)
             for price in current_prices
         ]

@@ -13,9 +13,7 @@ class GaussianDemandFunctionTest(TestCase):
     def test_function_returns_correct_number_of_demands(self):
         sales_with_four_prices: list[
             int
-        ] = self.demand_function_with_default_sf.get_sales(
-            [0.4, 0.3, 0.5, 0.5]
-        )
+        ] = self.demand_function_with_default_sf.get_sales([0.4, 0.3, 0.5, 0.5])
         assert len(sales_with_four_prices) == 4
         sales_with_three_prices: list[
             int

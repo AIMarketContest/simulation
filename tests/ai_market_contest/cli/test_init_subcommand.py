@@ -12,11 +12,7 @@ import os
 import os.path
 import sys
 
-from cli_test_utils import (
-    check_is_agent,
-    initialise_main_folder,
-    run_cli_command,
-)
+from cli_test_utils import check_is_agent, initialise_main_folder, run_cli_command
 
 
 def test_init_creates_aicontest_folder_at_given_path(tmp_path, parser):
@@ -29,15 +25,11 @@ def test_init_creates_aicontest_folder_at_given_path(tmp_path, parser):
     ), "aicontest folder either does not exist or is not a directory"
 
 
-def test_can_specify_number_of_agents_to_initialise_with_using_n_flag(
-    tmp_path, parser
-):
+def test_can_specify_number_of_agents_to_initialise_with_using_n_flag(tmp_path, parser):
     agent_names = ["AgentMatteo", "AgentIbraheem", "AgentPranav"]
 
     sys.stdin = io.StringIO("\n".join(agent_names) + "\nAuthor Name\n")
-    run_cli_command(
-        parser, ["init", str(tmp_path), "-n", str(len(agent_names))]
-    )
+    run_cli_command(parser, ["init", str(tmp_path), "-n", str(len(agent_names))])
 
     for agent_name in agent_names:
         check_is_agent(tmp_path, agent_name)

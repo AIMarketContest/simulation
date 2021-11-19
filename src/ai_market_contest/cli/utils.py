@@ -1,6 +1,6 @@
 import pathlib
 
-from ai_market_contest.cli.cli_config import ( # type: ignore
+from ai_market_contest.cli.cli_config import (  # type: ignore
     ABS_METHOD_STR,
     AGENT_FILE,
     AGENT_STR,
@@ -17,9 +17,7 @@ def make_agent_classname_camelcase(agent_name: str):
         return agent_name
     agent_name_cc = agent_name.lower()
     if AGENT_STR in agent_name_cc:
-        agent_name_cc = agent_name_cc.replace(
-            AGENT_STR, AGENT_STR.capitalize()
-        )
+        agent_name_cc = agent_name_cc.replace(AGENT_STR, AGENT_STR.capitalize())
     return agent_name_cc[0].upper() + agent_name_cc[1:]
 
 

@@ -4,12 +4,12 @@ import pathlib
 import sys
 from typing import Any
 
-from ai_market_contest.cli.cli_config import ( # type: ignore
+from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENT_FILE,
     CONFIG_FILENAME,
     PROJ_DIR_NAME,
 )
-from ai_market_contest.cli.utils import write_to_new_agent_file # type: ignore
+from ai_market_contest.cli.utils import write_to_new_agent_file  # type: ignore
 
 
 def create_agent_class(agent_name: str, proj_dir: pathlib.Path):

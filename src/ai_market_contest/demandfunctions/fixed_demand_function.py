@@ -26,9 +26,7 @@ class FixedDemandFunction(DemandFunction):
         """
 
         if fixed_quantity < 0:
-            raise ValueError(
-                "fixed_quantity must be greater than or equal to 0"
-            )
+            raise ValueError("fixed_quantity must be greater than or equal to 0")
 
         self.fixed_quantity: int = fixed_quantity
 
