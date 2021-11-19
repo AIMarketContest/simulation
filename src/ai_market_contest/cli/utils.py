@@ -48,6 +48,7 @@ def choose_trained_agent(trained_agents: list[str]):
     count = 0
     print("Input the hash of the version of the agent to be trained: ", end="")
     while count < max_count:
+        count += 1
         trained_agent = input()
         if trained_agent in trained_agents:
             break
@@ -108,7 +109,14 @@ def write_meta_file(
 ):
     meta_file: pathlib.Path = path / META_FILENAME
     config: configparser.ConfigParser = configparser.ConfigParser()
-    config["time"] = {"year": time.year, "month": time.month, "day": time.day, "hour": time.hour, "minute": time.minute, "second": time.second}
+    config["time"] = {
+        "year": time.year,
+        "month": time.month,
+        "day": time.day,
+        "hour": time.hour,
+        "minute": time.minute,
+        "second": time.second,
+    }
     config["trained-agent"] = {"hash": trained_agent_hash}
 
     with meta_file.open("w") as m_file:
@@ -147,7 +155,7 @@ def get_trained_agents(agent_dir: pathlib.Path) -> list[str]:
 
 
 def check_config_file_exists(config_file: pathlib.Path):
-    if not config_file.is_dir():
+    if not config_file.is_file():
         print("Error: config file not found")
         sys.exit(2)
 
@@ -156,6 +164,7 @@ def get_agent_names(proj_dir: pathlib.Path) -> list[str]:
     config: configparser.ConfigParser() = configparser.ConfigParser()
     config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
     check_config_file_exists(config_file)
+    print("hi")
     config.read(config_file)
     try:
         agents: list[str] = ast.literal_eval(config["agent"]["agents"])

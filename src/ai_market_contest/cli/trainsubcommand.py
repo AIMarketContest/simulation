@@ -1,7 +1,7 @@
 import pathlib
 from typing import Any
 
-from ai_market_contest.cli.cli_config import PROJ_DIR_NAME
+from ai_market_contest.cli.cli_config import PROJ_DIR_NAME, AGENTS_DIR_NAME
 from ai_market_contest.cli.utils import (
     check_path_exists,
     check_proj_dir_exists,
@@ -18,20 +18,20 @@ from ai_market_contest.cli.utils import (
 
 def train_agent(args: Any):
     path: pathlib.Path = args.path
-    proj_dir = path / PROJ_DIR_NAME
+    proj_dir: pathlib.Path = path / PROJ_DIR_NAME
     check_path_exists(path.is_dir())
     check_proj_dir_exists(proj_dir)
     agent_names: list[str] = get_agent_names(proj_dir)
     display_agents(agent_names)
     chosen_agent: str = choose_agent_for_training(agent_names)
-    show_trained_agents = ask_for_trained_agents(chosen_agent)
+    show_trained_agents: bool = ask_for_trained_agents(chosen_agent)
     agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
     chosen_agent_dir: pathlib.Path = agents_dir / chosen_agent
-    error_msg = f"Error: no directory exists for {chosen_agent}"
+    error_msg: str = f"Error: no directory exists for {chosen_agent}"
     check_directory_exists(chosen_agent_dir, error_msg)
     if get_trained_agents:
-        trained_agents = get_trained_agents(chosen_agent_dir)
-        display_trained_agents()
+        trained_agents: list[str] = get_trained_agents(chosen_agent_dir)
+        display_trained_agents(chosen_agent_dir, trained_agents)
         chosen_trained_agent = choose_trained_agent(trained_agents)
 
 
