@@ -1,5 +1,6 @@
 import pathlib
 
+META_FILENAME: str = "metadata.ini"
 COMMAND_NAME: str = "ai-market-contest"
 CLI_FILENAME: str = "cli.py"
 CLI_DIR: pathlib.Path = pathlib.Path(__file__).parent

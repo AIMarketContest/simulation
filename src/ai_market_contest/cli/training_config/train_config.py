@@ -4,6 +4,7 @@ import pathlib
 
 from ai_market_contest.environment import Environment
 
+
 class TrainConfig(ABCMeta):
     """
     Interface for configuring a training session.
@@ -28,7 +29,7 @@ class TrainConfig(ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def write_config_to_file(self, path : pathlib.Path):
+    def write_config_to_file(self, path: pathlib.Path):
         """
         Saves the configuration class as a configuration file.
 

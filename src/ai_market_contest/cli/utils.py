@@ -14,11 +14,42 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     IMPORT_STR,
     PROJ_DIR_NAME,
     COMMAND_NAME,
-    META_FILENAME
+    META_FILENAME,
 )
 
-def write_meta_file(path: pathlib.Path, trained_agent_hash: str, time: datetime.datetime):
-    meta_file = path / META_FILENAME
+
+def read_meta_file(meta_file: pathlib.Path) -> (str, datetime.datetime):
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    try:
+        year = int(config["time"]["year"])
+        month = int(config["time"]["month"])
+        day = int(config["time"]["day"])
+        hour = int(config["time"]["hour"])
+        minute = int(config["time"]["minute"])
+        second = int(config["time"]["second"])
+    except KeyError:
+        print("Error: Meta file missing time data")
+        sys.exit(1)
+    except ValueError:
+        print("Error: time attribute must only contain numbers")
+        sys.exit(1)
+    try:
+        time = datetime.datetime(year, month, day, hour, minute, second)
+    except ValueError:
+        print("Error: date time in meta file represents an invalid datetime")
+        sys.exit(1)
+    try:
+        trained_agent_hash = config["trained-agent"]["hash"]
+    except KeyError:
+        print("Error: Meta file missing the trained agent hash")
+        sys.exit(1)
+    return (trained_agent_hash, time)
+
+
+def write_meta_file(
+    path: pathlib.Path, trained_agent_hash: str, time: datetime.datetime
+):
+    meta_file: pathlib.Path = path / META_FILENAME
     config: configparser.ConfigParser = configparser.ConfigParser()
     config["time"]["year"] = str(time.year)
     config["time"]["month"] = str(time.month)
@@ -26,7 +57,7 @@ def write_meta_file(path: pathlib.Path, trained_agent_hash: str, time: datetime.
     config["time"]["hour"] = str(time.hour)
     config["time"]["minute"] = str(time.minute)
     config["time"]["second"] = str(time.second)
-    config["trained_agent"]["hash"] = trained_agent_hash
+    config["trained-agent"]["hash"] = trained_agent_hash
     with meta_file.open("w") as m_file:
         config.write(m_file)
 
@@ -35,16 +66,21 @@ def display_agents(agents: list[str]):
     print("The current initialised agents are: ")
     print(f"[{', '.join(agents)}]")
 
-def get_trained_agents(agent_dir: pathlib.Path): -> list[str]
+
+def get_trained_agents(agent_dir: pathlib.Path) -> list[str]:
     agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
     config: configparser.ConfigParser = configparser.ConfigParser()
-    check_config_file_exists(agent_config_file)    config.read(agent_config_file)
+    check_config_file_exists(agent_config_file)
+    config.read(agent_config_file)
     try:
-        trained_agents: list[str] = ast.literal_eval(config["training"]["trained-agents"])
+        trained_agents: list[str] = ast.literal_eval(
+            config["training"]["trained-agents"]
+        )
     except KeyError:
         print("Error: Config file needs a trained-agents attribute")
         sys.exit(1)
     return trained_agents
+
 
 def check_config_file_exists(config_file: pathlib.Path):
     if not config_file.is_dir():
@@ -52,7 +88,7 @@ def check_config_file_exists(config_file: pathlib.Path):
         sys.exit(2)
 
 
-def get_agent_names(proj_dir: pathlib.Path): -> list[str]
+def get_agent_names(proj_dir: pathlib.Path) -> list[str]:
     config: configparser.ConfigParser() = configparser.ConfigParser()
     config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
     check_config_file_exists(config_file)
