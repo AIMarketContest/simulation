@@ -2,6 +2,7 @@ import ast
 import atexit
 import configparser
 import pathlib
+import shutil
 import sys
 from typing import Any
 
