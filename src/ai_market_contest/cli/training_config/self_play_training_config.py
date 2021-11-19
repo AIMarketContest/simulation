@@ -7,6 +7,9 @@ from train_config import TrainConfig  # type: ignore
 from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import TRAIN_CONFIG_FILENAME  # type: ignore
 from ai_market_contest.demand_function import DemandFunction  # type: ignore
+from ai_market_contest.demandfunctions.gaussian_demand_function import (
+    GaussianDemandFunction,  # type: ignore
+)
 from ai_market_contest.environment import Environment  # type: ignore
 
 
@@ -28,7 +31,7 @@ class SelfPlayTrainingConfig(TrainConfig):
         self,
         number_of_agents: int = 5,
         training_duration: int = 100,
-        demand_function: DemandFunction = None,
+        demand_function: DemandFunction = GaussianDemandFunction(),
     ):
         """
         Parameters
@@ -37,7 +40,7 @@ class SelfPlayTrainingConfig(TrainConfig):
             The number of agents to play in the self-play game.
         training_duration: int, default=100
             The duration for the simulation.
-        demand_function: DemandFunction, default=None
+        demand_function: DemandFunction, default=GaussianDemandFunction()
             The demand function to be used by the environment during the simulation.
         """
         self.number_of_agents: int = number_of_agents
