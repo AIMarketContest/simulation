@@ -32,6 +32,19 @@ def check_file_exists(file_path: pathlib.Path, error_msg: str):
         sys.exit(2)
 
 
+def get_agent_initial_hash(chosen_agent_dir: pathlib.Path):
+    agent_config_file: pathlib.Path = chosen_agent_dir / CONFIG_FILENAME
+    check_config_file_exists(agent_config_file)
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    config.read(agent_config_file)
+    try:
+        initial_hash = ast.literal_eval(config["training"]["initial-hash"])
+    except KeyError:
+        print("Error: agent config missing an initial hash")
+        sys.exit(1)
+    return initial_hash
+
+
 def get_trained_agent_metadata(agent_dir: pathlib.Path, trained_agent_name: str):
     trained_agents_dir: pathlib.Path = agent_dir / TRAINED_AGENTS_DIR_NAME
     trained_agent_dir: pathlib.Path = trained_agents_dir / trained_agent_name
