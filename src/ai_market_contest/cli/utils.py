@@ -12,7 +12,6 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CLASS_METHOD_STR,
     CONFIG_FILENAME,
     IMPORT_STR,
-    PROJ_DIR_NAME,
     COMMAND_NAME,
     META_FILENAME,
     TRAINED_AGENTS_DIR_NAME,
@@ -30,8 +29,9 @@ def check_file_exists(file_path: pathlib.Path, error_msg: str):
     if not file_path.is_file():
         print(error_msg)
         sys.exit(2)
+        
 def get_shortened_hashes(hashes: list[str]):
-    return list(map(lambda h: h[:HASH_LENGTH], hashes))
+    return list(map(lambda hash: hash[:HASH_LENGTH], hashes))
 
 def make_initial_trained_agent(agent_dir: pathlib, initial_hash: str):
     trained_agents_dir = agent_dir / TRAINED_AGENTS_DIR_NAME
@@ -45,7 +45,6 @@ def make_initial_trained_agent(agent_dir: pathlib, initial_hash: str):
 
 def set_agent_initial_hash(agent_dir: pathlib.Path):
     agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
-    check_config_file_exists(agent_config_file)
     config: configparser.ConfigParser = configparser.ConfigParser()
     initial_hash = hash_string(str(datetime.datetime.now()))
     config["training"] = {
@@ -82,13 +81,14 @@ def get_trained_agent_metadata(agent_dir: pathlib.Path, trained_agent_name: str)
 
 
 def choose_trained_agent(trained_agents: list[str]):
+    shortened_hashes = get_shortened_hashes(trained_agents)
     max_count = 3
     count = 0
     print("\nInput the hash or index of the version of the agent to be trained: ", end="")
     while count < max_count:
         count += 1
         trained_agent = input()
-        if trained_agent in trained_agents:
+        if trained_agent in trained_agents or trained_agent in shortened_hashes:
             break
         if trained_agent.isnumeric():
             if int(trained_agent) in range(len(trained_agents)):
@@ -119,7 +119,7 @@ def ask_for_trained_agents(agent: str) -> bool:
     sys.exit(1)
 
 
-def read_meta_file(meta_file: pathlib.Path) -> (str, datetime.datetime):
+def read_meta_file(meta_file: pathlib.Path):
     config: configparser.ConfigParser = configparser.ConfigParser()
     config.read(meta_file)
     try:
@@ -306,9 +306,3 @@ def write_to_new_agent_file(agent_file: pathlib.Path, agent_name: str):
                     else:
                         f1.write(line)
 
-
-def write_agent_config_file(agent_config_file: pathlib.Path):
-    config: configparser.ConfigParser = configparser.ConfigParser()
-    config["training"] = {"trained-agents": []}
-    with agent_config_file.open("w") as f:
-        config.write(f)
