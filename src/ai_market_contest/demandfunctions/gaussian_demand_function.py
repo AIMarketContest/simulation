@@ -1,6 +1,6 @@
 from statistics import NormalDist
 
-from demand_function import DemandFunction
+from ai_market_contest.demand_function import DemandFunction
 
 
 class GaussianDemandFunction(DemandFunction):
@@ -15,7 +15,10 @@ class GaussianDemandFunction(DemandFunction):
     """
 
     def __init__(
-        self, max_sales_scale_factor: int = 1000, mu: float = 0.5, sigma: float = 1.0
+        self,
+        max_sales_scale_factor: int = 1000,
+        mu: float = 0.5,
+        sigma: float = 1.0,
     ):
         """
         Parameters

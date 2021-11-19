@@ -1,8 +1,11 @@
 ﻿import argparse
+import sys
 
-import cli.addagentsubcommand
-import cli.initsubcommand
-import cli.resetsubcommand
+import ai_market_contest.cli.addagentsubcommand as addagentsubcommand  # type: ignore
+import ai_market_contest.cli.initsubcommand as initsubcommand  # type: ignore
+import ai_market_contest.cli.resetsubcommand as resetsubcommand  # type: ignore
+
+KEYBOARD_INTERRUPT_MSG = "Operation aborted."
 
 
 def initialise_parser():
@@ -11,9 +14,9 @@ def initialise_parser():
     )
     subparsers = parser.add_subparsers()
 
-    cli.initsubcommand.create_subparser(subparsers)
-    cli.resetsubcommand.create_subparser(subparsers)
-    cli.addagentsubcommand.create_subparser(subparsers)
+    initsubcommand.create_subparser(subparsers)
+    resetsubcommand.create_subparser(subparsers)
+    addagentsubcommand.create_subparser(subparsers)
     return parser
 
 
@@ -24,4 +27,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print()  # print new line
+        print(KEYBOARD_INTERRUPT_MSG)
+        sys.exit(0)

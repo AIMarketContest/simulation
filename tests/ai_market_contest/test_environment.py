@@ -1,10 +1,11 @@
 ﻿from unittest import TestCase
 
 import numpy as np
-from agents.fixed_agent import FixedAgent
-from demand_function import DemandFunction
-from demandfunctions.fixed_demand_function import FixedDemandFunction
-from environment import Environment
+
+from ai_market_contest.agents.fixed_agent import FixedAgent
+from ai_market_contest.demand_function import DemandFunction
+from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction
+from ai_market_contest.environment import Environment
 
 
 class EnvironmentTest(TestCase):

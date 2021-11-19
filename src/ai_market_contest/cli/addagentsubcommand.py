@@ -1,22 +1,30 @@
 import ast
+import atexit
 import configparser
 import pathlib
+import shutil
 import sys
 from typing import Any
 
-from cli.cli_config import AGENT_FILE, CONFIG_FILENAME, PROJ_DIR_NAME
-from cli.initsubcommand import make_agent_classname_camelcase
-
-IMPORT_STR: str = "import"
-AGENT_STR: str = "Agent"
-ABS_METHOD_STR: str = "abstractmethod"
-CLASS_METHOD_STR: str = "classmethod"
+from ai_market_contest.cli.cli_config import (  # type: ignore
+    AGENT_FILE,
+    AGENTS_DIR_NAME,
+    CONFIG_FILENAME,
+    PROJ_DIR_NAME,
+)
+from ai_market_contest.cli.utils import (  # type: ignore
+    input_agent_name,
+    write_agent_config_file,
+    write_to_new_agent_file,
+)
 
 
 def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
+    agents_dir = proj_dir / AGENTS_DIR_NAME
     agent_filename: str = agent_name + ".py"
-    agent_file: pathlib.Path = proj_dir / agent_filename
-    if agent_file.is_file():
+    agent_dir: pathlib.Path = agents_dir / agent_name
+    agent_file: pathlib.Path = agent_dir / agent_filename
+    if agent_dir.is_dir():
         overwrite = "x"
         while overwrite != "y" and overwrite != "n":
             overwrite = input(
@@ -27,34 +35,38 @@ def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
                 break
             if overwrite == "n":
                 sys.exit(0)
-
+    agent_dir.mkdir(parents=True)
     agent_file.touch()
+    write_to_new_agent_file(agent_file, agent_name)
+    agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
+    write_agent_config_file(agent_config_file)
 
 
-def write_to_new_agent_file(agent_file: pathlib.Path, agent_name: str):
-    class_line_tab = False
-    with agent_file.open("w") as f1:
-        f1.write("from agent import Agent\n")
-        with AGENT_FILE.open("r") as f2:
-            for line in f2:
-                if line is not None:
-                    if CLASS_METHOD_STR in line:
-                        break
-                    if IMPORT_STR in line:
-                        continue
-                    if ABS_METHOD_STR in line:
-                        continue
-                    if AGENT_STR in line:
-                        tab = "\t" if class_line_tab else ""
-                        f1.write(
-                            tab
-                            + "class "
-                            + make_agent_classname_camelcase(agent_name)
-                            + "(Agent):\n"
-                        )
-                        class_line_tab = True
-                    else:
-                        f1.write(line)
+def edit_project_config_file(agent_name: str, proj_dir: pathlib.Path):
+    config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    config.read(config_file)
+    agents: list[str] = ast.literal_eval(config["agent"]["agents"])
+    if agent_name not in agents:
+        agents.append(agent_name)
+    config["agent"]["agents"] = str(agents)
+    with config_file.open("w") as c_file:
+        config.write(c_file)
+
+
+def remove_agent_dir(agent_name, proj_dir):
+    agents_dir = proj_dir / AGENTS_DIR_NAME
+    agent_dir = agents_dir / agent_name
+    if agent_dir.is_dir():
+        shutil.rmtree(agent_dir)
+    config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    config.read(config_file)
+    agents: list[str] = ast.lteral_eval(config["agent"]["agents"])
+    agents.remove(agent_name)
+    config["agent"]["agents"] = str(agents)
+    with config_file.open("w") as c_file:
+        config.write(c_file)
 
 
 def add_agent(args: Any):
@@ -69,17 +81,12 @@ def add_agent(args: Any):
             To initialise a project run aicontest init <path>"""
         )
         sys.exit(2)
-    agent_name = input("Enter name of new agent: ")
+    print("Enter name of new agent: ", end="")
+    agent_name = input_agent_name([])
+    atexit.register(remove_agent_dir, agent_name, proj_dir)
     create_agent_class(agent_name, proj_dir)
-    c_file = proj_dir / CONFIG_FILENAME
-    config = configparser.ConfigParser()
-    config.read(c_file)
-    agents = ast.literal_eval(config["agent"]["agents"])
-    if agent_name not in agents:
-        agents.append(agent_name)
-    config["agent"]["agents"] = str(agents)
-    with c_file.open("w") as config_file:
-        config.write(config_file)
+    edit_project_config_file(agent_name, proj_dir)
+    atexit.unregister(remove_agent_dir)
 
 
 def create_subparser(subparsers: Any):  # type: ignore
