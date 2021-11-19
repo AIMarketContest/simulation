@@ -1,5 +1,6 @@
 import ast
 import configparser
+import datetime
 import pathlib
 import sys
 from hashlib import sha1 as hashing_algorithm
@@ -13,7 +14,22 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     IMPORT_STR,
     PROJ_DIR_NAME,
     COMMAND_NAME,
+    META_FILENAME
 )
+
+def write_meta_file(path: pathlib.Path, trained_agent_hash: str, time: datetime.datetime):
+    meta_file = path / META_FILENAME
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    config["time"]["year"] = str(time.year)
+    config["time"]["month"] = str(time.month)
+    config["time"]["day"] = str(time.day)
+    config["time"]["hour"] = str(time.hour)
+    config["time"]["minute"] = str(time.minute)
+    config["time"]["second"] = str(time.second)
+    config["trained_agent"]["hash"] = trained_agent_hash
+    with meta_file.open("w") as m_file:
+        config.write(m_file)
+
 
 def display_agents(agents: list[str]):
     print("The current initialised agents are: ")
