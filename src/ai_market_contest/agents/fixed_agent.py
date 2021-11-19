@@ -24,3 +24,6 @@ class FixedAgent(Agent):
 
     def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
         return self.price
+
+    def __str__(self):
+        return f"FixedAgent(price: {self.price})"

@@ -23,3 +23,6 @@ class RandomAgent(Agent):
 
     def learning_has_converged(self):
         return True
+
+    def __str__(self):
+        return "RandomAgent()"

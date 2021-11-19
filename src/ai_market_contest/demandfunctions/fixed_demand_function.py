@@ -33,3 +33,6 @@ class FixedDemandFunction(DemandFunction):
     def get_sales(self, current_prices: list[float]) -> list[int]:
         demand_list = [self.fixed_quantity] * len(current_prices)
         return demand_list
+
+    def __str__(self):
+        return f"FixeddemandFunction(fixed quantity: {self.fixed_quantity})"
