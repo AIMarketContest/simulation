@@ -57,4 +57,8 @@ class GaussianDemandFunction(DemandFunction):
         ]
 
     def __str__(self):
-        return f"GaussianDemandFunction(max sales factor: {self.max_sales_scale_factor}, mean: {self.mu}, standard deviation: {self.sigma})"
+        return (
+            f"GaussianDemandFunction(mean: {self.mu}, "
+            f"standard deviation: {self.sigma}, max sales factor: "
+            f"{self.max_sales_scale_factor})"
+        )
