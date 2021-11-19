@@ -1,4 +1,4 @@
-from demand_function import DemandFunction
+from ai_market_contest.demand_function import DemandFunction
 
 
 class FixedDemandFunction(DemandFunction):
@@ -26,7 +26,9 @@ class FixedDemandFunction(DemandFunction):
         """
 
         if fixed_quantity < 0:
-            raise ValueError("fixed_quantity must be greater than or equal to 0")
+            raise ValueError(
+                "fixed_quantity must be greater than or equal to 0"
+            )
 
         self.fixed_quantity: int = fixed_quantity
 

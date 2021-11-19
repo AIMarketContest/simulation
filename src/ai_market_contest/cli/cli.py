@@ -1,8 +1,8 @@
 ﻿import argparse
 
-import addagentsubcommand
-import initsubcommand
-import resetsubcommand
+import ai_market_contest.cli.addagentsubcommand as addagentsubcommand
+import ai_market_contest.cli.initsubcommand as initsubcommand
+import ai_market_contest.cli.resetsubcommand as resetsubcommand
 
 
 def initialise_parser():

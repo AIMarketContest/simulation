@@ -1,5 +1,6 @@
 import pytest
-from cli import initialise_parser
+
+from ai_market_contest.cli.cli import initialise_parser
 
 
 @pytest.fixture

@@ -1,4 +1,7 @@
-from abc import ABCMeta, abstractmethod
+from abc import (
+    ABCMeta,
+    abstractmethod,
+)
 
 
 class Agent(metaclass=ABCMeta):
@@ -13,7 +16,9 @@ class Agent(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
+    def policy(
+        self, last_round_agents_prices: list[float], agent_index: int
+    ) -> float:
         """
         Query the agent for the next price to set.
 

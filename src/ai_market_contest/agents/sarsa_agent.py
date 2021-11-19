@@ -1,8 +1,12 @@
 from collections import defaultdict
-from typing import Dict, Sequence
+from typing import (
+    Dict,
+    Sequence,
+)
 
 import numpy as np
-from agent import Agent
+
+from ai_market_contest.agent import Agent
 
 
 class SarsaAgent(Agent):
@@ -17,7 +21,9 @@ class SarsaAgent(Agent):
         self.theta = 0.001
         self.time = 0
 
-    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
+    def policy(
+        self, last_round_agents_prices: list[float], agent_index: int
+    ) -> float:
         other_agent_prices = (
             last_round_agents_prices[:agent_index]
             + last_round_agents_prices[agent_index + 1 :]
@@ -57,7 +63,9 @@ class SarsaAgent(Agent):
         s2 = s2[:identity_index] + s2[identity_index + 1 :]
 
         self.Q[tuple(s1)][a1] += self.alpha * (
-            (r1 * a1) + self.gamma * self.Q[tuple(s2)][a2] - self.Q[tuple(s1)][a1]
+            (r1 * a1)
+            + self.gamma * self.Q[tuple(s2)][a2]
+            - self.Q[tuple(s1)][a1]
         )
 
     def probability_exploration(self):

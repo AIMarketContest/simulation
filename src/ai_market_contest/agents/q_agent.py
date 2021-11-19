@@ -1,8 +1,12 @@
 from collections import defaultdict
-from typing import Dict, Sequence
+from typing import (
+    Dict,
+    Sequence,
+)
 
 import numpy as np
-from agent import Agent
+
+from ai_market_contest.agent import Agent
 
 
 class QAgent(Agent):
@@ -17,7 +21,9 @@ class QAgent(Agent):
         self.theta = 0.0005
         self.time = 0
 
-    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
+    def policy(
+        self, last_round_agents_prices: list[float], agent_index: int
+    ) -> float:
         other_agent_prices = (
             last_round_agents_prices[:agent_index]
             + last_round_agents_prices[agent_index + 1 :]
