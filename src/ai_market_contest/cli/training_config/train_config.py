@@ -1,10 +1,10 @@
 import pathlib
 from abc import ABCMeta, abstractmethod
 
-from ai_market_contest.environment import Environment
+from ai_market_contest.environment import Environment  # type: ignore
 
 
-class TrainConfig(ABCMeta):
+class TrainConfig(metaclass=ABCMeta):
     """
     Interface for configuring a training session.
     """
