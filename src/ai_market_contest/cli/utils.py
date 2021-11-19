@@ -15,6 +15,10 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     COMMAND_NAME,
 )
 
+def display_agents(agents: list[str]):
+    print("The current initialised agents are: ")
+    print(f"[{', '.join(agents)}]")
+
 def get_trained_agents(agent_dir: pathlib.Path): -> list[str]
     agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
     config: configparser.ConfigParser = configparser.ConfigParser()
