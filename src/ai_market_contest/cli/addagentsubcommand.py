@@ -19,11 +19,7 @@ from ai_market_contest.cli.utils import (  # type: ignore
 )
 
 
-def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
-    agents_dir = proj_dir / AGENTS_DIR_NAME
-    agent_filename: str = agent_name + ".py"
-    agent_dir: pathlib.Path = agents_dir / agent_name
-    agent_file: pathlib.Path = agent_dir / agent_filename
+def check_overwrite_agent(agent_filename, agent_dir):
     if agent_dir.is_dir():
         overwrite = "x"
         while overwrite != "y" and overwrite != "n":
@@ -35,6 +31,14 @@ def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
                 break
             if overwrite == "n":
                 sys.exit(0)
+
+
+def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
+    agents_dir = proj_dir / AGENTS_DIR_NAME
+    agent_filename: str = agent_name + ".py"
+    agent_dir: pathlib.Path = agents_dir / agent_name
+    check_overwrite_agent(agent_filename, agent_dir)
+    agent_file: pathlib.Path = agent_dir / agent_filename
     agent_dir.mkdir(parents=True)
     agent_file.touch()
     write_to_new_agent_file(agent_file, agent_name)
