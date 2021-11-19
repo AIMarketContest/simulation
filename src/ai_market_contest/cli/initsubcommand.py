@@ -20,6 +20,7 @@ from ai_market_contest.cli.utils import (  # type: ignore
     write_agent_config_file,
     write_to_new_agent_file,
     set_agent_initial_hash,
+    make_initial_trained_agent,
 )
 
 
@@ -34,7 +35,8 @@ def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
         agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
         write_to_new_agent_file(agent_file, agent_name)
         write_agent_config_file(agent_config_file)
-        set_agent_initial_hash(agent_dir)
+        initial_hash: str = set_agent_initial_hash(agent_dir)
+        make_initial_trained_agent(agent_dir, initial_hash)
 
 
 def make_proj_dir(proj_dir: pathlib.Path):

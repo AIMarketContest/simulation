@@ -32,14 +32,28 @@ def check_file_exists(file_path: pathlib.Path, error_msg: str):
         sys.exit(2)
 
 
+def make_initial_trained_agent(agent_dir: pathlib, initial_hash: str):
+    trained_agents_dir = agent_dir / TRAINED_AGENTS_DIR_NAME
+    initial_trained_agent_dir = trained_agents_dir / initial_hash
+    initial_trained_agent_dir.mkdir(parents=True)
+    msg = "Initial untrained agent"
+    write_meta_file(
+        initial_trained_agent_dir, initial_hash, datetime.datetime.now(), msg
+    )
+
+
 def set_agent_initial_hash(agent_dir: pathlib.Path):
     agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
     check_config_file_exists(agent_config_file)
     config: configparser.ConfigParser = configparser.ConfigParser()
     initial_hash = hash_string(str(datetime.datetime.now()))
-    config["training"] = {"initial-hash": initial_hash, "trained-agents": [initial_hash]}
+    config["training"] = {
+        "initial-hash": initial_hash,
+        "trained-agents": [initial_hash],
+    }
     with agent_config_file.open("w") as acf:
         config.write(acf)
+    return initial_hash
 
 
 def get_agent_initial_hash(chosen_agent_dir: pathlib.Path):
@@ -48,7 +62,7 @@ def get_agent_initial_hash(chosen_agent_dir: pathlib.Path):
     config: configparser.ConfigParser = configparser.ConfigParser()
     config.read(agent_config_file)
     try:
-        initial_hash = ast.literal_eval(config["training"]["initial-hash"])
+        initial_hash = config["training"]["initial-hash"]
     except KeyError:
         print("Error: agent config missing an initial hash")
         sys.exit(1)
@@ -69,7 +83,7 @@ def get_trained_agent_metadata(agent_dir: pathlib.Path, trained_agent_name: str)
 def choose_trained_agent(trained_agents: list[str]):
     max_count = 3
     count = 0
-    print("Input the hash of the version of the agent to be trained: ", end="")
+    print("\nInput the hash of the version of the agent to be trained: ", end="")
     while count < max_count:
         count += 1
         trained_agent = input()
@@ -83,9 +97,9 @@ def choose_trained_agent(trained_agents: list[str]):
 
 def display_trained_agents(agent_dir: pathlib.Path, trained_agents: list[str]):
     for trained_agent in trained_agents:
-        (agent_hash, time) = get_trained_agent_metadata(agent_dir, trained_agent)
+        (agent_hash, time, msg) = get_trained_agent_metadata(agent_dir, trained_agent)
         shortened_hash: str = agent_hash[:HASH_LENGTH]
-        print(f"{shortened_hash} {str(time)}")
+        print(f"\n{shortened_hash} {str(time)} {msg}")
 
 
 def ask_for_trained_agents(agent: str) -> bool:
@@ -101,13 +115,16 @@ def ask_for_trained_agents(agent: str) -> bool:
 
 def read_meta_file(meta_file: pathlib.Path) -> (str, datetime.datetime):
     config: configparser.ConfigParser = configparser.ConfigParser()
+    config.read(meta_file)
     try:
+        
         year = int(config["time"]["year"])
         month = int(config["time"]["month"])
         day = int(config["time"]["day"])
         hour = int(config["time"]["hour"])
         minute = int(config["time"]["minute"])
         second = int(config["time"]["second"])
+        microsecond = int(config["time"]["microsecond"])
     except KeyError:
         print("Error: Meta file missing time data")
         sys.exit(1)
@@ -115,7 +132,7 @@ def read_meta_file(meta_file: pathlib.Path) -> (str, datetime.datetime):
         print("Error: time attribute must only contain numbers")
         sys.exit(1)
     try:
-        time = datetime.datetime(year, month, day, hour, minute, second)
+        time = datetime.datetime(year, month, day, hour, minute, second, microsecond)
     except ValueError:
         print("Error: date time in meta file represents an invalid datetime")
         sys.exit(1)
@@ -124,13 +141,18 @@ def read_meta_file(meta_file: pathlib.Path) -> (str, datetime.datetime):
     except KeyError:
         print("Error: Meta file missing the trained agent hash")
         sys.exit(1)
-    return (trained_agent_hash, time)
+    try:
+        message = config["trained-agent"]["message"]
+    except KeyError:
+        message = ""
+    return (trained_agent_hash, time, message)
 
 
 def write_meta_file(
-    path: pathlib.Path, trained_agent_hash: str, time: datetime.datetime
+    path: pathlib.Path, trained_agent_hash: str, time: datetime.datetime, message: str
 ):
     meta_file: pathlib.Path = path / META_FILENAME
+    meta_file.touch()
     config: configparser.ConfigParser = configparser.ConfigParser()
     config["time"] = {
         "year": time.year,
@@ -139,8 +161,9 @@ def write_meta_file(
         "hour": time.hour,
         "minute": time.minute,
         "second": time.second,
+        "microsecond": time.microsecond,
     }
-    config["trained-agent"] = {"hash": trained_agent_hash}
+    config["trained-agent"] = {"hash": trained_agent_hash, "message": message}
 
     with meta_file.open("w") as m_file:
         config.write(m_file)
