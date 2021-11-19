@@ -12,6 +12,12 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
 )
 
 
+def check_path_exists(path_exists: bool):
+    if not path_exists:
+        print("Illegal argument: Argument must be an existing directory")
+        sys.exit(2)
+
+
 def remove_underscores(string: str):
     return string.replace("_", "")
 

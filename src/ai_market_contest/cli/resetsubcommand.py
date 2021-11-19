@@ -4,20 +4,11 @@ import sys
 from typing import Any
 
 from ai_market_contest.cli.cli_config import COMMAND_NAME, PROJ_DIR_NAME  # type: ignore
+from ai_market_contest.cli.utils import check_path_exists  # type: ignore
 
 
 def remove_proj_dir(path_exists: bool, proj_dir: pathlib.Path):
-    if not path_exists:
-        print("Illegal argument: Argument must be an existing directory")
-        sys.exit(2)
-    if not proj_dir.is_dir():
-        print(
-            "Illegal argument: No project has been initialised at this directory\n"
-            + "To initialise a new project run "
-            + COMMAND_NAME
-            + " init <path>"
-        )
-        sys.exit(2)
+    check_path_exists(path_exists)
     shutil.rmtree(proj_dir)
 
 
