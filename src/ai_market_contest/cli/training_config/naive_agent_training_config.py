@@ -6,7 +6,7 @@ from train_config import TrainConfig  # type: ignore
 from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import TRAIN_CONFIG_FILENAME  # type: ignore
 from ai_market_contest.demand_function import DemandFunction  # type: ignore
-from ai_market_contest.environment import Environment, init_env  # type: ignore
+from ai_market_contest.environment import Environment  # type: ignore
 
 
 class NaiveAgentTrainingConfig(TrainConfig):
@@ -29,7 +29,7 @@ class NaiveAgentTrainingConfig(TrainConfig):
         Environment
             An Environment set up with the rules outlined by the configuration.
         """
-        env: Environment = init_env(
+        env: Environment = Environment(
             self.training_duration, self.demand_function, len(self.agents) + 1
         )  # max_agents has +1 to make room for the agent to be trained
         for agent in self.agents:
