@@ -18,6 +18,17 @@ def check_path_exists(path_exists: bool):
         sys.exit(2)
 
 
+def check_proj_dir_exists(proj_dir: pathlib.Path):
+    if not proj_dir.is_dir():
+        print(
+            "Illegal argument: No project has been initialised at this directory\n"
+            + "To initialise a new project run "
+            + COMMAND_NAME
+            + " init <path>"
+        )
+        sys.exit(2)
+
+
 def remove_underscores(string: str):
     return string.replace("_", "")
 

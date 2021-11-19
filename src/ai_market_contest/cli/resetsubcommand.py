@@ -4,11 +4,12 @@ import sys
 from typing import Any
 
 from ai_market_contest.cli.cli_config import COMMAND_NAME, PROJ_DIR_NAME  # type: ignore
-from ai_market_contest.cli.utils import check_path_exists  # type: ignore
+from ai_market_contest.cli.utils import check_path_exists, check_proj_dir_exists  # type: ignore
 
 
 def remove_proj_dir(path_exists: bool, proj_dir: pathlib.Path):
     check_path_exists(path_exists)
+    check_proj_dir_exists(proj_dir)
     shutil.rmtree(proj_dir)
 
 
