@@ -16,6 +16,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     META_FILENAME,
     TRAINED_AGENTS_DIR_NAME,
     HASH_LENGTH,
+    AGENT_PKL_FILENAME,
 )
 
 
@@ -29,11 +30,22 @@ def check_file_exists(file_path: pathlib.Path, error_msg: str):
     if not file_path.is_file():
         print(error_msg)
         sys.exit(2)
-        
+
+
+def get_agent_pkl_file(path: pathlib.Path, trained_agent_hash: str):
+    agent_pkl_file: pathlib.Path = path / AGENT_PKL_FILENAME
+    error_msg = (
+        f"Error: agent {trained_agent_hash} has no agent.pkl file in its directory"
+    )
+    check_file_exists(agent_pkl_file, error_msg)
+    return agent_pkl_file
+
+
 def get_shortened_hashes(hashes: list[str]):
     return list(map(lambda hash: hash[:HASH_LENGTH], hashes))
 
-def make_initial_trained_agent(agent_dir: pathlib, initial_hash: str):
+
+def make_initial_trained_agent(agent_dir: pathlib.Path, initial_hash: str):
     trained_agents_dir = agent_dir / TRAINED_AGENTS_DIR_NAME
     initial_trained_agent_dir = trained_agents_dir / initial_hash
     initial_trained_agent_dir.mkdir(parents=True)
@@ -84,7 +96,9 @@ def choose_trained_agent(trained_agents: list[str]):
     shortened_hashes = get_shortened_hashes(trained_agents)
     max_count = 3
     count = 0
-    print("\nInput the hash or index of the version of the agent to be trained: ", end="")
+    print(
+        "\nInput the hash or index of the version of the agent to be trained: ", end=""
+    )
     while count < max_count:
         count += 1
         trained_agent = input()
@@ -98,7 +112,10 @@ def choose_trained_agent(trained_agents: list[str]):
         print(
             f"Hash or index {trained_agent} does not correspond to an existing version of the agent"
         )
-        print("Enter a valid hash or index of the version of the agent to be trained: ", end="")
+        print(
+            "Enter a valid hash or index of the version of the agent to be trained: ",
+            end="",
+        )
 
 
 def display_trained_agents(agent_dir: pathlib.Path, trained_agents: list[str]):
@@ -123,7 +140,7 @@ def read_meta_file(meta_file: pathlib.Path):
     config: configparser.ConfigParser = configparser.ConfigParser()
     config.read(meta_file)
     try:
-        
+
         year = int(config["time"]["year"])
         month = int(config["time"]["month"])
         day = int(config["time"]["day"])
@@ -305,4 +322,3 @@ def write_to_new_agent_file(agent_file: pathlib.Path, agent_name: str):
                         class_line_tab = True
                     else:
                         f1.write(line)
-

@@ -31,10 +31,13 @@ def train_agent(args: Any):
     error_msg: str = f"Error: no directory exists for {chosen_agent}"
     check_directory_exists(chosen_agent_dir, error_msg)
     chosen_trained_agent: str = get_agent_initial_hash(chosen_agent_dir)
-    if get_trained_agents:
+    if show_trained_agents:
         trained_agents: list[str] = get_trained_agents(chosen_agent_dir)
         display_trained_agents(chosen_agent_dir, trained_agents)
         chosen_trained_agent = choose_trained_agent(trained_agents)
+    training_agent_dir = chosen_agent_dir / chosen_trained_agent
+    error_msg: str = f"Error: no directory exists for {chosen_trained_agent}"
+    check_directory_exists(training_agent_dir, error_msg)
 
 
 def create_subparser(subparsers: Any):  # type: ignore
