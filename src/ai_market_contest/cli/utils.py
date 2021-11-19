@@ -43,8 +43,21 @@ def get_trained_agent_metadata(agent_dir: pathlib.Path, trained_agent_name: str)
     return read_meta_file(meta_file)
 
 
-def display_trained_agents(agent_dir: pathlib.Path):
-    trained_agents: list[str] = get_trained_agents(agent_dir)
+def choose_trained_agent(trained_agents: list[str]):
+    max_count = 3
+    count = 0
+    print("Input the hash of the version of the agent to be trained: ", end="")
+    while count < max_count:
+        trained_agent = input()
+        if trained_agent in trained_agents:
+            break
+        print(
+            f"Hash {trained_agent} does not correspond to an existing version of the agent"
+        )
+        print("Enter a valid hash of the version of the agent to be trained: ", end="")
+
+
+def display_trained_agents(agent_dir: pathlib.Path, trained_agents: list[str]):
     for trained_agent in trained_agents:
         (agent_hash, time) = get_trained_agent_metadata(agent_dir, trained_agent)
         shortened_hash: str = agent_hash[:HASH_LENGTH]
@@ -95,13 +108,9 @@ def write_meta_file(
 ):
     meta_file: pathlib.Path = path / META_FILENAME
     config: configparser.ConfigParser = configparser.ConfigParser()
-    config["time"]["year"] = str(time.year)
-    config["time"]["month"] = str(time.month)
-    config["time"]["day"] = str(time.day)
-    config["time"]["hour"] = str(time.hour)
-    config["time"]["minute"] = str(time.minute)
-    config["time"]["second"] = str(time.second)
-    config["trained-agent"]["hash"] = trained_agent_hash
+    config["time"] = {"year": time.year, "month": time.month, "day": time.day, "hour": time.hour, "minute": time.minute, "second": time.second}
+    config["trained-agent"] = {"hash": trained_agent_hash}
+
     with meta_file.open("w") as m_file:
         config.write(m_file)
 
@@ -239,6 +248,6 @@ def write_to_new_agent_file(agent_file: pathlib.Path, agent_name: str):
 
 def write_agent_config_file(agent_config_file: pathlib.Path):
     config: configparser.ConfigParser = configparser.ConfigParser()
-    config["training"]["trained-agents"] = "[]"
+    config["training"] = {"trained-agents": []}
     with agent_config_file.open("w") as f:
         config.write(f)
