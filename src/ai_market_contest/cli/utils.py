@@ -1,5 +1,6 @@
 import configparser
 import pathlib
+from hashlib import sha1 as hashing_algorithm
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     ABS_METHOD_STR,
@@ -12,7 +13,9 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     COMMAND_NAME,
 )
 
-
+def hash_string(string):
+    return hashing_algorithm(string.encode()).hexdigest()
+    
 def check_path_exists(path_exists: bool):
     if not path_exists:
         print("Illegal argument: Argument must be an existing directory")
