@@ -18,6 +18,17 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
 )
 
 
+def ask_for_trained_agents(agent: str) -> bool:
+    max_count = 3
+    count = 0
+    while count < max_count:
+        char = input("Would you like to train a trained version of the agent (y/n): ")
+        if char == "n" or char == "y":
+            return True if char == "y" else False
+    print("Operation aborted: failed to get valid input")
+    sys.exit(1)
+
+
 def read_meta_file(meta_file: pathlib.Path) -> (str, datetime.datetime):
     config: configparser.ConfigParser = configparser.ConfigParser()
     try:
@@ -61,6 +72,7 @@ def write_meta_file(
     with meta_file.open("w") as m_file:
         config.write(m_file)
 
+
 def choose_agent_for_training(agent_names: list[str]) -> str:
     print("Choose an agent to train: ", end="")
     while True:
@@ -70,6 +82,7 @@ def choose_agent_for_training(agent_names: list[str]) -> str:
         print(f"{chosen_agent} not an existing agent")
         print("Choose a valid agent to train: ")
     return chosen_agent
+
 
 def display_agents(agents: list[str]):
     print("The current initialised agents are: ")
