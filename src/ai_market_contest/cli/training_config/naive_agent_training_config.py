@@ -72,7 +72,8 @@ class NaiveAgentTrainingConfig(TrainConfig):
 
     def set_training_duration(self, training_duration: int):
         """
-        Allows the user to change the number of time steps before the training simulation ends.
+        Allows the user to change the number of time steps before the
+        training simulation ends.
 
         Parameters
         ----------
@@ -83,7 +84,8 @@ class NaiveAgentTrainingConfig(TrainConfig):
 
     def set_demand_function(self, demand_function: DemandFunction):
         """
-        Allows the user to change the demand function used by the environment in the training.
+        Allows the user to change the demand function used by the
+        environment in the training.
 
         Parameters
         ----------
