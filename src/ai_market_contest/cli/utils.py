@@ -32,6 +32,16 @@ def check_file_exists(file_path: pathlib.Path, error_msg: str):
         sys.exit(2)
 
 
+def set_agent_initial_hash(agent_dir: pathlib.Path):
+    agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
+    check_config_file_exists(agent_config_file)
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    initial_hash = hash_string(str(datetime.datetime.now()))
+    config["training"] = {"initial-hash": initial_hash, "trained-agents": [initial_hash]}
+    with agent_config_file.open("w") as acf:
+        config.write(acf)
+
+
 def get_agent_initial_hash(chosen_agent_dir: pathlib.Path):
     agent_config_file: pathlib.Path = chosen_agent_dir / CONFIG_FILENAME
     check_config_file_exists(agent_config_file)
