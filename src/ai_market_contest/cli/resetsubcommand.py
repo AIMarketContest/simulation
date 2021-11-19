@@ -3,7 +3,7 @@ import shutil
 import sys
 from typing import Any
 
-from cli_config import PROJ_DIR_NAME
+from cli_config import PROJ_DIR_NAME, COMMAND_NAME
 
 
 def remove_proj_dir(path_exists: bool, proj_dir: pathlib.Path):
@@ -11,7 +11,12 @@ def remove_proj_dir(path_exists: bool, proj_dir: pathlib.Path):
         print("Illegal argument: Argument must be an existing directory")
         sys.exit(2)
     if not proj_dir.is_dir():
-        print("Illegal argument: No agent has been initialised at this directory")
+        print(
+            "Illegal argument: No project has been initialised at this directory\n"
+            + "To initialise a new project run "
+            + COMMAND_NAME
+            + " init <path>"
+        )
         sys.exit(2)
     shutil.rmtree(proj_dir)
 
