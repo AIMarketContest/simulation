@@ -1,6 +1,6 @@
 import pathlib
 
-from ai_market_contest.cli.cli_config import (
+from ai_market_contest.cli.cli_config import ( # type: ignore
     ABS_METHOD_STR,
     AGENT_FILE,
     AGENT_STR,
