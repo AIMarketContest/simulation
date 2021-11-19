@@ -10,12 +10,35 @@ from ai_market_contest.environment import Environment  # type: ignore
 
 
 class NaiveAgentTrainingConfig(TrainConfig):
+    """
+    Configuration class for agents to train via with naive implementations of agents.
+
+    Attributes
+    ----------
+    agents: list[Agent]
+        A list of naive agents to train the agent with.
+    training_duration: int
+        The duration for the simulation.
+    demand_function: DemandFunction
+        The demand function to be used by the environment during the simulation.
+    """
+
     def __init__(
         self,
         agents: list[Agent] = [],
         training_duration: int = 100,
         demand_function: DemandFunction = None,
     ):
+        """
+        Parameters
+        ----------
+        agents: list[Agent], default=[]
+            A list of naive agents to train the agent with.
+        training_duration: int, default=100
+            The duration for the simulation.
+        demand_function: DemandFunction, default=None
+            The demand function to be used by the environment during the simulation.
+        """
         self.agents: list[Agent] = agents
         self.training_duration: int = training_duration
         self.demand_function: DemandFunction = demand_function
@@ -52,7 +75,7 @@ class NaiveAgentTrainingConfig(TrainConfig):
         path : pathlib.Path
             Where the configuration file should be written to.
         """
-        config = configparser.ConfigParser()
+        config: configparser.ConfigParser = configparser.ConfigParser()
         config["training"] = {
             "type": "naive bots",
             "bots": ",".join(list(map(str, self.agents))),

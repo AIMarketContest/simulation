@@ -11,12 +11,35 @@ from ai_market_contest.environment import Environment  # type: ignore
 
 
 class SelfPlayTrainingConfig(TrainConfig):
+    """
+    Configuration class for agents to train via self-play.
+
+    Attributes
+    ----------
+    number_of_agents: int
+        The number of agents to play in the self-play game.
+    training_duration: int
+        The duration for the simulation.
+    demand_function: DemandFunction
+        The demand function to be used by the environment during the simulation.
+    """
+
     def __init__(
         self,
         number_of_agents: int = 5,
         training_duration: int = 100,
         demand_function: DemandFunction = None,
     ):
+        """
+        Parameters
+        ----------
+        number_of_agents: int, default=5
+            The number of agents to play in the self-play game.
+        training_duration: int, default=100
+            The duration for the simulation.
+        demand_function: DemandFunction, default=None
+            The demand function to be used by the environment during the simulation.
+        """
         self.number_of_agents: int = number_of_agents
         self.training_duration: int = training_duration
         self.demand_function: DemandFunction = demand_function
@@ -55,7 +78,7 @@ class SelfPlayTrainingConfig(TrainConfig):
         path : pathlib.Path
             Where the configuration file should be written to.
         """
-        config = configparser.ConfigParser()
+        config: configparser.ConfigParser = configparser.ConfigParser()
         config["training"] = {
             "type": "self-play",
             "number of agents": int(self.number_of_agents),
