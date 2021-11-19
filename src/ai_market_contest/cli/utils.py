@@ -30,7 +30,8 @@ def check_file_exists(file_path: pathlib.Path, error_msg: str):
     if not file_path.is_file():
         print(error_msg)
         sys.exit(2)
-
+def get_shortened_hashes(hashes: list[str]):
+    return list(map(lambda h: h[:HASH_LENGTH], hashes))
 
 def make_initial_trained_agent(agent_dir: pathlib, initial_hash: str):
     trained_agents_dir = agent_dir / TRAINED_AGENTS_DIR_NAME
@@ -83,23 +84,28 @@ def get_trained_agent_metadata(agent_dir: pathlib.Path, trained_agent_name: str)
 def choose_trained_agent(trained_agents: list[str]):
     max_count = 3
     count = 0
-    print("\nInput the hash of the version of the agent to be trained: ", end="")
+    print("\nInput the hash or index of the version of the agent to be trained: ", end="")
     while count < max_count:
         count += 1
         trained_agent = input()
         if trained_agent in trained_agents:
             break
+        if trained_agent.isnumeric():
+            if int(trained_agent) in range(len(trained_agents)):
+                index = int(trained_agent)
+                trained_agent = trained_agents[index]
+                break
         print(
-            f"Hash {trained_agent} does not correspond to an existing version of the agent"
+            f"Hash or index {trained_agent} does not correspond to an existing version of the agent"
         )
-        print("Enter a valid hash of the version of the agent to be trained: ", end="")
+        print("Enter a valid hash or index of the version of the agent to be trained: ", end="")
 
 
 def display_trained_agents(agent_dir: pathlib.Path, trained_agents: list[str]):
-    for trained_agent in trained_agents:
+    for index, trained_agent in enumerate(trained_agents):
         (agent_hash, time, msg) = get_trained_agent_metadata(agent_dir, trained_agent)
         shortened_hash: str = agent_hash[:HASH_LENGTH]
-        print(f"\n{shortened_hash} {str(time)} {msg}")
+        print(f"\n{index} {shortened_hash} {str(time)} {msg}")
 
 
 def ask_for_trained_agents(agent: str) -> bool:
