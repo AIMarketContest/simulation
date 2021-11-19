@@ -15,14 +15,24 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     COMMAND_NAME,
 )
 
+def get_trained_agents(agent_dir: pathlib.Path): -> list[str]
+    agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    check_config_file_exists(agent_config_file)    config.read(agent_config_file)
+    try:
+        trained_agents: list[str] = ast.literal_eval(config["training"]["trained-agents"])
+    except KeyError:
+        print("Error: Config file needs a trained-agents attribute")
+        sys.exit(1)
+    return trained_agents
 
 def check_config_file_exists(config_file: pathlib.Path):
     if not config_file.is_dir():
-        print("Error: config file for the project not found")
+        print("Error: config file not found")
         sys.exit(2)
 
 
-def get_agent_names(proj_dir: pathlib.Path):
+def get_agent_names(proj_dir: pathlib.Path): -> list[str]
     config: configparser.ConfigParser() = configparser.ConfigParser()
     config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
     check_config_file_exists(config_file)
@@ -30,7 +40,7 @@ def get_agent_names(proj_dir: pathlib.Path):
     try:
         agents: list[str] = ast.literal_eval(config["agent"]["agents"])
     except KeyError:
-        print("Error: config file does not contain an agents attribute")
+        print("Error: config file needs an agents attribute")
         sys.exit(1)
     return agents
 
@@ -118,5 +128,6 @@ def write_to_new_agent_file(agent_file: pathlib.Path, agent_name: str):
 
 def write_agent_config_file(agent_config_file: pathlib.Path):
     config: configparser.ConfigParser = configparser.ConfigParser()
+    config["training"]["trained-agents"] = "[]"
     with agent_config_file.open("w") as f:
         config.write(f)
