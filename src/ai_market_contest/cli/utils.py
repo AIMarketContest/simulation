@@ -1,5 +1,7 @@
+import ast
 import configparser
 import pathlib
+import sys
 from hashlib import sha1 as hashing_algorithm
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
@@ -13,9 +15,30 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     COMMAND_NAME,
 )
 
-def hash_string(string):
+
+def check_config_file_exists(config_file: pathlib.Path):
+    if not config_file.is_dir():
+        print("Error: config file for the project not found")
+        sys.exit(2)
+
+
+def get_agent_names(proj_dir: pathlib.Path):
+    config: configparser.ConfigParser() = configparser.ConfigParser()
+    config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
+    check_config_file_exists(config_file)
+    config.read(config_file)
+    try:
+        agents: list[str] = ast.literal_eval(config["agent"]["agents"])
+    except KeyError:
+        print("Error: config file does not contain an agents attribute")
+        sys.exit(1)
+    return agents
+
+
+def hash_string(string: str):
     return hashing_algorithm(string.encode()).hexdigest()
-    
+
+
 def check_path_exists(path_exists: bool):
     if not path_exists:
         print("Illegal argument: Argument must be an existing directory")

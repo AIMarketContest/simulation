@@ -66,7 +66,7 @@ def remove_agent_dir(agent_name, proj_dir):
     config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
     config: configparser.ConfigParser = configparser.ConfigParser()
     config.read(config_file)
-    agents: list[str] = ast.lteral_eval(config["agent"]["agents"])
+    agents: list[str] = ast.literal_eval(config["agent"]["agents"])
     agents.remove(agent_name)
     config["agent"]["agents"] = str(agents)
     with config_file.open("w") as c_file:
