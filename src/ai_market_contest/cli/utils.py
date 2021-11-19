@@ -15,7 +15,40 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     PROJ_DIR_NAME,
     COMMAND_NAME,
     META_FILENAME,
+    TRAINED_AGENTS_DIR_NAME,
+    HASH_LENGTH,
 )
+
+
+def check_directory_exists(directory: pathlib.Path, error_msg: str):
+    if not directory.is_dir():
+        print(error_msg)
+        sys.exit(2)
+
+
+def check_file_exists(file_path: pathlib.Path, error_msg: str):
+    if not file_path.is_file():
+        print(error_msg)
+        sys.exit(2)
+
+
+def get_trained_agent_metadata(agent_dir: pathlib.Path, trained_agent_name: str):
+    trained_agents_dir: pathlib.Path = agent_dir / TRAINED_AGENTS_DIR_NAME
+    trained_agent_dir: pathlib.Path = trained_agents_dir / trained_agent_name
+    error_msg: str = f"Error: no folder exists for {trained_agent_name}"
+    check_directory_exists(trained_agent_dir, error_msg)
+    meta_file: pathlib.Path = trained_agent_dir / META_FILENAME
+    error_msg: str = f"Error: no meta file exists for {trained_agent_name}"
+    check_file_exists(meta_file, error_msg)
+    return read_meta_file(meta_file)
+
+
+def display_trained_agents(agent_dir: pathlib.Path):
+    trained_agents: list[str] = get_trained_agents(agent_dir)
+    for trained_agent in trained_agents:
+        (agent_hash, time) = get_trained_agent_metadata(agent_dir, trained_agent)
+        shortened_hash: str = agent_hash[:HASH_LENGTH]
+        print(f"{shortened_hash} {str(time)}")
 
 
 def ask_for_trained_agents(agent: str) -> bool:

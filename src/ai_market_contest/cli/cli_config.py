@@ -1,5 +1,7 @@
 import pathlib
 
+HASH_LENGTH: str = 6
+TRAINED_AGENTS_DIR_NAME = "trained-agents"
 META_FILENAME: str = "metadata.ini"
 COMMAND_NAME: str = "ai-market-contest"
 CLI_FILENAME: str = "cli.py"
