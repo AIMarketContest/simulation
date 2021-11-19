@@ -14,6 +14,7 @@ from ai_market_contest.cli.utils import (
     check_directory_exists,
     choose_trained_agent,
     get_agent_initial_hash,
+    initialise_agent
 )  # type: ignore
 
 
@@ -31,6 +32,7 @@ def train_agent(args: Any):
     error_msg: str = f"Error: no directory exists for {chosen_agent}"
     check_directory_exists(chosen_agent_dir, error_msg)
     chosen_trained_agent: str = get_agent_initial_hash(chosen_agent_dir)
+    initialise_agent(chosen_agent_dir)
     if show_trained_agents:
         trained_agents: list[str] = get_trained_agents(chosen_agent_dir)
         display_trained_agents(chosen_agent_dir, trained_agents)

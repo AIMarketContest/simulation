@@ -2,7 +2,9 @@ import ast
 import configparser
 import datetime
 import pathlib
+import shutil
 import sys
+from subprocess import call
 from hashlib import sha1 as hashing_algorithm
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
@@ -17,6 +19,9 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     TRAINED_AGENTS_DIR_NAME,
     HASH_LENGTH,
     AGENT_PKL_FILENAME,
+    INITIAL_PICKLER_NAME,
+    INITIAL_PICKLER_FILE,
+    INITIAL_PICKLE_FILE_NAME
 )
 
 
@@ -31,7 +36,13 @@ def check_file_exists(file_path: pathlib.Path, error_msg: str):
         print(error_msg)
         sys.exit(2)
 
-
+def initialise_agent(agent_dir: pathlib.Path):
+    initial_pickler_file = agent_dir / INITIAL_PICKLER_NAME
+    call(["python3", initial_pickler_file.resolve()])
+    pickle_file = agent_dir / INITIAL_PICKLE_FILE_NAME
+    pickle_file.touch()
+    initial_agent_dir = agent_dir / TRAINED_AGENTS_DIR_NAME / get_agent_initial_hash(agent_dir)
+    shutil.move(pickle_file, initial_agent_dir / INITIAL_PICKLE_FILE_NAME)
 def get_agent_pkl_file(path: pathlib.Path, trained_agent_hash: str):
     agent_pkl_file: pathlib.Path = path / AGENT_PKL_FILENAME
     error_msg = (
@@ -53,6 +64,9 @@ def make_initial_trained_agent(agent_dir: pathlib.Path, initial_hash: str):
     write_meta_file(
         initial_trained_agent_dir, initial_hash, datetime.datetime.now(), msg
     )
+
+    shutil.copy(INITIAL_PICKLER_FILE, agent_dir / INITIAL_PICKLER_NAME)
+
 
 
 def set_agent_initial_hash(agent_dir: pathlib.Path):
@@ -116,8 +130,12 @@ def choose_trained_agent(trained_agents: list[str]):
             "Enter a valid hash or index of the version of the agent to be trained: ",
             end="",
         )
+    if count >= max_count:
+        print("\nOperation Aborted: Invalid hash or index")
+        sys.exit(1)
+    return trained_agent
 
-
+   
 def display_trained_agents(agent_dir: pathlib.Path, trained_agents: list[str]):
     for index, trained_agent in enumerate(trained_agents):
         (agent_hash, time, msg, parent_hash) = get_trained_agent_metadata(
@@ -198,7 +216,7 @@ def write_meta_file(
     }
     config["trained-agent"] = {
         "hash": trained_agent_hash,
-        "parent-hash": parent_hash,
+        "parent-hash": str(parent_hash),
         "message": message,
     }
 
@@ -315,7 +333,7 @@ def make_agent_classname_camelcase(agent_name: str):
 def write_to_new_agent_file(agent_file: pathlib.Path, agent_name: str):
     class_line_tab: bool = False
     with agent_file.open("w") as f1:
-        f1.write("from agent import Agent\n")
+        f1.write("from ai_market_contest.agent import Agent\n")
         with AGENT_FILE.open("r") as f2:
             for line in f2:
                 if line is not None:
