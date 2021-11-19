@@ -1,8 +1,8 @@
+import pathlib
 from abc import ABCMeta, abstractmethod
 
-import pathlib
-
 from ai_market_contest.environment import Environment
+
 
 class TrainConfig(ABCMeta):
     """
@@ -28,7 +28,7 @@ class TrainConfig(ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def write_config_to_file(self, path : pathlib.Path):
+    def write_config_to_file(self, path: pathlib.Path):
         """
         Saves the configuration class as a configuration file.
 
