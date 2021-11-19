@@ -97,7 +97,7 @@ def choose_trained_agent(trained_agents: list[str]):
     max_count = 3
     count = 0
     print(
-        "\nInput the hash or index of the version of the agent to be trained: ", end=""
+        "\nInput the hash or index of the version of the agent to be trained:", end=""
     )
     while count < max_count:
         count += 1
@@ -120,7 +120,9 @@ def choose_trained_agent(trained_agents: list[str]):
 
 def display_trained_agents(agent_dir: pathlib.Path, trained_agents: list[str]):
     for index, trained_agent in enumerate(trained_agents):
-        (agent_hash, time, msg) = get_trained_agent_metadata(agent_dir, trained_agent)
+        (agent_hash, time, msg, parent_hash) = get_trained_agent_metadata(
+            agent_dir, trained_agent
+        )
         shortened_hash: str = agent_hash[:HASH_LENGTH]
         print(f"\n{index} {shortened_hash} {str(time)} {msg}")
 
@@ -168,11 +170,19 @@ def read_meta_file(meta_file: pathlib.Path):
         message = config["trained-agent"]["message"]
     except KeyError:
         message = ""
-    return (trained_agent_hash, time, message)
+    try:
+        parent_hash = config["trained-agent"]["parent-hash"]
+    except:
+        parent_hash = None
+    return (trained_agent_hash, time, message, parent_hash)
 
 
 def write_meta_file(
-    path: pathlib.Path, trained_agent_hash: str, time: datetime.datetime, message: str
+    path: pathlib.Path,
+    trained_agent_hash: str,
+    time: datetime.datetime,
+    message: str,
+    parent_hash: str = None,
 ):
     meta_file: pathlib.Path = path / META_FILENAME
     meta_file.touch()
@@ -186,7 +196,11 @@ def write_meta_file(
         "second": time.second,
         "microsecond": time.microsecond,
     }
-    config["trained-agent"] = {"hash": trained_agent_hash, "message": message}
+    config["trained-agent"] = {
+        "hash": trained_agent_hash,
+        "parent-hash": parent_hash,
+        "message": message,
+    }
 
     with meta_file.open("w") as m_file:
         config.write(m_file)
