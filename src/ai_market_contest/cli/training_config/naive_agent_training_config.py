@@ -20,9 +20,14 @@ class NaiveAgentTrainingConfig(TrainConfig):
         self.training_duration: int = training_duration
         self.demand_function: DemandFunction = demand_function
 
-    def create_environment(self) -> Environment:
+    def create_environment(self, agent_to_train: Agent) -> Environment:
         """
         Returns an environment set up for the training regimine.
+
+        Parameters
+        ----------
+        agent_to_train : Agent
+            The agent the training configuration is designed to train.
 
         Returns
         ----------
@@ -32,6 +37,7 @@ class NaiveAgentTrainingConfig(TrainConfig):
         env: Environment = Environment(
             self.training_duration, self.demand_function, len(self.agents) + 1
         )  # max_agents has +1 to make room for the agent to be trained
+        env.add(agent_to_train)
         for agent in self.agents:
             env.add_agent(agent)
 
