@@ -61,6 +61,15 @@ def write_meta_file(
     with meta_file.open("w") as m_file:
         config.write(m_file)
 
+def choose_agent_for_training(agent_names: list[str]) -> str:
+    print("Choose an agent to train: ", end="")
+    while True:
+        chosen_agent = input()
+        if chosen_agent in agent_names:
+            break
+        print(f"{chosen_agent} not an existing agent")
+        print("Choose a valid agent to train: ")
+    return chosen_agent
 
 def display_agents(agents: list[str]):
     print("The current initialised agents are: ")
