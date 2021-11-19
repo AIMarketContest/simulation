@@ -9,6 +9,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     IMPORT_STR,
     PROJ_DIR_NAME,
+    COMMAND_NAME,
 )
 
 
