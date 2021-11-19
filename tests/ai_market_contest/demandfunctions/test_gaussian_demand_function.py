@@ -1,7 +1,9 @@
 from unittest import TestCase
 
-from demand_function import DemandFunction
-from demandfunctions.gaussian_demand_function import GaussianDemandFunction
+from ai_market_contest.demand_function import DemandFunction
+from ai_market_contest.demandfunctions.gaussian_demand_function import (
+    GaussianDemandFunction,
+)
 
 
 class GaussianDemandFunctionTest(TestCase):

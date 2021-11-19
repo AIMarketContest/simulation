@@ -1,4 +1,4 @@
-from agent import Agent
+from ai_market_contest.agent import Agent
 
 
 class FixedAgent(Agent):

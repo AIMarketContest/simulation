@@ -1,12 +1,13 @@
 from typing import Any, Dict, List, Optional
 
 import numpy as np
-from agent import Agent
-from demand_function import DemandFunction
 from gym import spaces  # type: ignore
 from numpy.typing import NDArray
 from pettingzoo import ParallelEnv  # type: ignore
 from pettingzoo.utils import from_parallel, wrappers  # type: ignore
+
+from ai_market_contest.agent import Agent
+from ai_market_contest.demand_function import DemandFunction
 
 
 class Environment(ParallelEnv):
@@ -119,7 +120,10 @@ class Environment(ParallelEnv):
     def step(
         self, actions: Dict[Agent, float]
     ) -> tuple[
-        Dict[Agent, float], Dict[Agent, float], Dict[Agent, bool], Dict[Agent, Any]
+        Dict[Agent, float],
+        Dict[Agent, float],
+        Dict[Agent, bool],
+        Dict[Agent, Any],
     ]:
         """
         Runs a time step for the simulation and appends results to the historic data

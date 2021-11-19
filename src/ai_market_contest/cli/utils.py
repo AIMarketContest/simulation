@@ -1,14 +1,14 @@
-import pathlib
 import configparser
+import pathlib
 
-from cli_config import (
-    AGENT_FILE,
-    CONFIG_FILENAME,
-    PROJ_DIR_NAME,
-    CLASS_METHOD_STR,
-    IMPORT_STR,
+from ai_market_contest.cli.cli_config import (  # type: ignore
     ABS_METHOD_STR,
+    AGENT_FILE,
     AGENT_STR,
+    CLASS_METHOD_STR,
+    CONFIG_FILENAME,
+    IMPORT_STR,
+    PROJ_DIR_NAME,
 )
 
 
@@ -74,5 +74,5 @@ def write_to_new_agent_file(agent_file: pathlib.Path, agent_name: str):
 
 def write_agent_config_file(agent_config_file: pathlib.Path):
     config: configparser.ConfigParser = configparser.ConfigParser()
-    with agent_config_file.open("w"):
-        config.write(agent_config_file)
+    with agent_config_file.open("w") as f:
+        config.write(f)

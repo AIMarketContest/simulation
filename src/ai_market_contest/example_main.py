@@ -1,9 +1,9 @@
 import importlib
 
-from agent import Agent
-from agents.random_agent import RandomAgent
-from demandfunctions.fixed_demand_function import FixedDemandFunction
-from environment import init_env
+from ai_market_contest.agent import Agent
+from ai_market_contest.agents.random_agent import RandomAgent
+from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction
+from ai_market_contest.environment import init_env
 
 
 def main(classname: str, filename: str, timesteps: str):

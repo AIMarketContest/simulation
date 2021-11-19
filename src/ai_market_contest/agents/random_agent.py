@@ -1,6 +1,6 @@
 import random
 
-from agent import Agent
+from ai_market_contest.agent import Agent
 
 
 class RandomAgent(Agent):

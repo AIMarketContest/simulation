@@ -1,9 +1,9 @@
 ﻿import argparse
 import sys
 
-import addagentsubcommand
-import initsubcommand
-import resetsubcommand
+import ai_market_contest.cli.addagentsubcommand as addagentsubcommand  # type: ignore
+import ai_market_contest.cli.initsubcommand as initsubcommand  # type: ignore
+import ai_market_contest.cli.resetsubcommand as resetsubcommand  # type: ignore
 
 KEYBOARD_INTERRUPT_MSG = "Operation aborted."
 

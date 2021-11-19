@@ -1,5 +1,5 @@
-from agents.fixed_agent import FixedAgent
-from agents.random_agent import RandomAgent
+from ai_market_contest.agents.fixed_agent import FixedAgent
+from ai_market_contest.agents.random_agent import RandomAgent
 
 rand_agent = RandomAgent()
 fixed_agent = FixedAgent()

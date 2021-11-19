@@ -2,7 +2,8 @@ from collections import defaultdict
 from typing import Dict, Sequence
 
 import numpy as np
-from agent import Agent
+
+from ai_market_contest.agent import Agent
 
 
 class SarsaAgent(Agent):

@@ -3,7 +3,7 @@ import shutil
 import sys
 from typing import Any
 
-from cli_config import PROJ_DIR_NAME, COMMAND_NAME
+from ai_market_contest.cli.cli_config import COMMAND_NAME, PROJ_DIR_NAME  # type: ignore
 
 
 def remove_proj_dir(path_exists: bool, proj_dir: pathlib.Path):
