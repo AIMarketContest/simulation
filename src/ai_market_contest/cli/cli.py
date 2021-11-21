@@ -5,6 +5,7 @@ import ai_market_contest.cli.addagentsubcommand as addagentsubcommand  # type: i
 import ai_market_contest.cli.initsubcommand as initsubcommand  # type: ignore
 import ai_market_contest.cli.resetsubcommand as resetsubcommand  # type: ignore
 import ai_market_contest.cli.trainsubcommand as trainsubcommand  # type: ignore
+import ai_market_contest.cli.initialiseagentsubcommand as initialiseagentsubcommand # type: ignore
 
 KEYBOARD_INTERRUPT_MSG = "Operation aborted."
 
@@ -19,6 +20,7 @@ def initialise_parser():
     resetsubcommand.create_subparser(subparsers)
     addagentsubcommand.create_subparser(subparsers)
     trainsubcommand.create_subparser(subparsers)
+    initialiseagentsubcommand.create_subparser(subparsers)
     return parser
 
 
