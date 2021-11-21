@@ -6,7 +6,6 @@ import sys
 from typing import Any, List
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
-    AGENT_FILE,
     AGENTS_DIR_NAME,
     COMMAND_NAME,
     CONFIG_FILENAME,
@@ -15,12 +14,12 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     EXAMPLE_MAIN_FILENAME,
     PROJ_DIR_NAME,
 )
-from ai_market_contest.cli.utils import (  # type: ignore
-    input_agent_name,
-    write_to_new_agent_file,
-    set_agent_initial_hash,
+from ai_market_contest.cli.utils.inputagentname import input_agent_name
+from ai_market_contest.cli.utils.initialiseagent import (  # type: ignore
+    create_new_agent_file,
     make_initial_trained_agent,
 )
+from ai_market_contest.cli.utils.hashing import set_agent_initial_hash
 
 
 def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
@@ -31,7 +30,7 @@ def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
         agent_dir.mkdir(parents=True)
         agent_file: pathlib.Path = agent_dir / agent_filename
         agent_file.touch()
-        write_to_new_agent_file(agent_file, agent_name)
+        create_new_agent_file(agent_file, agent_name)
         initial_hash: str = set_agent_initial_hash(agent_dir)
         make_initial_trained_agent(agent_dir, initial_hash)
 

@@ -11,14 +11,12 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     PROJ_DIR_NAME,
 )
-from ai_market_contest.cli.utils import (  # type: ignore
-    input_agent_name,
-    write_to_new_agent_file,
-    set_agent_initial_hash,
-)
+from ai_market_contest.cli.utils.inputagentname import input_agent_name
+from ai_market_contest.cli.utils.initialiseagent import create_new_agent_file
+from ai_market_contest.cli.utils.hashing import set_agent_initial_hash
 
 
-def check_overwrite_agent(agent_filename, agent_dir):
+def check_overwrite_agent(agent_filename: str, agent_dir: pathlib.Path):
     if agent_dir.is_dir():
         overwrite = "x"
         while overwrite != "y" and overwrite != "n":
@@ -40,7 +38,7 @@ def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
     agent_file: pathlib.Path = agent_dir / agent_filename
     agent_dir.mkdir(parents=True)
     agent_file.touch()
-    write_to_new_agent_file(agent_file, agent_name)
+    create_new_agent_file(agent_file, agent_name)
     set_agent_initial_hash(agent_dir)
 
 
