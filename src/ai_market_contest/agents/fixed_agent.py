@@ -19,5 +19,8 @@ class FixedAgent(Agent):
     ) -> None:
         pass
 
+    def learning_has_converged(self):
+        return True
+
     def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
         return self.price
