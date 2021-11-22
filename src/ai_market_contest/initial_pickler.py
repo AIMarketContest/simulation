@@ -11,5 +11,5 @@ from ai_market_contest.cli.cli_config import (
 
 pickle_file = (INITIAL_PICKLER_FILE.parent) / INITIAL_PICKLE_FILE_NAME
 
-with pickle_file.open("w") as pkl:
+with pickle_file.open("wb") as pkl:
     pickle.dump(agent, pkl)

@@ -1,12 +1,14 @@
 import pathlib
 import shutil
-from subprocess import call
+import sys
+from subprocess import run, PIPE
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     INITIAL_PICKLER_NAME,
     INITIAL_PICKLE_FILE_NAME,
     TRAINED_AGENTS_DIR_NAME,
     AGENT_PKL_FILENAME,
+    COMMAND_NAME
 )
 from ai_market_contest.cli.utils.hashing import get_agent_initial_hash
 
@@ -15,7 +17,10 @@ from ai_market_contest.cli.utils.filesystemutils import check_file_exists
 
 def initialise_agent_pkl_file(agent_dir: pathlib.Path):
     initial_pickler_file = agent_dir / INITIAL_PICKLER_NAME
-    call(["python3", initial_pickler_file.resolve()])
+    res = run(["python3", initial_pickler_file.resolve()], stdout=PIPE, stdin=PIPE, universal_newlines=True)
+    if res.returncode != 0:
+        print(f"Fix error in initial_pickler.py then re-run {COMMAND_NAME} initialise-agent <path>")
+        sys.exit(res.returncode)
     pickle_file = agent_dir / INITIAL_PICKLE_FILE_NAME
     pickle_file.touch()
     initial_agent_dir = (

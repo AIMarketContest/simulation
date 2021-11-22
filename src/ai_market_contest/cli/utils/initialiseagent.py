@@ -1,3 +1,4 @@
+import configparser
 import datetime
 import pathlib
 import shutil
@@ -11,9 +12,21 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     TRAINED_AGENTS_DIR_NAME,
     INITIAL_PICKLER_FILE,
     INITIAL_PICKLER_NAME,
+    CONFIG_FILENAME
 )
 from ai_market_contest.cli.utils.processmetafile import write_meta_file
+from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 
+def set_agent_to_initialised(agent_dir: pathlib.Path): 
+    config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
+    check_config_file_exists(config_file)    
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    config.read(config_file)
+    config["training"]["initialised"] = "True"
+    with config_file.open("w") as c_file:
+        config.write(c_file)
+    
+    
 
 def make_initial_trained_agent(agent_dir: pathlib.Path, initial_hash: str):
     trained_agents_dir = agent_dir / TRAINED_AGENTS_DIR_NAME
