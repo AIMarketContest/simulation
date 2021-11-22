@@ -44,3 +44,4 @@ def get_agent_initial_hash(chosen_agent_dir: pathlib.Path):
         print("Error: agent config missing an initial hash")
         sys.exit(1)
     return initial_hash
+

@@ -33,3 +33,25 @@ def get_trained_agents(agent_dir: pathlib.Path) -> list[str]:
         print("Error: Config file needs a trained-agents attribute")
         sys.exit(1)
     return trained_agents
+
+def add_trained_agent_to_config_file(agent_dir: pathlib.Path, trained_agent_name: str):
+    config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
+    check_config_file_exists(config_file)
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    config.read(config_file)
+    try:
+        trained_agents: list[str] = ast.literal_eval(
+            config["training"]["trained-agents"]
+        )
+    except KeyError:
+        print("Error: Config file needs a trained-agents attribute")
+        sys.exit(1)
+
+    trained_agents.append(trained_agent_name)
+    config["training"]["trained-agents"] = str(trained_agents)
+    with config_file.open("w") as c_file:
+        config.write(c_file)
+    
+    
+
+    

@@ -1,3 +1,4 @@
+import pickle
 import pathlib
 import shutil
 import sys
@@ -8,12 +9,13 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     INITIAL_PICKLE_FILE_NAME,
     TRAINED_AGENTS_DIR_NAME,
     AGENT_PKL_FILENAME,
-    COMMAND_NAME
+    COMMAND_NAME,
+    PICKLE_FILENAME
 )
 from ai_market_contest.cli.utils.hashing import get_agent_initial_hash
 
 from ai_market_contest.cli.utils.filesystemutils import check_file_exists
-
+from ai_market_contest.agent import Agent
 
 def initialise_agent_pkl_file(agent_dir: pathlib.Path):
     initial_pickler_file = agent_dir / INITIAL_PICKLER_NAME
@@ -36,3 +38,8 @@ def get_agent_pkl_file(path: pathlib.Path, trained_agent_hash: str):
     )
     check_file_exists(agent_pkl_file, error_msg)
     return agent_pkl_file
+
+def write_pkl_file(new_agent_dir: pathlib.Path, agent: Agent):
+    pkl_file = new_agent_dir / PICKLE_FILENAME
+    with pkl_file.open("wb") as pkl:
+        pickle.dump(agent, pkl)

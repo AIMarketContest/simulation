@@ -5,7 +5,9 @@ from typing import Any
 from ai_market_contest.cli.cli_config import (
     PROJ_DIR_NAME,
     AGENTS_DIR_NAME,
-    TRAINED_AGENTS_DIR_NAME
+    TRAINED_AGENTS_DIR_NAME,
+    COMMAND_NAME,
+    PICKLE_FILENAME
 )
 from ai_market_contest.cli.utils.hashing import (
     get_shortened_hashes,
@@ -24,8 +26,9 @@ from ai_market_contest.cli.utils.displayagents import (  # type: ignore
     display_agents,
     display_trained_agents,
 )
-from ai_market_contest.cli.utils.pklfileutils import initialise_agent_pkl_file
+
 from ai_market_contest.cli.utils.checkagentinitialisation import check_agent_is_initialised
+from ai_market_contest.cli.utils.training import train
 
 def ask_for_trained_agents(agent: str) -> bool:
     max_count = 3
@@ -107,7 +110,9 @@ def train_agent(args: Any):
     training_agent_dir = chosen_agent_dir / TRAINED_AGENTS_DIR_NAME / chosen_trained_agent
     error_msg: str = f"Error: no directory exists for {chosen_trained_agent}"
     check_directory_exists(training_agent_dir, error_msg)
-
+    training_msg: str = input("(Optional) Enter training message: ")
+    training_agent_pkl_file = training_agent_dir / PICKLE_FILENAME
+    train(chosen_agent_dir, chosen_agent, training_msg, training_agent_pkl_file)
 
 def create_subparser(subparsers: Any):  # type: ignore
     parser_train = subparsers.add_parser(

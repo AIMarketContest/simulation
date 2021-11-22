@@ -15,6 +15,7 @@ AGENT_FILE: pathlib.Path = (CLI_DIR / ".." / AGENT_FILENAME).resolve()
 INITIAL_PICKLE_FILE_NAME = "initial_pickle.pkl"
 INITIAL_PICKLER_NAME = "initial_pickler.py"
 INITIAL_PICKLER_FILE = (CLI_DIR / ".." / INITIAL_PICKLER_NAME).resolve()
+PICKLE_FILENAME = "agent_pickle.py"
 EXAMPLE_MAIN_FILENAME: str = "example_main.py"
 EXAMPLE_MAIN_FILE: pathlib.Path = (CLI_DIR / ".." / EXAMPLE_MAIN_FILENAME).resolve()
 IMPORT_STR: str = "import"
