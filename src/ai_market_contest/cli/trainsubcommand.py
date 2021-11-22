@@ -25,7 +25,7 @@ from ai_market_contest.cli.utils.displayagents import (  # type: ignore
     display_trained_agents,
 )
 from ai_market_contest.cli.utils.pklfileutils import initialise_agent_pkl_file
-
+from ai_market_contest.cli.utils.checkagentinitialisation import check_agent_is_initialised
 
 def ask_for_trained_agents(agent: str) -> bool:
     max_count = 3
@@ -92,6 +92,13 @@ def train_agent(args: Any):
     chosen_agent_dir: pathlib.Path = agents_dir / chosen_agent
     error_msg: str = f"Error: no directory exists for {chosen_agent}"
     check_directory_exists(chosen_agent_dir, error_msg)
+    agent_is_initialised = check_agent_is_initialised(chosen_agent_dir)
+    if not agent_is_initialised:
+        print("Agent must be initialised before training. To initialise the agent, "
+              + "edit the initial_pickler.py file in the agent folder, then run")
+        print(f"{COMMAND_NAME} initialise-agent <path>")
+        print("and pick the agent you want to initialise")
+        sys.exit(0)
     chosen_trained_agent: str = get_agent_initial_hash(chosen_agent_dir)
     if show_trained_agents:
         trained_agents: list[str] = get_trained_agents(chosen_agent_dir)
