@@ -42,7 +42,6 @@ def main(_: Any) -> None:
     # Networks.
     network_factory = lp_utils.partial_kwargs(maddpg.make_default_networks)
 
-
     # Checkpointer appends "Checkpoints" to checkpoint_dir.
     checkpoint_dir = f"{FLAGS.base_dir}/{FLAGS.mava_id}"
     print("Hello 1")
@@ -60,7 +59,6 @@ def main(_: Any) -> None:
 
     print("Hello 2")
 
-
     # Distributed program.
     program = maddpg.MADDPG(
         environment_factory=environment_factory,
@@ -75,14 +73,12 @@ def main(_: Any) -> None:
 
     print("Hello 3")
 
-
     # Ensure only trainer runs on gpu, while other processes run on cpu.
     local_resources = lp_utils.to_device(
         program_nodes=program.groups.keys(), nodes_on_gpu=["trainer"]
     )
 
     print("Hello 4")
-
 
     # Launch.
     lp.launch(
@@ -93,7 +89,6 @@ def main(_: Any) -> None:
     )
 
     print("Hello 5")
-
 
 
 if __name__ == "__main__":

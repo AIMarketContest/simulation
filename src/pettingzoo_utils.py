@@ -1,11 +1,10 @@
 from typing import Any, List, Optional, Union
 
 import dm_env
-from mava.wrappers import (PettingZooAECEnvWrapper,
-                           PettingZooParallelEnvWrapper)
-
-from environment import init_env, Environment
 from demandfunctions.fixed_demand_function import FixedDemandFunction
+from environment import Environment, init_env
+from mava.wrappers import PettingZooAECEnvWrapper, PettingZooParallelEnvWrapper
+
 
 def make_environment(
     evaluation: bool = False,
