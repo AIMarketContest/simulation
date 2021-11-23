@@ -4,13 +4,14 @@ import functools
 from datetime import datetime
 from typing import Any
 
+import launchpad as lp
 import sonnet as snt
 from absl import app, flags
 from mava.systems.tf import maddpg
 from mava.utils import lp_utils
 from mava.utils.loggers import logger_utils
 
-import src.pettingzoo_utils as pettingzoo_utils
+import pettingzoo_utils as pettingzoo_utils
 
 FLAGS = flags.FLAGS
 
@@ -34,8 +35,6 @@ flags.DEFINE_string("base_dir", "~/mava", "Base dir to store experiments.")
 
 
 def main(_: Any) -> None:
-    print("Hello 1")
-
     # Environment.
     environment_factory = functools.partial(pettingzoo_utils.make_environment)
 
@@ -44,7 +43,6 @@ def main(_: Any) -> None:
 
     # Checkpointer appends "Checkpoints" to checkpoint_dir.
     checkpoint_dir = f"{FLAGS.base_dir}/{FLAGS.mava_id}"
-    print("Hello 1")
 
     # Log every [log_every] seconds.
     log_every = 10
@@ -56,8 +54,6 @@ def main(_: Any) -> None:
         time_stamp=FLAGS.mava_id,
         time_delta=log_every,
     )
-
-    print("Hello 2")
 
     # Distributed program.
     program = maddpg.MADDPG(
@@ -71,14 +67,10 @@ def main(_: Any) -> None:
         max_gradient_norm=1.0,
     ).build()
 
-    print("Hello 3")
-
     # Ensure only trainer runs on gpu, while other processes run on cpu.
     local_resources = lp_utils.to_device(
         program_nodes=program.groups.keys(), nodes_on_gpu=["trainer"]
     )
-
-    print("Hello 4")
 
     # Launch.
     lp.launch(
@@ -88,8 +80,6 @@ def main(_: Any) -> None:
         local_resources=local_resources,
     )
 
-    print("Hello 5")
-
 
 if __name__ == "__main__":
-    main()
+    app.run(main)

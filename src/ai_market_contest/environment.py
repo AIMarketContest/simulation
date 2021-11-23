@@ -2,7 +2,7 @@ import functools
 from typing import Any, Dict, List
 
 from gym import spaces  # type: ignore
-from gym.spaces import Discrete, Tuple
+from gym.spaces import Discrete, MultiDiscrete
 from pettingzoo import ParallelEnv  # type: ignore
 from pettingzoo.utils import from_parallel, wrappers  # type: ignore
 
@@ -68,11 +68,18 @@ class Environment(ParallelEnv):
 
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent: str):
-        return Tuple([Discrete(self.NUMBER_OF_DISCRETE_PRICES)] * len(self.agents))
+        return spaces.Dict(
+            {
+                "observation": MultiDiscrete(
+                    [self.NUMBER_OF_DISCRETE_PRICES] * len(self.agents)
+                ),
+                "action_mask": Discrete(self.NUMBER_OF_DISCRETE_PRICES),
+            }
+        )
 
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent: str):
-        return Tuple([Discrete(self.NUMBER_OF_DISCRETE_PRICES)] * len(self.agents))
+        return Discrete(self.NUMBER_OF_DISCRETE_PRICES)
 
     def step(
         self, actions: Dict[str, int]

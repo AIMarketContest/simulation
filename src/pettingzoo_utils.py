@@ -1,15 +1,16 @@
 from typing import Any, List, Optional, Union
 
 import dm_env
-from demandfunctions.fixed_demand_function import FixedDemandFunction
-from environment import Environment, init_env
 from mava.wrappers import PettingZooAECEnvWrapper, PettingZooParallelEnvWrapper
+
+from ai_market_contest.agents.fixed_agent import FixedAgent
+from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction
+from ai_market_contest.environment import Environment, init_env
 
 
 def make_environment(
     evaluation: bool = False,
     env_type: str = "parallel",
-    env_module: Environment = init_env(100, FixedDemandFunction(), 10),
     random_seed: Optional[int] = None,
     **kwargs: Any,
 ) -> dm_env.Environment:
@@ -25,7 +26,7 @@ def make_environment(
     environment: Optional[dm_env.Environment] = None
 
     if env_type == "parallel":
-        env = env_module.parallel_env(**kwargs)  # type: ignore
+        env = init_env([FixedAgent()], FixedDemandFunction(), 10)  # type: ignore
         environment = PettingZooParallelEnvWrapper(env)
     elif env_type == "sequential":
         env = env_module.env(**kwargs)  # type: ignore
