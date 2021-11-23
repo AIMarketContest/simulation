@@ -4,7 +4,7 @@ from gym import spaces  # type: ignore
 from pettingzoo import ParallelEnv  # type: ignore
 from pettingzoo.utils import from_parallel, wrappers  # type: ignore
 import functools
-from gym.spaces import Discrete
+from gym.spaces import Discrete, Tuple
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.demand_function import DemandFunction
@@ -54,7 +54,7 @@ class Environment(ParallelEnv):
         self.possible_agents: List[str] = [
             "player_" + str(r) for r in range(len(agents))
         ]
-        self.agents = self.possible_agents[:] 
+        self.agents = self.possible_agents[:]
         self.agent_name_mapping: dict[str, Agent] = {
             agent_name: agent for agent_name, agent in zip(self.possible_agents, agents)
         }
@@ -68,11 +68,11 @@ class Environment(ParallelEnv):
 
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent: str):
-        return Discrete(self.NUMBER_OF_DISCRETE_PRICES)
+        return Tuple([Discrete(self.NUMBER_OF_DISCRETE_PRICES)] * len(self.agents))
 
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent: str):
-        return Discrete(self.NUMBER_OF_DISCRETE_PRICES)
+        return Tuple([Discrete(self.NUMBER_OF_DISCRETE_PRICES)] * len(self.agents))
 
     def step(
         self, actions: Dict[str, int]
@@ -106,7 +106,6 @@ def init_env(
     env = Environment(agents, simulation_length, demand)
     env = from_parallel(env)
     env = wrappers.CaptureStdoutWrapper(env)
-    env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
 
     return env
