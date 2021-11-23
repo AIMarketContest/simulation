@@ -16,7 +16,7 @@ def main(classname: str, filename: str, timesteps: str):
 
     env = init_env(agents, int(timesteps), FixedDemandFunction())
     env.reset()
-    env.step([0]*len(agents))
+    env.step([0] * len(agents))
 
 
 main("RandomAgent", "ai_market_contest.agents.random_agent", "100")

@@ -60,10 +60,10 @@ class Environment(ParallelEnv):
         }
         self.simulation_length: int = simulation_length
         self.demand: DemandFunction = demand
+        self.time_step: int = 0
         self.reset()
 
     def reset(self) -> Dict[str, float]:
-        self.time_step: int = 0
         return {agent: 0.0 for agent in self.possible_agents if agent is not None}
 
     @functools.lru_cache(maxsize=None)

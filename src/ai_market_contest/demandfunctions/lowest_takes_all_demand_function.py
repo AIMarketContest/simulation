@@ -6,7 +6,7 @@ class LowestTakesAllDemandFunction(DemandFunction):
         self.max_sales_scale_factor = max_sales_scale_factor
 
     def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
-        sales: dict[str, int] = { agent: 0 for agent in current_prices.keys() }
+        sales: dict[str, int] = {agent: 0 for agent in current_prices.keys()}
         max_agents = []
         max_price = -1
 
