@@ -10,7 +10,7 @@ class DemandFunction(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def get_sales(self, current_prices: list[float]) -> list[int]:
+    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
         """
         Calculates the quantity of the product that will be sold at a given
         price for each agent.
@@ -35,7 +35,7 @@ class DemandFunction(metaclass=ABCMeta):
         raise NotImplementedError
 
     @classmethod
-    def __subclasshook__(cls, subclass):
+    def __subclasshook__(cls, subclass: object):
         return (
             all(
                 [
