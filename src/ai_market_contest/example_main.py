@@ -10,11 +10,13 @@ def main(classname: str, filename: str, timesteps: str):
     agent_import = importlib.import_module(filename)
     agent_impl = getattr(agent_import, classname)
     agent: Agent = agent_impl()
-
-    env = init_env(int(timesteps), FixedDemandFunction(), 10)
-    env.add_agent(agent)
-
+    agents = [agent]
     for _ in range(10):
-        env.add_agent(RandomAgent())
+        agents.append(RandomAgent())
+
+    env = init_env(agents, int(timesteps), FixedDemandFunction())
+    env.reset()
+    env.step([0]*len(agents))
+
 
 main("RandomAgent", "ai_market_contest.agents.random_agent", "100")

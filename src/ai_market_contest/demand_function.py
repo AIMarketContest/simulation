@@ -35,7 +35,7 @@ class DemandFunction(metaclass=ABCMeta):
         raise NotImplementedError
 
     @classmethod
-    def __subclasshook__(cls, subclass):
+    def __subclasshook__(cls, subclass: object):
         return (
             all(
                 [
