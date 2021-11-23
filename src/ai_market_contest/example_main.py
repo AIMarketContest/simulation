@@ -16,3 +16,5 @@ def main(classname: str, filename: str, timesteps: str):
 
     for _ in range(10):
         env.add_agent(RandomAgent())
+
+main("RandomAgent", "ai_market_contest.agents.random_agent", "100")

@@ -5,6 +5,8 @@ from gym import spaces  # type: ignore
 from numpy.typing import NDArray
 from pettingzoo import ParallelEnv  # type: ignore
 from pettingzoo.utils import from_parallel, wrappers  # type: ignore
+import functools
+from gym.spaces import Discrete
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.demand_function import DemandFunction
@@ -52,8 +54,6 @@ class Environment(ParallelEnv):
 
     def reset(self) -> Dict[Agent, float]:
         self.possible_agents: List[Optional[Agent]] = [None] * self.max_agents
-        self.action_spaces: Dict[Agent, spaces.Discrete] = {}
-        self.observation_spaces: Dict[Agent, spaces.Discrete] = {}
         self.hist_set_prices: NDArray[np.float32] = np.zeros(
             (self.simulation_length, self.max_agents), dtype=np.float32
         )
@@ -88,34 +88,17 @@ class Environment(ParallelEnv):
             raise RuntimeError("Cannot add more agents to simulation")
 
         self.possible_agents[self.agent_count] = agent
-        self.action_spaces[agent] = spaces.Discrete(self.NUMBER_OF_DISCRETE_PRICES)
-        self.observation_spaces[agent] = spaces.Discrete(self.NUMBER_OF_DISCRETE_PRICES)
         self.agent_count += 1
 
         return self.agent_count - 1
 
-    def get_results(self) -> tuple[NDArray[np.float32], NDArray[np.int32]]:
-        """
-        Allows post-simulation analysis to be performed on sales figures and numbers
+    @functools.lru_cache(maxsize=None)
+    def observation_space(self, agent: str):
+        return Discrete(self.NUMBER_OF_DISCRETE_PRICES)
 
-        Returns
-        -------
-        self.hist_set_prices: list[list[float]]
-            The list represents the time slice of the simulation
-            For a time slice we can use the inner list to find how many sales
-            an agent made using their index in all_agents.
-        self.hist_sales_made: list[list[int]]
-            The list represents the time slice of the simulation
-            For a time slice we can use the list to find what price an agent
-            set using their index in all_agents.
-        """
-        return self.hist_set_prices, self.hist_sales_made
-
-    def observe(self, agent: Agent) -> List[float]:
-        agent_id = self.possible_agents.index(agent)
-        return [
-            self.hist_set_prices[x][agent_id] for x in range(len(self.hist_set_prices))
-        ]
+    @functools.lru_cache(maxsize=None)
+    def action_space(self, agent: str):
+        return Discrete(self.NUMBER_OF_DISCRETE_PRICES)
 
     def step(
         self, actions: Dict[Agent, float]
