@@ -75,19 +75,3 @@ class ${agent_classname}(Agent):
 
         """
         raise NotImplementedError
-
-    @classmethod
-    def __subclasshook__(cls, subclass):
-        return (
-            all(
-                [
-                    hasattr(subclass, "policy"),
-                    callable(subclass.policy),
-                    hasattr(subclass, "update"),
-                    callable(subclass.update),
-                    hasattr(subclass, "learning_has_converged"),
-                    callable(subclass.learning_has_converged),
-                ]
-            )
-            or NotImplemented
-        )
