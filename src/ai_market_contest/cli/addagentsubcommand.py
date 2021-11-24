@@ -12,34 +12,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     PROJ_DIR_NAME,
 )
 from ai_market_contest.cli.utils.inputagentname import input_agent_name
-from ai_market_contest.cli.utils.initialiseagent import create_new_agent_file
-from ai_market_contest.cli.utils.hashing import set_agent_initial_hash
-
-
-def check_overwrite_agent(agent_filename: str, agent_dir: pathlib.Path):
-    if agent_dir.is_dir():
-        overwrite = "x"
-        while overwrite != "y" and overwrite != "n":
-            overwrite = input(
-                f"{agent_filename} already exists, are you sure you want"
-                + " to override the existing file? (y/n): "
-            )
-            if overwrite == "y":
-                break
-            if overwrite == "n":
-                sys.exit(0)
-
-
-def create_agent_class(agent_name: str, proj_dir: pathlib.Path):
-    agents_dir = proj_dir / AGENTS_DIR_NAME
-    agent_filename: str = agent_name + ".py"
-    agent_dir: pathlib.Path = agents_dir / agent_name
-    check_overwrite_agent(agent_filename, agent_dir)
-    agent_file: pathlib.Path = agent_dir / agent_filename
-    agent_dir.mkdir(parents=True)
-    agent_file.touch()
-    create_new_agent_file(agent_file, agent_name)
-    set_agent_initial_hash(agent_dir)
+from ai_market_contest.cli.utils.initialiseagent import create_agent_class
 
 
 def edit_project_config_file(agent_name: str, proj_dir: pathlib.Path):
@@ -63,7 +36,8 @@ def remove_agent_dir(agent_name, proj_dir):
     config: configparser.ConfigParser = configparser.ConfigParser()
     config.read(config_file)
     agents: list[str] = ast.literal_eval(config["agent"]["agents"])
-    agents.remove(agent_name)
+    if agent_name in agents:
+        agents.remove(agent_name)
     config["agent"]["agents"] = str(agents)
     with config_file.open("w") as c_file:
         config.write(c_file)
@@ -84,7 +58,7 @@ def add_agent(args: Any):
     print("Enter name of new agent: ", end="")
     agent_name = input_agent_name([])
     atexit.register(remove_agent_dir, agent_name, proj_dir)
-    create_agent_class(agent_name, proj_dir)
+    create_agent_class(agent_name, proj_dir, True)
     edit_project_config_file(agent_name, proj_dir)
     atexit.unregister(remove_agent_dir)
 

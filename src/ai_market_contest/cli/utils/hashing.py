@@ -26,7 +26,7 @@ def set_agent_initial_hash(agent_dir: pathlib.Path):
     config["training"] = {
         "initial-hash": initial_hash,
         "trained-agents": [initial_hash],
-        "initialised": "False"
+        "initialised": "False",
     }
     with agent_config_file.open("w") as acf:
         config.write(acf)
@@ -44,4 +44,3 @@ def get_agent_initial_hash(chosen_agent_dir: pathlib.Path):
         print("Error: agent config missing an initial hash")
         sys.exit(1)
     return initial_hash
-

@@ -10,29 +10,17 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     COMMAND_NAME,
     CONFIG_FILENAME,
     ENVS_DIR_NAME,
-    EXAMPLE_MAIN_FILE,
-    EXAMPLE_MAIN_FILENAME,
     PROJ_DIR_NAME,
 )
 from ai_market_contest.cli.utils.inputagentname import input_agent_name
-from ai_market_contest.cli.utils.initialiseagent import (  # type: ignore
-    create_new_agent_file,
-    make_initial_trained_agent,
-)
+from ai_market_contest.cli.utils.initialiseagent import create_agent_class
 from ai_market_contest.cli.utils.hashing import set_agent_initial_hash
 
 
 def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
     agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
     for agent_name in agents_names:
-        agent_filename: str = agent_name + ".py"
-        agent_dir = agents_dir / agent_name
-        agent_dir.mkdir(parents=True)
-        agent_file: pathlib.Path = agent_dir / agent_filename
-        agent_file.touch()
-        create_new_agent_file(agent_file, agent_name)
-        initial_hash: str = set_agent_initial_hash(agent_dir)
-        make_initial_trained_agent(agent_dir, agent_name, initial_hash)
+        create_agent_class(agent_name, proj_dir)
 
 
 def make_proj_dir(proj_dir: pathlib.Path):
@@ -65,13 +53,6 @@ def remove_proj_dir(proj_dir: pathlib.Path):
         shutil.rmtree(proj_dir)
 
 
-def include_example(proj_dir: pathlib.Path):
-    shutil.copy(EXAMPLE_MAIN_FILE, proj_dir / EXAMPLE_MAIN_FILENAME)
-    print(
-        "The example on how to setup the environment can be found in example_main.py."
-    )
-
-
 def initialise_file_structure(args: Any):
     path: pathlib.Path = args.path
     proj_dir = path / PROJ_DIR_NAME
@@ -86,8 +67,6 @@ def initialise_file_structure(args: Any):
     authors: list[str] = input().split(",")
     make_agents_classes(proj_dir, agents_names)
     make_config_file(proj_dir, agents_names, authors)
-    if args.include_example:
-        include_example(proj_dir)
     atexit.unregister(remove_proj_dir)
 
 
@@ -105,9 +84,5 @@ def create_subparser(subparsers: Any):  # type: ignore
         default=1,
         dest="number_of_agents",
     )
-    parser_init.add_argument(
-        "--include-example",
-        action="store_true",
-        help="Includes an example showing how to setup the environment",
-    )
+
     parser_init.set_defaults(func=initialise_file_structure)

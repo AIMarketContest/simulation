@@ -17,11 +17,19 @@ from ai_market_contest.cli.utils.hashing import get_agent_initial_hash
 from ai_market_contest.cli.utils.filesystemutils import check_file_exists
 from ai_market_contest.agent import Agent
 
+
 def initialise_agent_pkl_file(agent_dir: pathlib.Path):
     initial_pickler_file = agent_dir / INITIAL_PICKLER_NAME
-    res = run(["python3", initial_pickler_file.resolve()], stdout=PIPE, stdin=PIPE, universal_newlines=True)
+    res = run(
+        ["python3", initial_pickler_file.resolve()],
+        stdout=PIPE,
+        stdin=PIPE,
+        universal_newlines=True,
+    )
     if res.returncode != 0:
-        print(f"Fix error in initial_pickler.py then re-run {COMMAND_NAME} initialise-agent <path>")
+        print(
+            f"Fix error in initial_pickler.py then re-run {COMMAND_NAME} initialise-agent <path>"
+        )
         sys.exit(res.returncode)
     pickle_file = agent_dir / INITIAL_PICKLE_FILE_NAME
     pickle_file.touch()
@@ -38,6 +46,7 @@ def get_agent_pkl_file(path: pathlib.Path, trained_agent_hash: str):
     )
     check_file_exists(agent_pkl_file, error_msg)
     return agent_pkl_file
+
 
 def write_pkl_file(new_agent_dir: pathlib.Path, agent: Agent):
     pkl_file = new_agent_dir / PICKLE_FILENAME
