@@ -21,10 +21,12 @@ from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
 from ai_market_contest.cli.utils.getagents import (  # type: ignore
     get_agent_names,
     get_trained_agents,
+    get_training_configs
 )
 from ai_market_contest.cli.utils.displayagents import (  # type: ignore
     display_agents,
     display_trained_agents,
+    display_training_configs
 )
 
 from ai_market_contest.cli.utils.checkagentinitialisation import (
@@ -43,6 +45,15 @@ def ask_for_trained_agents(agent: str) -> bool:
     print("Operation aborted: failed to get valid input")
     sys.exit(1)
 
+def choose_training_config(training_configs: list[str]):
+    print("Choose a training config: ", end="")
+    while True:
+        chosen_config = input()
+        if chosen_config in training_configs:
+            break
+        print(f"{chosen_config} not an existing training config")
+        print("Choose a valid agent to train: ")
+    return chosen_config 
 
 def choose_agent_for_training(agent_names: list[str]) -> str:
     print("Choose an agent to train: ", end="")
@@ -106,20 +117,20 @@ def train_agent(args: Any):
         print(f"{COMMAND_NAME} initialise-agent <path>")
         print("and pick the agent you want to initialise")
         sys.exit(0)
-    chosen_trained_agent: str = get_agent_initial_hash(chosen_agent_dir)
-    show_trained_agents: bool = ask_for_trained_agents(chosen_agent)
-    if show_trained_agents:
-        trained_agents: list[str] = get_trained_agents(chosen_agent_dir)
-        display_trained_agents(chosen_agent_dir, trained_agents)
-        chosen_trained_agent = choose_trained_agent(trained_agents)
+    trained_agents: list[str] = get_trained_agents(chosen_agent_dir)
+    display_trained_agents(chosen_agent_dir, trained_agents)
+    chosen_trained_agent = choose_trained_agent(trained_agents)
     training_agent_dir = (
         chosen_agent_dir / TRAINED_AGENTS_DIR_NAME / chosen_trained_agent
     )
     error_msg: str = f"Error: no directory exists for {chosen_trained_agent}"
     check_directory_exists(training_agent_dir, error_msg)
+    training_configs: list[str] = get_training_configs(proj_dir)
+    display_training_configs(training_configs)
+    training_config = choose_training_config(training_configs)
     training_msg: str = input("(Optional) Enter training message: ")
     training_agent_pkl_file = training_agent_dir / PICKLE_FILENAME
-    train(chosen_agent_dir, chosen_trained_agent, training_msg, training_agent_pkl_file)
+    train(proj_dir, chosen_agent_dir, chosen_trained_agent, training_msg, training_agent_pkl_file, training_config)
 
 
 def create_subparser(subparsers: Any):  # type: ignore

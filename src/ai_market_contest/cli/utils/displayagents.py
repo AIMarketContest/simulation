@@ -14,5 +14,9 @@ def display_trained_agents(agent_dir: pathlib.Path, trained_agents: list[str]):
 
 
 def display_agents(agents: list[str]):
-    print("The current initialised agents are: ")
+    print("The current agents are: ")
     print(f"[{', '.join(agents)}]")
+
+def display_training_configs(training_configs: list[str]):
+    print("The current training configs are:")
+    print(f"[{', '.join(training_configs)}]")

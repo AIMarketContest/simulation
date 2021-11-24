@@ -3,7 +3,7 @@ import configparser
 import pathlib
 import sys
 
-from ai_market_contest.cli.cli_config import CONFIG_FILENAME  # type: ignore
+from ai_market_contest.cli.cli_config import CONFIG_FILENAME, TRAINING_CONFIGS_DIR_NAME  # type: ignore
 from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 
 
@@ -52,3 +52,10 @@ def add_trained_agent_to_config_file(agent_dir: pathlib.Path, trained_agent_name
     config["training"]["trained-agents"] = str(trained_agents)
     with config_file.open("w") as c_file:
         config.write(c_file)
+
+def get_training_configs(proj_dir: pathlib.Path):
+    training_configs_dir = proj_dir / TRAINING_CONFIGS_DIR_NAME
+    training_configs = []
+    for training_config_file in training_configs_dir.rglob('*.py'):
+        training_configs.append(training_config_file.stem) 
+    return training_configs
