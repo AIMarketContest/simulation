@@ -60,7 +60,7 @@ def choose_trained_agent(trained_agents: list[str]):
     max_count = 3
     count = 0
     print(
-        "\nInput the hash or index of the version of the agent to be trained:", end=""
+        "\nInput the hash or index of the version of the agent to be trained: ", end=""
     )
     while count < max_count:
         count += 1
