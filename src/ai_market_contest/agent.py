@@ -39,6 +39,7 @@ class Agent(metaclass=ABCMeta):
 
         raise NotImplementedError
 
+    @abstractmethod
     def learning_has_converged(self):
         """
         Check if the agent's learning has converged.
