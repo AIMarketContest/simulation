@@ -1,12 +1,12 @@
 import configparser
 import datetime
 import pathlib
-import shutil
 from string import Template
 import typing
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENT_FILE,
+    AGENT_TEMPLATE,
     ABS_METHOD_STR,
     IMPORT_STR,
     AGENT_STR,
@@ -62,26 +62,8 @@ def make_agent_classname_camelcase(agent_name: str):
 
 
 def create_new_agent_file(agent_file: pathlib.Path, agent_name: str):
-    class_line_tab: bool = False
-    with agent_file.open("w") as f1:
-        f1.write("from ai_market_contest.agent import Agent\n")
-        with AGENT_FILE.open("r") as f2:
-            for line in f2:
-                if line is not None:
-                    if CLASS_METHOD_STR in line:
-                        break
-                    if IMPORT_STR in line:
-                        continue
-                    if ABS_METHOD_STR in line:
-                        continue
-                    if AGENT_STR in line:
-                        tab = "\t" if class_line_tab else ""
-                        f1.write(
-                            tab
-                            + "class "
-                            + make_agent_classname_camelcase(agent_name)
-                            + "(Agent):\n"
-                        )
-                        class_line_tab = True
-                    else:
-                        f1.write(line)
+    subs: typing.Dict[str, str] = {"agent_classname": make_agent_classname_camelcase(agent_name)}
+    with AGENT_FILE.open("r") as a_file:
+        src = Template(a_file.read())
+    with agent_file.open("w") as new_agent_file:
+        new_agent_file.write(src.substitute(subs))

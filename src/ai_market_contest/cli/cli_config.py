@@ -1,5 +1,6 @@
 import pathlib
 
+AGENT_TEMPLATE: str = "agent.templ"
 AGENT_PKL_FILENAME = "agent.pkl"
 HASH_LENGTH: str = 6
 TRAINED_AGENTS_DIR_NAME = "trained-agents"
@@ -11,7 +12,7 @@ PROJ_DIR_NAME: str = "aicontest"
 CONFIG_FILENAME: str = "config.ini"
 AGENT_FILENAME: str = "agent.py"
 AGENTS_DIR_NAME: str = "agents"
-AGENT_FILE: pathlib.Path = (CLI_DIR / ".." / AGENT_FILENAME).resolve()
+AGENT_FILE: pathlib.Path = (CLI_DIR / ".." / AGENT_TEMPLATE).resolve()
 INITIAL_PICKLE_FILE_NAME = "initial_pickle.pkl"
 INITIAL_PICKLER_NAME = "initial_pickler.py"
 INITIAL_PICKLER_FILE = (CLI_DIR / ".." / INITIAL_PICKLER_NAME).resolve()
