@@ -2,6 +2,8 @@ import configparser
 import datetime
 import pathlib
 import shutil
+from string import Template
+import typing
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENT_FILE,
@@ -17,6 +19,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
 from ai_market_contest.cli.utils.processmetafile import write_meta_file
 from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 
+
 def set_agent_to_initialised(agent_dir: pathlib.Path): 
     config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
     check_config_file_exists(config_file)    
@@ -28,7 +31,7 @@ def set_agent_to_initialised(agent_dir: pathlib.Path):
     
     
 
-def make_initial_trained_agent(agent_dir: pathlib.Path, initial_hash: str):
+def make_initial_trained_agent(agent_dir: pathlib.Path, agent_name: str, initial_hash: str):
     trained_agents_dir = agent_dir / TRAINED_AGENTS_DIR_NAME
     initial_trained_agent_dir = trained_agents_dir / initial_hash
     initial_trained_agent_dir.mkdir(parents=True)
@@ -36,8 +39,16 @@ def make_initial_trained_agent(agent_dir: pathlib.Path, initial_hash: str):
     write_meta_file(
         initial_trained_agent_dir, initial_hash, datetime.datetime.now(), msg
     )
-
-    shutil.copy(INITIAL_PICKLER_FILE, agent_dir / INITIAL_PICKLER_NAME)
+    new_pickler_file: pathlib.Path = agent_dir / INITIAL_PICKLER_NAME
+    subs: typing.Dict[str, str] = {
+        "agent_import": agent_name, 
+        "agent_classname": make_agent_classname_camelcase(agent_name),
+    } 
+    with INITIAL_PICKLER_FILE.open("r") as initial_pickler:
+        src = Template(initial_pickler.read())
+    
+    with new_pickler_file.open("w") as new_pickler:
+        new_pickler.write(src.substitute(subs))
 
 
 def make_agent_classname_camelcase(agent_name: str):

@@ -7,10 +7,10 @@ from subprocess import run, PIPE
 from ai_market_contest.cli.cli_config import (  # type: ignore
     INITIAL_PICKLER_NAME,
     INITIAL_PICKLE_FILE_NAME,
+    PICKLE_FILENAME,
     TRAINED_AGENTS_DIR_NAME,
     AGENT_PKL_FILENAME,
     COMMAND_NAME,
-    PICKLE_FILENAME
 )
 from ai_market_contest.cli.utils.hashing import get_agent_initial_hash
 
@@ -28,7 +28,7 @@ def initialise_agent_pkl_file(agent_dir: pathlib.Path):
     initial_agent_dir = (
         agent_dir / TRAINED_AGENTS_DIR_NAME / get_agent_initial_hash(agent_dir)
     )
-    shutil.move(pickle_file, initial_agent_dir / INITIAL_PICKLE_FILE_NAME)
+    shutil.move(pickle_file, initial_agent_dir / PICKLE_FILENAME)
 
 
 def get_agent_pkl_file(path: pathlib.Path, trained_agent_hash: str):

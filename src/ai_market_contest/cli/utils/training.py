@@ -1,14 +1,18 @@
 import datetime
+import shutil
 import pickle
 import pathlib
 
 from ai_market_contest.cli.cli_config import (
-    TRAINED_AGENTS_DIR_NAME
+    TRAINED_AGENTS_DIR_NAME,
+    ROOT_FOLDER
 )
 from ai_market_contest.cli.utils.processmetafile import (
     get_trained_agent_metadata, 
     write_meta_file
 )
+
+from ai_market_contest.cli.utils.filesystemutils import check_file_exists
 from ai_market_contest.cli.utils.hashing import hash_string
 from ai_market_contest.cli.utils.getagents import add_trained_agent_to_config_file
 from ai_market_contest.cli.utils.pklfileutils import write_pkl_file
@@ -16,9 +20,18 @@ from ai_market_contest.cli.utils.pklfileutils import write_pkl_file
 def TRAINING_ALGORITHM(agent): 
     return [agent]
 
-def train(agent_dir: pathlib.Path, agent_name: str, training_msg: str, agent_pkl_file: pathlib.Path): 
-    with agent_pkl_file.open("rb") as agent_pkl_file:
-        agent = pickle.load(agent_pkl_file)
+def copy_agent_file(agent_dir: pathlib.Path, agent_name: str):
+    agent_filename = agent_name + ".py"
+    agent_file = agent_dir / agent_filename
+    check_file_exists(agent_file)
+    shutil.copy(agent_file, ROOT_FOLDER / agent_filename)
+    
+    
+
+def train(agent_dir: pathlib.Path, agent_name: str, training_msg: str, agent_pkl_file: pathlib.Path):
+    copy_agent_file(agent_dir, agent_name)
+    with agent_pkl_file.open("rb") as pkl_file:
+        agent = pickle.load(pkl_file)
     (parent_hash, _, _, _) = get_trained_agent_metadata(agent_dir, agent_name)
     new_agents = TRAINING_ALGORITHM(agent)
     for new_agent in new_agents:

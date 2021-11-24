@@ -1,15 +1,13 @@
+import pathlib
 import pickle
 
-# from <agent_filename> import <agent_classname>
+from ${agent_import} import ${agent_classname}
 
-from ai_market_contest.cli.cli_config import (
-    INITIAL_PICKLER_FILE,
-    INITIAL_PICKLE_FILE_NAME,
-)
+INITIAL_PICKLE_FILE_NAME = "initial_pickle.pkl"
 
-# agent = <agent_classname>(<parameters>)
+agent = ${agent_classname}()
 
-pickle_file = (INITIAL_PICKLER_FILE.parent) / INITIAL_PICKLE_FILE_NAME
+pickle_file = (pathlib.Path(__file__).parent) / INITIAL_PICKLE_FILE_NAME
 
 with pickle_file.open("wb") as pkl:
     pickle.dump(agent, pkl)

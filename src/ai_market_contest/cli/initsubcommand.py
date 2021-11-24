@@ -32,7 +32,7 @@ def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
         agent_file.touch()
         create_new_agent_file(agent_file, agent_name)
         initial_hash: str = set_agent_initial_hash(agent_dir)
-        make_initial_trained_agent(agent_dir, initial_hash)
+        make_initial_trained_agent(agent_dir, agent_name, initial_hash)
 
 
 def make_proj_dir(proj_dir: pathlib.Path):

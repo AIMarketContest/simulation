@@ -90,7 +90,6 @@ def train_agent(args: Any):
     agent_names: list[str] = get_agent_names(proj_dir)
     display_agents(agent_names)
     chosen_agent: str = choose_agent_for_training(agent_names)
-    show_trained_agents: bool = ask_for_trained_agents(chosen_agent)
     agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
     chosen_agent_dir: pathlib.Path = agents_dir / chosen_agent
     error_msg: str = f"Error: no directory exists for {chosen_agent}"
@@ -103,6 +102,7 @@ def train_agent(args: Any):
         print("and pick the agent you want to initialise")
         sys.exit(0)
     chosen_trained_agent: str = get_agent_initial_hash(chosen_agent_dir)
+    show_trained_agents: bool = ask_for_trained_agents(chosen_agent)
     if show_trained_agents:
         trained_agents: list[str] = get_trained_agents(chosen_agent_dir)
         display_trained_agents(chosen_agent_dir, trained_agents)
