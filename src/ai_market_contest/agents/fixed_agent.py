@@ -11,10 +11,10 @@ class FixedAgent(Agent):
 
     def update(
         self,
-        s1: list[float],
-        r1: int,
-        s2: list[float],
-        r2: int,
+        last_round_prices: list[float],
+        last_round_sales: int,
+        round_before_last_prices: list[float],
+        round_before_last_sales: int,
         identity_index: int,
     ) -> None:
         pass

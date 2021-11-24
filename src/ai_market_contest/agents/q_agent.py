@@ -43,22 +43,31 @@ class QAgent(Agent):
 
     def update(
         self,
-        s1: list[float],
-        r1: int,
-        s2: list[float],
-        r2: int,
+        last_round_prices: list[float],
+        last_round_sales: int,
+        round_before_last_prices: list[float],
+        round_before_last_sales: int,
         identity_index: int,
     ) -> None:
         self.time += 1
 
-        a1 = s1[identity_index]
+        a1 = last_round_prices[identity_index]
 
-        s1 = s1[:identity_index] + s1[identity_index + 1 :]
-        s2 = s2[:identity_index] + s2[identity_index + 1 :]
+        last_round_prices = (
+            last_round_prices[:identity_index] + last_round_prices[identity_index + 1 :]
+        )
+        round_before_last_prices = (
+            round_before_last_prices[:identity_index]
+            + round_before_last_prices[identity_index + 1 :]
+        )
 
-        max_path: float = np.argmax(self.Q[tuple(s2)])  # type: ignore
-        self.Q[tuple(s1)][a1] += self.alpha * (
-            (r1 * a1) + self.gamma * max_path - self.Q[tuple(s1)][a1]
+        max_path: float = np.argmax(
+            self.Q[tuple(round_before_last_prices)]
+        )  # type: ignore
+        self.Q[tuple(last_round_prices)][a1] += self.alpha * (
+            (last_round_sales * a1)
+            + self.gamma * max_path
+            - self.Q[tuple(last_round_prices)][a1]
         )
 
     def probability_exploration(self):
