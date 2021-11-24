@@ -11,6 +11,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     ENVS_DIR_NAME,
     PROJ_DIR_NAME,
+    TRAINING_CONFIGS_DIR_NAME
 )
 from ai_market_contest.cli.utils.inputagentname import input_agent_name
 from ai_market_contest.cli.utils.initialiseagent import create_agent_class
@@ -33,8 +34,10 @@ def make_proj_dir(proj_dir: pathlib.Path):
         sys.exit(2)
     agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
     environments_dir: pathlib.Path = proj_dir / ENVS_DIR_NAME
+    training_configs_dir: pathlib.Path = proj_dir / TRAINING_CONFIGS_DIR_NAME
     agents_dir.mkdir(parents=True)
-    environments_dir.mkdir()
+    environments_dir.mkdir(parents=True)
+    training_configs_dir.mkdir(parents=True)
 
 
 def make_config_file(

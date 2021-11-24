@@ -22,3 +22,4 @@ EXAMPLE_MAIN_FILE: pathlib.Path = (CLI_DIR / ".." / EXAMPLE_MAIN_FILENAME).resol
 ENVS_DIR_NAME: str = "environments"
 ROOT_FOLDER: pathlib.Path = (CLI_DIR / "..").resolve()
 TRAIN_CONFIG_FILENAME: str = "train_config.ini"
+TRAINING_CONFIGS_DIR_NAME: str = "training_configs"
