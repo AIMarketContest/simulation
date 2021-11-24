@@ -36,7 +36,7 @@ def initialise_agent(args: Any):
     chosen_agent_dir: pathlib.Path = agents_dir / chosen_agent
     error_msg: str = f"Error: no directory exists for {chosen_agent}"
     check_directory_exists(chosen_agent_dir, error_msg)
-    initialise_agent_pkl_file(chosen_agent_dir)
+    initialise_agent_pkl_file(chosen_agent_dir, args.show_traceback)
     set_agent_to_initialised(chosen_agent_dir)
     print("Agent successfully initialised")
 
@@ -46,4 +46,9 @@ def create_subparser(subparsers: Any):  # type: ignore
         "initialise-agent", help="Initialise an agent for training"
     )
     parser_train.add_argument("path", type=pathlib.Path, default=".")
+    parser_train.add_argument(
+        "--show-traceback",
+        action="store_true",
+        help="Shows stack traceback in case python program crashes",
+    )
     parser_train.set_defaults(func=initialise_agent)

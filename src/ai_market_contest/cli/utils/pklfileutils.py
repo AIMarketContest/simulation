@@ -2,7 +2,7 @@ import pickle
 import pathlib
 import shutil
 import sys
-from subprocess import run, PIPE
+import subprocess
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     INITIAL_PICKLER_NAME,
@@ -18,14 +18,23 @@ from ai_market_contest.cli.utils.filesystemutils import check_file_exists
 from ai_market_contest.agent import Agent
 
 
-def initialise_agent_pkl_file(agent_dir: pathlib.Path):
+def initialise_agent_pkl_file(agent_dir: pathlib.Path, show_traceback: bool):
     initial_pickler_file = agent_dir / INITIAL_PICKLER_NAME
-    res = run(
-        ["python3", initial_pickler_file.resolve()],
-        stdout=PIPE,
-        stdin=PIPE,
-        universal_newlines=True,
-    )
+    if show_traceback:
+        res = subprocess.run(
+            ["python3", initial_pickler_file.resolve()],
+            stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE,
+            universal_newlines=True,
+        )
+    else:
+        res = subprocess.run(
+            ["python3", initial_pickler_file.resolve()],
+            stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+        )
     if res.returncode != 0:
         print(
             f"Fix error in initial_pickler.py then re-run {COMMAND_NAME} initialise-agent <path>"
