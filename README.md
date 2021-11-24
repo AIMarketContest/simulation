@@ -25,7 +25,7 @@ Here is a brief overview of the toolbox's workflow:
 
 <img src="docs/tutorial/aic_workflow.png" alt="Workflow">
 
-A more in depth explanation and tutorial can be found in `docs/tutorial/getting_started_tutorial.md`.
+A more in depth explanation and tutorial can be found [here](https://github.com/AIMarketContest/simulation/blob/add-tutorial/docs/tutorial/getting_started_tutorial.md).
 
 ## Developer tools
 
