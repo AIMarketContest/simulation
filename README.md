@@ -19,7 +19,16 @@ running all commands from the root directory as follows:
 alias aic="python3 src/ai_market_contest/cli/cli.py"
 ```
 
+# Running the program
+
+Here is a brief overview of the toolbox's workflow:
+
+<img src="docs/tutorial/aic_workflow.png" alt="Workflow">
+
+A more in depth explanation and tutorial can be found in `docs/tutorial/getting_started_tutorial.md`.
+
 ## Developer tools
+
 ### Styling
 When in the poetry virtual environment, [black](https://black.readthedocs.io/en/stable/) should be available and can be run with `black .`.
 
