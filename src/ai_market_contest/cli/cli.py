@@ -2,10 +2,11 @@
 import sys
 
 import ai_market_contest.cli.addagentsubcommand as addagentsubcommand  # type: ignore
+import ai_market_contest.cli.initialiseagentsubcommand as \
+    initialiseagentsubcommand  # type: ignore
 import ai_market_contest.cli.initsubcommand as initsubcommand  # type: ignore
 import ai_market_contest.cli.resetsubcommand as resetsubcommand  # type: ignore
 import ai_market_contest.cli.trainsubcommand as trainsubcommand  # type: ignore
-import ai_market_contest.cli.initialiseagentsubcommand as initialiseagentsubcommand  # type: ignore
 
 KEYBOARD_INTERRUPT_MSG = "Operation aborted."
 
@@ -24,8 +25,14 @@ def initialise_parser():
     return parser
 
 
+def no_arguments(args):
+    print("No arguments supplied. Make sure use the -h flag to see available options.")
+    sys.exit(-1)
+
+
 def main():
     parser = initialise_parser()
+    parser.set_defaults(func=no_arguments)
     args = parser.parse_args()
     args.func(args)
 
