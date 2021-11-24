@@ -6,16 +6,26 @@ class Agent(metaclass=ABCMeta):
     Agent interface - an agent represents a firm selling a product in the market.
 
     An agent encapsulates the users private pricing strategy.
-    The agent must give an initial price for the product
-    and given its sales for the last round
-    and all prices set by competitors in that round
-    it must give its new price.
+
+    The user is free to implement this interface in order to test strategies.
+    As is standard for ML models, it uses the policy-update format.
+    For those not familiar with policy-update, see the comments on each function.
     """
 
     @abstractmethod
-    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
+    def policy(
+        self, last_round_agents_prices: list[float], identity_index: int
+    ) -> float:
         """
         Query the agent for the next price to set.
+
+        Parameters
+        ----------
+        last_round_all_agents_prices : list of float
+            List of all the prices set by all agents in the previous timestep.
+        identity_index: int
+            A positive integer that tells the agent which index in the list
+            corresponds to themself.
 
         Returns
         -------
@@ -24,7 +34,7 @@ class Agent(metaclass=ABCMeta):
             discretised within [0,1].
 
         Raises
-        ______
+        ------
         NotImplementedError
             If concrete class does not override method.
         """
@@ -32,28 +42,13 @@ class Agent(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def update(
-        self,
-        s1: list[float],
-        r1: int,
-        s2: list[float],
-        r2: int,
-        identity_index: int,
-    ) -> None:
+    def learning_has_converged(self):
         """
-        Feeds data from the previous timestep into the agent allowing it
-        to adjust it's strategy.
+        Check if the agent's learning has converged.
 
-        Parameters
-        ----------
-        last_round_all_agents_prices : list of float
-            List of all the prices set by all agents in the previous timestep.
-        last_round_sales: int
-            A positive integer representing the number of sales the agent
-            made in the previous timestep.
-        identity_index: int
-            A positive integer that tells the agent which index in the list
-            corresponds to themself.
+        Returns
+        -------
+        bool : True if the agent learning has converged, False otherwise.
 
         Raises
         ------
@@ -62,15 +57,41 @@ class Agent(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    def learning_has_converged(self):
+    @abstractmethod
+    def update(
+        self,
+        last_round_prices: list[float],
+        last_round_sales: int,
+        round_before_last_prices: list[float],
+        round_before_last_sales: int,
+        identity_index: int,
+    ) -> None:
         """
-        Check if the agent's learning has converged.
+        Feeds data from the previous timestep into the agent allowing it
+        to adjust it's strategy.
 
-        Returns
-        -------
-        bool : True if the agent learning has converged, False otherwise.
+        Parameters
+        ----------
+        last_round_prices : list of float
+            List of all the prices set by all agents in the previous timestep.
+        last_round_sales: int
+            A positive integer representing the number of sales the agent
+            made in the previous timestep.
+        round_before_last_prices : list of float
+            List of all the prices set by all agents in the timestep before last.
+        round_before_last_sales: int
+            A positive integer representing the number of sales the agent
+            made in the timestep before last.
+        identity_index: int
+            A positive integer that holds the index in the list corresponding to
+            the current agent.
+
+        Raises
+        ------
+        NotImplementedError
+            If concrete class does not override method.
         """
-        return False
+        raise NotImplementedError
 
     @classmethod
     def __subclasshook__(cls, subclass):
@@ -81,6 +102,8 @@ class Agent(metaclass=ABCMeta):
                     callable(subclass.policy),
                     hasattr(subclass, "update"),
                     callable(subclass.update),
+                    hasattr(subclass, "learning_has_converged"),
+                    callable(subclass.learning_has_converged),
                 ]
             )
             or NotImplemented

@@ -63,3 +63,6 @@ class SarsaAgent(Agent):
 
     def probability_exploration(self):
         return (1 - self.theta) ** self.time
+
+    def learning_has_converged(self):
+        return True
