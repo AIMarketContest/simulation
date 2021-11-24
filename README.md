@@ -13,6 +13,12 @@ To make use of this you should:
 3. Run `poetry shell` to enter the virtual environment with access to the
    dependencies
 
+Until the package is properly installed, we recommend setting up an alias and
+running all commands from the root directory as follows:
+```
+alias aic="python3 src/ai_market_contest/cli/cli.py"
+```
+
 ## Developer tools
 ### Styling
 When in the poetry virtual environment, [black](https://black.readthedocs.io/en/stable/) should be available and can be run with `black .`.
