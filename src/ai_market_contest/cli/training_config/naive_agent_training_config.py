@@ -1,10 +1,11 @@
 import configparser
 import pathlib
 
-
-from ai_market_contest.cli.training_config.train_config import TrainConfig  # type: ignore
 from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import TRAIN_CONFIG_FILENAME  # type: ignore
+from ai_market_contest.cli.training_config.train_config import (
+    TrainConfig,  # type: ignore
+)
 from ai_market_contest.demand_function import DemandFunction  # type: ignore
 from ai_market_contest.demandfunctions.gaussian_demand_function import (
     GaussianDemandFunction,  # type: ignore
@@ -63,7 +64,7 @@ class NaiveAgentTrainingConfig(TrainConfig):
         env: Environment = Environment(
             self.training_duration, self.demand_function, len(self.agents) + 1
         )  # max_agents has +1 to make room for the agent to be trained
-        env.add(agent_to_train)
+        env.add_agent(agent_to_train)
         for agent in self.agents:
             env.add_agent(agent)
 
