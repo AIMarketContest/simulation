@@ -1,19 +1,24 @@
+import pathlib
 from abc import ABCMeta, abstractmethod
 
-import pathlib
+from ai_market_contest.agent import Agent  # type: ignore
+from ai_market_contest.environment import Environment  # type: ignore
 
-from ai_market_contest.environment import Environment
 
-
-class TrainConfig(ABCMeta):
+class TrainConfig(metaclass=ABCMeta):
     """
     Interface for configuring a training session.
     """
 
     @abstractmethod
-    def create_environment(self) -> Environment:
+    def create_environment(self, agent_to_train: Agent) -> Environment:
         """
         Returns an environment set up for the training regimine.
+
+        Parameters
+        ----------
+        agent_to_train : Agent
+            The agent the training configuration is designed to train.
 
         Returns
         ----------

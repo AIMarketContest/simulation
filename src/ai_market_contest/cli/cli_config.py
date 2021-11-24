@@ -21,3 +21,4 @@ EXAMPLE_MAIN_FILENAME: str = "example_main.py"
 EXAMPLE_MAIN_FILE: pathlib.Path = (CLI_DIR / ".." / EXAMPLE_MAIN_FILENAME).resolve()
 ENVS_DIR_NAME: str = "environments"
 ROOT_FOLDER: pathlib.Path = (CLI_DIR / "..").resolve()
+TRAIN_CONFIG_FILENAME: str = "train_config.ini"
