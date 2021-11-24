@@ -112,7 +112,7 @@ def train_agent(args: Any):
     check_directory_exists(training_agent_dir, error_msg)
     training_msg: str = input("(Optional) Enter training message: ")
     training_agent_pkl_file = training_agent_dir / PICKLE_FILENAME
-    train(chosen_agent_dir, chosen_agent, training_msg, training_agent_pkl_file)
+    train(chosen_agent_dir, chosen_trained_agent, training_msg, training_agent_pkl_file)
 
 def create_subparser(subparsers: Any):  # type: ignore
     parser_train = subparsers.add_parser(
