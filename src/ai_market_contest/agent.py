@@ -13,7 +13,9 @@ class Agent(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def policy(self, last_round_agents_prices: list[float], identity_index: int) -> float:
+    def policy(
+        self, last_round_agents_prices: list[float], identity_index: int
+    ) -> float:
         """
         Query the agent for the next price to set.
 
@@ -32,7 +34,7 @@ class Agent(metaclass=ABCMeta):
             discretised within [0,1].
 
         Raises
-        ______
+        ------
         NotImplementedError
             If concrete class does not override method.
         """
@@ -47,6 +49,11 @@ class Agent(metaclass=ABCMeta):
         Returns
         -------
         bool : True if the agent learning has converged, False otherwise.
+
+        Raises
+        ------
+        NotImplementedError
+            If concrete class does not override method.
         """
         raise NotImplementedError
 
