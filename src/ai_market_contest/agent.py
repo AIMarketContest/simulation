@@ -83,8 +83,8 @@ class Agent(metaclass=ABCMeta):
             A positive integer representing the number of sales the agent
             made in the timestep before last.
         identity_index: int
-            A positive integer that tells the agent which index in the list
-            corresponds to themself.
+            A positive integer that holds the index in the list corresponding to
+            the current agent.
 
         Raises
         ------
