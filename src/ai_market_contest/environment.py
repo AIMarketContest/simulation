@@ -111,7 +111,6 @@ def init_env(
     agents: List[Agent], simulation_length: int, demand: DemandFunction
 ) -> Environment:
     env = Environment(agents, simulation_length, demand)
-    env = from_parallel(env)
     env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
 
