@@ -22,7 +22,6 @@ from typing import Any
 import launchpad as lp
 import sonnet as snt
 from absl import app, flags
-
 from mava.components.tf.modules.exploration import LinearExplorationScheduler
 from mava.systems.tf import madqn
 from mava.utils import lp_utils

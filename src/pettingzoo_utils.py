@@ -17,8 +17,9 @@ def make_environment(
     random_seed: Optional[int] = None,
     **kwargs: Any,
 ) -> dm_env.Environment:
-    env_module = importlib.import_module(f"ai_market_contest.mpe.simple_spread_v2")
-    env = env_module.parallel_env(**kwargs)  # type: ignore
+    # env_module = importlib.import_module(f"ai_market_contest.mpe.simple_spread_v2")
+    # env = env_module.parallel_env(**kwargs)  # type: ignore
+    env = init_env([FixedAgent(10)], FixedDemandFunction(), 10)
     environment = PettingZooParallelEnvWrapper(env)
 
     return environment

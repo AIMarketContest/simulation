@@ -40,8 +40,9 @@ class Environment(ParallelEnv):
         The number of agents currently in the simulation
     """
 
-    START_VAL = 0.5
+    START_VAL = 50
     NUMBER_OF_DISCRETE_PRICES = 100
+    MAX_SALES = 100
 
     metadata = {"render.modes": ["human"], "name": "rps_v2"}
 
@@ -51,6 +52,7 @@ class Environment(ParallelEnv):
         simulation_length: int,
         demand: DemandFunction,
     ):
+        print("INIT")
         self.possible_agents: List[str] = [
             "player_" + str(r) for r in range(len(agents))
         ]
@@ -64,21 +66,22 @@ class Environment(ParallelEnv):
         self.reset()
 
     def reset(self) -> Dict[str, float]:
+        print("RESET")
         return {agent: 0.0 for agent in self.possible_agents if agent is not None}
 
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent: str):
+        print("OBSERVATION SPACE")
         return spaces.Dict(
             {
-                "observation": MultiDiscrete(
-                    [self.NUMBER_OF_DISCRETE_PRICES] * len(self.agents)
-                ),
+                "observation": Discrete(self.MAX_SALES),
                 "action_mask": Discrete(self.NUMBER_OF_DISCRETE_PRICES),
             }
         )
 
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent: str):
+        print("ACTION SPACE")
         return Discrete(self.NUMBER_OF_DISCRETE_PRICES)
 
     def step(
@@ -87,6 +90,7 @@ class Environment(ParallelEnv):
         """
         Runs a time step for the simulation and appends results to the historic data
         """
+        print("STEP")
         demands = self.demand.get_sales(actions)
         self.time_step += 1
         if self.time_step >= self.simulation_length:
