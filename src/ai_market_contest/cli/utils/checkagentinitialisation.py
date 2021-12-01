@@ -1,6 +1,7 @@
 import configparser
 import pathlib
 import sys
+
 from ai_market_contest.cli.cli_config import CONFIG_FILENAME
 from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 

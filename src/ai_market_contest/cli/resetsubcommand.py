@@ -4,8 +4,8 @@ from typing import Any
 
 from ai_market_contest.cli.cli_config import PROJ_DIR_NAME  # type: ignore
 from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
-    check_proj_dir_exists,
     check_path_exists,
+    check_proj_dir_exists,
 )
 
 

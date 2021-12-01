@@ -11,11 +11,11 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     ENVS_DIR_NAME,
     PROJ_DIR_NAME,
-    TRAINING_CONFIGS_DIR_NAME
+    TRAINING_CONFIGS_DIR_NAME,
 )
-from ai_market_contest.cli.utils.inputagentname import input_agent_name
-from ai_market_contest.cli.utils.initialiseagent import create_agent_class
 from ai_market_contest.cli.utils.hashing import set_agent_initial_hash
+from ai_market_contest.cli.utils.initialiseagent import create_agent_class
+from ai_market_contest.cli.utils.inputagentname import input_agent_name
 
 
 def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):

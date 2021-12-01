@@ -1,21 +1,21 @@
 import configparser
 import datetime
 import pathlib
-from string import Template
 import sys
 import typing
+from string import Template
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENT_FILE,
     AGENTS_DIR_NAME,
-    TRAINED_AGENTS_DIR_NAME,
+    CONFIG_FILENAME,
     INITIAL_PICKLER_FILE,
     INITIAL_PICKLER_NAME,
-    CONFIG_FILENAME,
+    TRAINED_AGENTS_DIR_NAME,
 )
-from ai_market_contest.cli.utils.processmetafile import write_meta_file
 from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 from ai_market_contest.cli.utils.hashing import set_agent_initial_hash
+from ai_market_contest.cli.utils.processmetafile import write_meta_file
 
 
 def set_agent_to_initialised(agent_dir: pathlib.Path):

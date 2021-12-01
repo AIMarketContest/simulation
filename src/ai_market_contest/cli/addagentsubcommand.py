@@ -11,8 +11,8 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     PROJ_DIR_NAME,
 )
-from ai_market_contest.cli.utils.inputagentname import input_agent_name
 from ai_market_contest.cli.utils.initialiseagent import create_agent_class
+from ai_market_contest.cli.utils.inputagentname import input_agent_name
 
 
 def edit_project_config_file(agent_name: str, proj_dir: pathlib.Path):

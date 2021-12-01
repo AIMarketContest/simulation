@@ -1,20 +1,23 @@
 import datetime
 import importlib.util
-import pickle
 import pathlib
+import pickle
 import sys
 
-from ai_market_contest.cli.cli_config import TRAINED_AGENTS_DIR_NAME, ROOT_FOLDER, TRAINING_CONFIGS_DIR_NAME
+from ai_market_contest.cli.cli_config import (
+    ROOT_FOLDER,
+    TRAINED_AGENTS_DIR_NAME,
+    TRAINING_CONFIGS_DIR_NAME,
+)
+from ai_market_contest.cli.training_config.training import train as TRAINING_ALGORITHM
+from ai_market_contest.cli.utils.filesystemutils import check_file_exists
+from ai_market_contest.cli.utils.getagents import add_trained_agent_to_config_file
+from ai_market_contest.cli.utils.hashing import hash_string
+from ai_market_contest.cli.utils.pklfileutils import write_pkl_file
 from ai_market_contest.cli.utils.processmetafile import (
     get_trained_agent_metadata,
     write_meta_file,
 )
-
-from ai_market_contest.cli.utils.filesystemutils import check_file_exists
-from ai_market_contest.cli.utils.hashing import hash_string
-from ai_market_contest.cli.utils.getagents import add_trained_agent_to_config_file
-from ai_market_contest.cli.utils.pklfileutils import write_pkl_file
-from ai_market_contest.cli.training_config.training import train as TRAINING_ALGORITHM
 
 
 def execute_training_routine(
@@ -23,13 +26,15 @@ def execute_training_routine(
     parent_hash: str,
     training_msg: str,
     agent_pkl_file: pathlib.Path,
-    training_config: str
+    training_config: str,
 ):
     sys.path.insert(0, str(agent_dir.resolve()))
     with agent_pkl_file.open("rb") as pkl_file:
         agent = pickle.load(pkl_file)
-    
-    training_config_file = proj_dir / TRAINING_CONFIGS_DIR_NAME / (training_config + ".py")
+
+    training_config_file = (
+        proj_dir / TRAINING_CONFIGS_DIR_NAME / (training_config + ".py")
+    )
     spec = importlib.util.spec_from_file_location(training_config, training_config_file)
     config_module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(config_module)

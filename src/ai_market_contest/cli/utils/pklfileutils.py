@@ -1,21 +1,20 @@
-import pickle
 import pathlib
+import pickle
 import shutil
-import sys
 import subprocess
+import sys
 
+from ai_market_contest.agent import Agent
 from ai_market_contest.cli.cli_config import (  # type: ignore
-    INITIAL_PICKLER_NAME,
-    INITIAL_PICKLE_FILE_NAME,
-    PICKLE_FILENAME,
-    TRAINED_AGENTS_DIR_NAME,
     AGENT_PKL_FILENAME,
     COMMAND_NAME,
+    INITIAL_PICKLE_FILE_NAME,
+    INITIAL_PICKLER_NAME,
+    PICKLE_FILENAME,
+    TRAINED_AGENTS_DIR_NAME,
 )
-from ai_market_contest.cli.utils.hashing import get_agent_initial_hash
-
 from ai_market_contest.cli.utils.filesystemutils import check_file_exists
-from ai_market_contest.agent import Agent
+from ai_market_contest.cli.utils.hashing import get_agent_initial_hash
 
 
 def initialise_agent_pkl_file(agent_dir: pathlib.Path, show_traceback: bool):

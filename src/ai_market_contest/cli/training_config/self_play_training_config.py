@@ -2,9 +2,11 @@ import configparser
 import copy
 import pathlib
 
-from ai_market_contest.cli.training_config.train_config import TrainConfig  # type: ignore
 from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import TRAIN_CONFIG_FILENAME  # type: ignore
+from ai_market_contest.cli.training_config.train_config import (
+    TrainConfig,  # type: ignore
+)
 from ai_market_contest.demand_function import DemandFunction  # type: ignore
 from ai_market_contest.demandfunctions.gaussian_demand_function import (
     GaussianDemandFunction,  # type: ignore

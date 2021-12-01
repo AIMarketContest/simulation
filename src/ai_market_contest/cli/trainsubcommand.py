@@ -3,34 +3,33 @@ import sys
 from typing import Any
 
 from ai_market_contest.cli.cli_config import (
-    PROJ_DIR_NAME,
     AGENTS_DIR_NAME,
-    TRAINED_AGENTS_DIR_NAME,
     COMMAND_NAME,
     PICKLE_FILENAME,
+    PROJ_DIR_NAME,
+    TRAINED_AGENTS_DIR_NAME,
 )
-from ai_market_contest.cli.utils.hashing import (
-    get_shortened_hashes,
-    get_agent_initial_hash,
+from ai_market_contest.cli.utils.checkagentinitialisation import (
+    check_agent_is_initialised,
+)
+from ai_market_contest.cli.utils.displayagents import (  # type: ignore
+    display_agents,
+    display_trained_agents,
+    display_training_configs,
 )
 from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
-    check_path_exists,
     check_directory_exists,
+    check_path_exists,
     check_proj_dir_exists,
 )
 from ai_market_contest.cli.utils.getagents import (  # type: ignore
     get_agent_names,
     get_trained_agents,
-    get_training_configs
+    get_training_configs,
 )
-from ai_market_contest.cli.utils.displayagents import (  # type: ignore
-    display_agents,
-    display_trained_agents,
-    display_training_configs
-)
-
-from ai_market_contest.cli.utils.checkagentinitialisation import (
-    check_agent_is_initialised,
+from ai_market_contest.cli.utils.hashing import (
+    get_agent_initial_hash,
+    get_shortened_hashes,
 )
 from ai_market_contest.cli.utils.training import execute_training_routine
 
@@ -45,6 +44,7 @@ def ask_for_trained_agents(agent: str) -> bool:
     print("Operation aborted: failed to get valid input")
     sys.exit(1)
 
+
 def choose_training_config(training_configs: list[str]):
     print("Choose a training config: ", end="")
     while True:
@@ -53,7 +53,8 @@ def choose_training_config(training_configs: list[str]):
             break
         print(f"{chosen_config} not an existing training config")
         print("Choose a valid agent to train: ")
-    return chosen_config 
+    return chosen_config
+
 
 def choose_agent_for_training(agent_names: list[str]) -> str:
     print("Choose an agent to train: ", end="")
@@ -130,7 +131,14 @@ def train_agent(args: Any):
     training_config = choose_training_config(training_configs)
     training_msg: str = input("(Optional) Enter training message: ")
     training_agent_pkl_file = training_agent_dir / PICKLE_FILENAME
-    execute_training_routine(proj_dir, chosen_agent_dir, chosen_trained_agent, training_msg, training_agent_pkl_file, training_config)
+    execute_training_routine(
+        proj_dir,
+        chosen_agent_dir,
+        chosen_trained_agent,
+        training_msg,
+        training_agent_pkl_file,
+        training_config,
+    )
 
 
 def create_subparser(subparsers: Any):  # type: ignore

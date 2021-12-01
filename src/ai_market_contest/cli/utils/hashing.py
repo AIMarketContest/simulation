@@ -1,14 +1,14 @@
 import configparser
 import datetime
-from hashlib import sha1 as hashing_algorithm
 import pathlib
 import sys
+from hashlib import sha1 as hashing_algorithm
 
-from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 from ai_market_contest.cli.cli_config import (  # type: ignore
-    HASH_LENGTH,
     CONFIG_FILENAME,
+    HASH_LENGTH,
 )
+from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 
 
 def hash_string(string: str):

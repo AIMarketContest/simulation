@@ -1,16 +1,16 @@
 import pathlib
 from typing import Any
 
-from ai_market_contest.cli.cli_config import PROJ_DIR_NAME, AGENTS_DIR_NAME
+from ai_market_contest.cli.cli_config import AGENTS_DIR_NAME, PROJ_DIR_NAME
+from ai_market_contest.cli.utils.displayagents import display_agents
 from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
+    check_directory_exists,
     check_path_exists,
     check_proj_dir_exists,
-    check_directory_exists,
 )
 from ai_market_contest.cli.utils.getagents import get_agent_names
-from ai_market_contest.cli.utils.displayagents import display_agents
-from ai_market_contest.cli.utils.pklfileutils import initialise_agent_pkl_file
 from ai_market_contest.cli.utils.initialiseagent import set_agent_to_initialised
+from ai_market_contest.cli.utils.pklfileutils import initialise_agent_pkl_file
 
 
 def choose_agent_for_initialising(agent_names: list[str]) -> str:
