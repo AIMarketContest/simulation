@@ -16,7 +16,8 @@ def input_agent_name(agents_names):
                 continue
             break
         print(
-            "Agent name must begin with a letter and can only contain letters, numbers and underscores"
+            "Agent name must begin with a letter and can only contain letters, ",
+            "numbers and underscores",
         )
         print("Enter a valid agent name: ", end="")
     return agent_name

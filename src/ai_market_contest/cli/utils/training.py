@@ -5,19 +5,14 @@ import pickle
 import sys
 
 from ai_market_contest.cli.cli_config import (
-    ROOT_FOLDER,
     TRAINED_AGENTS_DIR_NAME,
     TRAINING_CONFIGS_DIR_NAME,
 )
 from ai_market_contest.cli.training_config.training import train as TRAINING_ALGORITHM
-from ai_market_contest.cli.utils.filesystemutils import check_file_exists
 from ai_market_contest.cli.utils.getagents import add_trained_agent_to_config_file
 from ai_market_contest.cli.utils.hashing import hash_string
 from ai_market_contest.cli.utils.pklfileutils import write_pkl_file
-from ai_market_contest.cli.utils.processmetafile import (
-    get_trained_agent_metadata,
-    write_meta_file,
-)
+from ai_market_contest.cli.utils.processmetafile import write_meta_file
 
 
 def execute_training_routine(

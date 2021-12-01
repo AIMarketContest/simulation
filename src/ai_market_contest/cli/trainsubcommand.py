@@ -27,10 +27,7 @@ from ai_market_contest.cli.utils.getagents import (  # type: ignore
     get_trained_agents,
     get_training_configs,
 )
-from ai_market_contest.cli.utils.hashing import (
-    get_agent_initial_hash,
-    get_shortened_hashes,
-)
+from ai_market_contest.cli.utils.hashing import get_shortened_hashes
 from ai_market_contest.cli.utils.training import execute_training_routine
 
 
@@ -85,7 +82,8 @@ def choose_trained_agent(trained_agents: list[str]):
                 trained_agent = trained_agents[index]
                 break
         print(
-            f"Hash or index {trained_agent} does not correspond to an existing version of the agent"
+            f"Hash or index {trained_agent} does not correspond to an existing ",
+            "version of the agent",
         )
         print(
             "Enter a valid hash or index of the version of the agent to be trained: ",

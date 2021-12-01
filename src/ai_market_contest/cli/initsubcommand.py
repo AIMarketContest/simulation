@@ -13,13 +13,11 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     PROJ_DIR_NAME,
     TRAINING_CONFIGS_DIR_NAME,
 )
-from ai_market_contest.cli.utils.hashing import set_agent_initial_hash
 from ai_market_contest.cli.utils.initialiseagent import create_agent_class
 from ai_market_contest.cli.utils.inputagentname import input_agent_name
 
 
 def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
-    agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
     for agent_name in agents_names:
         create_agent_class(agent_name, proj_dir)
 
@@ -27,8 +25,8 @@ def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
 def make_proj_dir(proj_dir: pathlib.Path):
     if proj_dir.is_dir():
         print(
-            f"""{PROJ_DIR_NAME} project already initialised in the given directory 
-            To delete the current project run {COMMAND_NAME} reset <path> 
+            f"""{PROJ_DIR_NAME} project already initialised in the given directory
+            To delete the current project run {COMMAND_NAME} reset <path>
             To add an agent to the project run {COMMAND_NAME} add-agent <path>"""
         )
         sys.exit(2)
