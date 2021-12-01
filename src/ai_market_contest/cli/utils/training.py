@@ -17,7 +17,7 @@ from ai_market_contest.cli.utils.pklfileutils import write_pkl_file
 from ai_market_contest.cli.training_config.training import train as TRAINING_ALGORITHM
 
 
-def train(
+def execute_training_routine(
     proj_dir: pathlib.Path,
     agent_dir: pathlib.Path,
     parent_hash: str,

@@ -32,7 +32,7 @@ from ai_market_contest.cli.utils.displayagents import (  # type: ignore
 from ai_market_contest.cli.utils.checkagentinitialisation import (
     check_agent_is_initialised,
 )
-from ai_market_contest.cli.utils.training import train
+from ai_market_contest.cli.utils.training import execute_training_routine
 
 
 def ask_for_trained_agents(agent: str) -> bool:
@@ -130,7 +130,7 @@ def train_agent(args: Any):
     training_config = choose_training_config(training_configs)
     training_msg: str = input("(Optional) Enter training message: ")
     training_agent_pkl_file = training_agent_dir / PICKLE_FILENAME
-    train(proj_dir, chosen_agent_dir, chosen_trained_agent, training_msg, training_agent_pkl_file, training_config)
+    execute_training_routine(proj_dir, chosen_agent_dir, chosen_trained_agent, training_msg, training_agent_pkl_file, training_config)
 
 
 def create_subparser(subparsers: Any):  # type: ignore
