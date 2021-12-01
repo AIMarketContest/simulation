@@ -4,10 +4,7 @@ import pathlib
 import sys
 from hashlib import sha1 as hashing_algorithm
 
-from ai_market_contest.cli.cli_config import (  # type: ignore
-    CONFIG_FILENAME,
-    HASH_LENGTH,
-)
+from ai_market_contest.cli.cli_config import CONFIG_FILENAME, HASH_LENGTH  # type: ignore
 from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 
 

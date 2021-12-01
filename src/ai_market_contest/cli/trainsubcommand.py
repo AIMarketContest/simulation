@@ -17,6 +17,7 @@ from ai_market_contest.cli.utils.displayagents import (  # type: ignore
     display_trained_agents,
     display_training_configs,
 )
+from ai_market_contest.cli.utils.execute_training_routine import execute_training_routine
 from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
     check_directory_exists,
     check_path_exists,
@@ -28,7 +29,6 @@ from ai_market_contest.cli.utils.getagents import (  # type: ignore
     get_training_configs,
 )
 from ai_market_contest.cli.utils.hashing import get_shortened_hashes
-from ai_market_contest.cli.utils.training import execute_training_routine
 
 
 def ask_for_trained_agents(agent: str) -> bool:
