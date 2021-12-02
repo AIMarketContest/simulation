@@ -1,12 +1,13 @@
 ﻿import argparse
 import sys
 
-import ai_market_contest.cli.addagentsubcommand as addagentsubcommand  # type: ignore
-import ai_market_contest.cli.initialiseagentsubcommand \
-    as initialiseagentsubcommand  # type: ignore
-import ai_market_contest.cli.initsubcommand as initsubcommand  # type: ignore
-import ai_market_contest.cli.resetsubcommand as resetsubcommand  # type: ignore
-import ai_market_contest.cli.trainsubcommand as trainsubcommand  # type: ignore
+import aimc.addagentsubcommand as addagentsubcommand  # type: ignore
+import aimc.initialiseagentsubcommand as initialiseagentsubcommand  # type: ignore
+import aimc.initsubcommand as initsubcommand  # type: ignore
+import aimc.resetsubcommand as resetsubcommand  # type: ignore
+import aimc.trainsubcommand as trainsubcommand  # type: ignore
+
+import ai_market_contest.cli as aimc  # noqa: F401
 
 KEYBOARD_INTERRUPT_MSG = "Operation aborted."
 

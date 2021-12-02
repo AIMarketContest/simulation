@@ -84,7 +84,7 @@ def read_meta_file(meta_file: pathlib.Path):
     if "parent-hash" in config["trained-agent"]:
         parent_hash = config["trained-agent"]["parent-hash"]
     else:
-        parent_hash = None
+        parent_hash = ""
     return (trained_agent_hash, time, message, parent_hash)
 
 

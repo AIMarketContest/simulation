@@ -36,8 +36,10 @@ def execute_training_routine(
             f"Could not import training config file {training_config_file}."
         )
     config_module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(config_module)
-    config = config_module.get_config()
+    if spec.loader is None:
+        raise Exception("Could not execute config module, loader is None.")
+    spec.loader.exec_module(config_module)  # type: ignore
+    config = config_module.get_config()  # type: ignore
     env = config.create_environment(agent)
     TRAINING_ALGORITHM(env)
     new_agents = [agent]
