@@ -6,6 +6,7 @@ import pytest
 from ai_market_contest.agents import fixed_agent
 from ai_market_contest.agent import Agent
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 from numpy import random
 from statistics import mean
 
@@ -47,7 +48,6 @@ def graph_profits(agent_profits: dict[Agent:List[float]], agent_names: dict[Agen
     :agent_names: dictionary mapping agent to name of agent
 
     """
-
     for agent, profits in agent_profits.items():  # for loop cycles through the agents and corresponding keys
         x_axis = range(1, len(profits) + 1)
         plt.plot(x_axis, profits, label=agent_names.get(agent))
@@ -59,6 +59,35 @@ def graph_profits(agent_profits: dict[Agent:List[float]], agent_names: dict[Agen
     return plt
 
 
+def graph_convergence(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str]):
+    """
+    This function is used to plot the timesteps the different agents convereged at.
+    :agent_prices: dictionary mapping agent to list of profits
+    :agent_names: dictionary mapping agent to name of agent
+    """
+    ax = plt.figure().gca()
+    x_points = []
+    y_points = []
+    for agent, profits in agent_profits.items():
+        converged_profit = 0
+        converged_timestep = 1
+        for i in range(len(profits)):
+            if converged_profit != profits[i]:
+                converged_timestep = i+1
+        x_points.append(agent_names.get(agent))
+        y_points.append(converged_timestep)
+    ax.bar(x_points, y_points)
+    for i, v in enumerate(y_points):
+        ax.text(x_points[i], v, str(v))
+    ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+    plt.xlabel("Time step")
+    plt.ylabel("Agent")
+    plt.title("Time step at which agents converge")
+    print(y_points)
+    plt.show()
+
+
+################## Functions useful for testing  #######################
 def create_agents(num_agents: int) -> List[Agent]:
     """
     Function creates a list of agents of specified length
@@ -93,6 +122,19 @@ def create_agent_profits_dict(agents: List[Agent]) -> dict[Agent:List[float]]:
     return agent_profits
 
 
+def create_agent_fixed_profits_dict(agents: List[Agent], max_timesteps) -> dict[Agent:List[float]]:
+    agent_profits = {}
+    num_agents = len(agents)
+    rng = random.default_rng(12345)
+    profits = []
+    for i in range(num_agents):
+        timestep = rng.integers(low=1, high=max_timesteps, size=1)
+        profits = rng.integers(low=1, high=101, size=timestep)
+        fixed_profits = rng.integers(low=1, high=101, size=1) * (max_timesteps-timestep)
+        agent_profits.update({agents[i]: (profits+fixed_profits)})
+    return agent_profits
+
+
 @pytest.mark.parametrize('num_agents', [3,10, 204, 18])
 def test_graph_profits(num_agents):
     agents = create_agents(num_agents)
@@ -109,3 +151,10 @@ def test_graph_average_profits(num_agents,step):
     agent_profits = create_agent_profits_dict(agents)
     plot = plot_average_step(agent_profits, agent_names,step)
     plot.show()
+
+
+def test_graph_convergence(num_agents=5):
+    agents = create_agents(num_agents)
+    agent_names = create_agent_names_dict(agents)
+    agent_profits = create_agent_fixed_profits_dict(agents, 20)
+    graph_convergence(agent_profits, agent_names)
