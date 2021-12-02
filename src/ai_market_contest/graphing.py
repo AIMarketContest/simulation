@@ -1,56 +1,79 @@
 """
 This file contains the function to represent the results gotten from training agents
 """
+from statistics import mean
 from typing import List
 
+import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 import pytest
-from ai_market_contest.agents import fixed_agent
+from matplotlib.ticker import MaxNLocator  # type: ignore
+from numpy import ndarray, random
+
 from ai_market_contest.agent import Agent
-import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
-from numpy import random
-from statistics import mean
+from ai_market_contest.agents.fixed_agent import FixedAgent
 
 
-def plot_average_step(agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str], step: int = 1) -> plt:
+def plot_average_step(
+    agent_profits: dict[Agent, List[float]],
+    agent_names: dict[Agent, str],
+    step: int = 1,
+) -> plt:
     """
-    Function plots all time steps (or averages of timesteps) against the profits the agents made
+    Function plots all time steps (or averages of timesteps)
+    against the profits the agents made
     :agent_prices: dictionary mapping agent to list of profits
     :agent_names: dictionary mapping agent to name of agent
     :step: number of timesteps you want to average
     """
     if step == 0:
         return
-    for agent, profits in agent_profits.items():  # for loop cycles through the agents and corresponding keys
-        start = (1+step) // 2
+    for (
+        agent,
+        profits,
+    ) in (
+        agent_profits.items()
+    ):  # for loop cycles through the agents and corresponding keys
+        start = (1 + step) // 2
         x_axis = list(range(start, len(profits) + 1, step))
         y_axis = range(0, len(profits), step)
         if len(x_axis) < len(y_axis):
             x_axis.append(len(profits))
         if step != 1:
-            profits = [mean(profits[i:i + step]) for i in range(0, len(profits), step)]
-        plt.plot([x + step - start for x in x_axis], profits, label=agent_names.get(agent))
+            profits = [
+                mean(profits[i : i + step]) for i in range(0, len(profits), step)
+            ]
+        plt.plot(
+            [x + step - start for x in x_axis], profits, label=agent_names.get(agent)
+        )
     plt.legend(loc="upper left")
     plt.xlabel("Timestep")
     plt.ylabel("Profit")
     if step == 1:
         plt.title("Time step vs profit")
     else:
-        plt.title(f'Rolling average of prior {step} time steps vs profit')
+        plt.title(f"Rolling average of prior {step} time steps vs profit")
     plt.show()
     return plt
 
 
-def graph_profits(agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str]) -> plt:
+def graph_profits(
+    agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str]
+) -> plt:
     """
-    This function is used to plot the prices of all agents in the input on the same graph against timestep.
+    This function is used to plot the prices of all agents in the
+    input on the same graph against timestep.
     We assume that all the agents run for the same amount of timesteps
     :agent_prices: dictionary mapping agent to list of profits
     :agent_names: dictionary mapping agent to name of agent
 
     """
-    for agent, profits in agent_profits.items():  # for loop cycles through the agents and corresponding keys
+    for (
+        agent,
+        profits,
+    ) in (
+        agent_profits.items()
+    ):  # for loop cycles through the agents and corresponding keys
         x_axis = range(1, len(profits) + 1)
         plt.plot(x_axis, profits, label=agent_names.get(agent))
     plt.legend(loc="upper left")
@@ -60,13 +83,22 @@ def graph_profits(agent_profits: dict[Agent, List[float]], agent_names: dict[Age
     plt.show()
     return plt
 
-def graph_cumulative_profits(agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str]) -> plt:
+
+def graph_cumulative_profits(
+    agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str]
+) -> plt:
     """
-    This function is used to plot the total profit that each agent makes during a simulation.
+    This function is used to plot the total profit that
+    each agent makes during a simulation.
     :agent_prices: dictionary mapping agent to list of profits
     :agent_names: dictionary mapping agent to name of agent
     """
-    for agent, profits in agent_profits.items():  # for loop cycles through the agents and corresponding keys
+    for (
+        agent,
+        profits,
+    ) in (
+        agent_profits.items()
+    ):  # for loop cycles through the agents and corresponding keys
         x_axis = range(1, len(profits) + 1)
         cum_profits = np.cumsum(profits)
         plt.plot(x_axis, cum_profits, label=agent_names.get(agent))
@@ -78,7 +110,10 @@ def graph_cumulative_profits(agent_profits: dict[Agent, List[float]], agent_name
     plt.show()
     return plt
 
-def graph_convergence(agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str]):
+
+def graph_convergence(
+    agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str]
+):
     """
     This function is used to plot the timesteps the different agents convereged at.
     :agent_prices: dictionary mapping agent to list of profits
@@ -92,7 +127,7 @@ def graph_convergence(agent_profits: dict[Agent, List[float]], agent_names: dict
         converged_timestep = 1
         for i in range(len(profits)):
             if converged_profit != profits[i]:
-                converged_timestep = i+1
+                converged_timestep = i + 1
         x_points.append(agent_names.get(agent))
         y_points.append(converged_timestep)
     ax.bar(x_points, y_points)
@@ -106,55 +141,46 @@ def graph_convergence(agent_profits: dict[Agent, List[float]], agent_names: dict
     plt.show()
 
 
-################## Functions useful for testing  #######################
+# --------------------- Functions useful for testing  --------------------- #
 def create_agents(num_agents: int) -> List[Agent]:
     """
     Function creates a list of agents of specified length
     :num_agents: number of agents in the output list
     :agents: list of agents
     """
-    agents = []
-    for i in range(num_agents):
-        agents.append(fixed_agent.FixedAgent())
-    return agents
+    return [FixedAgent() for _ in range(num_agents)]
 
 
-def create_agent_names_dict(agents: List[Agent]) -> dict[Agent, List[str]]:
+def create_agent_names_dict(agents: List[Agent]) -> dict[Agent, str]:
     """
     function creates agent_names dict for give number of agents
     :agents: list of agents to map in dictionary
     :output: agent_names is dictionary mapping agent to agent name
     """
-    agent_names = {}
-    num_agents = len(agents)
-    for i in range(num_agents):
-        agent_names.update({agents[i]: f'agent_{i}'})
-    return agent_names
+    return {agent: f"agent_{i}" for i, agent in enumerate(agents)}
 
 
-def create_agent_profits_dict(agents: List[Agent]) -> dict[Agent, List[float]]:
-    agent_profits = {}
-    num_agents = len(agents)
+def create_agent_profits_dict(agents: List[Agent]) -> dict[Agent, ndarray]:
     rng = random.default_rng(12345)
-    for i in range(num_agents):
-        agent_profits.update({agents[i]: rng.integers(low=1, high=101, size=10)})
-    return agent_profits
+    return {agent: rng.integers(low=1, high=100, size=10) for agent in agents}
 
 
-def create_agent_fixed_profits_dict(agents: List[Agent], max_timesteps) -> dict[Agent, List[float]]:
+def create_agent_fixed_profits_dict(
+    agents: List[Agent], max_timesteps
+) -> dict[Agent, List[float]]:
     agent_profits = {}
-    num_agents = len(agents)
     rng = random.default_rng(12345)
-    profits = []
-    for i in range(num_agents):
+    for agent in agents:
         timestep = rng.integers(low=1, high=max_timesteps, size=1)
         profits = rng.integers(low=1, high=101, size=timestep)
-        fixed_profits = rng.integers(low=1, high=101, size=1).tolist() * (int)(max_timesteps-timestep)
-        agent_profits.update({agents[i]: (profits.tolist() + fixed_profits)})
+        fixed_profits = rng.integers(low=1, high=101, size=1).tolist() * (int)(
+            max_timesteps - timestep
+        )
+        agent_profits[agent] = profits.tolist() + fixed_profits
     return agent_profits
 
 
-@pytest.mark.parametrize('num_agents', [3,10, 204, 18])
+@pytest.mark.parametrize("num_agents", [3, 10, 204, 18])
 def test_graph_profits(num_agents):
     agents = create_agents(num_agents)
     agent_names = create_agent_names_dict(agents)
@@ -163,12 +189,12 @@ def test_graph_profits(num_agents):
     plot.show()
 
 
-@pytest.mark.parametrize('num_agents,step',[(3,5),(10,3),(24,1)])
-def test_graph_average_profits(num_agents,step):
+@pytest.mark.parametrize("num_agents,step", [(3, 5), (10, 3), (24, 1)])
+def test_graph_average_profits(num_agents, step):
     agents = create_agents(num_agents)
     agent_names = create_agent_names_dict(agents)
     agent_profits = create_agent_profits_dict(agents)
-    plot = plot_average_step(agent_profits, agent_names,step)
+    plot = plot_average_step(agent_profits, agent_names, step)
     plot.show()
 
 
@@ -177,6 +203,7 @@ def test_graph_convergence(num_agents=5):
     agent_names = create_agent_names_dict(agents)
     agent_profits = create_agent_fixed_profits_dict(agents, 20)
     graph_convergence(agent_profits, agent_names)
+
 
 def test_graph_cumulative_profit(num_agents=5):
     agents = create_agents(num_agents)
