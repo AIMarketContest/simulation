@@ -40,11 +40,3 @@ def test_default_number_of_agents_to_create_is_one(parser, tmp_path):
     initialise_main_folder(parser, tmp_path, agent_name=agent_name)
 
     check_is_agent(tmp_path, agent_name)
-
-
-def test_will_copy_example_usage_with_include_example_tag(parser, tmp_path):
-    # input for the program once it runs
-    sys.stdin = io.StringIO("AgentName\nAuthor Name\n")
-    run_cli_command(parser, ["init", str(tmp_path), "--include-example"])
-
-    assert os.path.isfile(tmp_path / "aicontest/example_main.py")
