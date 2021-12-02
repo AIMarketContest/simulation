@@ -11,6 +11,14 @@ from statistics import mean
 
 
 def plot_average_step(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str], step: int = 1) -> plt:
+    """
+    Function plots all time steps (or averages of timesteps) against the profits the agents made
+    :agent_prices: dictionary mapping agent to list of profits
+    :agent_names: dictionary mapping agent to name of agent
+    :step: number of timesteps you want to average
+    """
+    if step == 0:
+        return
     for agent, profits in agent_profits.items():  # for loop cycles through the agents and corresponding keys
         start = -1 * (-(1+step) // 2)
         x_axis = list(range(start, len(profits) + 1, step))
@@ -36,7 +44,7 @@ def plot_average_step(agent_profits: dict[Agent:List[float]], agent_names: dict[
 def graph_profits(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str]) -> plt:
     """
     This function is used to plot the prices of all agents in the input on the same graph against timestep.
-    We assume that all the
+    We assume that all the agents run for the same amount of timesteps
     :agent_prices: dictionary mapping agent to list of profits
     :agent_names: dictionary mapping agent to name of agent
 
