@@ -21,21 +21,21 @@ def plot_average_step(agent_profits: dict[Agent:List[float]], agent_names: dict[
     if step == 0:
         return
     for agent, profits in agent_profits.items():  # for loop cycles through the agents and corresponding keys
-        start = -1 * (-(1+step) // 2)
+        start = (1+step) // 2
         x_axis = list(range(start, len(profits) + 1, step))
         y_axis = range(0, len(profits), step)
         if len(x_axis) < len(y_axis):
             x_axis.append(len(profits))
         if step != 1:
             profits = [mean(profits[i:i + step]) for i in range(0, len(profits), step)]
-        plt.plot(x_axis, profits, label=agent_names.get(agent))
+        plt.plot([x + step - start for x in x_axis], profits, label=agent_names.get(agent))
     plt.legend(loc="upper left")
     plt.xlabel("Timestep")
     plt.ylabel("Profit")
     if step == 1:
         plt.title("Time step vs profit")
     else:
-        plt.title(f'Average of {step} time steps vs profit')
+        plt.title(f'Rolling average of prior {step} time steps vs profit')
     plt.show()
     return plt
 
