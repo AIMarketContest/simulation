@@ -2,6 +2,8 @@
 This file contains the function to represent the results gotten from training agents
 """
 from typing import List
+
+import numpy as np
 import pytest
 from ai_market_contest.agents import fixed_agent
 from ai_market_contest.agent import Agent
@@ -58,6 +60,24 @@ def graph_profits(agent_profits: dict[Agent:List[float]], agent_names: dict[Agen
     plt.show()
     return plt
 
+def graph_cumulative_profits(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str]) -> plt:
+    """
+    This function is used to plot the total profit that each agent makes during a simulation.
+    :agent_prices: dictionary mapping agent to list of profits
+    :agent_names: dictionary mapping agent to name of agent
+    """
+    for agent, profits in agent_profits.items():  # for loop cycles through the agents and corresponding keys
+        print(len(profits))
+        x_axis = range(1, len(profits) + 1)
+        cum_profits = np.cumsum(profits)
+        plt.plot(x_axis, cum_profits, label=agent_names.get(agent))
+    plt.legend(loc="upper left")
+    plt.xlabel("Time step")
+    plt.ylabel("Cumulative Profit")
+    plt.title("Cumulative profit over time")
+
+    plt.show()
+    return plt
 
 def graph_convergence(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str]):
     """
@@ -130,8 +150,8 @@ def create_agent_fixed_profits_dict(agents: List[Agent], max_timesteps) -> dict[
     for i in range(num_agents):
         timestep = rng.integers(low=1, high=max_timesteps, size=1)
         profits = rng.integers(low=1, high=101, size=timestep)
-        fixed_profits = rng.integers(low=1, high=101, size=1) * (max_timesteps-timestep)
-        agent_profits.update({agents[i]: (profits+fixed_profits)})
+        fixed_profits = rng.integers(low=1, high=101, size=1).tolist() * (int)(max_timesteps-timestep)
+        agent_profits.update({agents[i]: (profits.tolist() + fixed_profits)})
     return agent_profits
 
 
@@ -158,3 +178,9 @@ def test_graph_convergence(num_agents=5):
     agent_names = create_agent_names_dict(agents)
     agent_profits = create_agent_fixed_profits_dict(agents, 20)
     graph_convergence(agent_profits, agent_names)
+
+def test_graph_cumulative_profit(num_agents=5):
+    agents = create_agents(num_agents)
+    agent_names = create_agent_names_dict(agents)
+    agent_profits = create_agent_fixed_profits_dict(agents, 20)
+    graph_cumulative_profits(agent_profits, agent_names)
