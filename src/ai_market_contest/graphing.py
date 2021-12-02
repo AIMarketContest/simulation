@@ -67,7 +67,6 @@ def graph_cumulative_profits(agent_profits: dict[Agent:List[float]], agent_names
     :agent_names: dictionary mapping agent to name of agent
     """
     for agent, profits in agent_profits.items():  # for loop cycles through the agents and corresponding keys
-        print(len(profits))
         x_axis = range(1, len(profits) + 1)
         cum_profits = np.cumsum(profits)
         plt.plot(x_axis, cum_profits, label=agent_names.get(agent))
