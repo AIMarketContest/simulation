@@ -9,14 +9,23 @@ import matplotlib.pyplot as plt
 from numpy import random
 
 
+def plot_average(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str]) -> plt:
+    return
+
+
 def graph_profits(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str]) -> plt:
     """
-    This function is used to plot the prices of all agents in the input on the same graph against timestep
+    This function is used to plot the prices of all agents in the input on the same graph against timestep.
+    We assume that all the
     :agent_prices: dictionary mapping agent to list of profits
     :agent_names: dictionary mapping agent to name of agent
     """
+
     for agent, profits in agent_profits.items():  # for loop cycles through the agents and corresponding keys
-        plt.plot(len(agent_profits), profits, label=agent_names.get(agent))
+        x_axis = range(1, len(profits) + 1)
+        print(x_axis)
+        print(agent_names.get(agent))
+        plt.plot(x_axis, profits, label=agent_names.get(agent))
     plt.show()
     return plt
 
@@ -49,8 +58,9 @@ def create_agent_names_dict(agents: List[Agent]) -> dict[Agent:List[str]]:
 def create_agent_profits_dict(agents: List[Agent]) -> dict[Agent:List[float]]:
     agent_profits = {}
     num_agents = len(agents)
+    rng = random.default_rng(12345)
     for i in range(num_agents):
-        agent_profits.update({agents[i]: random.randint(0, 101)})
+        agent_profits.update({agents[i]: rng.integers(low=1, high=101, size=10)})
     return agent_profits
 
 
