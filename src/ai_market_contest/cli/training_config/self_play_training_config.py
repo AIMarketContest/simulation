@@ -85,7 +85,7 @@ class SelfPlayTrainingConfig(TrainConfig):
         config: configparser.ConfigParser = configparser.ConfigParser()
         config["training"] = {
             "type": "self-play",
-            "number of agents": int(self.number_of_agents),
+            "number of agents": str(self.number_of_agents),
         }
         config["environment"] = {
             "demand function": str(self.demand_function),

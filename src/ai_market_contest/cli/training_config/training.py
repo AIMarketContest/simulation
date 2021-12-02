@@ -7,7 +7,10 @@ from ai_market_contest.environment import Environment
 def agent_dict_to_list(agent_dict: dict[Agent, int], env: Environment) -> List[int]:
     agent_values: List[int] = []
     for agent_name in env.possible_agents:
-        agent_values.append(agent_dict[agent_name])
+        if agent_name in agent_dict:
+            agent_values.append(agent_dict[agent_name])
+        else:
+            raise ValueError(f"Agent {agent_name} not found in agent_dict")
     return agent_values
 
 

@@ -11,7 +11,7 @@ from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 
 
 def get_agent_names(proj_dir: pathlib.Path) -> list[str]:
-    config: configparser.ConfigParser() = configparser.ConfigParser()
+    config: configparser.ConfigParser = configparser.ConfigParser()
     config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
     check_config_file_exists(config_file)
     config.read(config_file)

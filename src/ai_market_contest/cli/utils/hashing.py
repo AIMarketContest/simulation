@@ -4,7 +4,10 @@ import pathlib
 import sys
 from hashlib import sha1 as hashing_algorithm
 
-from ai_market_contest.cli.cli_config import CONFIG_FILENAME, HASH_LENGTH  # type: ignore
+from ai_market_contest.cli.cli_config import (  # type: ignore
+    CONFIG_FILENAME,
+    HASH_LENGTH,
+)
 from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 
 
@@ -22,7 +25,7 @@ def set_agent_initial_hash(agent_dir: pathlib.Path):
     initial_hash = hash_string(str(datetime.datetime.now()))
     config["training"] = {
         "initial-hash": initial_hash,
-        "trained-agents": [initial_hash],
+        "trained-agents": str([initial_hash]),
         "initialised": "False",
     }
     with agent_config_file.open("w") as acf:

@@ -2,7 +2,7 @@ import pathlib
 
 AGENT_TEMPLATE: str = "agent.templ"
 AGENT_PKL_FILENAME = "agent.pkl"
-HASH_LENGTH: str = 6
+HASH_LENGTH: int = 6
 TRAINED_AGENTS_DIR_NAME = "trained-agents"
 META_FILENAME: str = "metadata.ini"
 COMMAND_NAME: str = "ai-market-contest"

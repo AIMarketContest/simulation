@@ -24,13 +24,13 @@ def write_meta_file(
     meta_file.touch()
     config: configparser.ConfigParser = configparser.ConfigParser()
     config["time"] = {
-        "year": time.year,
-        "month": time.month,
-        "day": time.day,
-        "hour": time.hour,
-        "minute": time.minute,
-        "second": time.second,
-        "microsecond": time.microsecond,
+        "year": str(time.year),
+        "month": str(time.month),
+        "day": str(time.day),
+        "hour": str(time.hour),
+        "minute": str(time.minute),
+        "second": str(time.second),
+        "microsecond": str(time.microsecond),
     }
     config["trained-agent"] = {
         "hash": trained_agent_hash,
@@ -59,23 +59,31 @@ def read_meta_file(meta_file: pathlib.Path):
     except ValueError:
         print("Error: time attribute must only contain numbers")
         sys.exit(1)
+
     try:
         time = datetime.datetime(year, month, day, hour, minute, second, microsecond)
     except ValueError:
         print("Error: date time in meta file represents an invalid datetime")
         sys.exit(1)
-    try:
+
+    if "trained-agent" not in config:
+        print("Error: Meta file missing trained agent data")
+        sys.exit(1)
+
+    if "hash" in config["trained-agent"]:
         trained_agent_hash = config["trained-agent"]["hash"]
-    except KeyError:
+    else:
         print("Error: Meta file missing the trained agent hash")
         sys.exit(1)
-    try:
+
+    if "message" in config["trained-agent"]:
         message = config["trained-agent"]["message"]
-    except KeyError:
+    else:
         message = ""
-    try:
+
+    if "parent-hash" in config["trained-agent"]:
         parent_hash = config["trained-agent"]["parent-hash"]
-    except:
+    else:
         parent_hash = None
     return (trained_agent_hash, time, message, parent_hash)
 
@@ -86,6 +94,6 @@ def get_trained_agent_metadata(agent_dir: pathlib.Path, trained_agent_name: str)
     error_msg: str = f"Error: no folder exists for {trained_agent_name}"
     check_directory_exists(trained_agent_dir, error_msg)
     meta_file: pathlib.Path = trained_agent_dir / META_FILENAME
-    error_msg: str = f"Error: no meta file exists for {trained_agent_name}"
+    error_msg = f"Error: no meta file exists for {trained_agent_name}"
     check_file_exists(meta_file, error_msg)
     return read_meta_file(meta_file)

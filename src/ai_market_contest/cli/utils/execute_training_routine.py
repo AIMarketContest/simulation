@@ -31,6 +31,10 @@ def execute_training_routine(
         proj_dir / TRAINING_CONFIGS_DIR_NAME / (training_config + ".py")
     )
     spec = importlib.util.spec_from_file_location(training_config, training_config_file)
+    if spec is None:
+        raise Exception(
+            f"Could not import training config file {training_config_file}."
+        )
     config_module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(config_module)
     config = config_module.get_config()

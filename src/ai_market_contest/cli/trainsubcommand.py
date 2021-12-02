@@ -17,7 +17,9 @@ from ai_market_contest.cli.utils.displayagents import (  # type: ignore
     display_trained_agents,
     display_training_configs,
 )
-from ai_market_contest.cli.utils.execute_training_routine import execute_training_routine
+from ai_market_contest.cli.utils.execute_training_routine import (
+    execute_training_routine,
+)
 from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
     check_directory_exists,
     check_path_exists,
@@ -122,7 +124,7 @@ def train_agent(args: Any):
     training_agent_dir = (
         chosen_agent_dir / TRAINED_AGENTS_DIR_NAME / chosen_trained_agent
     )
-    error_msg: str = f"Error: no directory exists for {chosen_trained_agent}"
+    error_msg = f"Error: no directory exists for {chosen_trained_agent}"
     check_directory_exists(training_agent_dir, error_msg)
     training_configs: list[str] = get_training_configs(proj_dir)
     display_training_configs(training_configs)
