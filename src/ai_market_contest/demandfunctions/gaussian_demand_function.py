@@ -55,3 +55,10 @@ class GaussianDemandFunction(DemandFunction):
             int((1 - gaussian_distribution.cdf(price)) * self.max_sales_scale_factor)
             for price in current_prices
         ]
+
+    def __str__(self):
+        return (
+            f"GaussianDemandFunction(mean: {self.mu}, "
+            f"standard deviation: {self.sigma}, max sales factor: "
+            f"{self.max_sales_scale_factor})"
+        )

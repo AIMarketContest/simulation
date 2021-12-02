@@ -141,3 +141,6 @@ aicontest/
 
 # Jetbrains folder
 .idea
+
+# pkl files
+*.pkl

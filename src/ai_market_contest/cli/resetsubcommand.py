@@ -1,30 +1,24 @@
 import pathlib
 import shutil
-import sys
 from typing import Any
 
-from ai_market_contest.cli.cli_config import COMMAND_NAME, PROJ_DIR_NAME  # type: ignore
+from ai_market_contest.cli.cli_config import PROJ_DIR_NAME  # type: ignore
+from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
+    check_path_exists,
+    check_proj_dir_exists,
+)
 
 
-def remove_proj_dir(path_exists: bool, proj_dir: pathlib.Path):
-    if not path_exists:
-        print("Illegal argument: Argument must be an existing directory")
-        sys.exit(2)
-    if not proj_dir.is_dir():
-        print(
-            "Illegal argument: No project has been initialised at this directory\n"
-            + "To initialise a new project run "
-            + COMMAND_NAME
-            + " init <path>"
-        )
-        sys.exit(2)
+def remove_proj_dir(path: pathlib.Path, proj_dir: pathlib.Path):
+    check_path_exists(path)
+    check_proj_dir_exists(proj_dir)
     shutil.rmtree(proj_dir)
 
 
 def reset_file_structure(args: Any):
     path = args.path
     proj_dir: pathlib.Path = path / PROJ_DIR_NAME
-    remove_proj_dir(path.is_dir(), proj_dir)
+    remove_proj_dir(path, proj_dir)
 
 
 def create_subparser(subparsers: Any):  # type: ignore
