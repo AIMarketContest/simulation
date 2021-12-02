@@ -13,7 +13,7 @@ from numpy import random
 from statistics import mean
 
 
-def plot_average_step(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str], step: int = 1) -> plt:
+def plot_average_step(agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str], step: int = 1) -> plt:
     """
     Function plots all time steps (or averages of timesteps) against the profits the agents made
     :agent_prices: dictionary mapping agent to list of profits
@@ -42,7 +42,7 @@ def plot_average_step(agent_profits: dict[Agent:List[float]], agent_names: dict[
     return plt
 
 
-def graph_profits(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str]) -> plt:
+def graph_profits(agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str]) -> plt:
     """
     This function is used to plot the prices of all agents in the input on the same graph against timestep.
     We assume that all the agents run for the same amount of timesteps
@@ -60,7 +60,7 @@ def graph_profits(agent_profits: dict[Agent:List[float]], agent_names: dict[Agen
     plt.show()
     return plt
 
-def graph_cumulative_profits(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str]) -> plt:
+def graph_cumulative_profits(agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str]) -> plt:
     """
     This function is used to plot the total profit that each agent makes during a simulation.
     :agent_prices: dictionary mapping agent to list of profits
@@ -78,7 +78,7 @@ def graph_cumulative_profits(agent_profits: dict[Agent:List[float]], agent_names
     plt.show()
     return plt
 
-def graph_convergence(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str]):
+def graph_convergence(agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str]):
     """
     This function is used to plot the timesteps the different agents convereged at.
     :agent_prices: dictionary mapping agent to list of profits
@@ -119,7 +119,7 @@ def create_agents(num_agents: int) -> List[Agent]:
     return agents
 
 
-def create_agent_names_dict(agents: List[Agent]) -> dict[Agent:List[str]]:
+def create_agent_names_dict(agents: List[Agent]) -> dict[Agent, List[str]]:
     """
     function creates agent_names dict for give number of agents
     :agents: list of agents to map in dictionary
@@ -132,7 +132,7 @@ def create_agent_names_dict(agents: List[Agent]) -> dict[Agent:List[str]]:
     return agent_names
 
 
-def create_agent_profits_dict(agents: List[Agent]) -> dict[Agent:List[float]]:
+def create_agent_profits_dict(agents: List[Agent]) -> dict[Agent, List[float]]:
     agent_profits = {}
     num_agents = len(agents)
     rng = random.default_rng(12345)
@@ -141,7 +141,7 @@ def create_agent_profits_dict(agents: List[Agent]) -> dict[Agent:List[float]]:
     return agent_profits
 
 
-def create_agent_fixed_profits_dict(agents: List[Agent], max_timesteps) -> dict[Agent:List[float]]:
+def create_agent_fixed_profits_dict(agents: List[Agent], max_timesteps) -> dict[Agent, List[float]]:
     agent_profits = {}
     num_agents = len(agents)
     rng = random.default_rng(12345)
