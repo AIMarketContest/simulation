@@ -7,10 +7,30 @@ from ai_market_contest.agents import fixed_agent
 from ai_market_contest.agent import Agent
 import matplotlib.pyplot as plt
 from numpy import random
+from statistics import mean
 
 
-def plot_average(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str]) -> plt:
-    return
+def plot_average_step(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str], step: int = 1) -> plt:
+    for agent, profits in agent_profits.items():  # for loop cycles through the agents and corresponding keys
+        start = -1 * (-(1+step) // 2)
+        x_axis = list(range(start, len(profits) + 1, step))
+        y_axis = range(0, len(profits), step)
+        if len(x_axis) < len(y_axis):
+            x_axis.append(len(profits))
+        print(list(x_axis))
+        if step != 1:
+            profits = [mean(profits[i:i + step]) for i in range(0, len(profits), step)]
+        plt.plot(x_axis, profits, label=agent_names.get(agent))
+    plt.legend(loc="upper left")
+    plt.xlabel("Timestep")
+    plt.ylabel("Profit")
+    if step == 1:
+        plt.title("Time step vs profit")
+    else:
+        plt.title(f'Average of {step} time steps vs profit')
+    plt.show()
+    return plt
+
 
 
 def graph_profits(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str]) -> plt:
@@ -19,13 +39,16 @@ def graph_profits(agent_profits: dict[Agent:List[float]], agent_names: dict[Agen
     We assume that all the
     :agent_prices: dictionary mapping agent to list of profits
     :agent_names: dictionary mapping agent to name of agent
+
     """
 
     for agent, profits in agent_profits.items():  # for loop cycles through the agents and corresponding keys
         x_axis = range(1, len(profits) + 1)
-        print(x_axis)
-        print(agent_names.get(agent))
         plt.plot(x_axis, profits, label=agent_names.get(agent))
+    plt.legend(loc="upper left")
+    plt.xlabel("Time step")
+    plt.ylabel("Profit")
+
     plt.show()
     return plt
 
@@ -64,10 +87,19 @@ def create_agent_profits_dict(agents: List[Agent]) -> dict[Agent:List[float]]:
     return agent_profits
 
 
-@pytest.mark.parametrize('num_agents', [20, 204, 18])
+@pytest.mark.parametrize('num_agents', [3,10, 204, 18])
 def test_graph_profits(num_agents):
     agents = create_agents(num_agents)
     agent_names = create_agent_names_dict(agents)
     agent_profits = create_agent_profits_dict(agents)
     plot = graph_profits(agent_profits, agent_names)
+    plot.show()
+
+
+@pytest.mark.parametrize('num_agents,step',[(3,5)])
+def test_graph_average_profits(num_agents,step):
+    agents = create_agents(num_agents)
+    agent_names = create_agent_names_dict(agents)
+    agent_profits = create_agent_profits_dict(agents)
+    plot = plot_average_step(agent_profits, agent_names,step)
     plot.show()
