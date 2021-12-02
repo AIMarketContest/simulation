@@ -25,7 +25,6 @@ def plot_average_step(agent_profits: dict[Agent:List[float]], agent_names: dict[
         y_axis = range(0, len(profits), step)
         if len(x_axis) < len(y_axis):
             x_axis.append(len(profits))
-        print(list(x_axis))
         if step != 1:
             profits = [mean(profits[i:i + step]) for i in range(0, len(profits), step)]
         plt.plot(x_axis, profits, label=agent_names.get(agent))
@@ -38,7 +37,6 @@ def plot_average_step(agent_profits: dict[Agent:List[float]], agent_names: dict[
         plt.title(f'Average of {step} time steps vs profit')
     plt.show()
     return plt
-
 
 
 def graph_profits(agent_profits: dict[Agent:List[float]], agent_names: dict[Agent:str]) -> plt:
@@ -104,7 +102,7 @@ def test_graph_profits(num_agents):
     plot.show()
 
 
-@pytest.mark.parametrize('num_agents,step',[(3,5)])
+@pytest.mark.parametrize('num_agents,step',[(3,5),(10,3),(24,1)])
 def test_graph_average_profits(num_agents,step):
     agents = create_agents(num_agents)
     agent_names = create_agent_names_dict(agents)
