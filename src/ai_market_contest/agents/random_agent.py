@@ -18,8 +18,8 @@ class RandomAgent(Agent):
     ) -> None:
         pass
 
-    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
-        return random.random()
+    def policy(self, last_round_agents_prices: list[float]) -> float:
+        return random.randint(0, 99)
 
     def learning_has_converged(self):
         return True

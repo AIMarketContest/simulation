@@ -6,12 +6,14 @@ from ray.rllib import agents  # type: ignore
 from ray.tune.logger import UnifiedLogger, pretty_print  # type: ignore
 from ray.tune.registry import register_env  # type: ignore
 
-from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction
+from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function import (
+    LowestTakesAllDemandFunction,
+)
 from ai_market_contest.environment import Market
 
 register_env(
     "marketplace",
-    lambda x: Market(10, FixedDemandFunction(), 100),
+    lambda x: Market(10, LowestTakesAllDemandFunction(99), 100),
 )
 
 config = agents.dqn.DEFAULT_CONFIG.copy()
@@ -42,7 +44,7 @@ trainer = agents.dqn.DQNTrainer(
 )
 
 
-for i in range(1000):
+for i in range(800):
     # Perform one iteration of training the policy with PPO
     result = trainer.train()
     print(pretty_print(result))
