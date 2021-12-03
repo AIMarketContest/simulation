@@ -8,6 +8,9 @@ class RandomAgent(Agent):
     An agent which returns a random price.
     """
 
+    def __init__(self):
+        pass
+
     def compute_actions(
         self,
         obs_batch,
@@ -19,7 +22,7 @@ class RandomAgent(Agent):
     ):
 
         return [random.randint(0, 99) for _ in obs_batch], [], {}
-    
+
     def learn_on_batch(self, samples):
         pass
 
