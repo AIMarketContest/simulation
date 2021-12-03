@@ -19,6 +19,9 @@ class RandomAgent(Agent):
     ):
 
         return [random.randint(0, 99) for _ in obs_batch], [], {}
+    
+    def learn_on_batch(self, samples):
+        pass
 
     def __str__(self):
         return "RandomAgent()"
