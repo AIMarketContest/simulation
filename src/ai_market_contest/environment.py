@@ -68,18 +68,18 @@ class Environment(ParallelEnv):
     def reset(self) -> Dict[str, float]:
         return {agent: 0.0 for agent in self.possible_agents if agent is not None}
 
-    @functools.lru_cache(maxsize=None)
-    def observation_space(self, agent: str):
-        return spaces.Dict(
-            {
-                "observation": Discrete(self.MAX_SALES),
-                "action_mask": Discrete(self.NUMBER_OF_DISCRETE_PRICES),
-            }
-        )
+    # @functools.lru_cache(maxsize=None)
+    # def observation_space(self, agent: str):
+    #     return spaces.Dict(
+    #         {
+    #             "observation": Discrete(self.MAX_SALES),
+    #             "action_mask": Discrete(self.NUMBER_OF_DISCRETE_PRICES),
+    #         }
+    #     )
 
-    @functools.lru_cache(maxsize=None)
-    def action_space(self, agent: str):
-        return Discrete(self.NUMBER_OF_DISCRETE_PRICES)
+    # @functools.lru_cache(maxsize=None)
+    # def action_space(self, agent: str):
+    #     return Discrete(self.NUMBER_OF_DISCRETE_PRICES)
 
     def step(
         self, actions: Dict[str, int]
@@ -111,9 +111,9 @@ def init_env(
     simulation_length: int, demand: DemandFunction, num_agents: int
 ) -> Environment:
     env = Environment(simulation_length, demand, num_agents)
-    env = from_parallel(env)
-    env = wrappers.CaptureStdoutWrapper(env)
-    env = wrappers.AssertOutOfBoundsWrapper(env)
-    env = wrappers.OrderEnforcingWrapper(env)
+    # env = from_parallel(env)
+    # env = wrappers.CaptureStdoutWrapper(env)
+    # env = wrappers.AssertOutOfBoundsWrapper(env)
+    # env = wrappers.OrderEnforcingWrapper(env)
 
     return env
