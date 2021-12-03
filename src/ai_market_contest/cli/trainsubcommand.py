@@ -139,6 +139,7 @@ def train_agent(args: Any):
         training_agent_pkl_file,
         training_config,
     )
+    print("Training completed successfully.")
 
 
 def create_subparser(subparsers: Any):  # type: ignore
