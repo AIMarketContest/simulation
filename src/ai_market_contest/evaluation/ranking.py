@@ -4,7 +4,10 @@ import numpy as np
 import pytest
 
 from ai_market_contest.agent import Agent
-from ai_market_contest.graphing import create_agent_profits_dict, create_agents
+from ai_market_contest.evaluation.graphing import (
+    create_agent_profits_dict,
+    create_agents,
+)
 
 
 def cumulative_profit_ranking(
