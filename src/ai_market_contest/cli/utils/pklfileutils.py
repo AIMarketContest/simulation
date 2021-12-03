@@ -37,7 +37,7 @@ def initialise_agent_pkl_file(agent_dir: pathlib.Path, show_traceback: bool):
     if res.returncode != 0:
         print(
             f"Fix error in initial_pickler.py then re-run {COMMAND_NAME} ",
-            "initialise-agent <path>",
+            "train <path>",
         )
         sys.exit(res.returncode)
     pickle_file = agent_dir / INITIAL_PICKLE_FILE_NAME

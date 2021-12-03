@@ -31,6 +31,8 @@ from ai_market_contest.cli.utils.getagents import (  # type: ignore
     get_training_configs,
 )
 from ai_market_contest.cli.utils.hashing import get_shortened_hashes
+from ai_market_contest.cli.utils.pklfileutils import initialise_agent_pkl_file
+from ai_market_contest.cli.utils.initialiseagent import set_agent_to_initialised
 
 
 def ask_for_trained_agents(agent: str) -> bool:
@@ -111,13 +113,8 @@ def train_agent(args: Any):
     check_directory_exists(chosen_agent_dir, error_msg)
     agent_is_initialised = check_agent_is_initialised(chosen_agent_dir)
     if not agent_is_initialised:
-        print(
-            "Agent must be initialised before training. To initialise the agent, "
-            + "edit the initial_pickler.py file in the agent folder, then run"
-        )
-        print(f"{COMMAND_NAME} initialise-agent <path>")
-        print("and pick the agent you want to initialise")
-        sys.exit(0)
+        initialise_agent_pkl_file(chosen_agent_dir, args.show_traceback) 
+        set_agent_to_initialised(chosen_agent_dir) 
     trained_agents: list[str] = get_trained_agents(chosen_agent_dir)
     display_trained_agents(chosen_agent_dir, trained_agents)
     chosen_trained_agent = choose_trained_agent(trained_agents)
@@ -146,4 +143,5 @@ def create_subparser(subparsers: Any):  # type: ignore
         "train", help="Train an agent within a specified environment"
     )
     parser_train.add_argument("path", type=pathlib.Path, default=".")
+    parser_train.add_argument("--show-traceback", action="store")
     parser_train.set_defaults(func=train_agent)
