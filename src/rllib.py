@@ -1,10 +1,9 @@
 from ray.rllib import agents  # type: ignore
-from ray.rllib.env import ParallelPettingZooEnv  # type: ignore
 from ray.tune.logger import pretty_print  # type: ignore
 from ray.tune.registry import register_env  # type: ignore
 
 from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction
-from ai_market_contest.test_env import Market
+from ai_market_contest.environment import Market
 
 register_env(
     "marketplace",
