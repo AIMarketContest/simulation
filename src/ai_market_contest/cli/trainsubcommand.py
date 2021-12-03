@@ -124,6 +124,9 @@ def train_agent(args: Any):
     error_msg = f"Error: no directory exists for {chosen_trained_agent}"
     check_directory_exists(training_agent_dir, error_msg)
     training_configs: list[str] = get_training_configs(proj_dir)
+    if not training_configs:
+        print("Operation aborted: no training configs have been defined in training_configs")
+        sys.exit(1)
     display_training_configs(training_configs)
     training_config = choose_training_config(training_configs)
     training_msg: str = input("(Optional) Enter training message: ")
