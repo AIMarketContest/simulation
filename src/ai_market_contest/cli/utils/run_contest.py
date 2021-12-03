@@ -1,9 +1,10 @@
 from typing import List
-from ai_market_contest.agent import Agent
 
-from ai_market_contest.environment import Market
 from ray.rllib.policy.policy import Policy
 from ray.tune.registry import register_env
+
+from ai_market_contest.agent import Agent
+from ai_market_contest.environment import Market
 
 
 def run_contest(env: Market, agents: dict[Policy, str]):
@@ -32,5 +33,9 @@ def run_contest(env: Market, agents: dict[Policy, str]):
 
         previous_actions = current_actions
         obs, rewards, dones, infos = env.step(previous_actions)
+
+    # Add in final reward
+    for agent, agent_id in agents.items():
+        agent_sales[agent].append(rewards[agent_id])
 
     return agent_sales
