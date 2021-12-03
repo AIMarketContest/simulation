@@ -172,7 +172,6 @@ def create_agent_fixed_profits_dict(
     rng = random.default_rng(12345)
     for agent in agents:
         timestep = rng.integers(low=1, high=max_timesteps, size=1)
-        print(max_timesteps - timestep)
         profits = rng.integers(low=1, high=101, size=timestep)
         fixed_profits = rng.integers(low=1, high=101, size=1).tolist() * (int)(
             max_timesteps - timestep
