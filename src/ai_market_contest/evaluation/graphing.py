@@ -128,6 +128,7 @@ def graph_convergence(
         for i in range(len(profits)):
             if converged_profit != profits[i]:
                 converged_timestep = i + 1
+                converged_profit = profits[i]
         x_points.append(agent_names.get(agent))
         y_points.append(converged_timestep)
     ax.bar(x_points, y_points)
@@ -137,7 +138,6 @@ def graph_convergence(
     plt.xlabel("Time step")
     plt.ylabel("Agent")
     plt.title("Time step at which agents converge")
-    print(y_points)
     plt.show()
 
 
@@ -172,6 +172,7 @@ def create_agent_fixed_profits_dict(
     rng = random.default_rng(12345)
     for agent in agents:
         timestep = rng.integers(low=1, high=max_timesteps, size=1)
+        print(max_timesteps - timestep)
         profits = rng.integers(low=1, high=101, size=timestep)
         fixed_profits = rng.integers(low=1, high=101, size=1).tolist() * (int)(
             max_timesteps - timestep
