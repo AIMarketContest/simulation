@@ -23,5 +23,6 @@ class FixedAgent(Agent):
 
     def learn_on_batch(self, samples):
         pass
+
     def __str__(self):
         return f"FixedAgent(price: {self.price})"
