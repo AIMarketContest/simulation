@@ -1,4 +1,5 @@
 from ai_market_contest.agent import Agent
+
 class ${agent_classname}(Agent):
     """
     Agent interface - an agent represents a firm selling a product in the market.
@@ -10,8 +11,14 @@ class ${agent_classname}(Agent):
     For those not familiar with policy-update, see the comments on each function.
     """
 
-    def policy(
-        self, last_round_agents_prices: list[float], identity_index: int
+
+    def compute_actions(
+        self, obs_batch: int,
+        state_batches:None,
+        prev_action_batch=None,
+        prev_reward_batch=None,
+        info_batch=None,
+        episodes=None,
     ) -> float:
         """
         Query the agent for the next price to set.
@@ -30,11 +37,16 @@ class ${agent_classname}(Agent):
             Price of the product set by the agent at the current timestep,
             discretised within [0,1].
 
+        Raises
+        ------
+        NotImplementedError
+            If concrete class does not override method.
         """
 
         raise NotImplementedError
 
-    def learning_has_converged(self):
+
+    def learn_on_batch(self, samples):
         """
         Check if the agent's learning has converged.
 
@@ -42,36 +54,10 @@ class ${agent_classname}(Agent):
         -------
         bool : True if the agent learning has converged, False otherwise.
 
+        Raises
+        ------
+        NotImplementedError
+            If concrete class does not override method.
         """
-        raise NotImplementedError
-
-    def update(
-        self,
-        last_round_prices: list[float],
-        last_round_sales: int,
-        round_before_last_prices: list[float],
-        round_before_last_sales: int,
-        identity_index: int,
-    ) -> None:
-        """
-        Feeds data from the previous timestep into the agent allowing it
-        to adjust it's strategy.
-
-        Parameters
-        ----------
-        last_round_prices : list of float
-            List of all the prices set by all agents in the previous timestep.
-        last_round_sales: int
-            A positive integer representing the number of sales the agent
-            made in the previous timestep.
-        round_before_last_prices : list of float
-            List of all the prices set by all agents in the timestep before last.
-        round_before_last_sales: int
-            A positive integer representing the number of sales the agent
-            made in the timestep before last.
-        identity_index: int
-            A positive integer that holds the index in the list corresponding to
-            the current agent.
-
-        """
-        raise NotImplementedError
+        raise NotImplementedErr
+        )
