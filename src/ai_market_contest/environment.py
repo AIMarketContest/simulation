@@ -1,8 +1,7 @@
-from typing import List, Tuple
-from gym.spaces.discrete import Discrete
-from gym.spaces.multi_discrete import MultiDiscrete
 import math
+from typing import List, Tuple
 
+from gym.spaces.discrete import Discrete  # type: ignore
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 from ray.rllib.utils.typing import MultiAgentDict
 

@@ -3,7 +3,7 @@ import tempfile
 from datetime import datetime
 
 from ray.rllib import agents  # type: ignore
-from ray.tune.logger import pretty_print  # type: ignore
+from ray.tune.logger import UnifiedLogger, pretty_print  # type: ignore
 from ray.tune.registry import register_env  # type: ignore
 
 from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction
