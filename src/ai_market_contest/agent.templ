@@ -13,13 +13,13 @@ class ${agent_classname}(Agent):
 
 
     def compute_actions(
-        self, obs_batch: int,
-        state_batches:None,
+        self, obs_batch,
+        state_batches=None,
         prev_action_batch=None,
         prev_reward_batch=None,
         info_batch=None,
         episodes=None,
-    ) -> float:
+    ):
         """
         Query the agent for the next price to set.
 

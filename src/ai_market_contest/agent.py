@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from ray.rllib.policy.policy import Policy
 
+
 class Agent(Policy, metaclass=ABCMeta):
     """
     Agent interface - an agent represents a firm selling a product in the market.
@@ -14,13 +15,14 @@ class Agent(Policy, metaclass=ABCMeta):
 
     @abstractmethod
     def compute_actions(
-        self, obs_batch: int,
-        state_batches:None,
+        self,
+        obs_batch,
+        state_batches=None,
         prev_action_batch=None,
         prev_reward_batch=None,
         info_batch=None,
         episodes=None,
-    ) -> float:
+    ):
         """
         Query the agent for the next price to set.
 

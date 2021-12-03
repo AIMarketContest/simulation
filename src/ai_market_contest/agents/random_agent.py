@@ -8,21 +8,17 @@ class RandomAgent(Agent):
     An agent which returns a random price.
     """
 
-    def update(
+    def compute_actions(
         self,
-        last_round_prices: list[float],
-        last_round_sales: int,
-        round_before_last_prices: list[float],
-        round_before_last_sales: int,
-        identity_index: int,
-    ) -> None:
-        pass
+        obs_batch,
+        state_batches=None,
+        prev_action_batch=None,
+        prev_reward_batch=None,
+        info_batch=None,
+        episodes=None,
+    ):
 
-    def policy(self, last_round_agents_prices: list[float]) -> float:
-        return random.randint(0, 99)
-
-    def learning_has_converged(self):
-        return True
+        return [random.randint(0, 99) for _ in obs_batch], [], {}
 
     def __str__(self):
         return "RandomAgent()"
