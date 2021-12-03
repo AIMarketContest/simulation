@@ -123,7 +123,7 @@ def graph_convergence(
     x_points = []
     y_points = []
     for agent, profits in agent_profits.items():
-        converged_profit = 0
+        converged_profit = 0.0
         converged_timestep = 1
         for i in range(len(profits)):
             if converged_profit != profits[i]:
