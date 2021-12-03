@@ -1,3 +1,5 @@
+
+  
 from statistics import NormalDist
 
 from ai_market_contest.demand_function import DemandFunction
@@ -6,7 +8,6 @@ from ai_market_contest.demand_function import DemandFunction
 class GaussianDemandFunction(DemandFunction):
     """
     A demand function which determines the price using a Gaussian distribution.
-
     Attributes
     ----------
     max_sales_scale_factor: int
@@ -33,7 +34,6 @@ class GaussianDemandFunction(DemandFunction):
         sigma: float, default=1.0
             A positive number representing the standard deviation
             in the gaussian distribution model.
-
         Raises
         ______
         ValueError
@@ -49,16 +49,14 @@ class GaussianDemandFunction(DemandFunction):
         self.mu: float = mu
         self.sigma: float = sigma
 
-    def get_sales(self, current_prices: list[float]) -> list[int]:
+    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
         gaussian_distribution: "NormalDist" = NormalDist(mu=self.mu, sigma=self.sigma)
-        return [
-            int((1 - gaussian_distribution.cdf(price)) * self.max_sales_scale_factor)
-            for price in current_prices
-        ]
 
-    def __str__(self):
-        return (
-            f"GaussianDemandFunction(mean: {self.mu}, "
-            f"standard deviation: {self.sigma}, max sales factor: "
-            f"{self.max_sales_scale_factor})"
-        )
+        sales: dict[str, int] = {}
+
+        for agent, price in current_prices.items():
+            sales[agent] = int(
+                (1 - gaussian_distribution.cdf(price)) * self.max_sales_scale_factor
+            )
+
+        return sales

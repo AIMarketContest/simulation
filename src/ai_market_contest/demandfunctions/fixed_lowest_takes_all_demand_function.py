@@ -1,26 +1,23 @@
-import numpy as np
-
 from ai_market_contest.demand_function import DemandFunction
 
 
-class FixedLowestTakesAllDemandFunction(DemandFunction):
-    """
-    Demand function that gives all demand to the lowest price.
+class LowestTakesAllDemandFunction(DemandFunction):
+    def __init__(self, max_sales_scale_factor: int = 1000):
+        self.max_sales_scale_factor = max_sales_scale_factor
 
-    Attributes
-    ----------
-    total_demand : int
-        The total demand to be given at each time step.
-    """
+    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
+        sales: dict[str, int] = {agent: 0 for agent in current_prices.keys()}
+        max_agents = []
+        max_price = -1
 
-    def __init__(self, total_demand: int):
-        self.total_demand: int = total_demand
+        for agent, price in current_prices.items():
+            if price == max_agents:
+                max_agents.append(agent)
+            elif price > max_price:
+                max_agents = [agent]
+                max_price = price
 
-    def get_sales(self, current_prices: list[float]) -> list[int]:
-        lowest_index = np.argmin(current_prices)
-        demands = len(current_prices) * [0]
-        demands[lowest_index] = self.total_demand
-        return demands
+        for agent in max_agents:
+            sales[agent] = int(self.max_sales_scale_factor / len(max_agents))
 
-    def __str__(self):
-        return f"FixedLowestTakesAllDemandFunction(total demand: {self.total_demand})"
+        return sales
