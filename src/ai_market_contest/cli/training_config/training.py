@@ -1,10 +1,9 @@
 from typing import List
 
-from ai_market_contest.agent import Agent
 from ai_market_contest.environment import Environment
 
 
-def agent_dict_to_list(agent_dict: dict[Agent, int], env: Environment) -> List[int]:
+def agent_dict_to_list(agent_dict: dict[str, int], env: Environment) -> List[int]:
     agent_values: List[int] = []
     for agent_name in env.possible_agents:
         if agent_name in agent_dict:

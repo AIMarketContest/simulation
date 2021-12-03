@@ -1,11 +1,10 @@
-from ray.tune.registry import register_env
-from ray.rllib.env import ParallelPettingZooEnv
-from ray.rllib import agents
+from ray.rllib import agents  # type: ignore
+from ray.rllib.env import ParallelPettingZooEnv  # type: ignore
+from ray.tune.logger import pretty_print  # type: ignore
+from ray.tune.registry import register_env  # type: ignore
 
-from ai_market_contest.environment import init_env
 from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction
-from ray.tune.logger import pretty_print
-
+from ai_market_contest.environment import init_env
 
 register_env(
     "marketplace",
@@ -16,10 +15,10 @@ trainer = agents.dqn.DQNTrainer(env="marketplace")
 
 
 for i in range(1000):
-   # Perform one iteration of training the policy with PPO
-   result = trainer.train()
-   print(pretty_print(result))
+    # Perform one iteration of training the policy with PPO
+    result = trainer.train()
+    print(pretty_print(result))
 
-   if i % 100 == 0:
-       checkpoint = trainer.save()
-       print("checkpoint saved at", checkpoint)
+    if i % 100 == 0:
+        checkpoint = trainer.save()
+        print("checkpoint saved at", checkpoint)

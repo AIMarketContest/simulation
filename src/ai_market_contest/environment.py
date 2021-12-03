@@ -2,11 +2,10 @@ import functools
 from typing import Any, Dict, List
 
 from gym import spaces  # type: ignore
-from gym.spaces import Discrete, MultiDiscrete
+from gym.spaces import Discrete  # type: ignore
 from pettingzoo import ParallelEnv  # type: ignore
 from pettingzoo.utils import from_parallel, wrappers  # type: ignore
 
-from ai_market_contest.agent import Agent
 from ai_market_contest.demand_function import DemandFunction
 
 
@@ -63,8 +62,7 @@ class Environment(ParallelEnv):
             for agent in self.agents
         }
         self.action_spaces = {
-            agent: Discrete(self.NUMBER_OF_DISCRETE_PRICES)
-            for agent in self.agents
+            agent: Discrete(self.NUMBER_OF_DISCRETE_PRICES) for agent in self.agents
         }
 
     def reset(self) -> Dict[str, float]:
@@ -85,7 +83,7 @@ class Environment(ParallelEnv):
 
     def step(
         self, actions: Dict[str, int]
-    ) -> tuple[Dict[str, float], Dict[str, float], Dict[str, bool], Dict[str, Any],]:
+    ) -> tuple[Dict[str, float], Dict[str, float], Dict[str, bool], Dict[str, Any]]:
         """
         Runs a time step for the simulation and appends results to the historic data
         """

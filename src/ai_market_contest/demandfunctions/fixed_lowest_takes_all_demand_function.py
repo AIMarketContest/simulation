@@ -7,17 +7,18 @@ class LowestTakesAllDemandFunction(DemandFunction):
 
     def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
         sales: dict[str, int] = {agent: 0 for agent in current_prices.keys()}
-        max_agents = []
-        max_price = -1
+        min_agents = []
+        min_price = float("inf")
 
         for agent, price in current_prices.items():
-            if price == max_agents:
-                max_agents.append(agent)
-            elif price > max_price:
-                max_agents = [agent]
-                max_price = price
+            if price == min_price:
+                min_agents.append(agent)
+            elif price < min_price:
+                min_agents = [agent]
+                min_price = price
 
-        for agent in max_agents:
-            sales[agent] = int(self.max_sales_scale_factor / len(max_agents))
+        agent_sales = int(self.max_sales_scale_factor / len(min_agents))
+        for agent in min_agents:
+            sales[agent] = agent_sales
 
         return sales
