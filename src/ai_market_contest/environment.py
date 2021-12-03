@@ -45,12 +45,7 @@ class Environment(ParallelEnv):
 
     metadata = {"render.modes": ["human"], "name": "rps_v2"}
 
-    def __init__(
-        self,
-        simulation_length: int,
-        demand: DemandFunction,
-        num_agents: int
-    ):
+    def __init__(self, simulation_length: int, demand: DemandFunction, num_agents: int):
         self.possible_agents: List[str] = [
             "player_" + str(r) for r in range(num_agents)
         ]
@@ -59,6 +54,18 @@ class Environment(ParallelEnv):
         self.demand: DemandFunction = demand
         self.time_step: int = 0
         self.reset()
+
+        self.observation_spaces = {
+            agent: {
+                "observation": Discrete(self.MAX_SALES),
+                "action_mask": Discrete(self.NUMBER_OF_DISCRETE_PRICES),
+            }
+            for agent in self.agents
+        }
+        self.action_spaces = {
+            agent: Discrete(self.NUMBER_OF_DISCRETE_PRICES)
+            for agent in self.agents
+        }
 
     def reset(self) -> Dict[str, float]:
         return {agent: 0.0 for agent in self.possible_agents if agent is not None}
@@ -110,5 +117,5 @@ def init_env(
     env = wrappers.CaptureStdoutWrapper(env)
     env = wrappers.AssertOutOfBoundsWrapper(env)
     env = wrappers.OrderEnforcingWrapper(env)
-    
+
     return env
