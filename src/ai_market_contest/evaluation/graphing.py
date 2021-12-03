@@ -4,19 +4,23 @@ This file contains the function to represent the results gotten from training ag
 from statistics import mean
 from typing import List
 
+import matplotlib
 import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 import pytest
 from matplotlib.ticker import MaxNLocator  # type: ignore
 from numpy import ndarray, random
+from ray.rllib.policy.policy import Policy
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.agents.fixed_agent import FixedAgent
 
+matplotlib.use("TkAgg")
+
 
 def plot_average_step(
-    agent_profits: dict[Agent, List[float]],
-    agent_names: dict[Agent, str],
+    agent_profits: dict[Policy, List[float]],
+    agent_names: dict[Policy, str],
     step: int = 1,
 ) -> plt:
     """

@@ -73,8 +73,7 @@ def initialise_file_structure(args: Any):
 
 def create_subparser(subparsers: Any):  # type: ignore
     parser_init = subparsers.add_parser(
-        "init",
-        help="Initialises a folder structure for a project",
+        "init", help="Initialises a folder structure for a project"
     )
     parser_init.add_argument("path", type=pathlib.Path, default=".")
     parser_init.add_argument(

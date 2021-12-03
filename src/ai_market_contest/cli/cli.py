@@ -4,8 +4,8 @@ import sys
 import ai_market_contest.cli.addagentsubcommand as addagentsubcommand  # type: ignore
 import ai_market_contest.cli.initsubcommand as initsubcommand  # type: ignore
 import ai_market_contest.cli.resetsubcommand as resetsubcommand  # type: ignore
-import ai_market_contest.cli.trainsubcommand as trainsubcommand  # type: ignore
 import ai_market_contest.cli.runsubcommand as runsubcommand  # type: ignore
+import ai_market_contest.cli.trainsubcommand as trainsubcommand  # type: ignore
 
 KEYBOARD_INTERRUPT_MSG = "Operation aborted."
 

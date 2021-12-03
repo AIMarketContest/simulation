@@ -1,6 +1,7 @@
 import pathlib
 import sys
 from typing import Any
+
 from ai_market_contest.agents.fixed_agent import FixedAgent
 from ai_market_contest.agents.random_agent import RandomAgent
 from ai_market_contest.cli.utils.run_contest import run_contest
@@ -8,7 +9,6 @@ from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandF
 from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function import (
     LowestTakesAllDemandFunction,
 )
-
 from ai_market_contest.environment import Market
 from ai_market_contest.evaluation.graphing import plot_average_step
 
