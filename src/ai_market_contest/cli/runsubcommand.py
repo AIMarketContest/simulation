@@ -10,7 +10,7 @@ from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function im
     LowestTakesAllDemandFunction,
 )
 from ai_market_contest.environment import Market
-from ai_market_contest.evaluation.graphing import plot_average_step
+from ai_market_contest.evaluation.graphing import graph_cumulative_profits, plot_average_step
 
 
 def run_simulation(args: Any):
@@ -23,6 +23,7 @@ def run_simulation(args: Any):
     agent_sales = run_contest(environment, agent_mapping)
 
     plot_average_step(agent_sales, agent_mapping)
+    graph_cumulative_profits(agent_sales, agent_mapping)
 
 
 def create_subparser(subparsers: Any):  # type: ignore
