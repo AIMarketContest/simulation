@@ -1,9 +1,9 @@
-from abc import ABCMeta, abstractmethod
-
 from ray.rllib.policy.policy import Policy
+from ray.rllib.utils.typing import TrainerConfigDict
+import gym
 
 
-class Agent(Policy, metaclass=ABCMeta):
+class Agent(Policy):
     """
     Agent interface - an agent represents a firm selling a product in the market.
 
@@ -14,16 +14,20 @@ class Agent(Policy, metaclass=ABCMeta):
     For those not familiar with policy-update, see the comments on each function.
     """
 
-    @abstractmethod
-    def compute_actions(
+    def __init__(
         self,
-        obs_batch,
-        state_batches=None,
-        prev_action_batch=None,
-        prev_reward_batch=None,
-        info_batch=None,
-        episodes=None,
+        observation_space: gym.env = None,
+        action_space: gym.env = None,
+        config: TrainerConfigDict = {}
     ):
+        super().__init__(observation_space, action_space, config)
+
+    def set_initial_price(self) -> float:
+        raise NotImplementedError
+
+    def set_price(
+        self, last_round_all_agents_prices: List[float], identity_index: int
+    ) -> float:
         """
         Query the agent for the next price to set.
 
@@ -46,37 +50,29 @@ class Agent(Policy, metaclass=ABCMeta):
         NotImplementedError
             If concrete class does not override method.
         """
-
         raise NotImplementedError
 
-    @abstractmethod
-    def learn_on_batch(self, samples):
-        """
-        Check if the agent's learning has converged.
+    def get_initial_state(self):
+        return self.set_initial_price()
 
-        Returns
-        -------
-        bool : True if the agent learning has converged, False otherwise.
-
-        Raises
-        ------
-        NotImplementedError
-            If concrete class does not override method.
-        """
-        raise NotImplementedError
-
-    @classmethod
-    def __subclasshook__(cls, subclass):
+    def compute_actions(
+        self,
+        obs_batch,
+        state_batches=None,
+        prev_action_batch=None,
+        prev_reward_batch=None,
+        info_batch=None,
+        episodes=None,
+    ):
+        identity_index = 0
+        if info_batch:
+            info = info_batch[0]
+            identity_index = info["identity_index"]
         return (
-            all(
-                [
-                    hasattr(subclass, "policy"),
-                    callable(subclass.policy),
-                    hasattr(subclass, "update"),
-                    callable(subclass.update),
-                    hasattr(subclass, "learning_has_converged"),
-                    callable(subclass.learning_has_converged),
-                ]
-            )
-            or NotImplemented
+            [self.set_price(prices_list, identity_index) for prices_list in obs_batch],
+            [],
+            {},
         )
+
+    def learn_on_batch(self, samples):
+        pass

@@ -18,11 +18,9 @@ class Market(MultiAgentEnv):
     ):
         self.agents: List[str] = ["player_" + str(r) for r in range(num_agents)]
 
-        # self.observation_space = MultiDiscrete(
-        #     [self.NUMBER_OF_DISCRETE_PRICES] * num_agents
-        # )
-
-        self.observation_space = Discrete(self.NUMBER_OF_DISCRETE_PRICES)
+        self.observation_space = MultiDiscrete(
+            [self.NUMBER_OF_DISCRETE_PRICES] * num_agents
+        )
         self.action_space = Discrete(self.NUMBER_OF_DISCRETE_PRICES)
 
         self.reward_range = (-math.inf, math.inf)
@@ -44,16 +42,18 @@ class Market(MultiAgentEnv):
         if self.time_step >= self.simulation_length:
             # raise IndexError("Cannot run simulation beyond maximum time step")
             self.done = True
-
+        last_round_all_agents_prices: List[float] = [
+            price for _, price in action_dict.items()
+        ]
         observations: MultiAgentDict = {}
         rewards: MultiAgentDict = {}
         dones: MultiAgentDict = {}
         infos: MultiAgentDict = {}
 
-        for agent in self.agents:
-            observations[agent] = demands[agent]
+        for agent_index, agent in enumerate(self.agents):
+            observations[agent] = last_round_all_agents_prices
             rewards[agent] = demands[agent] * action_dict[agent]
             dones["__all__"] = self.done
-            infos[agent] = {}
+            infos[agent] = {"identity_index": agent_index}
 
         return observations, rewards, dones, infos
