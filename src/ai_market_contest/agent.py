@@ -14,12 +14,7 @@ class Agent(Policy):
     For those not familiar with policy-update, see the comments on each function.
     """
 
-    def __init__(
-        self,
-        observation_space=None,
-        action_space=None,
-        config={}
-    ):
+    def __init__(self, observation_space=None, action_space=None, config={}):
         super().__init__(observation_space, action_space, config)
 
     def get_initial_price(self) -> float:

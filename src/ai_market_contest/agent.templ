@@ -11,17 +11,29 @@ class ${agent_classname}(Agent):
     For those not familiar with policy-update, see the comments on each function.
     """
 
-    def __init__(self):
-    	pass
+    def __init__(self, *args, **kwargs):
+    	super().__init__(*args, **kwargs)
 
-    def compute_actions(
-        self, obs_batch,
-        state_batches=None,
-        prev_action_batch=None,
-        prev_reward_batch=None,
-        info_batch=None,
-        episodes=None,
-    ):
+    def get_initial_price(self) -> float:
+        """
+        Query the agent for the initial price to set.
+
+        Returns
+        -------
+        float
+            Price of the product set by the agent at the current timestep,
+            discretised within [0,100].
+
+        Raises
+        ------
+        NotImplementedError
+            If concrete class does not override method.
+        """
+        pass
+
+    def get_price(
+        self, last_round_all_agents_prices: List[float], identity_index: int
+    ) -> float:
         """
         Query the agent for the next price to set.
 
@@ -37,16 +49,14 @@ class ${agent_classname}(Agent):
         -------
         float
             Price of the product set by the agent at the current timestep,
-            discretised within [0,1].
+            discretised within [0,100].
 
         Raises
         ------
         NotImplementedError
             If concrete class does not override method.
         """
-
-        raise NotImplementedError
-
-
-    def learn_on_batch(self, samples):
         pass
+
+    
+    
