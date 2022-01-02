@@ -1,7 +1,8 @@
 import math
 from typing import List, Tuple
 
-from gym.spaces.discrete import Discrete  # type: ignore
+from gym.spaces.discrete import Discrete
+from gym.spaces.multi_discrete import MultiDiscrete  # type: ignore
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 from ray.rllib.utils.typing import MultiAgentDict
 
@@ -19,7 +20,7 @@ class Market(MultiAgentEnv):
         self.agents: List[str] = ["player_" + str(r) for r in range(num_agents)]
 
         self.observation_space = MultiDiscrete(
-            [self.NUMBER_OF_DISCRETE_PRICES] * num_agents
+            [self.NUMBER_OF_DISCRETE_PRICES for _ in range(num_agents)]
         )
         self.action_space = Discrete(self.NUMBER_OF_DISCRETE_PRICES)
 
@@ -32,7 +33,7 @@ class Market(MultiAgentEnv):
     def reset(self):
         self.time_step = 0
         self.done = False
-        return {agent: 0 for agent in self.agents}
+        return {agent: [self.START_VAL for _ in self.agents] for agent in self.agents}
 
     def step(
         self, action_dict: MultiAgentDict
@@ -42,7 +43,7 @@ class Market(MultiAgentEnv):
         if self.time_step >= self.simulation_length:
             # raise IndexError("Cannot run simulation beyond maximum time step")
             self.done = True
-        last_round_all_agents_prices: List[float] = [
+        last_round_all_agents_prices: List[int] = [
             price for _, price in action_dict.items()
         ]
         observations: MultiAgentDict = {}
@@ -55,5 +56,4 @@ class Market(MultiAgentEnv):
             rewards[agent] = demands[agent] * action_dict[agent]
             dones["__all__"] = self.done
             infos[agent] = {"identity_index": agent_index}
-
         return observations, rewards, dones, infos
