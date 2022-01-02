@@ -1,28 +1,15 @@
 from ai_market_contest.agent import Agent
 
 
-class FixedAgent(Agent):
+class FixedAgentFifty(Agent):
     """
-    An agent that always returns the same price.
+    An agent that always returns the same price of 50.
     """
 
-    def __init__(self, price: int = 50):
-        self.price = price
+    FIXED_PRICE: int = 50
 
-    def compute_actions(
-        self,
-        obs_batch,
-        state_batches=None,
-        prev_action_batch=None,
-        prev_reward_batch=None,
-        info_batch=None,
-        episodes=None,
-    ):
+    def get_initial_price(self):
+        return FIXED_PRICE
 
-        return [self.price for _ in obs_batch], [], {}
-
-    def learn_on_batch(self, samples):
-        pass
-
-    def __str__(self):
-        return f"FixedAgent(price: {self.price})"
+    def get_price(self, last_round_agents_prices: List[int], identity_index):
+        return FIXED_PRICE
