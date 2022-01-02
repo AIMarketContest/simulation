@@ -16,9 +16,9 @@ class Agent(Policy):
 
     def __init__(
         self,
-        observation_space: gym.env = None,
-        action_space: gym.env = None,
-        config: TrainerConfigDict = {},
+        observation_space=None,
+        action_space=None,
+        config={}
     ):
         super().__init__(observation_space, action_space, config)
 
