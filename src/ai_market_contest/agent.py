@@ -18,14 +18,28 @@ class Agent(Policy):
         self,
         observation_space: gym.env = None,
         action_space: gym.env = None,
-        config: TrainerConfigDict = {}
+        config: TrainerConfigDict = {},
     ):
         super().__init__(observation_space, action_space, config)
 
-    def set_initial_price(self) -> float:
+    def get_initial_price(self) -> float:
+        """
+        Query the agent for the initial price to set.
+
+        Returns
+        -------
+        float
+            Price of the product set by the agent at the current timestep,
+            discretised within [0,100].
+
+        Raises
+        ------
+        NotImplementedError
+            If concrete class does not override method.
+        """
         raise NotImplementedError
 
-    def set_price(
+    def get_price(
         self, last_round_all_agents_prices: List[float], identity_index: int
     ) -> float:
         """
@@ -43,7 +57,7 @@ class Agent(Policy):
         -------
         float
             Price of the product set by the agent at the current timestep,
-            discretised within [0,1].
+            discretised within [0,100].
 
         Raises
         ------
