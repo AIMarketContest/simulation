@@ -25,3 +25,26 @@ ENVS_DIR_NAME: Final = "environments"
 ROOT_FOLDER: Final = (CLI_DIR / "..").resolve()
 TRAIN_CONFIG_FILENAME: Final = "train_config.ini"
 TRAINING_CONFIGS_DIR_NAME: Final = "training_configs"
+
+RLLIB_AGENTS = [
+    "AC2",
+    "AC3",
+    "BC",
+    "DDPG",
+    "TD3",
+    "APEX-DDPG",
+    "DQN",
+    "Rainbow",
+    "APEX-DQN",
+    "IMPALA",
+    "MARWIL",
+    "PG",
+    "PPO",
+    "APPO",
+    "R2D2",
+    "SAC",
+    "LinUCB",
+    "LinTS",
+    "QMIX",
+    "MADDPG",
+]
