@@ -2,7 +2,7 @@
 This file contains the function to represent the results gotten from training agents
 """
 from statistics import mean
-from typing import List
+from typing import List, Dict
 
 import matplotlib
 import matplotlib.pyplot as plt  # type: ignore
@@ -19,8 +19,8 @@ matplotlib.use("TkAgg")
 
 
 def plot_average_step(
-    agent_profits: dict[Policy, List[float]],
-    agent_names: dict[Policy, str],
+    agent_profits: Dict[Policy, List[float]],
+    agent_names: Dict[Policy, str],
     step: int = 1,
 ) -> plt:
     """
@@ -62,7 +62,7 @@ def plot_average_step(
 
 
 def graph_profits(
-    agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str]
+    agent_profits: Dict[Agent, List[float]], agent_names: Dict[Agent, str]
 ) -> plt:
     """
     This function is used to plot the prices of all agents in the
@@ -89,7 +89,7 @@ def graph_profits(
 
 
 def graph_cumulative_profits(
-    agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str]
+    agent_profits: Dict[Agent, List[float]], agent_names: Dict[Agent, str]
 ) -> plt:
     """
     This function is used to plot the total profit that
@@ -116,7 +116,7 @@ def graph_cumulative_profits(
 
 
 def graph_convergence(
-    agent_profits: dict[Agent, List[float]], agent_names: dict[Agent, str]
+    agent_profits: Dict[Agent, List[float]], agent_names: Dict[Agent, str]
 ):
     """
     This function is used to plot the timesteps the different agents convereged at.

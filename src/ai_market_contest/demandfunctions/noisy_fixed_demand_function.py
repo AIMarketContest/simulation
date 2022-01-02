@@ -1,6 +1,7 @@
 from numpy.random import randint
 
 from ai_market_contest.demand_function import DemandFunction
+from typing import Dict
 
 
 class NoisyFixedDemandFunction(DemandFunction):
@@ -10,7 +11,7 @@ class NoisyFixedDemandFunction(DemandFunction):
 
         self.fixed_quantity: int = fixed_quantity
 
-    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
+    def get_sales(self, current_prices: Dict[str, int]) -> Dict[str, int]:
         return {
             agent: int(randint(0, 100) + self.fixed_quantity)
             for agent in current_prices.keys()

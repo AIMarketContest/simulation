@@ -1,4 +1,5 @@
 from ai_market_contest.demand_function import DemandFunction
+from typing import Dict
 
 
 class FixedDemandFunction(DemandFunction):
@@ -28,8 +29,8 @@ class FixedDemandFunction(DemandFunction):
 
         self.fixed_quantity: int = fixed_quantity
 
-    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
-        sales: dict[str, int] = {}
+    def get_sales(self, current_prices: Dict[str, int]) -> Dict[str, int]:
+        sales: Dict[str, int] = {}
 
         for agent, _ in current_prices.items():
             sales[agent] = self.fixed_quantity

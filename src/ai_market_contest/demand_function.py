@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+from typing import Dict
 
 
 class DemandFunction(metaclass=ABCMeta):
@@ -9,7 +10,7 @@ class DemandFunction(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
+    def get_sales(self, current_prices: Dict[str, int]) -> Dict[str, int]:
         """
         Calculates the quantity of the product that will be sold at a given
         price for each agent.

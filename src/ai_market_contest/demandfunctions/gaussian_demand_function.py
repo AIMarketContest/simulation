@@ -1,4 +1,5 @@
 from statistics import NormalDist
+from typing import Dict
 
 from ai_market_contest.demand_function import DemandFunction
 
@@ -44,7 +45,7 @@ class GaussianDemandFunction(DemandFunction):
         self.mu: float = mu
         self.sigma: float = sigma
 
-    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
+    def get_sales(self, current_prices: Dict[str, int]) -> Dict[str, int]:
         gaussian_distribution: "NormalDist" = NormalDist(mu=self.mu, sigma=self.sigma)
 
         sales: dict[str, int] = {}

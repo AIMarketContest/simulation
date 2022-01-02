@@ -39,16 +39,9 @@ def custom_log_creator(custom_path, custom_str):
     return logger_creator
 
 
-trainer = agents.dqn.DQNTrainer(
-    env="marketplace", logger_creator=custom_log_creator("./logs", "marketplace")
-)
+trainer = agents.dqn.DQNTrainer(env="marketplace")
 
 
-for i in range(800):
-    # Perform one iteration of training the policy with PPO
+for i in range(10):
     result = trainer.train()
     print(pretty_print(result))
-
-    if i % 100 == 0:
-        checkpoint = trainer.save()
-        print("checkpoint saved at", checkpoint)

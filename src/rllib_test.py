@@ -48,5 +48,5 @@ while not done:
     rewards_arr.append(rewards)
 
 print(action_arr)
-print("")
+print()
 print(rewards_arr)
