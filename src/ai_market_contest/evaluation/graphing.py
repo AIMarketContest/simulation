@@ -4,7 +4,7 @@ This file contains the function to represent the results gotten from training ag
 from statistics import mean
 from typing import List, Dict
 
-import matplotlib # type: ignore
+import matplotlib  # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 import pytest

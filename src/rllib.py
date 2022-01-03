@@ -2,7 +2,9 @@ import os
 import tempfile
 from datetime import datetime
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
-from ai_market_contest.training.sequential_agent_name_maker import SequentialAgentNameMaker
+from ai_market_contest.training.sequential_agent_name_maker import (
+    SequentialAgentNameMaker,
+)
 
 from ray.rllib import agents  # type: ignore
 from ray.tune.logger import UnifiedLogger, pretty_print  # type: ignore
@@ -17,7 +19,9 @@ num_agents: int = 10
 agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(num_agents)
 register_env(
     "marketplace",
-    lambda x: Market(num_agents, LowestTakesAllDemandFunction(99), 100, agent_name_maker), 
+    lambda x: Market(
+        num_agents, LowestTakesAllDemandFunction(99), 100, agent_name_maker
+    ),
 )
 
 config = agents.dqn.DEFAULT_CONFIG.copy()

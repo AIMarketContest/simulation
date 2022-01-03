@@ -1,3 +1,7 @@
+from ai_market_contest.training.agent_name_maker import AgentNameMaker
+from ai_market_contest.training.sequential_agent_name_maker import (
+    SequentialAgentNameMaker,
+)
 from ray.rllib import agents
 from ray.tune.registry import register_env
 

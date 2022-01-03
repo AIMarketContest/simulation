@@ -2,26 +2,30 @@ import pathlib
 import sys
 from typing import Any
 
-from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom # type: ignore
-from ai_market_contest.agents.random_agent import RandomAgent # type: ignore
-from ai_market_contest.cli.utils.run_contest import run_contest # type: ignore
-from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction # type: ignore
+from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom  # type: ignore
+from ai_market_contest.agents.random_agent import RandomAgent  # type: ignore
+from ai_market_contest.cli.utils.run_contest import run_contest  # type: ignore
+from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction  # type: ignore
 from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function import (
     LowestTakesAllDemandFunction,
-) # type: ignore
-from ai_market_contest.environment import Market # type: ignore
+)  # type: ignore
+from ai_market_contest.environment import Market  # type: ignore
 from ai_market_contest.evaluation.graphing import (
     graph_cumulative_profits,
     plot_average_step,
-) # type: ignore
+)  # type: ignore
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
-from ai_market_contest.training.sequential_agent_name_maker import SequentialAgentNameMaker
+from ai_market_contest.training.sequential_agent_name_maker import (
+    SequentialAgentNameMaker,
+)
 
 
 def run_simulation(args: Any):
     num_agents: int = 2
     agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(num_agents)
-    environment = Market(num_agents, LowestTakesAllDemandFunction(), 50, agent_name_maker)
+    environment = Market(
+        num_agents, LowestTakesAllDemandFunction(), 50, agent_name_maker
+    )
     agent1 = FixedAgentRandom(25)
     agent2 = RandomAgent()
 

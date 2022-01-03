@@ -1,8 +1,8 @@
 from ray.rllib.policy.policy import Policy
 from ray.rllib.utils.typing import TrainerConfigDict
 from typing import List
-from ai_market_contest.typing.types import Price # type: ignore
-import gym # type: ignore
+from ai_market_contest.typing.types import Price  # type: ignore
+import gym  # type: ignore
 
 
 class Agent(Policy):
