@@ -35,7 +35,7 @@ class Agent(Policy):
         """
         raise NotImplementedError
 
-    def get_price(
+    def policy(
         self, last_round_all_agents_prices: List[float], identity_index: int
     ) -> float:
         """
@@ -62,6 +62,28 @@ class Agent(Policy):
         """
         raise NotImplementedError
 
+    def update(self, last_round_profit: int, identity_index: int) -> None:
+        raise NotImplementedError
+    """
+        Feeds data from the previous timestep into the agent allowing it
+        to adjust it's strategy.
+        
+        Parameters
+        ----------
+        last_round_profit: int
+            A positive integer representing the profit the agent
+            made in the previous timestep.
+        identity_index: int
+            A positive integer that holds the index in the list corresponding to
+            the current agent.
+            
+        Raises
+        ------
+        NotImplementedError
+            If concrete class does not override method.
+            
+        """
+        
     def get_initial_state(self):
         return self.set_initial_price()
 
@@ -75,11 +97,16 @@ class Agent(Policy):
         episodes=None,
     ):
         identity_index = 0
+        action_batch = []
         if info_batch:
             info = info_batch[0]
             identity_index = info["identity_index"]
+        for i, prices_list in enumerate(obs_batch):
+            update(prev_reward_batch[i], indentity_index)
+            action_batch.append(self.set_price(prices_list, identity_index))
+            
         return (
-            [self.set_price(prices_list, identity_index) for prices_list in obs_batch],
+            action_batch,
             [],
             {},
         )
