@@ -1,5 +1,3 @@
-from ai_market_contest.training.agent_name_maker import AgentNameMaker
-from ai_market_contest.training.sequential_agent_name_maker import SequentialAgentNameMaker
 from ray.rllib import agents
 from ray.tune.registry import register_env
 
@@ -9,9 +7,7 @@ from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function im
 )
 from ai_market_contest.environment import Market
 
-num_agents: int = 2
-agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(num_agents)
-env = Market(num_agents, LowestTakesAllDemandFunction(99), 10, agent_name_maker)
+env = Market(2, LowestTakesAllDemandFunction(99), 10)
 
 test_agents = [RandomAgent()]
 
@@ -44,7 +40,7 @@ done = False
 while not done:
     actions = {}
     actions["player_0"] = trainer.compute_action(obs["player_1"])
-    actions["player_1"] = test_agents[0].policy(obs, 1)
+    actions["player_1"] = test_agents[0].policy(obs)
 
     obs, rewards, dones, infos = env.step(actions)
     done = dones["__all__"]
@@ -52,5 +48,5 @@ while not done:
     rewards_arr.append(rewards)
 
 print(action_arr)
-print()
+print("")
 print(rewards_arr)

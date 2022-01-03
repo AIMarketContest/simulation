@@ -16,7 +16,7 @@ class TrainingConfigReader:
     def __init__(
         self,
         config_file_path: pathlib.Path,
-        demand_function_locator: DemandFunctionLocator,
+        demand_function_locator: DemandFunctionLocator = None,
         config_parser: ConfigParser = ConfigParser(),
     ):
         config_parser.read(config_file_path)
@@ -29,7 +29,7 @@ class TrainingConfigReader:
     def get_num_agents(self) -> int:
         return (
             int(self.parsed_config["General"]["number_of_self_play_agents"])
-            + int(self.parsed_config["Naive Agents"].keys().sum())
+            + int(len(self.parsed_config["Naive Agents"].keys()))
         )
 
     def get_other_config(self) -> Dict[str, str]:
