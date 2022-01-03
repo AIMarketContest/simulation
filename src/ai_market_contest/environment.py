@@ -1,13 +1,14 @@
-import math # type: ignore
-from typing import List, Tuple # type: ignore
+import math  # type: ignore
+from typing import List, Tuple  # type: ignore
 
-from gym.spaces.discrete import Discrete # type: ignore
+from gym.spaces.discrete import Discrete  # type: ignore
 from gym.spaces.multi_discrete import MultiDiscrete  # type: ignore
-from ray.rllib.env.multi_agent_env import MultiAgentEnv # type: ignore
-from ray.rllib.utils.typing import MultiAgentDict # type: ignore
+from ray.rllib.env.multi_agent_env import MultiAgentEnv  # type: ignore
+from ray.rllib.utils.typing import MultiAgentDict  # type: ignore
 
-from ai_market_contest.demand_function import DemandFunction # type: ignore
-from ai_market_contest.typing.types import Price # type: ignore
+from ai_market_contest.demand_function import DemandFunction  # type: ignore
+from ai_market_contest.training.agent_name_maker import AgentNameMaker  # type: ignore
+from ai_market_contest.typing.types import Price  # type: ignore
 
 
 class Market(MultiAgentEnv):
@@ -16,9 +17,13 @@ class Market(MultiAgentEnv):
     MAX_SALES = 100
 
     def __init__(
-        self, num_agents: int, demand_function: DemandFunction, simulation_length: int
+        self,
+        num_agents: int,
+        demand_function: DemandFunction,
+        simulation_length: int,
+        agent_name_maker: AgentNameMaker,
     ):
-        self.agents: List[str] = ["player_" + str(r) for r in range(num_agents)]
+        self.agents: List[str] = agent_name_maker.get_names()
 
         self.observation_space = MultiDiscrete(
             [self.NUMBER_OF_DISCRETE_PRICES for _ in range(num_agents)]
@@ -30,6 +35,8 @@ class Market(MultiAgentEnv):
         self.done = False
         self.simulation_length = simulation_length
         self.time_step = 0
+
+        self.agent_name_maker = agent_name_maker
 
     def reset(self):
         self.time_step = 0

@@ -14,10 +14,14 @@ from ai_market_contest.evaluation.graphing import (
     graph_cumulative_profits,
     plot_average_step,
 ) # type: ignore
+from ai_market_contest.training.agent_name_maker import AgentNameMaker
+from ai_market_contest.training.sequential_agent_name_maker import SequentialAgentNameMaker
 
 
 def run_simulation(args: Any):
-    environment = Market(2, LowestTakesAllDemandFunction(), 50)
+    num_agents: int = 2
+    agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(num_agents)
+    environment = Market(num_agents, LowestTakesAllDemandFunction(), 50, agent_name_maker)
     agent1 = FixedAgentRandom(25)
     agent2 = RandomAgent()
 
