@@ -7,6 +7,7 @@ from ray.rllib.env.multi_agent_env import MultiAgentEnv
 from ray.rllib.utils.typing import MultiAgentDict
 
 from ai_market_contest.demand_function import DemandFunction
+from ai_market_contest.typing.types import Price
 
 
 class Market(MultiAgentEnv):
@@ -41,9 +42,8 @@ class Market(MultiAgentEnv):
         demands = self.demand.get_sales(action_dict)
         self.time_step += 1
         if self.time_step >= self.simulation_length:
-            # raise IndexError("Cannot run simulation beyond maximum time step")
             self.done = True
-        last_round_all_agents_prices: List[int] = [
+        last_round_all_agents_prices: List[Price] = [
             price for _, price in action_dict.items()
         ]
         observations: MultiAgentDict = {}

@@ -1,7 +1,7 @@
 from ai_market_contest.agent import Agent
 
 class ${agent_classname}(Agent):
-    """
+"""
     Agent interface - an agent represents a firm selling a product in the market.
 
     An agent encapsulates the users private pricing strategy.
@@ -11,10 +11,10 @@ class ${agent_classname}(Agent):
     For those not familiar with policy-update, see the comments on each function.
     """
 
-    def __init__(self, *args, **kwargs):
-    	super().__init__(*args, **kwargs)
+    def __init__(self, observation_space=None, action_space=None, config={}):
+        super().__init__(observation_space, action_space, config)
 
-    def get_initial_price(self) -> float:
+    def get_initial_price(self) -> Price:
         """
         Query the agent for the initial price to set.
 
@@ -29,11 +29,11 @@ class ${agent_classname}(Agent):
         NotImplementedError
             If concrete class does not override method.
         """
-        pass
+        raise NotImplementedError
 
-    def get_price(
-        self, last_round_all_agents_prices: List[float], identity_index: int
-    ) -> float:
+    def policy(
+        self, last_round_all_agents_prices: List[Price], identity_index: int
+    ) -> Price:
         """
         Query the agent for the next price to set.
 
@@ -56,7 +56,28 @@ class ${agent_classname}(Agent):
         NotImplementedError
             If concrete class does not override method.
         """
-        pass
+        raise NotImplementedError
 
+    def update(self, last_round_profit: Price, identity_index: int) -> None:
+        """
+        Feeds data from the previous timestep into the agent allowing it
+        to adjust it's strategy.
+        
+        Parameters
+        ----------
+        last_round_profit: int
+            A positive integer representing the profit the agent
+            made in the previous timestep.
+        identity_index: int
+            A positive integer that holds the index in the list corresponding to
+            the current agent.
+            
+        Raises
+        ------
+        NotImplementedError
+            If concrete class does not override method.
+            
+        """
+        pass
     
     

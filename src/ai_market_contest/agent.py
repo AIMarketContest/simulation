@@ -1,6 +1,7 @@
 from ray.rllib.policy.policy import Policy
 from ray.rllib.utils.typing import TrainerConfigDict
 from typing import List
+from ai_market_contest.typing.types import Price
 import gym
 
 
@@ -18,7 +19,7 @@ class Agent(Policy):
     def __init__(self, observation_space=None, action_space=None, config={}):
         super().__init__(observation_space, action_space, config)
 
-    def get_initial_price(self) -> float:
+    def get_initial_price(self) -> Price:
         """
         Query the agent for the initial price to set.
 
@@ -36,8 +37,8 @@ class Agent(Policy):
         raise NotImplementedError
 
     def policy(
-        self, last_round_all_agents_prices: List[float], identity_index: int
-    ) -> float:
+        self, last_round_all_agents_prices: List[Price], identity_index: int
+    ) -> Price:
         """
         Query the agent for the next price to set.
 
@@ -62,12 +63,11 @@ class Agent(Policy):
         """
         raise NotImplementedError
 
-    def update(self, last_round_profit: int, identity_index: int) -> None:
-        raise NotImplementedError
-    """
+    def update(self, last_round_profit: Price, identity_index: int) -> None:
+        """
         Feeds data from the previous timestep into the agent allowing it
         to adjust it's strategy.
-        
+
         Parameters
         ----------
         last_round_profit: int
@@ -76,16 +76,14 @@ class Agent(Policy):
         identity_index: int
             A positive integer that holds the index in the list corresponding to
             the current agent.
-            
+
         Raises
         ------
         NotImplementedError
             If concrete class does not override method.
-            
+
         """
-        
-    def get_initial_state(self):
-        return self.set_initial_price()
+        raise NotImplementedError
 
     def compute_actions(
         self,
@@ -96,15 +94,15 @@ class Agent(Policy):
         info_batch=None,
         episodes=None,
     ):
-        identity_index = 0
-        action_batch = []
+        identity_index: int = 0
+        action_batch: List[Price] = []
         if info_batch:
-            info = info_batch[0]
+            info: int = info_batch[0]
             identity_index = info["identity_index"]
         for i, prices_list in enumerate(obs_batch):
             update(prev_reward_batch[i], indentity_index)
             action_batch.append(self.set_price(prices_list, identity_index))
-            
+
         return (
             action_batch,
             [],
