@@ -11,7 +11,9 @@ from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function im
 )
 from ai_market_contest.environment import Market
 
-env = Market(2, LowestTakesAllDemandFunction(99), 10)
+num_agents: int = 2
+agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(5)
+env = Market(num_agents, LowestTakesAllDemandFunction(99), 10, agent_name_maker)
 
 test_agents = [RandomAgent()]
 
@@ -28,10 +30,6 @@ config.update(
 )
 
 trainer = agents.dqn.DQNTrainer(env="marketplace")
-
-trainer.restore(
-    "./logs/marketplace_2021-12-03_04-24-137cq46qrz/checkpoint_000701/checkpoint-701"
-)
 
 
 # run until episode ends

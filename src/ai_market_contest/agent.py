@@ -1,6 +1,6 @@
 from ray.rllib.policy.policy import Policy
-from ray.rllib.utils.typing import TrainerConfigDict
-from typing import List
+from ray.rllib.utils.typing import TrainerConfigDict, TensorStructType, TensorType
+from typing import List, Union, Optional, Dict
 from ai_market_contest.typing.types import Price  # type: ignore
 import gym  # type: ignore
 
@@ -87,21 +87,23 @@ class Agent(Policy):
 
     def compute_actions(
         self,
-        obs_batch,
-        state_batches=None,
-        prev_action_batch=None,
-        prev_reward_batch=None,
-        info_batch=None,
-        episodes=None,
+            obs_batch: Union[List[TensorStructType], TensorStructType],
+            state_batches: Optional[List[TensorType]] = None,
+            prev_action_batch: Union[List[TensorStructType],
+                                     TensorStructType] = None,
+            prev_reward_batch: Union[List[TensorStructType],
+                                     TensorStructType] = None,
+            info_batch: Optional[Dict[str, list]] = None,
+            episodes: Optional[List["Episode"]] = None,
+            explore: Optional[bool] = None,
+            timestep: Optional[int] = None,
+            **kwargs
     ):
         identity_index: int = 0
         action_batch: List[Price] = []
-        if info_batch:
-            info: int = info_batch[0]
-            identity_index = info["identity_index"]
         for i, prices_list in enumerate(obs_batch):
             self.update(prev_reward_batch[i], identity_index)
-            action_batch.append(self.set_price(prices_list, identity_index))
+            action_batch.append(self.policy(prices_list, identity_index))
 
         return (
             action_batch,

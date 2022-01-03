@@ -53,9 +53,8 @@ class PolicySelector:
             cur_number_of_agents = self.self_play_number + 1
             for naive_agent, count in self.naive_agents_counts.items():
                 if agent_id in [
-                    "player" + str(i) for i in range(cur_number_of_agents, count + 1)
+                    "player_" + str(i) for i in range(cur_number_of_agents, cur_number_of_agents + count + 1)
                 ]:
                     return naive_agent
                 cur_number_of_agents += count
-
         return select_policy
