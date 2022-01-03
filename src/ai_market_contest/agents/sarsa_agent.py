@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Dict, Sequence
+from typing import Dict, Sequence, List
 
 import numpy as np
 
@@ -18,7 +18,7 @@ class SarsaAgent(Agent):
         self.theta = 0.001
         self.time = 0
 
-    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
+    def policy(self, last_round_agents_prices: List[float], agent_index: int) -> float:
         other_agent_prices = (
             last_round_agents_prices[:agent_index]
             + last_round_agents_prices[agent_index + 1 :]
@@ -43,9 +43,9 @@ class SarsaAgent(Agent):
 
     def update(
         self,
-        last_round_prices: list[float],
+        last_round_prices: List[float],
         last_round_sales: int,
-        round_before_last_prices: list[float],
+        round_before_last_prices: List[float],
         round_before_last_sales: int,
         identity_index: int,
     ) -> None:

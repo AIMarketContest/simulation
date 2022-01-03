@@ -1,6 +1,6 @@
 import pathlib
 import sys
-from typing import Any
+from typing import Any, List
 
 from ai_market_contest.cli.cli_config import (
     AGENTS_DIR_NAME,
@@ -46,7 +46,7 @@ def ask_for_trained_agents(agent: str) -> bool:
     sys.exit(1)
 
 
-def choose_training_config(training_configs: list[str]):
+def choose_training_config(training_configs: List[str]):
     print("Choose a training config: ", end="")
     while True:
         chosen_config = input()
@@ -57,7 +57,7 @@ def choose_training_config(training_configs: list[str]):
     return chosen_config
 
 
-def choose_agent_for_training(agent_names: list[str]) -> str:
+def choose_agent_for_training(agent_names: List[str]) -> str:
     print("Choose an agent to train: ", end="")
     while True:
         chosen_agent = input()
@@ -68,7 +68,7 @@ def choose_agent_for_training(agent_names: list[str]) -> str:
     return chosen_agent
 
 
-def choose_trained_agent(trained_agents: list[str]):
+def choose_trained_agent(trained_agents: List[str]):
     shortened_hashes = get_shortened_hashes(trained_agents)
     max_count = 3
     count = 0
@@ -104,7 +104,7 @@ def train_agent(args: Any):
     proj_dir: pathlib.Path = path / PROJ_DIR_NAME
     check_path_exists(path)
     check_proj_dir_exists(proj_dir)
-    agent_names: list[str] = get_agent_names(proj_dir)
+    agent_names: List[str] = get_agent_names(proj_dir)
     display_agents(agent_names)
     chosen_agent: str = choose_agent_for_training(agent_names)
     agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
@@ -115,7 +115,7 @@ def train_agent(args: Any):
     if not agent_is_initialised:
         initialise_agent_pkl_file(chosen_agent_dir, args.show_traceback)
         set_agent_to_initialised(chosen_agent_dir)
-    trained_agents: list[str] = get_trained_agents(chosen_agent_dir)
+    trained_agents: List[str] = get_trained_agents(chosen_agent_dir)
     display_trained_agents(chosen_agent_dir, trained_agents)
     chosen_trained_agent = choose_trained_agent(trained_agents)
     training_agent_dir = (
@@ -123,7 +123,7 @@ def train_agent(args: Any):
     )
     error_msg = f"Error: no directory exists for {chosen_trained_agent}"
     check_directory_exists(training_agent_dir, error_msg)
-    training_configs: list[str] = get_training_configs(proj_dir)
+    training_configs: List[str] = get_training_configs(proj_dir)
     if not training_configs:
         print(
             "Operation aborted: no training configs have been defined in training_configs"

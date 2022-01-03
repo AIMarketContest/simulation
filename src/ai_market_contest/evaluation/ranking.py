@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 import numpy as np
 import pytest
@@ -11,7 +11,7 @@ from ai_market_contest.evaluation.graphing import (
 
 
 def cumulative_profit_ranking(
-    agent_profits: dict[Agent, List[float]]
+    agent_profits: Dict[Agent, List[float]]
 ) -> List[Tuple[Agent, float]]:
     cum_profits = get_cumulative_profits(agent_profits)
     cum_profit_items_sorted = sorted(
@@ -21,8 +21,8 @@ def cumulative_profit_ranking(
 
 
 def get_cumulative_profits(
-    agent_profits: dict[Agent, List[float]]
-) -> dict[Agent, float]:
+    agent_profits: Dict[Agent, List[float]]
+) -> Dict[Agent, float]:
     profits = {}
     for (
         agent,

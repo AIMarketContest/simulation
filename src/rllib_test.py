@@ -40,7 +40,7 @@ done = False
 while not done:
     actions = {}
     actions["player_0"] = trainer.compute_action(obs["player_1"])
-    actions["player_1"] = test_agents[0].policy(obs)
+    actions["player_1"] = test_agents[0].policy(obs, 1)
 
     obs, rewards, dones, infos = env.step(actions)
     done = dones["__all__"]

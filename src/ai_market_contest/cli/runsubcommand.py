@@ -2,23 +2,23 @@ import pathlib
 import sys
 from typing import Any
 
-from ai_market_contest.agents.fixed_agent import FixedAgent
-from ai_market_contest.agents.random_agent import RandomAgent
-from ai_market_contest.cli.utils.run_contest import run_contest
-from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction
+from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom # type: ignore
+from ai_market_contest.agents.random_agent import RandomAgent # type: ignore
+from ai_market_contest.cli.utils.run_contest import run_contest # type: ignore
+from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction # type: ignore
 from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function import (
     LowestTakesAllDemandFunction,
-)
-from ai_market_contest.environment import Market
+) # type: ignore
+from ai_market_contest.environment import Market # type: ignore
 from ai_market_contest.evaluation.graphing import (
     graph_cumulative_profits,
     plot_average_step,
-)
+) # type: ignore
 
 
 def run_simulation(args: Any):
     environment = Market(2, LowestTakesAllDemandFunction(), 50)
-    agent1 = FixedAgent(25)
+    agent1 = FixedAgentRandom(25)
     agent2 = RandomAgent()
 
     agent_mapping = {agent1: "player_0", agent2: "player_1"}

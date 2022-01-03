@@ -2,10 +2,10 @@
 
 import numpy as np
 
-from ai_market_contest.agents.fixed_agent import FixedAgent
-from ai_market_contest.demand_function import DemandFunction
-from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction
-from ai_market_contest.environment import Market
+from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom # type: ignore
+from ai_market_contest.demand_function import DemandFunction # type: ignore
+from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction # type: ignore
+from ai_market_contest.environment import Market # type: ignore
 
 
 class MarketTest(TestCase):
@@ -14,16 +14,16 @@ class MarketTest(TestCase):
 
     def test_to_add_agent(self):
         env = Market(self.simulation_length, self.demand_function, 1)
-        a = FixedAgent()
+        a = FixedAgentRandom()
         env.add_agent(a)
         assert len(env.possible_agents) == 1
 
     def test_to_add_agents(self):
         env = Market(self.simulation_length, self.demand_function, 4)
-        a = FixedAgent()
-        b = FixedAgent()
-        c = FixedAgent()
-        d = FixedAgent()
+        a = FixedAgentRandom()
+        b = FixedAgentRandom()
+        c = FixedAgentRandom()
+        d = FixedAgentRandom()
 
         env.add_agent(a)
         env.add_agent(b)
@@ -33,7 +33,7 @@ class MarketTest(TestCase):
 
     def test_to_get_results(self):
         env = Market(self.simulation_length, self.demand_function, 1)
-        a = FixedAgent()
+        a = FixedAgentRandom()
         env.add_agent(a)
         test_set_prices = np.array([[1.00]])
         test_sales = np.array([[4]])
@@ -51,8 +51,8 @@ class MarketTest(TestCase):
 
     def test_runtime_exception_when_too_many_agents_added(self):
         env = Market(self.simulation_length, self.demand_function, 2)
-        env.add_agent(FixedAgent())
-        env.add_agent(FixedAgent())
+        env.add_agent(FixedAgentRandom())
+        env.add_agent(FixedAgentRandom())
 
         with self.assertRaises(RuntimeError):
-            env.add_agent(FixedAgent())
+            env.add_agent(FixedAgentRandom())

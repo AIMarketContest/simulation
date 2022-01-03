@@ -1,4 +1,4 @@
-from typing import Any, Dict, Callable
+from typing import Any, Dict, Callable # type: ignore
 
 
 class PolicySelector:
@@ -25,14 +25,14 @@ class PolicySelector:
         naive_agents_counts: Dict[str, int] = {},
     ):
         self.agent_name = agent_name
-        self.random_agent_number = random_agent_number
-        self.naive_agents = naive_agents
-        self.opponent_name = _get_agent_opponent_name(agent_name)
+        self.self_play_number = self_play_number
+        self.naive_agents_counts = naive_agents_counts
+        self.opponent_name = self._get_agent_opponent_name(agent_name)
 
-    def _get_agent_opponent_name(agent_name: str):
+    def _get_agent_opponent_name(self, agent_name: str):
         return agent_name + "-opponent"
 
-    def get_select_policy_function(self) -> Callable[[int, Any, Any], str]:
+    def get_select_policy_function(self) -> Callable[[str, Any, Any], str]: # type: ignore
         """
         Returns a function that maps an agent_id to a policy name.
 
@@ -45,16 +45,17 @@ class PolicySelector:
         def select_policy(agent_id: str, *args, **kwargs) -> str:
             if agent_id == "player_0":
                 return self.agent_name
+            
             if agent_id in [
                 "player_" + str(i) for i in range(1, self.self_play_number + 1)
             ]:
                 return self.opponent_name
             cur_number_of_agents = self.self_play_number + 1
-            for naive_agent, count in self.naive_agents:
+            for naive_agent, count in self.naive_agents_counts.items():
                 if agent_id in [
                     "player" + str(i) for i in range(cur_number_of_agents, count + 1)
                 ]:
                     return naive_agent
                 cur_number_of_agents += count
-
+            
         return select_policy

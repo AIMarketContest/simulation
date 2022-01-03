@@ -1,5 +1,6 @@
 import configparser
 import pathlib
+from typing import List
 
 from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import TRAIN_CONFIG_FILENAME  # type: ignore
@@ -29,7 +30,7 @@ class NaiveAgentTrainingConfig(TrainConfig):
 
     def __init__(
         self,
-        agents: list[Agent] = [],
+        agents: List[Agent] = [],
         training_duration: int = 100,
         demand_function: DemandFunction = GaussianDemandFunction(),
     ):
@@ -43,7 +44,7 @@ class NaiveAgentTrainingConfig(TrainConfig):
         demand_function: DemandFunction, default=GaussianDemandFunction()
             The demand function to be used by the environment during the simulation.
         """
-        self.agents: list[Agent] = agents
+        self.agents: List[Agent] = agents
         self.training_duration: int = training_duration
         self.demand_function: DemandFunction = demand_function
 

@@ -1,13 +1,13 @@
-import math
-from typing import List, Tuple
+import math # type: ignore
+from typing import List, Tuple # type: ignore
 
-from gym.spaces.discrete import Discrete
+from gym.spaces.discrete import Discrete # type: ignore
 from gym.spaces.multi_discrete import MultiDiscrete  # type: ignore
-from ray.rllib.env.multi_agent_env import MultiAgentEnv
-from ray.rllib.utils.typing import MultiAgentDict
+from ray.rllib.env.multi_agent_env import MultiAgentEnv # type: ignore
+from ray.rllib.utils.typing import MultiAgentDict # type: ignore
 
-from ai_market_contest.demand_function import DemandFunction
-from ai_market_contest.typing.types import Price
+from ai_market_contest.demand_function import DemandFunction # type: ignore
+from ai_market_contest.typing.types import Price # type: ignore
 
 
 class Market(MultiAgentEnv):

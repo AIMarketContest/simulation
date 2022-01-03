@@ -4,7 +4,7 @@ This file contains the function to represent the results gotten from training ag
 from statistics import mean
 from typing import List, Dict
 
-import matplotlib
+import matplotlib # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 import pytest
@@ -13,7 +13,7 @@ from numpy import ndarray, random
 from ray.rllib.policy.policy import Policy
 
 from ai_market_contest.agent import Agent
-from ai_market_contest.agents.fixed_agent import FixedAgent
+from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom
 
 matplotlib.use("TkAgg")
 
@@ -152,10 +152,10 @@ def create_agents(num_agents: int) -> List[Agent]:
     :num_agents: number of agents in the output list
     :agents: list of agents
     """
-    return [FixedAgent() for _ in range(num_agents)]
+    return [FixedAgentRandom() for _ in range(num_agents)]
 
 
-def create_agent_names_dict(agents: List[Agent]) -> dict[Agent, str]:
+def create_agent_names_dict(agents: List[Agent]) -> Dict[Agent, str]:
     """
     function creates agent_names dict for give number of agents
     :agents: list of agents to map in dictionary
@@ -164,14 +164,14 @@ def create_agent_names_dict(agents: List[Agent]) -> dict[Agent, str]:
     return {agent: f"agent_{i}" for i, agent in enumerate(agents)}
 
 
-def create_agent_profits_dict(agents: List[Agent]) -> dict[Agent, ndarray]:
+def create_agent_profits_dict(agents: List[Agent]) -> Dict[Agent, ndarray]:
     rng = random.default_rng(12345)
     return {agent: rng.integers(low=1, high=100, size=10) for agent in agents}
 
 
 def create_agent_fixed_profits_dict(
     agents: List[Agent], max_timesteps
-) -> dict[Agent, List[float]]:
+) -> Dict[Agent, List[float]]:
     agent_profits = {}
     rng = random.default_rng(12345)
     for agent in agents:

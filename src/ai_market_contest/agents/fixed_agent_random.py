@@ -1,5 +1,5 @@
 from ai_market_contest.agent import Agent
-from ai_market_contest.typing.types import Price
+from ai_market_contest.typing.types import Price # type: ignore
 from typing import List
 import random
 

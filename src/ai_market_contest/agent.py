@@ -1,8 +1,8 @@
 from ray.rllib.policy.policy import Policy
 from ray.rllib.utils.typing import TrainerConfigDict
 from typing import List
-from ai_market_contest.typing.types import Price
-import gym
+from ai_market_contest.typing.types import Price # type: ignore
+import gym # type: ignore
 
 
 class Agent(Policy):
@@ -100,7 +100,7 @@ class Agent(Policy):
             info: int = info_batch[0]
             identity_index = info["identity_index"]
         for i, prices_list in enumerate(obs_batch):
-            update(prev_reward_batch[i], indentity_index)
+            self.update(prev_reward_batch[i], identity_index)
             action_batch.append(self.set_price(prices_list, identity_index))
 
         return (
