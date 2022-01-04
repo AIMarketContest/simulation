@@ -2,6 +2,7 @@ from ray.rllib.policy.policy import Policy
 from ray.rllib.utils.typing import TrainerConfigDict, TensorStructType, TensorType
 from typing import List, Union, Optional, Dict
 from ai_market_contest.typing.types import Price  # type: ignore
+import numpy as np
 import gym  # type: ignore
 
 
@@ -99,14 +100,18 @@ class Agent(Policy):
     ):
         identity_index: int = 0
         action_batch: List[Price] = []
-        for i, prices_list in enumerate(obs_batch):
-            self.update(prev_reward_batch[i], identity_index)
+        
+        for j in range(len(obs_batch)):
+            obs = obs_batch[j]
+            prices_list: List[Price] = []
+            for i in range(100, len(obs)+1, 100):
+                prices_list.append(np.where(obs[i-100:i] == 1)[0])
             action_batch.append(self.policy(prices_list, identity_index))
 
         return (
             action_batch,
             [],
-            {},
+            {}
         )
 
     def learn_on_batch(self, samples):
