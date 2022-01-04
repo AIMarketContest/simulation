@@ -3,6 +3,7 @@ import shutil
 from typing import List
 import typer
 import questionary
+from addagentsubcommand import create_agent
 from cli_config import COMMAND_NAME, PROJ_DIR_NAME, RLLIB_AGENTS
 
 from initsubcommand import initialise_file_structure
@@ -56,13 +57,18 @@ def add_agent(path: Path = typer.Option(Path(f".", exists=True))):
     ).ask()
 
     if agent_type == "custom":
-        agent_names: List[str] = []
-        agent_names.append(typer.prompt("Enter custom agent name"))
+        agent_name = typer.prompt("Enter custom agent name")
+        create_agent(path, agent_name)
     elif agent_type == "rllib":
         rllib_agent = questionary.select(
             "What rllib agent would you like to use?",
             choices=RLLIB_AGENTS,
         ).ask()
+
+
+@app.command()
+def add_demand_function(path: Path = typer.Option(Path(f".", exists=True))):
+    demand_function_name = typer.prompt("Enter custom demand function name")
 
 
 @app.command()

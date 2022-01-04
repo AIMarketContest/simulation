@@ -3,16 +3,14 @@ import atexit
 import configparser
 import pathlib
 import shutil
-import sys
 from typing import Any
+
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,
     CONFIG_FILENAME,
-    PROJ_DIR_NAME,
 )
 from ai_market_contest.cli.utils.initialiseagent import create_agent_class
-from ai_market_contest.cli.utils.inputagentname import input_agent_name
 
 
 def edit_project_config_file(agent_name: str, proj_dir: pathlib.Path):
@@ -43,23 +41,21 @@ def remove_agent_dir(agent_name, proj_dir):
         config.write(c_file)
 
 
-def add_agent(args: Any):
-    path: pathlib.Path = args.path
-    if not path.is_dir():
-        print("Illegal argument: Argument must be an existing directory")
-        sys.exit(2)
-    proj_dir = path / PROJ_DIR_NAME
-    if not proj_dir.is_dir():
-        print(
-            """No project has been initialised in the directory.
-            To initialise a project run aicontest init <path>"""
-        )
-        sys.exit(2)
-    print("Enter name of new agent: ", end="")
-    agent_name = input_agent_name([])
-    atexit.register(remove_agent_dir, agent_name, proj_dir)
-    create_agent_class(agent_name, proj_dir, True)
-    edit_project_config_file(agent_name, proj_dir)
+def create_agent(path: pathlib.Path, agent_name: str):
+    # TODO: Move these to main cli function
+    # if not path.is_dir():
+    #     typer.echo("Illegal argument: Argument must be an existing directory")
+    #     raise typer.Exit(1)
+    # proj_dir = path / PROJ_DIR_NAME
+    # if not proj_dir.is_dir():
+    #     typer.echo(
+    #         """No project has been initialised in the directory.
+    #         To initialise a project run aicontest init <path>"""
+    #     )
+    #     raise typer.Exit(1)
+    atexit.register(remove_agent_dir, agent_name, path)
+    create_agent_class(agent_name, path, True)
+    edit_project_config_file(agent_name, path)
     atexit.unregister(remove_agent_dir)
 
 
