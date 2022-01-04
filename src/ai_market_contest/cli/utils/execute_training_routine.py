@@ -37,7 +37,7 @@ def execute_training_routine(
         )
     config_module = importlib.util.module_from_spec(spec)
     if spec.loader is None:
-        raise Exception("Could not execute config module, loader is None.")
+        raise Exception("Error in finding the required training config file")
     spec.loader.exec_module(config_module)  # type: ignore
     config = config_module.get_config()  # type: ignore
     env = config.create_environment(agent)
