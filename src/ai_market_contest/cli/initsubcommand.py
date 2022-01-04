@@ -8,6 +8,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,
     COMMAND_NAME,
     CONFIG_FILENAME,
+    DEMAND_FUNCTION_DIR_NAME,
     ENVS_DIR_NAME,
     PROJ_DIR_NAME,
     TRAINING_CONFIGS_DIR_NAME,
@@ -32,18 +33,29 @@ def make_proj_dir(proj_dir: pathlib.Path):
         typer.Exit(code=1)
     agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
     environments_dir: pathlib.Path = proj_dir / ENVS_DIR_NAME
+    demand_function_dir: pathlib.Path = proj_dir / DEMAND_FUNCTION_DIR_NAME
     training_configs_dir: pathlib.Path = proj_dir / TRAINING_CONFIGS_DIR_NAME
     agents_dir.mkdir(parents=True)
     environments_dir.mkdir(parents=True)
+    demand_function_dir.mkdir(parents=True)
     training_configs_dir.mkdir(parents=True)
 
 
-def make_config_file(
+def make_main_config_file(
     proj_dir: pathlib.Path, agents_names: List[str], authors: List[str]
 ):
     config: configparser.ConfigParser = configparser.ConfigParser()
     config["agent"] = {"agents": agents_names, "authors": authors}  # type: ignore
     c_file: pathlib.Path = proj_dir / CONFIG_FILENAME
+    c_file.touch()
+    with c_file.open("w") as config_file:
+        config.write(config_file)
+
+
+def make_environment_config_file(proj_dir: pathlib.Path):
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    config["environment"] = {"demandfunctions": []}  # type: ignore
+    c_file: pathlib.Path = proj_dir / ENVS_DIR_NAME / CONFIG_FILENAME
     c_file.touch()
     with c_file.open("w") as config_file:
         config.write(config_file)
@@ -61,5 +73,6 @@ def initialise_file_structure(
     atexit.register(remove_proj_dir, path)
 
     make_agents_classes(path, agent_names)
-    make_config_file(path, agent_names, authors)
+    make_main_config_file(path, agent_names, authors)
+    make_environment_config_file(path)
     atexit.unregister(remove_proj_dir)

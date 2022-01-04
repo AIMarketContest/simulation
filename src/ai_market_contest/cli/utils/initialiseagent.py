@@ -42,7 +42,7 @@ def create_agent_class(
     agent_name: str, proj_dir: pathlib.Path, check_overwrite: bool = False
 ):
     agents_dir = proj_dir / AGENTS_DIR_NAME
-    agent_filename: str = agent_name + ".py"
+    agent_filename: str = f"{agent_name}.py"
     agent_dir: pathlib.Path = agents_dir / agent_name
     if check_overwrite:
         check_overwrite_agent(agent_filename, agent_dir)

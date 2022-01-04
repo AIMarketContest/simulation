@@ -3,15 +3,19 @@ import atexit
 import configparser
 import pathlib
 import shutil
+from typing import Any
+
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,
     CONFIG_FILENAME,
+    DEMAND_FUNCTION_DIR_NAME,
+    ENVS_DIR_NAME,
 )
 from ai_market_contest.cli.utils.initialiseagent import create_agent_class
 
 
-def edit_project_config_file(agent_name: str, proj_dir: pathlib.Path):
+def edit_environment_config_file(agent_name: str, proj_dir: pathlib.Path):
     config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
     config: configparser.ConfigParser = configparser.ConfigParser()
     config.read(config_file)
@@ -23,23 +27,27 @@ def edit_project_config_file(agent_name: str, proj_dir: pathlib.Path):
         config.write(c_file)
 
 
-def remove_agent_dir(agent_name: str, proj_dir: pathlib.Path):
-    agents_dir = proj_dir / AGENTS_DIR_NAME
-    agent_dir = agents_dir / agent_name
-    if agent_dir.is_dir():
-        shutil.rmtree(agent_dir)
-    config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
+def remove_demand_function(demand_function_name: str, proj_dir: pathlib.Path):
+    demand_function_dir = proj_dir / DEMAND_FUNCTION_DIR_NAME
+    target_demand_function = demand_function_dir / f"{agendemand_function_namet_nam}.py"
+
+    if target_demand_function.exists():
+        target_demand_function.unlink()
+
+    config_file: pathlib.Path = proj_dir / ENVS_DIR_NAME / CONFIG_FILENAME
     config: configparser.ConfigParser = configparser.ConfigParser()
     config.read(config_file)
-    agents: list[str] = ast.literal_eval(config["agent"]["agents"])
-    if agent_name in agents:
-        agents.remove(agent_name)
-    config["agent"]["agents"] = str(agents)
+    demand_functions: list[str] = ast.literal_eval(
+        config["environment"]["demandfunctions"]
+    )
+    if demand_function_name in demand_functions:
+        demand_functions.remove(demand_function_name)
+    config["environment"]["demandfunctions"] = str(demand_functions)
     with config_file.open("w") as c_file:
         config.write(c_file)
 
 
-def create_agent(path: pathlib.Path, agent_name: str):
+def create_demandfunction(path: pathlib.Path, demand_function_name: str):
     # TODO: Move these to main cli function
     # if not path.is_dir():
     #     typer.echo("Illegal argument: Argument must be an existing directory")
@@ -51,7 +59,7 @@ def create_agent(path: pathlib.Path, agent_name: str):
     #         To initialise a project run aicontest init <path>"""
     #     )
     #     raise typer.Exit(1)
-    atexit.register(remove_agent_dir, agent_name, path)
-    create_agent_class(agent_name, path, True)
-    edit_project_config_file(agent_name, path)
-    atexit.unregister(remove_agent_dir)
+    atexit.register(remove_demand_function, demand_function_name, path)
+    create_demand_function_class(demand_function_name, path, True)
+    edit_environment_config_file(demand_function_name, path)
+    atexit.unregister(remove_demand_function)
