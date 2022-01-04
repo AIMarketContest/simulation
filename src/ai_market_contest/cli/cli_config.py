@@ -1,5 +1,16 @@
 import pathlib
 from typing import Final
+from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction
+from ai_market_contest.demandfunctions.gaussian_demand_function import (
+    GaussianDemandFunction,
+)
+from ai_market_contest.demandfunctions.noisy_fixed_demand_function import (
+    NoisyFixedDemandFunction,
+)
+from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function import (
+    LowestTakesAllDemandFunction,
+)
+
 
 AGENT_TEMPLATE: Final = "agent.templ"
 AGENT_PKL_FILENAME: Final = "agent.pkl"
@@ -51,3 +62,10 @@ RLLIB_AGENTS = [
     "QMIX",
     "MADDPG",
 ]
+
+CUR_DEMAND_FUNCTIONS: Final = {
+    "Fixed": FixedDemandFunction,
+    "LowestTakesAll": LowestTakesAllDemandFunction,
+    "Gaussian": GaussianDemandFunction,
+    "NoisyFixed": NoisyFixedDemandFunction,
+}
