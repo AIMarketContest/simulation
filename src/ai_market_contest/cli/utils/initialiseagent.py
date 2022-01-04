@@ -9,8 +9,6 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENT_FILE,
     AGENTS_DIR_NAME,
     CONFIG_FILENAME,
-    INITIAL_PICKLER_FILE,
-    INITIAL_PICKLER_NAME,
     TRAINED_AGENTS_DIR_NAME,
 )
 from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
@@ -38,16 +36,6 @@ def make_initial_trained_agent(
     write_meta_file(
         initial_trained_agent_dir, initial_hash, datetime.datetime.now(), msg
     )
-    new_pickler_file: pathlib.Path = agent_dir / INITIAL_PICKLER_NAME
-    subs: typing.Dict[str, str] = {
-        "agent_import": agent_name,
-        "agent_classname": make_agent_classname_camelcase(agent_name),
-    }
-    with INITIAL_PICKLER_FILE.open("r") as initial_pickler:
-        src = Template(initial_pickler.read())
-
-    with new_pickler_file.open("w") as new_pickler:
-        new_pickler.write(src.substitute(subs))
 
 
 def create_agent_class(

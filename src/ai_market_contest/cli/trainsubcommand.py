@@ -113,8 +113,8 @@ def train_agent(args: Any):
     check_directory_exists(chosen_agent_dir, error_msg)
     agent_is_initialised = check_agent_is_initialised(chosen_agent_dir)
     if not agent_is_initialised:
-        initialise_agent_pkl_file(chosen_agent_dir, args.show_traceback) 
-        set_agent_to_initialised(chosen_agent_dir) 
+        initialise_agent_pkl_file(chosen_agent_dir, args.show_traceback)
+        set_agent_to_initialised(chosen_agent_dir)
     trained_agents: list[str] = get_trained_agents(chosen_agent_dir)
     display_trained_agents(chosen_agent_dir, trained_agents)
     chosen_trained_agent = choose_trained_agent(trained_agents)
@@ -125,7 +125,9 @@ def train_agent(args: Any):
     check_directory_exists(training_agent_dir, error_msg)
     training_configs: list[str] = get_training_configs(proj_dir)
     if not training_configs:
-        print("Operation aborted: no training configs have been defined in training_configs")
+        print(
+            "Operation aborted: no training configs have been defined in training_configs"
+        )
         sys.exit(1)
     display_training_configs(training_configs)
     training_config = choose_training_config(training_configs)
