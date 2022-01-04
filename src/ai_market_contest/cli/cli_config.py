@@ -10,7 +10,11 @@ from ai_market_contest.demandfunctions.noisy_fixed_demand_function import (
 from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function import (
     LowestTakesAllDemandFunction,
 )
-
+from ai_market_contest.agents.fixed_agent_fifty import FixedAgentFifty
+from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom
+from ai_market_contest.agents.random_agent import RandomAgent
+from ai_market_contest.agents.q_agent import QAgent
+from ai_market_contest.agents.sarsa_agent import SarsaAgent
 
 AGENT_TEMPLATE: Final = "agent.templ"
 AGENT_PKL_FILENAME: Final = "agent.pkl"
@@ -68,4 +72,12 @@ CUR_DEMAND_FUNCTIONS: Final = {
     "LowestTakesAll": LowestTakesAllDemandFunction,
     "Gaussian": GaussianDemandFunction,
     "NoisyFixed": NoisyFixedDemandFunction,
+}
+
+CUR_AGENTS: Final = {
+    "QLearning": QAgent,
+    "SARSA": SarsaAgent,
+    "Random": RandomAgent,
+    "FixedRandom": FixedAgentRandom,
+    "FixedFifty": FixedAgentFifty,
 }
