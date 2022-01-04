@@ -4,10 +4,12 @@ from typing import List
 import typer
 import questionary
 from addagentsubcommand import create_agent
+from adddemandfunctionsubcommand import create_demand_function
 from cli_config import COMMAND_NAME, PROJ_DIR_NAME, RLLIB_AGENTS
 
 from initsubcommand import initialise_file_structure
 from utils.filesystemutils import check_proj_dir_exists
+from utils.initialisedemandfunction import create_demand_functon_class
 
 
 app = typer.Typer()
@@ -69,6 +71,7 @@ def add_agent(path: Path = typer.Option(Path(f".", exists=True))):
 @app.command()
 def add_demand_function(path: Path = typer.Option(Path(f".", exists=True))):
     demand_function_name = typer.prompt("Enter custom demand function name")
+    create_demand_function(path, demand_function_name)
 
 
 @app.command()

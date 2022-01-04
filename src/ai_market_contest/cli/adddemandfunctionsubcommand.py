@@ -13,6 +13,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     ENVS_DIR_NAME,
 )
 from ai_market_contest.cli.utils.initialiseagent import create_agent_class
+from utils.initialisedemandfunction import create_demand_functon_class
 
 
 def edit_environment_config_file(agent_name: str, proj_dir: pathlib.Path):
@@ -47,7 +48,7 @@ def remove_demand_function(demand_function_name: str, proj_dir: pathlib.Path):
         config.write(c_file)
 
 
-def create_demandfunction(path: pathlib.Path, demand_function_name: str):
+def create_demand_function(path: pathlib.Path, demand_function_name: str):
     # TODO: Move these to main cli function
     # if not path.is_dir():
     #     typer.echo("Illegal argument: Argument must be an existing directory")
@@ -60,6 +61,6 @@ def create_demandfunction(path: pathlib.Path, demand_function_name: str):
     #     )
     #     raise typer.Exit(1)
     atexit.register(remove_demand_function, demand_function_name, path)
-    create_demand_function_class(demand_function_name, path, True)
+    create_demand_functon_class(demand_function_name, path, True)
     edit_environment_config_file(demand_function_name, path)
     atexit.unregister(remove_demand_function)

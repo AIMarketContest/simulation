@@ -3,6 +3,7 @@ from typing import Final
 
 AGENT_TEMPLATE: Final = "agent.templ"
 AGENT_PKL_FILENAME: Final = "agent.pkl"
+DEMAND_FUNCTION_TEMPLATE = "demand_function.templ"
 HASH_LENGTH: Final = 6
 TRAINED_AGENTS_DIR_NAME: Final = "trained-agents"
 META_FILENAME: Final = "metadata.ini"
@@ -16,6 +17,7 @@ AGENT_FILENAME: Final = "agent.py"
 AGENTS_DIR_NAME: Final = "agents"
 DEMAND_FUNCTION_DIR_NAME: Final = f"{ENVS_DIR_NAME}/demandfunctions"
 AGENT_FILE: Final = (CLI_DIR / ".." / AGENT_TEMPLATE).resolve()
+DEMAND_FUNCTION_FILE: Final = (CLI_DIR / ".." / DEMAND_FUNCTION_TEMPLATE).resolve()
 INITIAL_PICKLE_FILE_NAME: Final = "initial_pickle.pkl"
 INITIAL_PICKLER_NAME: Final = "initial_pickler.py"
 INITIAL_PICKLER_TEMPLATE: Final = "initial_pickler.templ"

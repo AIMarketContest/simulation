@@ -44,8 +44,9 @@ def create_agent_class(
     agents_dir = proj_dir / AGENTS_DIR_NAME
     agent_filename: str = f"{agent_name}.py"
     agent_dir: pathlib.Path = agents_dir / agent_name
-    if check_overwrite:
-        check_overwrite_agent(agent_filename, agent_dir)
+    # TODO: Add overwriting functionality again
+    # if check_overwrite:
+    #     check_overwrite_agent(agent_filename, agent_dir)
     agent_file: pathlib.Path = agent_dir / agent_filename
     agent_dir.mkdir(parents=True)
     agent_file.touch()
