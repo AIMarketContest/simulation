@@ -27,8 +27,8 @@ class TrainingConfigReader:
         return self.parsed_config["Naive Agents"]
 
     def get_num_agents(self) -> int:
-        return int(self.parsed_config["General"]["number_of_self_play_agents"]) + sum(
-            map(int, self.parsed_config["Naive Agents"].values())
+        return int(self.parsed_config["General"]["number_of_self_play_agents"]) + int(
+            len(self.parsed_config["Naive Agents"].keys())
         )
 
     def get_other_config(self) -> Dict[str, str]:
@@ -41,5 +41,6 @@ class TrainingConfigReader:
                 self.parsed_config["General"]["demand_function"]
             ),
             int(self.parsed_config["General"]["training_duration"]),
+            self.parsed_config["General"]["training_duration"],
             agent_name_maker,
         )

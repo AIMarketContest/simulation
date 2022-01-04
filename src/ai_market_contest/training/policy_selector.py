@@ -27,10 +27,19 @@ class PolicySelector:
         self.agent_name = agent_name
         self.self_play_number = self_play_number
         self.naive_agents_counts = naive_agents_counts
-        self.opponent_name = self._get_agent_opponent_name(agent_name)
+        self.opponent_name = self.get_agent_opponent_name()
 
-    def _get_agent_opponent_name(self, agent_name: str):
-        return agent_name + "-opponent"
+    def get_agent_opponent_name(self):
+        return self.agent_name + "-opponent"
+
+    def get_agent_name(self):
+        return self.agent_name
+
+    def has_self_play(self):
+        return self.self_play_number > 0
+
+    def get_naive_agents_names(self):
+        return self.naive_agents_counts.keys()
 
     def get_select_policy_function(self) -> Callable[[str, Any, Any], str]:  # type: ignore
         """
@@ -53,8 +62,12 @@ class PolicySelector:
             cur_number_of_agents = self.self_play_number + 1
             for naive_agent, count in self.naive_agents_counts.items():
                 if agent_id in [
-                    "player_" + str(i) for i in range(cur_number_of_agents, cur_number_of_agents + count + 1)
+                    "player_" + str(i)
+                    for i in range(
+                        cur_number_of_agents, cur_number_of_agents + count + 1
+                    )
                 ]:
                     return naive_agent
                 cur_number_of_agents += count
+
         return select_policy

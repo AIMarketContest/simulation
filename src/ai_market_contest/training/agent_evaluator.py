@@ -5,7 +5,7 @@ from ray.rllib.agents.registry import get_trainer_class  # type: ignore
 from rllib.agents.trainer import Trainer  # type: ignore
 from ray.tune.registry import register_env  # type: ignore
 from ray.tune.logger import pretty_print  # type: ignore
-from ai_market_contest.agent import Agent # type: ignore
+from ai_market_contest.agent import Agent  # type: ignore
 
 
 class AgentEvaluator:

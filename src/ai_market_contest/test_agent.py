@@ -2,6 +2,8 @@ from ai_market_contest.agent import Agent
 from ai_market_contest.typing.types import Price
 from typing import List
 import random
+
+
 class TestAgent(Agent):
     """
     Agent interface - an agent represents a firm selling a product in the market.
@@ -68,7 +70,7 @@ class TestAgent(Agent):
         """
         Feeds data from the previous timestep into the agent allowing it
         to adjust it's strategy.
-        
+
         Parameters
         ----------
         last_round_profit: int
@@ -77,14 +79,12 @@ class TestAgent(Agent):
         identity_index: int
             A positive integer that holds the index in the list corresponding to
             the current agent.
-            
+
         Raises
         ------
         NotImplementedError
             If concrete class does not override method.
-            
+
         """
         if last_round_profit < 20:
             self.lowest_price = True
-    
-    

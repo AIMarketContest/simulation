@@ -87,17 +87,15 @@ class Agent(Policy):
 
     def compute_actions(
         self,
-            obs_batch: Union[List[TensorStructType], TensorStructType],
-            state_batches: Optional[List[TensorType]] = None,
-            prev_action_batch: Union[List[TensorStructType],
-                                     TensorStructType] = None,
-            prev_reward_batch: Union[List[TensorStructType],
-                                     TensorStructType] = None,
-            info_batch: Optional[Dict[str, list]] = None,
-            episodes: Optional[List["Episode"]] = None,
-            explore: Optional[bool] = None,
-            timestep: Optional[int] = None,
-            **kwargs
+        obs_batch: Union[List[TensorStructType], TensorStructType],
+        state_batches: Optional[List[TensorType]] = None,
+        prev_action_batch: Union[List[TensorStructType], TensorStructType] = None,
+        prev_reward_batch: Union[List[TensorStructType], TensorStructType] = None,
+        info_batch: Optional[Dict[str, list]] = None,
+        episodes: Optional[List["Episode"]] = None,
+        explore: Optional[bool] = None,
+        timestep: Optional[int] = None,
+        **kwargs
     ):
         identity_index: int = 0
         action_batch: List[Price] = []

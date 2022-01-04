@@ -17,7 +17,7 @@ class AgentTrainer:
         trainer_str: str = "DQN",
     ):
         self.training_config: Dict[str, Any] = training_config
-        register_env("marketplace", lambda x : env)
+        register_env("marketplace", lambda x: env)
         self.training_config["env"] = "marketplace"
         trainer_cls: Trainer = get_trainer_class(trainer_str)
         self.trainer: Trainer = trainer_cls(config=training_config)
