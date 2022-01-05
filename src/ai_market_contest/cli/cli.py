@@ -120,6 +120,8 @@ def train(
         "Choose a training config:", choices=training_configs
     ).ask()
 
+    training_msg: str = typer.prompt("(Optional) Enter training message")
+
 
 @app.command()
 def run():
