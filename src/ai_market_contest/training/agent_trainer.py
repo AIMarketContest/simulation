@@ -32,14 +32,14 @@ class AgentTrainer:
     def get_trainer(self):
         return self.trainer
 
-    def pretty_print(self, results: Dict[str, Any], epochs: int) -> None:
-        status = "{:2d} reward {:6.2f}/{:6.2f}/{:6.2f} len {:4.2f} saved {}"
+    def pretty_print(self, results: Dict[str, Any], epoch: int) -> None:
+        status = "epoch {:2d} \nreward min: {:6.2f}\nreward mean: {:6.2f}\nreward max:  {:6.2f}\nmean length: {:4.2f}\n"
         print(
             status.format(
                 epoch + 1,
-                result["episode_reward_min"],
-                result["episode_reward_mean"],
-                result["episode_reward_max"],
-                result["episode_len_mean"],
+                results["episode_reward_min"],
+                results["episode_reward_mean"],
+                results["episode_reward_max"],
+                results["episode_len_mean"],
             )
         )

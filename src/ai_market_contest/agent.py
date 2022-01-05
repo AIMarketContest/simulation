@@ -107,7 +107,7 @@ class Agent(Policy):
                 prices_list.append(np.where(obs[index - 100 : index] == 1)[0][0])
             info = info_batch[agent_index]
             if info == 0:
-                if info[agent_index] == 0:
+                if prev_action_batch[agent_index] == 0:
                     action_batch.append(self.get_initial_price())
                 else:
                     action_batch.append(prev_action_batch[agent_index])
