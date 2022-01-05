@@ -75,7 +75,7 @@ def add_demand_function(path: Path = typer.Option(Path(f".", exists=True))):
 
 
 @app.command()
-def train():
+def train(path: Path = typer.Option(Path(f".", exists=True)), showtraceback: bool = False):
     typer.echo(f"Train agent")
 
 
