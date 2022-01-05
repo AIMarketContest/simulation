@@ -24,7 +24,11 @@ from ai_market_contest.cli.utils.getagents import (  # type: ignore
 )
 from ai_market_contest.cli.utils.hashing import hash_string  # type: ignore
 from ai_market_contest.cli.utils.pklfileutils import write_pkl_file  # type: ignore
-from ai_market_contest.cli.utils.processmetafile import write_meta_file  # type: ignore
+from ai_market_contest.cli.utils.processmetafile import write_meta_file
+from ai_market_contest.training.agent_name_maker import AgentNameMaker
+from ai_market_contest.training.sequential_agent_name_maker import (
+    SequentialAgentNameMaker,  # type: ignore
+)
 
 
 def set_up_and_execute_training_routine(
@@ -41,6 +45,10 @@ def set_up_and_execute_training_routine(
     demand_function_locator: DemandFunctionLocator = DemandFunctionLocator(proj_dir)
     config_reader: TrainingConfigReader = TrainingConfigReader(
         training_config_path, demand_function_locator
+    )
+
+    agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(
+        config_reader.get_num_agents()
     )
 
 
