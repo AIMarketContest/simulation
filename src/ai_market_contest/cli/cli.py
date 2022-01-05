@@ -101,11 +101,7 @@ def train(
     check_directory_exists_for_agent(chosen_agent, chosen_agent_dir)
 
     agent_is_initialised: bool = check_agent_is_initialised(chosen_agent_dir)
-    if not agent_is_initialised:
-        # We want to define a trainer with the name of the agent
-        # TODO
-        pass
-    else:
+    if agent_is_initialised:
         # We want to restore a trainer correspoinding to the version selected by the user
         trained_agents: List[str] = get_trained_agents(chosen_agent_dir)
         trained_agents_info: List[str] = get_trained_agents_info(
