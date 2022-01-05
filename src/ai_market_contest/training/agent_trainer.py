@@ -4,7 +4,6 @@ from typing import Any, Dict  # type: ignore
 from ray.rllib.agents.registry import get_trainer_class  # type: ignore
 from ray.rllib.agents.trainer import Trainer  # type: ignore
 from ray.tune.registry import register_env  # type: ignore
-from ray.tune.logger import pretty_print  # type: ignore
 
 
 class AgentTrainer:
@@ -25,11 +24,22 @@ class AgentTrainer:
             self.trainer.restore(checkpoint_path)
 
     def train(self, epochs: int, print_training: bool) -> None:
-        for _ in range(epochs):
+        for epoch in range(epochs):
             results = self.trainer.train()
-            print(results)
             if print_training:
-                pretty_print(results)
+                self.pretty_print(results, epoch)
 
     def get_trainer(self):
         return self.trainer
+
+    def pretty_print(self, results: Dict[str, Any], epochs: int) -> None:
+        status = "{:2d} reward {:6.2f}/{:6.2f}/{:6.2f} len {:4.2f} saved {}"
+        print(
+            status.format(
+                epoch + 1,
+                result["episode_reward_min"],
+                result["episode_reward_mean"],
+                result["episode_reward_max"],
+                result["episode_len_mean"],
+            )
+        )

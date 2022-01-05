@@ -21,7 +21,7 @@ from ai_market_contest.training.agent_trainer import AgentTrainer
 from ai_market_contest.test_agent import TestAgent
 from ai_market_contest.training.policy_selector import PolicySelector
 
-num_agents: int = 10
+num_agents: int = 5
 agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(num_agents)
 
 
@@ -33,7 +33,7 @@ env = Market(num_agents, demand_function(99), training_duration, agent_name_make
 random_agent_spec = PolicySpec(policy_class=RandomAgent)
 test_agent_spec = PolicySpec(policy_class=TestAgent)
 
-naive_agents_counts = {"random-agent": 7}
+naive_agents_counts = {"random-agent": num_agents - num_self_play_agents - 1}
 ps = PolicySelector(
     "test-agent",
     self_play_number=num_self_play_agents,
@@ -54,4 +54,4 @@ config = {
 }
 
 agent_trainer = AgentTrainer(env, config, restored=False, checkpoint_path=None)
-agent_trainer.train(training_duration, True)
+agent_trainer.train(1, True)

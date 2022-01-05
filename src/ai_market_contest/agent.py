@@ -100,22 +100,26 @@ class Agent(Policy):
     ):
         identity_index: int = 0
         action_batch: List[Price] = []
-        
-        for j in range(len(obs_batch)):
-            obs = obs_batch[j]
+        for agent_index in range(len(obs_batch)):
+            obs = obs_batch[agent_index]
             prices_list: List[Price] = []
-            for i in range(100, len(obs)+1, 100):
-                prices_list.append(np.where(obs[i-100:i] == 1)[0][0])
+            for index in range(100, len(obs) + 1, 100):
+                prices_list.append(np.where(obs[index - 100 : index] == 1)[0][0])
+            info = info_batch[agent_index]
+            if info == 0:
+                if info[agent_index] == 0:
+                    action_batch.append(self.get_initial_price())
+                else:
+                    action_batch.append(prev_action_batch[agent_index])
+                continue
+            identity_index: int = info["identity_index"]
+            self.update(prev_action_batch[agent_index], identity_index)
             action_batch.append(self.policy(prices_list, identity_index))
 
-        return (
-            action_batch,
-            [],
-            {}
-        )
+        return (action_batch, [], {})
 
     def learn_on_batch(self, samples):
         pass
-    
+
     def update_target(self):
         return True

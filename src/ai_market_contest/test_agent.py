@@ -34,7 +34,7 @@ class TestAgent(Agent):
         NotImplementedError
             If concrete class does not override method.
         """
-        return 0
+        return 50
 
     def policy(
         self, last_round_all_agents_prices: List[Price], identity_index: int
