@@ -14,9 +14,11 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     TRAINING_CONFIG_FILE_EXTENSION,
     TRAINING_CONFIGS_DIR_NAME,
 )
+from ai_market_contest.cli.training_config.config_reader import TrainingConfigReader
 from ai_market_contest.cli.training_config.training import (
     train as TRAINING_ALGORITHM,  # type: ignore
 )
+from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.getagents import (  # type: ignore
     add_trained_agent_to_config_file,
 )
@@ -33,7 +35,13 @@ def set_up_and_execute_training_routine(
     parent_hash: str,
     training_msg: str,
 ):
-    pass
+    training_config_path: pathlib.Path = get_training_config_path(
+        proj_dir, training_config
+    )
+    demand_function_locator: DemandFunctionLocator = DemandFunctionLocator(proj_dir)
+    config_reader: TrainingConfigReader = TrainingConfigReader(
+        training_config_path, demand_function_locator
+    )
 
 
 def save_new_agent(new_agent, agent_dir, parent_hash, training_msg, config):
