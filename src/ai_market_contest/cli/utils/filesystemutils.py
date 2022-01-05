@@ -18,7 +18,7 @@ def check_file_exists(file_path: pathlib.Path, error_msg: str):
 
 def check_proj_dir_exists(proj_dir: pathlib.Path):
     error_msg: str = (
-        "Illegal argument: No project has been initialised at this directory"
+        "Illegal argument: No project has been initialised at this directory\n"
         + f"To initialise a new project run {COMMAND_NAME} init <path>"
     )
     check_directory_exists(proj_dir, error_msg)

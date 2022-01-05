@@ -5,12 +5,9 @@ from ai_market_contest.cli.utils.processmetafile import get_trained_agent_metada
 
 
 def display_trained_agents(agent_dir: pathlib.Path, trained_agents: list[str]):
-    for index, trained_agent in enumerate(trained_agents):
-        (agent_hash, time, msg, parent_hash) = get_trained_agent_metadata(
-            agent_dir, trained_agent
-        )
-        shortened_hash: str = agent_hash[:HASH_LENGTH]
-        print(f"\n{index} {shortened_hash} {str(time)} {msg}")
+    trained_agents_info = get_trained_agents_info(trained_agents, agent_dir)
+    for index, trained_agent_info in enumerate(trained_agents_info):
+        print(f"\n{index} {trained_agent_info}")
 
 
 def display_agents(agents: list[str]):

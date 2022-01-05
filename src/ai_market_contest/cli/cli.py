@@ -1,16 +1,25 @@
-﻿from pathlib import Path
-import shutil
+﻿import shutil
+from pathlib import Path
 from typing import List
-import typer
+
 import questionary
+import typer
 from addagentsubcommand import create_agent
 from adddemandfunctionsubcommand import create_demand_function
-from cli_config import COMMAND_NAME, PROJ_DIR_NAME, RLLIB_AGENTS
-
+from cli_config import AGENTS_DIR_NAME, COMMAND_NAME, PROJ_DIR_NAME, RLLIB_AGENTS
 from initsubcommand import initialise_file_structure
-from utils.filesystemutils import check_proj_dir_exists
+from utils.filesystemutils import check_path_exists, check_proj_dir_exists
 from utils.initialisedemandfunction import create_demand_functon_class
 
+from ai_market_contest.cli.utils.agent_check_utils import (
+    check_agent_is_initialised,
+    check_directory_exists_for_agent,
+)
+from ai_market_contest.cli.utils.getagents import (
+    get_agent_names,
+    get_trained_agents,
+    get_trained_agents_info,
+)
 
 app = typer.Typer()
 
@@ -75,8 +84,38 @@ def add_demand_function(path: Path = typer.Option(Path(f".", exists=True))):
 
 
 @app.command()
-def train(path: Path = typer.Option(Path(f".", exists=True)), showtraceback: bool = False):
-    typer.echo(f"Train agent")
+def train(
+    path: Path = typer.Option(Path(f".", exists=True)), showtraceback: bool = False
+):
+    proj_dir: Path = path / PROJ_DIR_NAME
+    check_path_exists(path)
+    check_proj_dir_exists(proj_dir)
+
+    agent_names: List[str] = get_agent_names(proj_dir)
+    chosen_agent: str = questionary.select(
+        "Choose an agent to train.", choices=agent_names
+    ).ask()
+    agents_dir: Path = proj_dir / AGENTS_DIR_NAME
+    chosen_agent_dir: Path = agents_dir / chosen_agent
+
+    check_directory_exists_for_agent(chosen_agent, chosen_agent_dir)
+
+    agent_is_initialised: bool = check_agent_is_initialised(chosen_agent_dir)
+    if not agent_is_initialised:
+        # We want to define a trainer with the name of the agent
+        # TODO
+        pass
+    else:
+        # We want to restore a trainer correspoinding to the version selected by the user
+        trained_agents: List[str] = get_trained_agents(chosen_agent_dir)
+        trained_agents_info: List[str] = get_trained_agents_info(
+            trained_agents, chosen_agent_dir
+        )
+        chosen_trained_agent: str = questionary.select(
+            "Select which version of the agent to train", choices=trained_agents_info
+        )
+        # TODO
+        pass
 
 
 @app.command()

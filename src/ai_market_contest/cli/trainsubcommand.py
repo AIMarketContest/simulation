@@ -31,8 +31,8 @@ from ai_market_contest.cli.utils.getagents import (  # type: ignore
     get_training_configs,
 )
 from ai_market_contest.cli.utils.hashing import get_shortened_hashes
-from ai_market_contest.cli.utils.pklfileutils import initialise_agent_pkl_file
 from ai_market_contest.cli.utils.initialiseagent import set_agent_to_initialised
+from ai_market_contest.cli.utils.pklfileutils import initialise_agent_pkl_file
 
 
 def ask_for_trained_agents(agent: str) -> bool:
@@ -55,17 +55,6 @@ def choose_training_config(training_configs: List[str]):
         print(f"{chosen_config} not an existing training config")
         print("Choose a valid agent to train: ")
     return chosen_config
-
-
-def choose_agent_for_training(agent_names: List[str]) -> str:
-    print("Choose an agent to train: ", end="")
-    while True:
-        chosen_agent = input()
-        if chosen_agent in agent_names:
-            break
-        print(f"{chosen_agent} not an existing agent")
-        print("Choose a valid agent to train: ")
-    return chosen_agent
 
 
 def choose_trained_agent(trained_agents: List[str]):
@@ -100,12 +89,6 @@ def choose_trained_agent(trained_agents: List[str]):
 
 
 def train_agent(args: Any):
-    path: pathlib.Path = args.path
-    proj_dir: pathlib.Path = path / PROJ_DIR_NAME
-    check_path_exists(path)
-    check_proj_dir_exists(proj_dir)
-    agent_names: List[str] = get_agent_names(proj_dir)
-    display_agents(agent_names)
     chosen_agent: str = choose_agent_for_training(agent_names)
     agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
     chosen_agent_dir: pathlib.Path = agents_dir / chosen_agent

@@ -1,23 +1,25 @@
 import pathlib
 from typing import Final
+
+from ai_market_contest.agents.fixed_agent_fifty import FixedAgentFifty
+from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom
+from ai_market_contest.agents.q_agent import QAgent
+from ai_market_contest.agents.random_agent import RandomAgent
+from ai_market_contest.agents.sarsa_agent import SarsaAgent
 from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction
+from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function import (
+    LowestTakesAllDemandFunction,
+)
 from ai_market_contest.demandfunctions.gaussian_demand_function import (
     GaussianDemandFunction,
 )
 from ai_market_contest.demandfunctions.noisy_fixed_demand_function import (
     NoisyFixedDemandFunction,
 )
-from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function import (
-    LowestTakesAllDemandFunction,
-)
-from ai_market_contest.agents.fixed_agent_fifty import FixedAgentFifty
-from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom
-from ai_market_contest.agents.random_agent import RandomAgent
-from ai_market_contest.agents.q_agent import QAgent
-from ai_market_contest.agents.sarsa_agent import SarsaAgent
 
 AGENT_TEMPLATE: Final = "agent.templ"
 AGENT_PKL_FILENAME: Final = "agent.pkl"
+AGENTS_DIR_NAME: Final = "agents"
 DEMAND_FUNCTION_TEMPLATE = "demand_function.templ"
 HASH_LENGTH: Final = 6
 TRAINED_AGENTS_DIR_NAME: Final = "trained-agents"
@@ -29,7 +31,6 @@ PROJ_DIR_NAME: Final = "aicontest"
 CONFIG_FILENAME: Final = "config.ini"
 ENVS_DIR_NAME: Final = "environments"
 AGENT_FILENAME: Final = "agent.py"
-AGENTS_DIR_NAME: Final = "agents"
 DEMAND_FUNCTION_DIR_NAME: Final = f"{ENVS_DIR_NAME}/demandfunctions"
 AGENT_FILE: Final = (CLI_DIR / ".." / AGENT_TEMPLATE).resolve()
 DEMAND_FUNCTION_FILE: Final = (CLI_DIR / ".." / DEMAND_FUNCTION_TEMPLATE).resolve()
