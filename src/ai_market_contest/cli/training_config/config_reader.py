@@ -2,10 +2,7 @@ import pathlib
 from configparser import ConfigParser
 from typing import Dict
 
-from ai_market_contest.cli.training_config.demand_function_locator import (
-    DemandFunctionLocator,
-)
-from ai_market_contest.demand_function import DemandFunction
+from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.environment import Market
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
 
