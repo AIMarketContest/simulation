@@ -11,10 +11,8 @@ from typing import List
 from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import (  # type: ignore
     TRAINED_AGENTS_DIR_NAME,
+    TRAINING_CONFIG_FILE_EXTENSION,
     TRAINING_CONFIGS_DIR_NAME,
-)
-from ai_market_contest.cli.training_config.train_config import (  # type: ignore
-    TrainConfig,
 )
 from ai_market_contest.cli.training_config.training import (
     train as TRAINING_ALGORITHM,  # type: ignore
@@ -25,7 +23,6 @@ from ai_market_contest.cli.utils.getagents import (  # type: ignore
 from ai_market_contest.cli.utils.hashing import hash_string  # type: ignore
 from ai_market_contest.cli.utils.pklfileutils import write_pkl_file  # type: ignore
 from ai_market_contest.cli.utils.processmetafile import write_meta_file  # type: ignore
-from ai_market_contest.environment import Environment  # type: ignore
 
 
 def set_up_and_execute_training_routine(
@@ -52,26 +49,16 @@ def save_new_agent(new_agent, agent_dir, parent_hash, training_msg, config):
     config.write_config_to_file(new_agent_dir)
 
 
-def get_training_config(proj_dir: pathlib.Path, training_config: str) -> TrainConfig:
-    # Add .py as extension was removed when displaying to users
-    training_config_file: pathlib.Path = (
-        proj_dir / TRAINING_CONFIGS_DIR_NAME / (training_config + ".py")
+def get_training_config_path(
+    proj_dir: pathlib.Path, training_config: str
+) -> pathlib.Path:
+    # Add extension as was removed when displaying to users
+    training_config_file_path: pathlib.Path = (
+        proj_dir
+        / TRAINING_CONFIGS_DIR_NAME
+        / f"{training_config}{TRAINING_CONFIG_FILE_EXTENSION}"
     )
-
-    spec: ModuleSpec = importlib.util.spec_from_file_location(
-        training_config, training_config_file
-    )
-    if spec is None:
-        raise Exception(
-            f"Could not import training config file {training_config_file}."
-        )
-    config_module: ModuleType = importlib.util.module_from_spec(spec)
-    if spec.loader is None:
-        raise Exception("Error in finding the required training config file")
-    spec.loader.exec_module(config_module)  # type: ignore
-    config: TrainConfig = config_module.get_config()  # type: ignore
-
-    return config
+    return training_config_file_path
 
 
 def fetch_instantiated_agent(
