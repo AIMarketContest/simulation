@@ -26,6 +26,7 @@ from ai_market_contest.cli.utils.hashing import hash_string  # type: ignore
 from ai_market_contest.cli.utils.pklfileutils import write_pkl_file  # type: ignore
 from ai_market_contest.cli.utils.processmetafile import write_meta_file
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
+from ai_market_contest.training.policy_selector import PolicySelector
 from ai_market_contest.training.sequential_agent_name_maker import (
     SequentialAgentNameMaker,  # type: ignore
 )
@@ -49,6 +50,12 @@ def set_up_and_execute_training_routine(
 
     agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(
         config_reader.get_num_agents()
+    )
+
+    policy_selector: PolicySelector = PolicySelector(
+        agent_name,
+        config_reader.get_self_play_num(),
+        config_reader.get_naive_agent_counts(),
     )
 
 
