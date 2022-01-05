@@ -15,6 +15,7 @@ from ai_market_contest.cli.utils.agent_check_utils import (
     check_agent_is_initialised,
     check_directory_exists_for_agent,
 )
+from ai_market_contest.cli.utils.config_utils import check_configs, get_training_configs
 from ai_market_contest.cli.utils.getagents import (
     get_agent_names,
     get_trained_agents,
@@ -112,6 +113,12 @@ def train(
         )
         # TODO
         pass
+
+    training_configs: List[str] = get_training_configs(proj_dir)
+    check_configs(training_configs)
+    training_config: str = questionary.select(
+        "Choose a training config:", choices=training_configs
+    ).ask()
 
 
 @app.command()

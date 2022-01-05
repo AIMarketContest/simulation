@@ -3,7 +3,10 @@ import sys
 from pathlib import Path
 
 from ai_market_contest.cli.cli_config import CONFIG_FILENAME
-from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
+from ai_market_contest.cli.utils.filesystemutils import (
+    check_config_file_exists,
+    check_directory_exists,
+)
 
 
 def check_agent_is_initialised(agent_dir: Path) -> bool:
