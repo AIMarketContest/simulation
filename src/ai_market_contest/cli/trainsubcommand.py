@@ -18,7 +18,7 @@ from ai_market_contest.cli.utils.displayagents import (  # type: ignore
     display_training_configs,
 )
 from ai_market_contest.cli.utils.execute_training_routine import (
-    execute_training_routine,
+    set_up_and_execute_training_routine,
 )
 from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
     check_directory_exists,
@@ -116,7 +116,7 @@ def train_agent(args: Any):
     training_config = choose_training_config(training_configs)
     training_msg: str = input("(Optional) Enter training message: ")
     training_agent_pkl_file = training_agent_dir / PICKLE_FILENAME
-    execute_training_routine(
+    set_up_and_execute_training_routine(
         proj_dir,
         chosen_agent_dir,
         chosen_trained_agent,

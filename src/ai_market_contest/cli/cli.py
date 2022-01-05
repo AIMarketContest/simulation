@@ -1,6 +1,7 @@
 ﻿import shutil
 from pathlib import Path
 from typing import List
+from ai_market_contest.cli.utils.execute_training_routine import set_up_and_execute_training_routine
 
 import questionary
 import typer
@@ -121,6 +122,11 @@ def train(
     ).ask()
 
     training_msg: str = typer.prompt("(Optional) Enter training message")
+
+    # TODO replace None with current agent hash (as it becomes the parent)
+    set_up_and_execute_training_routine(
+        training_config, proj_dir, chosen_agent_dir, chosen_agent, None, training_msg
+    )
 
 
 @app.command()

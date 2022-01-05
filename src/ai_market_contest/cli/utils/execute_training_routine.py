@@ -16,8 +16,8 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
 from ai_market_contest.cli.training_config.train_config import (  # type: ignore
     TrainConfig,
 )
-from ai_market_contest.cli.training_config.training import (  # type: ignore
-    train as TRAINING_ALGORITHM,
+from ai_market_contest.cli.training_config.training import (
+    train as TRAINING_ALGORITHM,  # type: ignore
 )
 from ai_market_contest.cli.utils.getagents import (  # type: ignore
     add_trained_agent_to_config_file,
@@ -28,25 +28,15 @@ from ai_market_contest.cli.utils.processmetafile import write_meta_file  # type:
 from ai_market_contest.environment import Environment  # type: ignore
 
 
-def execute_training_routine(
+def set_up_and_execute_training_routine(
+    training_config: str,
     proj_dir: pathlib.Path,
     agent_dir: pathlib.Path,
+    agent_name: str,
     parent_hash: str,
     training_msg: str,
-    agent_pkl_file: pathlib.Path,
-    training_config: str,
 ):
-    agent: Agent = fetch_instantiated_agent(agent_dir, agent_pkl_file)
-
-    config: TrainConfig = get_training_config(proj_dir, training_config)
-    env: Environment = config.create_environment(agent)
-
-    TRAINING_ALGORITHM(env)
-
-    new_agents: List[Agent] = [agent]
-    new_agent: Agent
-    for new_agent in new_agents:
-        save_new_agent(new_agent, agent_dir, parent_hash, training_msg, config)
+    pass
 
 
 def save_new_agent(new_agent, agent_dir, parent_hash, training_msg, config):
@@ -87,8 +77,5 @@ def get_training_config(proj_dir: pathlib.Path, training_config: str) -> TrainCo
 def fetch_instantiated_agent(
     agent_dir: pathlib.Path, agent_pkl_file: pathlib.Path
 ) -> Agent:
-    # Add agent definition to path so can unpickle instantiated version
-    sys.path.insert(0, str(agent_dir.resolve()))
-    with agent_pkl_file.open("rb") as pkl_file:
-        agent: Agent = pickle.load(pkl_file)
-    return agent
+    # TODO replace with restore
+    return None
