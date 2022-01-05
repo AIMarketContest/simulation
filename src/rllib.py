@@ -41,6 +41,7 @@ ps = PolicySelector(
 )
 config = {
     "num_workers": 0,
+    "prioritized_replay": False,
     "multiagent": {
         "policies_to_train": ["test-agent"],
         "policies": {

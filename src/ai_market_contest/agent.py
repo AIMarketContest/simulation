@@ -105,7 +105,7 @@ class Agent(Policy):
             obs = obs_batch[j]
             prices_list: List[Price] = []
             for i in range(100, len(obs)+1, 100):
-                prices_list.append(np.where(obs[i-100:i] == 1)[0])
+                prices_list.append(np.where(obs[i-100:i] == 1)[0][0])
             action_batch.append(self.policy(prices_list, identity_index))
 
         return (
@@ -116,3 +116,6 @@ class Agent(Policy):
 
     def learn_on_batch(self, samples):
         pass
+    
+    def update_target(self):
+        return True

@@ -24,9 +24,10 @@ class AgentTrainer:
         if restored:
             self.trainer.restore(checkpoint_path)
 
-    def train(self, epochs: int, print_training: bool = False) -> None:
+    def train(self, epochs: int, print_training: bool) -> None:
         for _ in range(epochs):
             results = self.trainer.train()
+            print(results)
             if print_training:
                 pretty_print(results)
 
