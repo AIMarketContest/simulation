@@ -5,6 +5,7 @@ import pathlib
 import shutil
 from typing import Any
 
+from utils.initialisedemandfunction import create_demand_functon_class
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,
@@ -13,7 +14,6 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     ENVS_DIR_NAME,
 )
 from ai_market_contest.cli.utils.initialiseagent import create_agent_class
-from utils.initialisedemandfunction import create_demand_functon_class
 
 
 def edit_environment_config_file(agent_name: str, proj_dir: pathlib.Path):

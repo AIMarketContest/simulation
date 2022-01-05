@@ -1,7 +1,6 @@
 ﻿import shutil
 from pathlib import Path
 from typing import List
-from ai_market_contest.cli.utils.execute_training_routine import set_up_and_execute_training_routine
 
 import questionary
 import typer
@@ -17,6 +16,9 @@ from ai_market_contest.cli.utils.agent_check_utils import (
     check_directory_exists_for_agent,
 )
 from ai_market_contest.cli.utils.config_utils import check_configs, get_training_configs
+from ai_market_contest.cli.utils.execute_training_routine import (
+    set_up_and_execute_training_routine,
+)
 from ai_market_contest.cli.utils.getagents import (
     get_agent_names,
     get_trained_agents,

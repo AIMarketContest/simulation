@@ -1,7 +1,9 @@
+from typing import Dict, List
+
+from ray.rllib.policy.policy import PolicySpec
+
 from ai_market_contest.cli.utils.agentlocator import AgentLocator
 from ai_market_contest.training.policy_selector import PolicySelector
-from ray.rllib.policy.policy import PolicySpec
-from typing import List, Dict
 
 
 class PolicyConfigMaker:

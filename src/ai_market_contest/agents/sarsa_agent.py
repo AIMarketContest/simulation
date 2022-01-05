@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Dict, Sequence, List
+from typing import Dict, List, Sequence
 
 import numpy as np
 

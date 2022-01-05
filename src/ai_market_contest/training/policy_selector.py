@@ -1,4 +1,4 @@
-from typing import Any, Dict, Callable  # type: ignore
+from typing import Any, Callable, Dict  # type: ignore
 
 
 class PolicySelector:

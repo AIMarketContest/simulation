@@ -1,9 +1,11 @@
-from ray.rllib.policy.policy import Policy
-from ray.rllib.utils.typing import TrainerConfigDict, TensorStructType, TensorType
-from typing import List, Union, Optional, Dict
-from ai_market_contest.typing.types import Price  # type: ignore
-import numpy as np
+from typing import Dict, List, Optional, Union
+
 import gym  # type: ignore
+import numpy as np
+from ray.rllib.policy.policy import Policy
+from ray.rllib.utils.typing import TensorStructType, TensorType, TrainerConfigDict
+
+from ai_market_contest.typing.types import Price  # type: ignore
 
 
 class Agent(Policy):

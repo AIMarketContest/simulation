@@ -4,6 +4,8 @@ import pathlib
 import shutil
 from typing import List
 
+import typer
+
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,
     COMMAND_NAME,
@@ -14,8 +16,6 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     TRAINING_CONFIGS_DIR_NAME,
 )
 from ai_market_contest.cli.utils.initialiseagent import create_agent_class
-
-import typer
 
 
 def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):

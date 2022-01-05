@@ -1,7 +1,8 @@
+from typing import Dict
+
 from numpy.random import randint
 
 from ai_market_contest.demand_function import DemandFunction
-from typing import Dict
 
 class NoisyFixedDemandFunction(DemandFunction):
     FIXED_QUANTITY: int = 1000

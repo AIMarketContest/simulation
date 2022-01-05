@@ -1,25 +1,24 @@
 import os
 import tempfile
 from datetime import datetime
-from ai_market_contest.training.agent_name_maker import AgentNameMaker
-from ai_market_contest.agents.random_agent import RandomAgent
-from ai_market_contest.training.sequential_agent_name_maker import (
-    SequentialAgentNameMaker,
-)
 
 from ray.rllib import agents  # type: ignore
+from ray.rllib.policy.policy import PolicySpec
 from ray.tune.logger import UnifiedLogger, pretty_print  # type: ignore
 from ray.tune.registry import register_env  # type: ignore
 
-from ray.rllib.policy.policy import PolicySpec
+from ai_market_contest.agents.random_agent import RandomAgent
 from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function import (
     LowestTakesAllDemandFunction,
 )
 from ai_market_contest.environment import Market
-
-from ai_market_contest.training.agent_trainer import AgentTrainer
 from ai_market_contest.test_agent import TestAgent
+from ai_market_contest.training.agent_name_maker import AgentNameMaker
+from ai_market_contest.training.agent_trainer import AgentTrainer
 from ai_market_contest.training.policy_selector import PolicySelector
+from ai_market_contest.training.sequential_agent_name_maker import (
+    SequentialAgentNameMaker,
+)
 
 num_agents: int = 5
 agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(num_agents)

@@ -5,15 +5,17 @@ from typing import Any
 from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom  # type: ignore
 from ai_market_contest.agents.random_agent import RandomAgent  # type: ignore
 from ai_market_contest.cli.utils.run_contest import run_contest  # type: ignore
-from ai_market_contest.demandfunctions.fixed_demand_function import FixedDemandFunction  # type: ignore
-from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function import (
+from ai_market_contest.demandfunctions.fixed_demand_function import (
+    FixedDemandFunction,  # type: ignore
+)
+from ai_market_contest.demandfunctions.fixed_lowest_takes_all_demand_function import (  # type: ignore
     LowestTakesAllDemandFunction,
-)  # type: ignore
+)
 from ai_market_contest.environment import Market  # type: ignore
-from ai_market_contest.evaluation.graphing import (
+from ai_market_contest.evaluation.graphing import (  # type: ignore
     graph_cumulative_profits,
     plot_average_step,
-)  # type: ignore
+)
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
 from ai_market_contest.training.sequential_agent_name_maker import (
     SequentialAgentNameMaker,

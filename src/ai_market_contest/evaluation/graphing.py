@@ -2,7 +2,7 @@
 This file contains the function to represent the results gotten from training agents
 """
 from statistics import mean
-from typing import List, Dict
+from typing import Dict, List
 
 import matplotlib  # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
