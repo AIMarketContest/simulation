@@ -17,17 +17,17 @@ class PolicyConfigMaker:
         policy_config["multiagent"]["policies_to_train"] = [agent_to_train]
         policy_config["multiagent"]["policies"] = {}
         policy_config["multiagent"]["policies"][agent_to_train] = PolicySpec(
-            policy_class=self.agentlocator.get_agent(agent_to_train)
+            policy_class=self.agent_locator.get_agent(agent_to_train)
         )
         if self.policy_selector.has_self_play():
             agent_opponent: str = self.policy_selector.get_agent_opponent_name()
             policy_config["multiagent"]["policies"][agent_opponent] = PolicySpec(
-                policy_class=self.agentlocator.get_agent(agent_opponent)
+                policy_class=self.agent_locator.get_agent(agent_opponent)
             )
         naive_agent: str
         for naive_agent in self.policy_selector.get_naive_agents_names():
             policy_config["multiagent"]["policies"][naive_agent] = PolicySpec(
-                policy_class=self.agentlocator.get_agent(naive_agent)
+                policy_class=self.agent_locator.get_agent(naive_agent)
             )
         policy_config["multiagent"][
             "policy_mapping_fn"
