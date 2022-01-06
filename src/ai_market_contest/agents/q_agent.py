@@ -7,9 +7,9 @@ from ai_market_contest.agent import Agent
 
 
 class QAgent(Agent):
-    def __init__(self, action_spaces: int):
+    def __init__(self):
         self.cost = 0.3
-        self.actions_spaces = action_spaces
+        self.actions_spaces = 100
         self.Q: Dict[Sequence[float], Dict[float, float]] = defaultdict(
             lambda: defaultdict(int)
         )
@@ -17,8 +17,11 @@ class QAgent(Agent):
         self.gamma = 0.9
         self.theta = 0.0005
         self.time = 0
+        self.round_before_last_prices = []
+        self.round_before_last_profit = 0
 
     def policy(self, last_round_agents_prices: List[float], agent_index: int) -> float:
+        self.round_before_last_prices = last_round_agents_prices
         other_agent_prices = (
             last_round_agents_prices[:agent_index]
             + last_round_agents_prices[agent_index + 1 :]
@@ -37,16 +40,13 @@ class QAgent(Agent):
                     max_profit = profit
                     best_price = price
 
-            return best_price
+            return int(best_price)
 
         return np.random.randint(0, self.actions_spaces)
 
     def update(
         self,
-        last_round_prices: List[float],
-        last_round_sales: int,
-        round_before_last_prices: List[float],
-        round_before_last_sales: int,
+        last_round_profit: int,
         identity_index: int,
     ) -> None:
         self.time += 1
@@ -57,15 +57,15 @@ class QAgent(Agent):
             last_round_prices[:identity_index] + last_round_prices[identity_index + 1 :]
         )
         round_before_last_prices = (
-            round_before_last_prices[:identity_index]
-            + round_before_last_prices[identity_index + 1 :]
+            self.round_before_last_prices[:identity_index]
+            + self.round_before_last_prices[identity_index + 1 :]
         )
 
         max_path: float = np.argmax(
-            self.Q[tuple(round_before_last_prices)]
+            self.Q[tuple(self.round_before_last_prices)]
         )  # type: ignore
         self.Q[tuple(last_round_prices)][a1] += self.alpha * (
-            (last_round_sales * a1)
+            last_round_profit
             + self.gamma * max_path
             - self.Q[tuple(last_round_prices)][a1]
         )
