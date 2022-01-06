@@ -62,6 +62,10 @@ def set_up_and_execute_training_routine(
 
     agent_locator: AgentLocator = AgentLocator(agent_dir)
 
+    policy_config_maker: PolicyConfigMaker = PolicyConfigMaker(
+        agent_locator, policy_selector
+    )
+
 
 def save_new_agent(new_agent, agent_dir, parent_hash, training_msg, config):
     cur_datetime: datetime.datetime = datetime.datetime.now()
