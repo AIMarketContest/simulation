@@ -80,6 +80,7 @@ def set_up_and_execute_training_routine(
         config,
         None,
         False,
+        config_reader.get_optimisation_algorithm(),
     )
 
     trainer.train(config_reader.get_num_epochs(), config_reader.print_training())

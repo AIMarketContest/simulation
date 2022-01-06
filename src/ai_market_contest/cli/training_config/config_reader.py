@@ -58,3 +58,7 @@ class TrainingConfigReader:
     def get_num_epochs(self) -> int:
         # TODO add default value
         return int(self.parsed_config["General"]["epochs"])
+
+    def get_optimisation_algorithm(self) -> str:
+        # Check optimisation algorithm is valid
+        return self.parsed_config["General"]["optimisation_algorithm"]
