@@ -18,6 +18,7 @@ from ai_market_contest.cli.training_config.config_reader import TrainingConfigRe
 from ai_market_contest.cli.training_config.training import (
     train as TRAINING_ALGORITHM,  # type: ignore
 )
+from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.getagents import (  # type: ignore
     add_trained_agent_to_config_file,
@@ -26,6 +27,7 @@ from ai_market_contest.cli.utils.hashing import hash_string  # type: ignore
 from ai_market_contest.cli.utils.pklfileutils import write_pkl_file  # type: ignore
 from ai_market_contest.cli.utils.processmetafile import write_meta_file
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
+from ai_market_contest.training.policy_config_maker import PolicyConfigMaker
 from ai_market_contest.training.policy_selector import PolicySelector
 from ai_market_contest.training.sequential_agent_name_maker import (
     SequentialAgentNameMaker,  # type: ignore
@@ -57,6 +59,8 @@ def set_up_and_execute_training_routine(
         config_reader.get_self_play_num(),
         config_reader.get_naive_agent_counts(),
     )
+
+    agent_locator: AgentLocator = AgentLocator(agent_dir)
 
 
 def save_new_agent(new_agent, agent_dir, parent_hash, training_msg, config):

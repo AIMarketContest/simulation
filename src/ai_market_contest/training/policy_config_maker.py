@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from ray.rllib.policy.policy import PolicySpec
 
-from ai_market_contest.cli.utils.agentlocator import AgentLocator
+from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.training.policy_selector import PolicySelector
 
 
