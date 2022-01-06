@@ -47,6 +47,12 @@ class TrainingConfigReader:
             self.demand_function_locator.get_demand_function(
                 self.parsed_config["General"]["demand_function"]
             ),
-            int(self.parsed_config["General"]["training_duration"]),
+            int(self.parsed_config["General"]["simulation_length"]),
             agent_name_maker,
         )
+
+    def print_training(self) -> bool:
+        return bool(self.parsed_config["General"]["print_training"])
+
+    def get_num_epochs(self) -> int:
+        return int(self.parsed_config["General"]["epochs"])
