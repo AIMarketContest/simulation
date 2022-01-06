@@ -48,6 +48,5 @@ class TrainingConfigReader:
                 self.parsed_config["General"]["demand_function"]
             ),
             int(self.parsed_config["General"]["training_duration"]),
-            self.parsed_config["General"]["training_duration"],
             agent_name_maker,
         )
