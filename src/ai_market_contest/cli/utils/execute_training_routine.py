@@ -82,6 +82,8 @@ def set_up_and_execute_training_routine(
         False,
     )
 
+    trainer.train(config_reader.get_num_epochs(), config_reader.print_training())
+
 
 def save_new_agent(new_agent, agent_dir, parent_hash, training_msg, config):
     cur_datetime: datetime.datetime = datetime.datetime.now()
