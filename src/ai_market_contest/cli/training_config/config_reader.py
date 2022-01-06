@@ -52,7 +52,9 @@ class TrainingConfigReader:
         )
 
     def print_training(self) -> bool:
+        # TODO add default value
         return bool(self.parsed_config["General"]["print_training"])
 
     def get_num_epochs(self) -> int:
+        # TODO add default value
         return int(self.parsed_config["General"]["epochs"])
