@@ -2,6 +2,7 @@ import importlib.util
 import pathlib
 from ast import literal_eval
 from configparser import ConfigParser
+from types import ModuleType
 from typing import List
 
 from ai_market_contest.cli.cli_config import CONFIG_FILENAME, CUR_DEMAND_FUNCTIONS
@@ -30,6 +31,7 @@ class DemandFunctionLocator:
         )
         if spec.loader is None:
             raise Exception("Error in finding the required demand function")
+        demand_func_module: ModuleType = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(demand_func_module)  # type: ignore
         demand_function_cls = getattr(demand_func_module, demand_function_name)  # type: ignore
         return demand_function_cls

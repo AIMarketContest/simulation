@@ -2,6 +2,7 @@ import importlib.util
 import pathlib
 from ast import literal_eval
 from configparser import ConfigParser
+from types import ModuleType
 from typing import List
 
 from ai_market_contest.agent import Agent
@@ -16,9 +17,7 @@ class AgentLocator:
     def _get_agents(self) -> List[str]:
         config_parser: ConfigParser = ConfigParser()
         config_parser.read(self.agents_dir / CONFIG_FILENAME)
-        agents: List[str] = literal_eval(
-            config_parser["agentsenvironment"]["demand functions"]
-        )
+        agents: List[str] = literal_eval(config_parser["agent"]["agents"])
         return agents
 
     def get_agent(self, agent_name: str) -> Agent:
@@ -29,6 +28,7 @@ class AgentLocator:
         spec = importlib.util.spec_from_file_location(agent_name, agent_file)
         if spec.loader is None:
             raise Exception("Error in finding the required agent")
+        agent_module: ModuleType = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(agent_module)  # type: ignore
         agent_cls = getattr(agent_module, agent_name)  # type: ignore
         return agent_cls
