@@ -6,7 +6,7 @@ import sys
 from importlib.machinery import ModuleSpec
 from io import BufferedReader
 from types import ModuleType
-from typing import List
+from typing import Any, Dict, List
 
 from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import (  # type: ignore
@@ -27,11 +27,13 @@ from ai_market_contest.cli.utils.hashing import hash_string  # type: ignore
 from ai_market_contest.cli.utils.pklfileutils import write_pkl_file  # type: ignore
 from ai_market_contest.cli.utils.processmetafile import write_meta_file
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
+from ai_market_contest.training.agent_trainer import AgentTrainer
 from ai_market_contest.training.policy_config_maker import PolicyConfigMaker
 from ai_market_contest.training.policy_selector import PolicySelector
 from ai_market_contest.training.sequential_agent_name_maker import (
     SequentialAgentNameMaker,  # type: ignore
 )
+from ai_market_contest.training.training_config_maker import TrainingConfigMaker
 
 
 def set_up_and_execute_training_routine(
@@ -64,6 +66,20 @@ def set_up_and_execute_training_routine(
 
     policy_config_maker: PolicyConfigMaker = PolicyConfigMaker(
         agent_locator, policy_selector
+    )
+
+    training_config_maker: TrainingConfigMaker = TrainingConfigMaker(
+        config_reader, policy_config_maker
+    )
+
+    config: Dict[str, Any] = training_config_maker.make_training_config()
+
+    # TODO add in ability to restore agents
+    trainer: AgentTrainer = AgentTrainer(
+        config_reader.get_environment(agent_name_maker),
+        config,
+        None,
+        False,
     )
 
 
