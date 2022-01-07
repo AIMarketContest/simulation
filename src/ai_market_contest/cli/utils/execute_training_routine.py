@@ -3,6 +3,7 @@ import importlib.util
 import pathlib
 import pickle
 import sys
+from configparser import ConfigParser
 from importlib.machinery import ModuleSpec
 from io import BufferedReader
 from types import ModuleType
@@ -50,6 +51,8 @@ def set_up_and_execute_training_routine(
     training_config_path: pathlib.Path = get_training_config_path(
         proj_dir, training_config
     )
+    config_parser: ConfigParser = ConfigParser()
+    config_parser.optionxform = str
     demand_function_locator: DemandFunctionLocator = DemandFunctionLocator(proj_dir)
     config_reader: TrainingConfigReader = TrainingConfigReader(
         training_config_path, demand_function_locator
