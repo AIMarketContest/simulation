@@ -10,6 +10,7 @@ from typing import Any, Dict, List
 
 from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import (  # type: ignore
+    AGENTS_DIR_NAME,
     TRAINED_AGENTS_DIR_NAME,
     TRAINING_CONFIG_FILE_EXTENSION,
     TRAINING_CONFIGS_DIR_NAME,
@@ -62,7 +63,7 @@ def set_up_and_execute_training_routine(
         config_reader.get_naive_agent_counts(),
     )
 
-    agent_locator: AgentLocator = AgentLocator(agent.get_dir())
+    agent_locator: AgentLocator = AgentLocator(proj_dir / AGENTS_DIR_NAME)
 
     policy_config_maker: PolicyConfigMaker = PolicyConfigMaker(
         agent_locator, policy_selector
