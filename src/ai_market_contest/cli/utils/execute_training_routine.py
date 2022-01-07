@@ -20,6 +20,7 @@ from ai_market_contest.cli.training_config.training import (
 )
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
+from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
 from ai_market_contest.cli.utils.getagents import (  # type: ignore
     add_trained_agent_to_config_file,
 )
@@ -39,8 +40,7 @@ from ai_market_contest.training.training_config_maker import TrainingConfigMaker
 def set_up_and_execute_training_routine(
     training_config: str,
     proj_dir: pathlib.Path,
-    agent_dir: pathlib.Path,
-    agent_name: str,
+    agent: ExistingAgent,
     parent_hash: str,
     training_msg: str,
 ):
@@ -57,12 +57,12 @@ def set_up_and_execute_training_routine(
     )
 
     policy_selector: PolicySelector = PolicySelector(
-        agent_name,
+        agent.get_name(),
         config_reader.get_self_play_num(),
         config_reader.get_naive_agent_counts(),
     )
 
-    agent_locator: AgentLocator = AgentLocator(agent_dir)
+    agent_locator: AgentLocator = AgentLocator(agent.get_dir())
 
     policy_config_maker: PolicyConfigMaker = PolicyConfigMaker(
         agent_locator, policy_selector

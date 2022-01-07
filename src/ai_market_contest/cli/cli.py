@@ -19,6 +19,7 @@ from ai_market_contest.cli.utils.config_utils import check_configs, get_training
 from ai_market_contest.cli.utils.execute_training_routine import (
     set_up_and_execute_training_routine,
 )
+from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
 from ai_market_contest.cli.utils.getagents import (
     get_agent_names,
     get_trained_agents,
@@ -96,20 +97,16 @@ def train(
     check_proj_dir_exists(proj_dir)
 
     agent_names: List[str] = get_agent_names(proj_dir)
-    chosen_agent: str = questionary.select(
+    chosen_agent_name: str = questionary.select(
         "Choose an agent to train.", choices=agent_names
     ).ask()
-    agents_dir: Path = proj_dir / AGENTS_DIR_NAME
-    chosen_agent_dir: Path = agents_dir / chosen_agent
+    chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, proj_dir)
 
-    check_directory_exists_for_agent(chosen_agent, chosen_agent_dir)
-
-    agent_is_initialised: bool = check_agent_is_initialised(chosen_agent_dir)
-    if agent_is_initialised:
+    if chosen_agent.is_initialised():
         # We want to restore a trainer corresponding to the version selected by the user
-        trained_agents: List[str] = get_trained_agents(chosen_agent_dir)
+        trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
         trained_agents_info: List[str] = get_trained_agents_info(
-            trained_agents, chosen_agent_dir
+            trained_agents, chosen_agent.get_dir()
         )
         chosen_trained_agent: str = questionary.select(
             "Select which version of the agent to train", choices=trained_agents_info
@@ -127,7 +124,7 @@ def train(
 
     # TODO replace None with current agent hash (as it becomes the parent)
     set_up_and_execute_training_routine(
-        training_config, proj_dir, chosen_agent_dir, chosen_agent, None, training_msg
+        training_config, proj_dir, chosen_agent, None, training_msg
     )
 
 
