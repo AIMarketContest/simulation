@@ -1,4 +1,6 @@
-﻿from configparser import ConfigParser
+#!/usr/bin/env python3
+import shutil
+from configparser import ConfigParser
 from pathlib import Path
 from typing import Callable
 
@@ -37,19 +39,14 @@ from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLo
 from ai_market_contest.cli.utils.execute_training_routine import (
     set_up_and_execute_training_routine,
 )
-from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
-from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
-    ExistingAgentVersion,
-)
 from ai_market_contest.cli.utils.filesystemutils import (
-    assert_config_file_exists,
     assert_proj_dir_exists,
     check_overwrite,
+    check_path_exists,
+    check_proj_dir_exists,
 )
-from ai_market_contest.cli.utils.get_agents import (
-    get_agent_names,
-    get_trained_agents,
-    get_trained_agents_info,
+from ai_market_contest.cli.utils.initialisedemandfunction import (
+    create_demand_functon_class,
 )
 from ai_market_contest.cli.utils.project_initialisation_utils import (
     initialise_file_structure,
