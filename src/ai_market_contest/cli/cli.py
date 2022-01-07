@@ -129,7 +129,7 @@ def train(
         "Choose a training config:", choices=training_configs
     ).ask()
 
-    training_msg: str = typer.prompt("(Optional) Enter training message")
+    training_msg: str = typer.prompt("Enter training message")
 
     # TODO replace None with current agent hash (as it becomes the parent)
     set_up_and_execute_training_routine(
