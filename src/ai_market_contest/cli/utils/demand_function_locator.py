@@ -23,7 +23,7 @@ class DemandFunctionLocator:
 
     def get_demand_function(self, demand_function_name: str) -> DemandFunction:
         if demand_function_name in CUR_DEMAND_FUNCTIONS:
-            return CUR_DEMAND_FUNCTIONS[demand_function_name]
+            return CUR_DEMAND_FUNCTIONS[demand_function_name]()
         demand_function_dir: pathlib.Path = self.env_dir / demand_function_name
         demand_function_file: str = demand_function_dir / (demand_function_name + ".py")
         spec = importlib.util.spec_from_file_location(
