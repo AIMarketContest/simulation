@@ -1,6 +1,7 @@
 import os
 import tempfile
 from datetime import datetime
+import pathlib
 
 from ray.rllib import agents  # type: ignore
 from ray.rllib.policy.policy import PolicySpec
@@ -27,7 +28,7 @@ agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(num_agents)
 num_self_play_agents = 2
 demand_function = LowestTakesAllDemandFunction
 training_duration: int = 10
-env = Market(num_agents, demand_function(99), training_duration, agent_name_maker)
+env = Market(num_agents, demand_function(), training_duration, agent_name_maker)
 
 random_agent_spec = PolicySpec(policy_class=RandomAgent)
 test_agent_spec = PolicySpec(policy_class=TestAgent)
@@ -54,3 +55,13 @@ config = {
 
 agent_trainer = AgentTrainer(env, config, restored=False, checkpoint_path=None)
 agent_trainer.train(1, True)
+path = pathlib.Path.cwd()
+agent_trainer.save(path)
+agent_trainer = AgentTrainer(
+    env,
+    config,
+    restored=True,
+    checkpoint_path=str((path / "checkpoint_000001/checkpoint-1").resolve()),
+)
+agent_trainer.train(1, True)
+agent_trainer.save(path)

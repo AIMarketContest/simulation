@@ -36,6 +36,7 @@ from ai_market_contest.training.sequential_agent_name_maker import (
     SequentialAgentNameMaker,  # type: ignore
 )
 from ai_market_contest.training.training_config_maker import TrainingConfigMaker
+from ai_market_contest.cli.utils.checkpoint_locator import get_checkpoint_path
 
 
 def set_up_and_execute_training_routine(
@@ -44,6 +45,9 @@ def set_up_and_execute_training_routine(
     agent: ExistingAgent,
     parent_hash: str,
     training_msg: str,
+    restore: bool,
+    training_agent_dir: pathlib.Path,
+    agent_is_initialised: bool,
 ):
     training_config_path: pathlib.Path = get_training_config_path(
         proj_dir, training_config
@@ -74,16 +78,16 @@ def set_up_and_execute_training_routine(
     )
 
     config: Dict[str, Any] = training_config_maker.make_training_config()
-
-    # TODO add in ability to restore agents
+    checkpoint_path = get_checkpoint_path(training_agent_dir)
     trainer: AgentTrainer = AgentTrainer(
         config_reader.get_environment(agent_name_maker),
         config,
-        None,
-        False,
+        checkpoint_path,
+        restore,
         config_reader.get_optimisation_algorithm(),
     )
-
+    if not agent_is_initialised:
+        trainer.save(training_agent_dir)
     trainer.train(config_reader.get_num_epochs(), config_reader.print_training())
 
 

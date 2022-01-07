@@ -21,6 +21,7 @@ class Agent(Policy):
 
     def __init__(self, observation_space=None, action_space=None, config={}):
         super().__init__(observation_space, action_space, config)
+        self.w = 1
 
     def get_initial_price(self) -> Price:
         """
@@ -125,3 +126,12 @@ class Agent(Policy):
 
     def update_target(self):
         return True
+
+    def set_weights(self, weights):
+        self.w = weights["w"]
+
+    def get_weights(self):
+        return {"w": self.w}
+
+    # def get_state(self):
+    #     return {"weights": self.get_weights()}

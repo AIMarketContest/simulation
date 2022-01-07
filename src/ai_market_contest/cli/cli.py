@@ -6,7 +6,13 @@ import questionary
 import typer
 from addagentsubcommand import create_agent
 from adddemandfunctionsubcommand import create_demand_function
-from cli_config import AGENTS_DIR_NAME, COMMAND_NAME, PROJ_DIR_NAME, RLLIB_AGENTS
+from cli_config import (
+    AGENTS_DIR_NAME,
+    COMMAND_NAME,
+    PROJ_DIR_NAME,
+    RLLIB_AGENTS,
+    TRAINED_AGENTS_DIR_NAME,
+)
 from initsubcommand import initialise_file_structure
 from utils.filesystemutils import check_path_exists, check_proj_dir_exists
 from utils.initialisedemandfunction import create_demand_functon_class
@@ -101,19 +107,22 @@ def train(
         "Choose an agent to train.", choices=agent_names
     ).ask()
     chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, proj_dir)
-
-    if chosen_agent.is_initialised():
+    restore: bool = False
+    agent_is_initialised: bool = chosen_agent.is_initialised()
+    if agent_is_initialised:
         # We want to restore a trainer corresponding to the version selected by the user
-        trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
-        trained_agents_info: List[str] = get_trained_agents_info(
-            trained_agents, chosen_agent.get_dir()
-        )
-        chosen_trained_agent: str = questionary.select(
-            "Select which version of the agent to train", choices=trained_agents_info
-        )
-        # TODO
-        pass
+        restore = True
 
+    trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
+    trained_agents_info: List[str] = get_trained_agents_info(
+        trained_agents, chosen_agent.get_dir()
+    )
+    chosen_trained_agent: str = questionary.select(
+        "Select which version of the agent to train", choices=trained_agents_info
+    )
+    training_agent_dir: pathlib.Path = (
+        chosen_agent_dir / TRAINED_AGENTS_DIR_NAME / chosen_trained_agent
+    )
     training_configs: List[str] = get_training_configs(proj_dir)
     check_configs(training_configs)
     training_config: str = questionary.select(
@@ -124,7 +133,14 @@ def train(
 
     # TODO replace None with current agent hash (as it becomes the parent)
     set_up_and_execute_training_routine(
-        training_config, proj_dir, chosen_agent, None, training_msg
+        training_config,
+        proj_dir,
+        chosen_agent,
+        chosen_trained_agent,
+        training_msg,
+        restore,
+        training_agent_dir,
+        agent_is_initialised,
     )
 
 

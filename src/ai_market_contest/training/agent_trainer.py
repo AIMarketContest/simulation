@@ -45,3 +45,6 @@ class AgentTrainer:
                 results["episode_len_mean"],
             )
         )
+
+    def save(self, checkpoint_dir: pathlib.Path):
+        self.trainer.save(checkpoint_dir)
