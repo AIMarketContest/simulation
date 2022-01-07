@@ -163,6 +163,7 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
 
     agent_names: List[str] = get_agent_names(proj_dir)
     agent_names.append("exit")
+    agent_count: int = 0
     # TODO check that list is not empty
     while True:
         chosen_agent_name: str = questionary.select(
@@ -191,6 +192,7 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
                 "Name was already taken. Enter unique name for agent"
             ).ask()
         agents[agent_given_name] = chosen_agent_version
+        agent_count += 1
     print(agents)
 
     evaluation_configs: List[str] = get_evaluation_configs(proj_dir)
@@ -204,6 +206,7 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
         get_evaluation_config_path(proj_dir, evaluation_config),
         DemandFunctionLocator(env_dir),
         config_parser,
+        agent_count,
     )
     agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(
         evaluation_config_reader.get_num_agents()
