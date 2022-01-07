@@ -108,10 +108,6 @@ def train(
     ).ask()
     chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, proj_dir)
     restore: bool = False
-    agent_is_initialised: bool = chosen_agent.is_initialised()
-    if agent_is_initialised:
-        # We want to restore a trainer corresponding to the version selected by the user
-        restore = True
 
     trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
     trained_agents_info: List[str] = get_trained_agents_info(
@@ -121,7 +117,7 @@ def train(
         "Select which version of the agent to train", choices=trained_agents_info
     )
     training_agent_dir: pathlib.Path = (
-        chosen_agent_dir / TRAINED_AGENTS_DIR_NAME / chosen_trained_agent
+        chosen_agent.get_dir() / TRAINED_AGENTS_DIR_NAME / chosen_trained_agent
     )
     training_configs: List[str] = get_training_configs(proj_dir)
     check_configs(training_configs)
@@ -138,9 +134,7 @@ def train(
         chosen_agent,
         chosen_trained_agent,
         training_msg,
-        restore,
         training_agent_dir,
-        agent_is_initialised,
     )
 
 

@@ -45,9 +45,7 @@ def set_up_and_execute_training_routine(
     agent: ExistingAgent,
     parent_hash: str,
     training_msg: str,
-    restore: bool,
     training_agent_dir: pathlib.Path,
-    agent_is_initialised: bool,
 ):
     training_config_path: pathlib.Path = get_training_config_path(
         proj_dir, training_config
@@ -83,10 +81,10 @@ def set_up_and_execute_training_routine(
         config_reader.get_environment(agent_name_maker),
         config,
         checkpoint_path,
-        restore,
+        agent.is_initialised(),
         config_reader.get_optimisation_algorithm(),
     )
-    if not agent_is_initialised:
+    if not agent.is_initialised():
         trainer.save(training_agent_dir)
     trainer.train(config_reader.get_num_epochs(), config_reader.print_training())
 
