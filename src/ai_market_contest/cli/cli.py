@@ -115,7 +115,7 @@ def train(
     )
     chosen_trained_agent: str = questionary.select(
         "Select which version of the agent to train", choices=trained_agents_info
-    )
+    ).ask()
     training_agent_dir: pathlib.Path = (
         chosen_agent.get_dir() / TRAINED_AGENTS_DIR_NAME / chosen_trained_agent
     )
