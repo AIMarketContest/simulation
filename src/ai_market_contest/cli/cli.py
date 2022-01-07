@@ -221,7 +221,10 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
         evaluation_config_reader.get_naive_agent_counts(),
         agents,
         evaluation_config_reader.get_optimisation_algorithm(),
+        agent_name_maker,
     )
+
+    print(evaluator.evaluate())
 
 
 if __name__ == "__main__":
