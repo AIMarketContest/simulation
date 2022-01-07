@@ -1,4 +1,5 @@
-﻿import shutil
+﻿import pathlib
+import shutil
 from pathlib import Path
 from typing import List
 
@@ -26,6 +27,9 @@ from ai_market_contest.cli.utils.execute_training_routine import (
     set_up_and_execute_training_routine,
 )
 from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
+from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
+    ExistingAgentVersion,
+)
 from ai_market_contest.cli.utils.getagents import (
     get_agent_names,
     get_trained_agents,
@@ -107,7 +111,6 @@ def train(
         "Choose an agent to train.", choices=agent_names
     ).ask()
     chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, proj_dir)
-    restore: bool = False
 
     trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
     trained_agents_info: List[str] = get_trained_agents_info(
@@ -116,8 +119,8 @@ def train(
     chosen_trained_agent: str = questionary.select(
         "Select which version of the agent to train", choices=trained_agents_info
     ).ask()
-    training_agent_dir: pathlib.Path = (
-        chosen_agent.get_dir() / TRAINED_AGENTS_DIR_NAME / chosen_trained_agent
+    chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
+        chosen_agent, chosen_trained_agent
     )
     training_configs: List[str] = get_training_configs(proj_dir)
     check_configs(training_configs)
@@ -131,10 +134,9 @@ def train(
     set_up_and_execute_training_routine(
         training_config,
         proj_dir,
-        chosen_agent,
+        chosen_agent_version,
         chosen_trained_agent,
         training_msg,
-        training_agent_dir,
     )
 
 

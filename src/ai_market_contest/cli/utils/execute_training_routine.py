@@ -21,6 +21,9 @@ from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.checkpoint_locator import get_checkpoint_path
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
+from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
+    ExistingAgentVersion,
+)
 from ai_market_contest.cli.utils.getagents import (  # type: ignore
     add_trained_agent_to_config_file,
 )
@@ -43,10 +46,9 @@ from ai_market_contest.training.training_config_maker import TrainingConfigMaker
 def set_up_and_execute_training_routine(
     training_config: str,
     proj_dir: pathlib.Path,
-    agent: ExistingAgent,
+    agent_version: ExistingAgentVersion,
     parent_hash: str,
     training_msg: str,
-    training_agent_dir: pathlib.Path,
 ):
     training_config_path: pathlib.Path = get_training_config_path(
         proj_dir, training_config
@@ -63,7 +65,7 @@ def set_up_and_execute_training_routine(
     )
 
     policy_selector: PolicySelector = PolicySelector(
-        agent.get_name(),
+        agent_version.get_agent_name(),
         config_reader.get_self_play_num(),
         config_reader.get_naive_agent_counts(),
     )
@@ -79,16 +81,16 @@ def set_up_and_execute_training_routine(
     )
 
     config: Dict[str, Any] = training_config_maker.make_training_config()
-    checkpoint_path = get_checkpoint_path(training_agent_dir)
+    checkpoint_path = get_checkpoint_path(agent_version.get_dir())
     trainer: AgentTrainer = AgentTrainer(
         config_reader.get_environment(agent_name_maker),
         config,
         checkpoint_path,
-        agent.is_initialised(),
+        agent_version.was_agent_initialised(),
         config_reader.get_optimisation_algorithm(),
     )
-    if not agent.is_initialised():
-        trainer.save(training_agent_dir)
+    if not agent_version.was_agent_initialised():
+        trainer.save(agent_version.get_dir())
     trainer.train(config_reader.get_num_epochs(), config_reader.print_training())
 
 
