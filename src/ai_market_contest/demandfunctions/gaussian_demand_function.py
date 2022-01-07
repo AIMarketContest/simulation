@@ -13,6 +13,7 @@ class GaussianDemandFunction(DemandFunction):
         A positive integer representing the quantity to be sold
         from an agent selling the product at price = 0.
     """
+
     MAX_SALES_SCALE_FACTOR: int = 1000
     MU: float = 0
     SIGMA: float = 1

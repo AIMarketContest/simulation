@@ -4,6 +4,7 @@ from numpy.random import randint
 
 from ai_market_contest.demand_function import DemandFunction
 
+
 class NoisyFixedDemandFunction(DemandFunction):
     FIXED_QUANTITY: int = 1000
 
