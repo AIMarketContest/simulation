@@ -47,6 +47,7 @@ from ai_market_contest.cli.utils.getagents import (
     get_trained_agents,
     get_trained_agents_info,
 )
+from ai_market_contest.evaluation.agent_evaluator import AgentEvaluator
 
 app = typer.Typer()
 
@@ -210,6 +211,16 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
     )
     agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(
         evaluation_config_reader.get_num_agents()
+    )
+
+    agent_locator: AgentLocator = AgentLocator(proj_dir / AGENTS_DIR_NAME)
+
+    evaluator: AgentEvaluator = AgentEvaluator(
+        evaluation_config_reader.get_environment(agent_name_maker),
+        agent_locator,
+        evaluation_config_reader.get_naive_agent_counts(),
+        agents,
+        evaluation_config_reader.get_optimisation_algorithm(),
     )
 
 
