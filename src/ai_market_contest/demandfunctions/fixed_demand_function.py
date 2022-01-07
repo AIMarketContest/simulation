@@ -11,8 +11,9 @@ class FixedDemandFunction(DemandFunction):
         A positive integer representing the quantity to be purchased from each
         agent every round.
     """
+    FIXED_QUANTITY: int = 1
 
-    def __init__(self, fixed_quantity: int = 1):
+    def __init__(self):
         """
         Parameters
         ----------
@@ -24,15 +25,13 @@ class FixedDemandFunction(DemandFunction):
             When quantity given is less than 0.
         """
 
-        if fixed_quantity < 0:
+        if self.FIXED_QUANTITY < 0:
             raise ValueError("fixed_quantity must be greater than or equal to 0")
-
-        self.fixed_quantity: int = fixed_quantity
 
     def get_sales(self, current_prices: Dict[str, int]) -> Dict[str, int]:
         sales: Dict[str, int] = {}
 
         for agent, _ in current_prices.items():
-            sales[agent] = self.fixed_quantity
+            sales[agent] = self.FIXED_QUANTITY
 
         return sales
