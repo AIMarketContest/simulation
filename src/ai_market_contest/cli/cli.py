@@ -1,5 +1,4 @@
-﻿import pathlib
-import shutil
+﻿import shutil
 from pathlib import Path
 from typing import Dict, List
 
@@ -11,22 +10,18 @@ from configparser import ConfigParser
 from cli_config import (
     AGENTS_DIR_NAME,
     COMMAND_NAME,
-    EVALUATION_CONFIGS_DIR_NAME,
     PROJ_DIR_NAME,
     RLLIB_AGENTS,
-    TRAINED_AGENTS_DIR_NAME,
     ENVS_DIR_NAME,
 )
 from initsubcommand import initialise_file_structure
+from ai_market_contest.training.agent_name_maker import AgentNameMaker
+from ai_market_contest.training.sequential_agent_name_maker import SequentialAgentNameMaker
+from utils.agent_locator import AgentLocator
 from utils.filesystemutils import check_path_exists, check_proj_dir_exists
-from utils.initialisedemandfunction import create_demand_functon_class
 
 from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,
-)
-from ai_market_contest.cli.utils.agent_check_utils import (
-    check_agent_is_initialised,
-    check_directory_exists_for_agent,
 )
 from ai_market_contest.cli.utils.config_utils import (
     check_configs_exist,

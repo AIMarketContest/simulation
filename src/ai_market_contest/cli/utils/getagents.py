@@ -7,7 +7,6 @@ from typing import List
 from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     HASH_LENGTH,
-    TRAINING_CONFIGS_DIR_NAME,
 )
 from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 from ai_market_contest.cli.utils.processmetafile import get_trained_agent_metadata

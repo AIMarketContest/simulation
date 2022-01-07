@@ -1,39 +1,6 @@
-import pathlib
 import sys
-from typing import Any, List
-
-from ai_market_contest.cli.cli_config import (
-    AGENTS_DIR_NAME,
-    COMMAND_NAME,
-    PICKLE_FILENAME,
-    PROJ_DIR_NAME,
-    TRAINED_AGENTS_DIR_NAME,
-)
-from ai_market_contest.cli.utils.checkagentinitialisation import (
-    check_agent_is_initialised,
-)
-from ai_market_contest.cli.utils.displayagents import (  # type: ignore
-    display_agents,
-    display_trained_agents,
-    display_training_configs,
-)
-from ai_market_contest.cli.utils.execute_training_routine import (
-    set_up_and_execute_training_routine,
-)
-from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
-    check_directory_exists,
-    check_path_exists,
-    check_proj_dir_exists,
-)
-from ai_market_contest.cli.utils.getagents import (  # type: ignore
-    get_agent_names,
-    get_trained_agents,
-    get_training_configs,
-)
+from typing import List
 from ai_market_contest.cli.utils.hashing import get_shortened_hashes
-from ai_market_contest.cli.utils.initialiseagent import set_agent_to_initialised
-from ai_market_contest.cli.utils.pklfileutils import initialise_agent_pkl_file
-
 
 def ask_for_trained_agents(agent: str) -> bool:
     max_count = 3
@@ -87,50 +54,3 @@ def choose_trained_agent(trained_agents: List[str]):
         sys.exit(1)
     return trained_agent
 
-
-def train_agent(args: Any):
-    chosen_agent: str = choose_agent_for_training(agent_names)
-    agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
-    chosen_agent_dir: pathlib.Path = agents_dir / chosen_agent
-    error_msg: str = f"Error: no directory exists for {chosen_agent}"
-    check_directory_exists(chosen_agent_dir, error_msg)
-    agent_is_initialised = check_agent_is_initialised(chosen_agent_dir)
-    if not agent_is_initialised:
-        initialise_agent_pkl_file(chosen_agent_dir, args.show_traceback)
-        set_agent_to_initialised(chosen_agent_dir)
-    trained_agents: List[str] = get_trained_agents(chosen_agent_dir)
-    display_trained_agents(chosen_agent_dir, trained_agents)
-    chosen_trained_agent = choose_trained_agent(trained_agents)
-    training_agent_dir = (
-        chosen_agent_dir / TRAINED_AGENTS_DIR_NAME / chosen_trained_agent
-    )
-    error_msg = f"Error: no directory exists for {chosen_trained_agent}"
-    check_directory_exists(training_agent_dir, error_msg)
-    training_configs: List[str] = get_training_configs(proj_dir)
-    if not training_configs:
-        print(
-            "Operation aborted: no training configs have been defined in training_configs"
-        )
-        sys.exit(1)
-    display_training_configs(training_configs)
-    training_config = choose_training_config(training_configs)
-    training_msg: str = input("(Optional) Enter training message: ")
-    training_agent_pkl_file = training_agent_dir / PICKLE_FILENAME
-    set_up_and_execute_training_routine(
-        proj_dir,
-        chosen_agent_dir,
-        chosen_trained_agent,
-        training_msg,
-        training_agent_pkl_file,
-        training_config,
-    )
-    print("Training completed successfully.")
-
-
-def create_subparser(subparsers: Any):  # type: ignore
-    parser_train = subparsers.add_parser(
-        "train", help="Train an agent within a specified environment"
-    )
-    parser_train.add_argument("path", type=pathlib.Path, default=".")
-    parser_train.add_argument("--show-traceback", action="store")
-    parser_train.set_defaults(func=train_agent)

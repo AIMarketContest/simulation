@@ -1,23 +1,19 @@
-import pathlib  # type: ignore
-from typing import Any, Dict, List, Tuple  # type: ignore
+from typing import Any, Dict, Tuple  # type: ignore
 
 import gym  # type: ignore
 from ray.rllib.agents.registry import get_trainer_class  # type: ignore
-from ray.tune.logger import pretty_print  # type: ignore
-from ray.tune.registry import register_env  # type: ignore
 
 from ai_market_contest.agent import Agent  # type: ignore
-from rllib.agents.trainer import Trainer  # type: ignore
-from ai_market_contest.cli.utils.existing_agent import ExistingAgentVersion  # type: ignore
+from ray.rllib.agents.trainer import Trainer  # type: ignore
+from ai_market_contest.cli.utils.existing_agent.existing_agent_version import ExistingAgentVersion  # type: ignore
 from ai_market_contest.cli.utils.checkpoint_locator import get_checkpoint_path  # type: ignore
 from ai_market_contest.cli.utils.agent_locator import AgentLocator  # type: ignore
 from ai_market_contest.training.agent_name_maker import AgentNameMaker  # type: ignore
 
-
 class AgentEvaluator:
     def __init__(
         self,
-        env: gym.Environment,
+        env: gym.Env,
         agent_locator: AgentLocator,
         naive_agents_counts: Dict[str, Any],
         agents: Dict[str, ExistingAgentVersion],

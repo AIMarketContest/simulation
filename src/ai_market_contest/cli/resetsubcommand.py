@@ -19,11 +19,3 @@ def reset_file_structure(args: Any):
     path = args.path
     proj_dir: pathlib.Path = path / PROJ_DIR_NAME
     remove_proj_dir(path, proj_dir)
-
-
-def create_subparser(subparsers: Any):  # type: ignore
-    parser_reset = subparsers.add_parser(
-        "reset", help="Reset the initialised folder structure for the project"
-    )
-    parser_reset.add_argument("path", type=pathlib.Path, default=".")
-    parser_reset.set_defaults(func=reset_file_structure)

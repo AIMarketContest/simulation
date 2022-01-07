@@ -1,6 +1,9 @@
+from configparser import ConfigParser
+import pathlib
 from ai_market_contest.cli.configs.simulation_config_reader import (
     SimulationConfigReader,
 )
+from utils.demand_function_locator import DemandFunctionLocator
 
 
 class EvaluationConfigReader(SimulationConfigReader):
@@ -15,4 +18,4 @@ class EvaluationConfigReader(SimulationConfigReader):
         self.num_trained_agents = num_trained_agents
 
     def get_num_agents(self) -> int:
-        return sum(self.get_naive_agent_counts().values()) + num_trained_agents
+        return len(self.get_naive_agent_counts().values()) + self.num_trained_agents
