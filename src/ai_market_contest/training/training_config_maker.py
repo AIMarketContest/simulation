@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from ai_market_contest.cli.training_config.config_reader import TrainingConfigReader
+from ai_market_contest.cli.configs.training_config_reader import TrainingConfigReader
 from ai_market_contest.training.policy_config_maker import PolicyConfigMaker
 
 
