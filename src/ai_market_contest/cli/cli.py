@@ -1,7 +1,7 @@
 ﻿import pathlib
 import shutil
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 
 import questionary
 import typer
@@ -141,8 +141,44 @@ def train(
 
 
 @app.command()
-def run():
-    typer.echo(f"Run agent")
+def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
+    proj_dir: Path = path / PROJ_DIR_NAME
+    check_path_exists(path)
+    check_proj_dir_exists(proj_dir)
+
+    agents: Dict[str, ExistingAgentVersion] = {}
+
+    agent_names: List[str] = get_agent_names(proj_dir)
+    agent_names.append("exit")
+    # TODO check that list is not empty
+    while True:
+        chosen_agent_name: str = questionary.select(
+            "Choose an agent to train.", choices=agent_names
+        ).ask()
+        if chosen_agent_name == "exit":
+            if not agents:
+                print("Cannot start simulation with no trained agents")
+                continue
+            break
+        chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, proj_dir)
+
+        trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
+        trained_agents_info: List[str] = get_trained_agents_info(
+            trained_agents, chosen_agent.get_dir()
+        )
+        chosen_trained_agent: str = questionary.select(
+            "Select which version of the agent to train", choices=trained_agents_info
+        ).ask()
+        chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
+            chosen_agent, chosen_trained_agent
+        )
+        agent_given_name: str = questionary.text("Enter unique name for agent").ask()
+        while agent_given_name in agents.keys():
+            agent_given_name: str = questionary.text(
+                "Name was already taken. Enter unique name for agent"
+            ).ask()
+        agents[agent_given_name] = chosen_agent_version
+    print(agents)
 
 
 if __name__ == "__main__":
