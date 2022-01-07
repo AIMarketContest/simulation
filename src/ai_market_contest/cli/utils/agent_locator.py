@@ -23,6 +23,8 @@ class AgentLocator:
     def get_agent(self, agent_name: str) -> Agent:
         if agent_name in CUR_AGENTS:
             return CUR_AGENTS[agent_name]
+        if "-opponent" in agent_name:
+            agent_name = agent_name[: -len("-opponent")]
         agent_dir: pathlib.Path = self.agents_dir / agent_name
         agent_file: str = agent_dir / (agent_name + ".py")
         spec = importlib.util.spec_from_file_location(agent_name, agent_file)
