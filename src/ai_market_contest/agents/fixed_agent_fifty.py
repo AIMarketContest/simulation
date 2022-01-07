@@ -17,5 +17,5 @@ class FixedAgentFifty(Agent):
     def get_initial_price(self) -> int:
         return self.FIXED_PRICE
 
-    def get_price(self, last_round_agents_prices: List[Price], identity_index):
+    def policy(self, last_round_agents_prices: List[Price], identity_index):
         return self.FIXED_PRICE
