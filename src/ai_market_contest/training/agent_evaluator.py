@@ -16,14 +16,15 @@ class AgentEvaluator:
         env: gym.Environment,
         naive_agents_map: Dict[str, Agent],
         naive_agents_counts: Dict[Agent, Any],
-        agents: Dict[str, Tuple[pathlib.Path, str]],
+        agents: Dict[str, pathlib.Path],
+        op_algorithm: str,
     ):
         self.env = env
         self.naive_agents_map = naive_agents_map
         i = 0
 
         self.trainers = {}
-        for agent_name, (checkpoint_path, op_algorithm) in agents.items():
+        for agent_name, checkpoint_path in agents.items():
             trainer_cls: Trainer = get_trainer_class(op_algorithm)
             new_trainer: Trainer = trainer_cls()
             new_trainer.restore(checkpoint_path)
