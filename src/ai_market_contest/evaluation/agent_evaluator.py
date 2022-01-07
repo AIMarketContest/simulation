@@ -8,6 +8,8 @@ from ray.tune.registry import register_env  # type: ignore
 
 from ai_market_contest.agent import Agent  # type: ignore
 from rllib.agents.trainer import Trainer  # type: ignore
+from ai_market_contest.cli.utils.existing_agent import ExistingAgentVersion  # type: ignore
+from ai_market_contest.cli.utils.checkpoint_locator import get_checkpoint_path  # type: ignore
 
 
 class AgentEvaluator:
@@ -16,17 +18,17 @@ class AgentEvaluator:
         env: gym.Environment,
         naive_agents_map: Dict[str, Agent],
         naive_agents_counts: Dict[Agent, Any],
-        agents: Dict[str, pathlib.Path],
+        agents: Dict[str, ExistingAgentVersion],
         op_algorithm: str,
     ):
         self.env = env
         self.naive_agents_map = naive_agents_map
         i = 0
-
         self.trainers = {}
-        for agent_name, checkpoint_path in agents.items():
+        for agent_name, chosen_agent_version in agents.items():
             trainer_cls: Trainer = get_trainer_class(op_algorithm)
             new_trainer: Trainer = trainer_cls()
+            checkpoint_path: str = get_checkpoint_path(chosen_agent_version.get_dir())
             new_trainer.restore(checkpoint_path)
             self.trainers[agent_name] = new_trainer
 
