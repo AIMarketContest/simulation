@@ -21,6 +21,7 @@ from ai_market_contest.cli.training_config.training import (
     train as TRAINING_ALGORITHM,  # type: ignore
 )
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
+from ai_market_contest.cli.utils.checkpoint_locator import get_checkpoint_path
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
 from ai_market_contest.cli.utils.getagents import (  # type: ignore
@@ -37,7 +38,6 @@ from ai_market_contest.training.sequential_agent_name_maker import (
     SequentialAgentNameMaker,  # type: ignore
 )
 from ai_market_contest.training.training_config_maker import TrainingConfigMaker
-from ai_market_contest.cli.utils.checkpoint_locator import get_checkpoint_path
 
 
 def set_up_and_execute_training_routine(
@@ -55,7 +55,7 @@ def set_up_and_execute_training_routine(
     config_parser.optionxform = str
     demand_function_locator: DemandFunctionLocator = DemandFunctionLocator(proj_dir)
     config_reader: TrainingConfigReader = TrainingConfigReader(
-        training_config_path, demand_function_locator
+        training_config_path, demand_function_locator, config_parser
     )
 
     agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(
