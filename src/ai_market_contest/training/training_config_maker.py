@@ -16,4 +16,5 @@ class TrainingConfigMaker:
     def make_training_config(self) -> Dict[str, Any]:
         config: Dict[str, Any] = self.policy_config_maker.get_policy_config()
         config.update(self.training_config_reader.get_other_config())
+        config["prioritized_replay"] = False
         return config
