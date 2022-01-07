@@ -4,21 +4,22 @@ from typing import Dict, List
 
 import questionary
 import typer
-from addagentsubcommand import create_agent
-from adddemandfunctionsubcommand import create_demand_function
+
+from ai_market_contest.cli.addagentsubcommand import create_agent
+from ai_market_contest.cli.adddemandfunctionsubcommand import create_demand_function
 from configparser import ConfigParser
-from cli_config import (
+from ai_market_contest.cli.cli_config import (
     AGENTS_DIR_NAME,
     COMMAND_NAME,
     PROJ_DIR_NAME,
     RLLIB_AGENTS,
     ENVS_DIR_NAME,
 )
-from initsubcommand import initialise_file_structure
+from ai_market_contest.cli.initsubcommand import initialise_file_structure
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
 from ai_market_contest.training.sequential_agent_name_maker import SequentialAgentNameMaker
-from utils.agent_locator import AgentLocator
-from utils.filesystemutils import check_path_exists, check_proj_dir_exists
+from ai_market_contest.cli.utils.agent_locator import AgentLocator
+from ai_market_contest.cli.utils.filesystemutils import check_path_exists, check_proj_dir_exists
 
 from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,

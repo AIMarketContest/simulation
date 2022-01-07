@@ -5,7 +5,7 @@ import pathlib
 import shutil
 from typing import Any
 
-from utils.initialisedemandfunction import create_demand_functon_class
+from ai_market_contest.cli.utils.initialisedemandfunction import create_demand_functon_class
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,
