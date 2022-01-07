@@ -1,7 +1,7 @@
 import os
+import pathlib
 import tempfile
 from datetime import datetime
-import pathlib
 
 from ray.rllib import agents  # type: ignore
 from ray.rllib.policy.policy import PolicySpec

@@ -13,12 +13,11 @@ from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,
     TRAINED_AGENTS_DIR_NAME,
-    TRAINING_CONFIG_FILE_EXTENSION,
-    TRAINING_CONFIGS_DIR_NAME,
 )
 from ai_market_contest.cli.configs.training_config_reader import TrainingConfigReader
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.checkpoint_locator import get_checkpoint_path
+from ai_market_contest.cli.utils.config_utils import get_training_config_path
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
@@ -30,9 +29,6 @@ from ai_market_contest.cli.utils.getagents import (  # type: ignore
 from ai_market_contest.cli.utils.hashing import hash_string  # type: ignore
 from ai_market_contest.cli.utils.pklfileutils import write_pkl_file  # type: ignore
 from ai_market_contest.cli.utils.processmetafile import write_meta_file
-from ai_market_contest.cli.utils.training import (
-    train as TRAINING_ALGORITHM,  # type: ignore
-)
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
 from ai_market_contest.training.agent_trainer import AgentTrainer
 from ai_market_contest.training.policy_config_maker import PolicyConfigMaker
@@ -105,18 +101,6 @@ def save_new_agent(new_agent, agent_dir, parent_hash, training_msg, config):
     )
     write_pkl_file(new_agent_dir, new_agent)
     config.write_config_to_file(new_agent_dir)
-
-
-def get_training_config_path(
-    proj_dir: pathlib.Path, training_config: str
-) -> pathlib.Path:
-    # Add extension as was removed when displaying to users
-    training_config_file_path: pathlib.Path = (
-        proj_dir
-        / TRAINING_CONFIGS_DIR_NAME
-        / f"{training_config}{TRAINING_CONFIG_FILE_EXTENSION}"
-    )
-    return training_config_file_path
 
 
 def fetch_instantiated_agent(

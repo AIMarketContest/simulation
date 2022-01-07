@@ -45,7 +45,7 @@ ROOT_FOLDER: Final = (CLI_DIR / "..").resolve()
 TRAIN_CONFIG_FILENAME: Final = "train_config.ini"
 TRAINING_CONFIGS_DIR_NAME: Final = "training_configs"
 EVALUATION_CONFIGS_DIR_NAME: Final = "evaluation_configs"
-TRAINING_CONFIG_FILE_EXTENSION: Final = ".ini"
+CONFIG_FILE_EXTENSION: Final = ".ini"
 
 RLLIB_AGENTS = [
     "AC2",

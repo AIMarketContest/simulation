@@ -10,6 +10,7 @@ from adddemandfunctionsubcommand import create_demand_function
 from cli_config import (
     AGENTS_DIR_NAME,
     COMMAND_NAME,
+    EVALUATION_CONFIGS_DIR_NAME,
     PROJ_DIR_NAME,
     RLLIB_AGENTS,
     TRAINED_AGENTS_DIR_NAME,
@@ -18,11 +19,20 @@ from initsubcommand import initialise_file_structure
 from utils.filesystemutils import check_path_exists, check_proj_dir_exists
 from utils.initialisedemandfunction import create_demand_functon_class
 
+from ai_market_contest.cli.configs.evaluation_config_reader import (
+    EvaluationConfigReader,
+)
 from ai_market_contest.cli.utils.agent_check_utils import (
     check_agent_is_initialised,
     check_directory_exists_for_agent,
 )
-from ai_market_contest.cli.utils.config_utils import check_configs, get_training_configs
+from ai_market_contest.cli.utils.config_utils import (
+    check_configs_exist,
+    get_evaluation_config_path,
+    get_evaluation_configs,
+    get_training_configs,
+)
+from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.execute_training_routine import (
     set_up_and_execute_training_routine,
 )
@@ -123,7 +133,7 @@ def train(
         chosen_agent, chosen_trained_agent
     )
     training_configs: List[str] = get_training_configs(proj_dir)
-    check_configs(training_configs)
+    check_configs_exist(training_configs)
     training_config: str = questionary.select(
         "Choose a training config:", choices=training_configs
     ).ask()
@@ -179,6 +189,17 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
             ).ask()
         agents[agent_given_name] = chosen_agent_version
     print(agents)
+
+    evaluation_configs: List[str] = get_evaluation_configs(proj_dir)
+    check_configs_exist(evaluation_configs)
+    evaluation_config: str = questionary.select(
+        "Choose a training config:", choices=evaluation_configs
+    ).ask()
+
+    evaluation_config_reader: EvaluationConfigReader = EvaluationConfigReader(
+        get_evaluation_config_path(proj_dir, evaluation_config),
+        DemandFunctionLocator(proj_dir),
+    )
 
 
 if __name__ == "__main__":
