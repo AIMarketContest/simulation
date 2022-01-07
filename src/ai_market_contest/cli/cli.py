@@ -7,6 +7,7 @@ import questionary
 import typer
 from addagentsubcommand import create_agent
 from adddemandfunctionsubcommand import create_demand_function
+from configparser import ConfigParser
 from cli_config import (
     AGENTS_DIR_NAME,
     COMMAND_NAME,
@@ -197,10 +198,15 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
     evaluation_config: str = questionary.select(
         "Choose a training config:", choices=evaluation_configs
     ).ask()
-
+    config_parser: ConfigParser = ConfigParser()
+    config_parser.optionxform = str
     evaluation_config_reader: EvaluationConfigReader = EvaluationConfigReader(
         get_evaluation_config_path(proj_dir, evaluation_config),
         DemandFunctionLocator(env_dir),
+        config_parser,
+    )
+    agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(
+        evaluation_config_reader.get_num_agents()
     )
 
 
