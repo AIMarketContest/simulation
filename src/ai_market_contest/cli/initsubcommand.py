@@ -12,6 +12,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     DEMAND_FUNCTION_DIR_NAME,
     ENVS_DIR_NAME,
+    EVALUATION_CONFIGS_DIR_NAME,
     PROJ_DIR_NAME,
     TRAINING_CONFIGS_DIR_NAME,
 )
@@ -35,10 +36,12 @@ def make_proj_dir(proj_dir: pathlib.Path):
     environments_dir: pathlib.Path = proj_dir / ENVS_DIR_NAME
     demand_function_dir: pathlib.Path = proj_dir / DEMAND_FUNCTION_DIR_NAME
     training_configs_dir: pathlib.Path = proj_dir / TRAINING_CONFIGS_DIR_NAME
+    evaluation_configs_dir: pathlib.Path = proj_dir / EVALUATION_CONFIGS_DIR_NAME
     agents_dir.mkdir(parents=True)
     environments_dir.mkdir(parents=True)
     demand_function_dir.mkdir(parents=True)
     training_configs_dir.mkdir(parents=True)
+    evaluation_configs_dir.mkdir(parents=True)
 
 
 def make_main_config_file(
