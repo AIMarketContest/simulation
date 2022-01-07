@@ -13,6 +13,7 @@ from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,
     TRAINED_AGENTS_DIR_NAME,
+    ENVS_DIR_NAME,
 )
 from ai_market_contest.cli.configs.training_config_reader import TrainingConfigReader
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
@@ -51,7 +52,8 @@ def set_up_and_execute_training_routine(
     )
     config_parser: ConfigParser = ConfigParser()
     config_parser.optionxform = str
-    demand_function_locator: DemandFunctionLocator = DemandFunctionLocator(proj_dir)
+    env_dir = proj_dir / ENVS_DIR_NAME
+    demand_function_locator: DemandFunctionLocator = DemandFunctionLocator(env_dir)
     config_reader: TrainingConfigReader = TrainingConfigReader(
         training_config_path, demand_function_locator, config_parser
     )

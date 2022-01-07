@@ -14,6 +14,7 @@ from cli_config import (
     PROJ_DIR_NAME,
     RLLIB_AGENTS,
     TRAINED_AGENTS_DIR_NAME,
+    ENVS_DIR_NAME,
 )
 from initsubcommand import initialise_file_structure
 from utils.filesystemutils import check_path_exists, check_proj_dir_exists
@@ -153,6 +154,7 @@ def train(
 @app.command()
 def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
     proj_dir: Path = path / PROJ_DIR_NAME
+    env_dir = proj_dir / ENVS_DIR_NAME
     check_path_exists(path)
     check_proj_dir_exists(proj_dir)
 
@@ -198,7 +200,7 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
 
     evaluation_config_reader: EvaluationConfigReader = EvaluationConfigReader(
         get_evaluation_config_path(proj_dir, evaluation_config),
-        DemandFunctionLocator(proj_dir),
+        DemandFunctionLocator(env_dir),
     )
 
 
