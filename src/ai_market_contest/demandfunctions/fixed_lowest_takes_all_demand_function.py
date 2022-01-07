@@ -3,8 +3,10 @@ from typing import Dict
 
 
 class LowestTakesAllDemandFunction(DemandFunction):
-    def __init__(self, max_sales_scale_factor: int = 1000):
-        self.max_sales_scale_factor = max_sales_scale_factor
+    MAX_SALES_SCALE_FACTOR: int = 1000
+
+    def __init__(self):
+        pass
 
     def get_sales(self, current_prices: Dict[str, int]) -> Dict[str, int]:
         sales: Dict[str, int] = {agent: 0 for agent in current_prices.keys()}
@@ -18,7 +20,7 @@ class LowestTakesAllDemandFunction(DemandFunction):
                 min_agents = [agent]
                 min_price = price
 
-        agent_sales = int(self.max_sales_scale_factor / len(min_agents))
+        agent_sales = int(self.MAX_SALES_SCALE_FACTOR / len(min_agents))
         for agent in min_agents:
             sales[agent] = agent_sales
 
