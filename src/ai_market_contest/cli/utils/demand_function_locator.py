@@ -34,4 +34,4 @@ class DemandFunctionLocator:
         demand_func_module: ModuleType = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(demand_func_module)  # type: ignore
         demand_function_cls = getattr(demand_func_module, demand_function_name)  # type: ignore
-        return demand_function_cls
+        return demand_function_cls()
