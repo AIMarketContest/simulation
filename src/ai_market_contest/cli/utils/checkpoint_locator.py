@@ -1,4 +1,5 @@
 import pathlib
+
 from ai_market_contest.cli.utils.filesystemutils import check_directory_exists
 
 

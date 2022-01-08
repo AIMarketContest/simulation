@@ -1,4 +1,5 @@
 ﻿import shutil
+from configparser import ConfigParser
 from pathlib import Path
 from typing import Dict, List
 
@@ -6,17 +7,14 @@ import questionary
 import typer
 from addagentsubcommand import create_agent
 from adddemandfunctionsubcommand import create_demand_function
-from configparser import ConfigParser
 from cli_config import (
     AGENTS_DIR_NAME,
     COMMAND_NAME,
+    ENVS_DIR_NAME,
     PROJ_DIR_NAME,
     RLLIB_AGENTS,
-    ENVS_DIR_NAME,
 )
 from initsubcommand import initialise_file_structure
-from ai_market_contest.training.agent_name_maker import AgentNameMaker
-from ai_market_contest.training.sequential_agent_name_maker import SequentialAgentNameMaker
 from utils.agent_locator import AgentLocator
 from utils.filesystemutils import check_path_exists, check_proj_dir_exists
 
@@ -43,6 +41,10 @@ from ai_market_contest.cli.utils.getagents import (
     get_trained_agents_info,
 )
 from ai_market_contest.evaluation.agent_evaluator import AgentEvaluator
+from ai_market_contest.training.agent_name_maker import AgentNameMaker
+from ai_market_contest.training.sequential_agent_name_maker import (
+    SequentialAgentNameMaker,
+)
 
 app = typer.Typer()
 

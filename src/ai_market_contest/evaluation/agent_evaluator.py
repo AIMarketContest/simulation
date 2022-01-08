@@ -2,13 +2,18 @@ from typing import Any, Dict, Tuple  # type: ignore
 
 import gym  # type: ignore
 from ray.rllib.agents.registry import get_trainer_class  # type: ignore
+from ray.rllib.agents.trainer import Trainer  # type: ignore
 
 from ai_market_contest.agent import Agent  # type: ignore
-from ray.rllib.agents.trainer import Trainer  # type: ignore
-from ai_market_contest.cli.utils.existing_agent.existing_agent_version import ExistingAgentVersion  # type: ignore
-from ai_market_contest.cli.utils.checkpoint_locator import get_checkpoint_path  # type: ignore
 from ai_market_contest.cli.utils.agent_locator import AgentLocator  # type: ignore
+from ai_market_contest.cli.utils.checkpoint_locator import (
+    get_checkpoint_path,  # type: ignore
+)
+from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
+    ExistingAgentVersion,  # type: ignore
+)
 from ai_market_contest.training.agent_name_maker import AgentNameMaker  # type: ignore
+
 
 class AgentEvaluator:
     def __init__(

@@ -12,8 +12,8 @@ from typing import Any, Dict, List
 from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,
-    TRAINED_AGENTS_DIR_NAME,
     ENVS_DIR_NAME,
+    TRAINED_AGENTS_DIR_NAME,
 )
 from ai_market_contest.cli.configs.training_config_reader import TrainingConfigReader
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
