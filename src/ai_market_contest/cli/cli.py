@@ -125,14 +125,15 @@ def train(
     chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, proj_dir)
 
     trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
-    trained_agents_info: List[str] = get_trained_agents_info(
+    trained_agents_info: Dict[str:str] = get_trained_agents_info(
         trained_agents, chosen_agent.get_dir()
     )
     chosen_trained_agent: str = questionary.select(
-        "Select which version of the agent to train", choices=trained_agents_info
+        "Select which version of the agent to train",
+        choices=list(trained_agents_info.keys()),
     ).ask()
     chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
-        chosen_agent, chosen_trained_agent
+        chosen_agent, trained_agents_info[chosen_trained_agent]
     )
     training_configs: List[str] = get_training_configs(proj_dir)
     check_configs_exist(training_configs)
