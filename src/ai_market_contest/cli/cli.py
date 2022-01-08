@@ -48,8 +48,9 @@ from ai_market_contest.training.sequential_agent_name_maker import (
     SequentialAgentNameMaker,
 )
 
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 app = typer.Typer(context_settings=CONTEXT_SETTINGS)
+
 
 @app.command()
 def init(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}"))):
@@ -97,11 +98,13 @@ def add_agent(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
     if agent_type == "custom":
         agent_name = typer.prompt("Enter custom agent name")
         create_agent(path, agent_name)
+        typer.echo(f"Agent located in {path}/agents/{agent_name} directory")
     elif agent_type == "rllib":
         rllib_agent = questionary.select(
             "What rllib agent would you like to use?",
             choices=RLLIB_AGENTS,
         ).ask()
+        # TODO: Implement this
 
 
 @app.command()
@@ -110,6 +113,9 @@ def add_demand_function(
 ):
     demand_function_name = typer.prompt("Enter custom demand function name")
     create_demand_function(path, demand_function_name)
+    typer.echo(
+        f"Demand function located in {path}/environments/demandfunctions/{demand_function_name}.py"
+    )
 
 
 @app.command()

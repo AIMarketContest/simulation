@@ -3,6 +3,8 @@ import atexit
 import configparser
 import pathlib
 
+import typer
+
 from utils.initialisedemandfunction import create_demand_functon_class
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
@@ -45,17 +47,10 @@ def remove_demand_function(demand_function_name: str, proj_dir: pathlib.Path):
 
 
 def create_demand_function(path: pathlib.Path, demand_function_name: str):
-    # TODO: Move these to main cli function
-    # if not path.is_dir():
-    #     typer.echo("Illegal argument: Argument must be an existing directory")
-    #     raise typer.Exit(1)
-    # proj_dir = path / PROJ_DIR_NAME
-    # if not proj_dir.is_dir():
-    #     typer.echo(
-    #         """No project has been initialised in the directory.
-    #         To initialise a project run aicontest init <path>"""
-    #     )
-    #     raise typer.Exit(1)
+    if not path.is_dir():
+        typer.echo("Illegal argument: Argument must be an existing directory")
+        raise typer.Exit(1)
+
     atexit.register(remove_demand_function, demand_function_name, path)
     create_demand_functon_class(demand_function_name, path, True)
     edit_environment_config_file(demand_function_name, path)

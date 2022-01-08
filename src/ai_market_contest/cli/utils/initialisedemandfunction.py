@@ -3,17 +3,21 @@ import typing
 from string import Template
 
 from cli_config import DEMAND_FUNCTION_DIR_NAME, DEMAND_FUNCTION_FILE
+from ai_market_contest.cli.utils.filesystemutils import check_overwrite
 
 
 def create_demand_functon_class(
-    demand_function_name: str, proj_dir: pathlib.Path, check_overwrite: bool = False
+    demand_function_name: str, proj_dir: pathlib.Path, overwrite_check: bool = False
 ):
     demand_function_dir = proj_dir / DEMAND_FUNCTION_DIR_NAME
     demand_function_filename: str = f"{demand_function_name}.py"
     demand_function_file: pathlib.Path = demand_function_dir / demand_function_filename
-    # TODO: Add overwriting functionality again
-    # if check_overwrite:
-    #     check_overwrite_agent(agent_filename, agent_dir)
+
+    if overwrite_check and not check_overwrite(
+        demand_function_filename, demand_function_dir
+    ):
+        return
+
     demand_function_file.touch()
     create_new_demand_function_file(demand_function_file, demand_function_name)
 
