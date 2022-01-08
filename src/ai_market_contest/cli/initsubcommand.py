@@ -3,6 +3,10 @@ import configparser
 import pathlib
 import shutil
 from typing import List
+from ai_market_contest.cli.utils.config_utils import (
+    copy_example_evaluation_config_file,
+    copy_example_training_config_file,
+)
 
 import typer
 
@@ -78,4 +82,6 @@ def initialise_file_structure(
     make_agents_classes(path, agent_names)
     make_main_config_file(path, agent_names, authors)
     make_environment_config_file(path)
+    copy_example_training_config_file(path)
+    copy_example_evaluation_config_file(path)
     atexit.unregister(remove_proj_dir)

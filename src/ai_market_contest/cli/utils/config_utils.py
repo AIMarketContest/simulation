@@ -1,3 +1,4 @@
+import shutil
 import sys
 from pathlib import Path
 from typing import List
@@ -5,6 +6,10 @@ from typing import List
 from ai_market_contest.cli.cli_config import (
     CONFIG_FILE_EXTENSION,
     EVALUATION_CONFIGS_DIR_NAME,
+    EXAMPLE_EVALUATION_CONFIG,
+    EXAMPLE_EVALUATION_CONFIG_FILE_NAME,
+    EXAMPLE_TRAINING_CONFIG,
+    EXAMPLE_TRAINING_CONFIG_FILE_NAME,
     TRAINING_CONFIGS_DIR_NAME,
 )
 
@@ -51,3 +56,18 @@ def get_evaluation_config_path(proj_dir: Path, evaluation_config: str) -> Path:
         / f"{evaluation_config}{CONFIG_FILE_EXTENSION}"
     )
     return evaluation_config_path
+
+
+def copy_example_training_config_file(proj_dir: Path) -> None:
+    shutil.copyfile(
+        EXAMPLE_TRAINING_CONFIG,
+        proj_dir / f"{TRAINING_CONFIGS_DIR_NAME}/{EXAMPLE_TRAINING_CONFIG_FILE_NAME}",
+    )
+
+
+def copy_example_evaluation_config_file(proj_dir: Path) -> None:
+    shutil.copyfile(
+        EXAMPLE_EVALUATION_CONFIG,
+        proj_dir
+        / f"{EVALUATION_CONFIGS_DIR_NAME}/{EXAMPLE_EVALUATION_CONFIG_FILE_NAME}",
+    )
