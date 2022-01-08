@@ -5,7 +5,7 @@ from typing import Dict, List
 
 import questionary
 import typer
-from addagentsubcommand import create_agent
+from ai_market_contest.cli.add_agent_subcommand import create_agent
 from adddemandfunctionsubcommand import create_demand_function
 from cli_config import (
     AGENTS_DIR_NAME,
