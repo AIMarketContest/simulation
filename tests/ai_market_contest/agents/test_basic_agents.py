@@ -8,7 +8,7 @@ fixed_agent_rand = FixedAgentRandom()
 
 
 def test_fixed_price_agent_fifty_gives_returns_correct_price():
-    first_price = fixed_agent_fifty.policy([], 0)
+    first_price = fixed_agent_fifty.get_initial_price()
     second_price = fixed_agent_fifty.policy([], 0)
 
     fixed_agent_fifty.update([], 0)
@@ -21,7 +21,7 @@ def test_fixed_price_agent_fifty_gives_returns_correct_price():
 
 
 def test_fixed_random_agent_generates_consistent_prices():
-    first_price = fixed_agent_fifty.policy([], 0)
+    first_price = fixed_agent_fifty.get_initial_price()
     second_price = fixed_agent_fifty.policy([], 0)
 
     fixed_agent_fifty.update([], 0)
@@ -33,7 +33,7 @@ def test_fixed_random_agent_generates_consistent_prices():
 
 
 def test_random_agent_uses_generates_different_prices():
-    first_price = rand_agent.policy([], 0)
+    first_price = rand_agent.get_initial_price()
     second_price = rand_agent.policy([], 0)
 
     rand_agent.update([], 0)

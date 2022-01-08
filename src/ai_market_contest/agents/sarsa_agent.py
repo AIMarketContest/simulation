@@ -18,9 +18,11 @@ class SarsaAgent(Agent):
         self.theta = 0.001
         self.time = 0
         self.round_before_last_prices = []
+        self.last_round_prices = []
 
     def policy(self, last_round_agents_prices: List[float], agent_index: int) -> float:
-        self.round_before_last_prices = last_round_agents_prices
+        self.round_before_last_prices = self.last_round_prices
+        self.last_round_prices = last_round_agents_prices
         other_agent_prices = (
             last_round_agents_prices[:agent_index]
             + last_round_agents_prices[agent_index + 1 :]
@@ -50,11 +52,11 @@ class SarsaAgent(Agent):
     ) -> None:
         self.time += 1
 
-        a1 = last_round_prices[identity_index]
+        a1 = self.last_round_prices[identity_index]
         a2 = self.round_before_last_prices[identity_index]
 
         last_round_prices = (
-            last_round_prices[:identity_index] + last_round_prices[identity_index + 1 :]
+            self.last_round_prices[:identity_index] + self.last_round_prices[identity_index + 1 :]
         )
         round_before_last_prices = (
             self.round_before_last_prices[:identity_index]
@@ -62,7 +64,7 @@ class SarsaAgent(Agent):
         )
 
         self.Q[tuple(last_round_prices)][a1] += self.alpha * (
-            (last_round_sales * a1)
+            (self.last_round_prices * a1)
             + self.gamma * self.Q[tuple(round_before_last_prices)][a2]
             - self.Q[tuple(last_round_prices)][a1]
         )
