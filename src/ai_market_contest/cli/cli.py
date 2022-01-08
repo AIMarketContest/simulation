@@ -48,8 +48,8 @@ from ai_market_contest.training.sequential_agent_name_maker import (
     SequentialAgentNameMaker,
 )
 
-app = typer.Typer()
-
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+app = typer.Typer(context_settings=CONTEXT_SETTINGS)
 
 @app.command()
 def init(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}"))):
