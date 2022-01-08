@@ -12,16 +12,16 @@ def test_q_learning_agent_sets_highest_price_under_fixed_demand():
 
     price = 0
     for i in range(100):
-        q_agent.update(price * 100, 0)
         price = q_agent.policy([price, 50], 0)
+        q_agent.update(price * 100, 0)
     assert price >= 95
 
 
 def test_sarsa_agent_sets_highest_price_under_fixed_demand():
     sarsa_agent = SarsaAgent()
 
-    price = sarsa_agent.get_initial_price()
+    price = 0
     for i in range(100):
-        sarsa_agent.update(price * 100, 0)
         price = sarsa_agent.policy([price, 50], 0)
+        sarsa_agent.update(price * 100, 0)
     assert price >= 95
