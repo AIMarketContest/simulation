@@ -3,10 +3,6 @@ import configparser
 import pathlib
 import shutil
 from typing import List
-from ai_market_contest.cli.utils.config_utils import (
-    copy_example_evaluation_config_file,
-    copy_example_training_config_file,
-)
 
 import typer
 
@@ -19,6 +15,10 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     EVALUATION_CONFIGS_DIR_NAME,
     PROJ_DIR_NAME,
     TRAINING_CONFIGS_DIR_NAME,
+)
+from ai_market_contest.cli.utils.config_utils import (
+    copy_example_evaluation_config_file,
+    copy_example_training_config_file,
 )
 from ai_market_contest.cli.utils.initialiseagent import create_agent_class
 
