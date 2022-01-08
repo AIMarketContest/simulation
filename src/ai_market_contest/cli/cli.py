@@ -17,7 +17,7 @@ from initsubcommand import initialise_file_structure
 from utils.agent_locator import AgentLocator
 from utils.filesystemutils import check_path_exists, check_proj_dir_exists
 
-from ai_market_contest.cli.add_agent_subcommand import create_agent
+from ai_market_contest.cli.utils.agent_manipulation_utils import create_agent
 from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,
 )
