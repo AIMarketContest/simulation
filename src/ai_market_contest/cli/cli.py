@@ -5,7 +5,6 @@ from typing import Dict, List
 
 import questionary
 import typer
-from ai_market_contest.cli.add_agent_subcommand import create_agent
 from adddemandfunctionsubcommand import create_demand_function
 from cli_config import (
     AGENTS_DIR_NAME,
@@ -18,6 +17,7 @@ from initsubcommand import initialise_file_structure
 from utils.agent_locator import AgentLocator
 from utils.filesystemutils import check_path_exists, check_proj_dir_exists
 
+from ai_market_contest.cli.add_agent_subcommand import create_agent
 from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,
 )
