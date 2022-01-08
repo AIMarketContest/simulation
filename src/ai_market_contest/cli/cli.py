@@ -88,7 +88,7 @@ def reset(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
 
 
 @app.command()
-def add_agent(path: Path = typer.Option(Path(f".", exists=True))):
+def add_agent(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
     agent_type = questionary.select(
         "What type of agent would you like add?",
         choices=["custom", "rllib"],
@@ -105,7 +105,9 @@ def add_agent(path: Path = typer.Option(Path(f".", exists=True))):
 
 
 @app.command()
-def add_demand_function(path: Path = typer.Option(Path(f".", exists=True))):
+def add_demand_function(
+    path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
+):
     demand_function_name = typer.prompt("Enter custom demand function name")
     create_demand_function(path, demand_function_name)
 

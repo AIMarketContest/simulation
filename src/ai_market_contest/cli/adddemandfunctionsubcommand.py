@@ -2,35 +2,31 @@ import ast
 import atexit
 import configparser
 import pathlib
-import shutil
-from typing import Any
 
 from utils.initialisedemandfunction import create_demand_functon_class
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
-    AGENTS_DIR_NAME,
     CONFIG_FILENAME,
     DEMAND_FUNCTION_DIR_NAME,
     ENVS_DIR_NAME,
 )
-from ai_market_contest.cli.utils.initialiseagent import create_agent_class
 
 
-def edit_environment_config_file(agent_name: str, proj_dir: pathlib.Path):
-    config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
+def edit_environment_config_file(env_name: str, proj_dir: pathlib.Path):
+    config_file: pathlib.Path = proj_dir / ENVS_DIR_NAME / CONFIG_FILENAME
     config: configparser.ConfigParser = configparser.ConfigParser()
     config.read(config_file)
-    agents: list[str] = ast.literal_eval(config["agent"]["agents"])
-    if agent_name not in agents:
-        agents.append(agent_name)
-    config["agent"]["agents"] = str(agents)
+    envs: list[str] = ast.literal_eval(config["environment"]["demandfunctions"])
+    if env_name not in envs:
+        envs.append(env_name)
+    config["environment"]["demandfunctions"] = str(envs)
     with config_file.open("w") as c_file:
         config.write(c_file)
 
 
 def remove_demand_function(demand_function_name: str, proj_dir: pathlib.Path):
     demand_function_dir = proj_dir / DEMAND_FUNCTION_DIR_NAME
-    target_demand_function = demand_function_dir / f"{agendemand_function_namet_nam}.py"
+    target_demand_function = demand_function_dir / f"{demand_function_name}.py"
 
     if target_demand_function.exists():
         target_demand_function.unlink()
