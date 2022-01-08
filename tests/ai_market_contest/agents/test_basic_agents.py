@@ -20,7 +20,7 @@ def test_fixed_price_agent_fifty_gives_returns_correct_price():
     assert first_price == third_price
 
 
-def test_fixed_random_agent_generates_consistent_prices() :
+def test_fixed_random_agent_generates_consistent_prices():
     first_price = fixed_agent_fifty.policy([], 0)
     second_price = fixed_agent_fifty.policy([], 0)
 

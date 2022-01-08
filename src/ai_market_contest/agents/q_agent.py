@@ -18,10 +18,12 @@ class QAgent(Agent):
         self.theta = 0.0005
         self.time = 0
         self.round_before_last_prices = []
+        self.last_round_prices = []
         self.round_before_last_profit = 0
 
     def policy(self, last_round_agents_prices: List[float], agent_index: int) -> float:
-        self.round_before_last_prices = last_round_agents_prices
+        self.round_before_last_prices = self.last_round_prices
+        self.last_round_prices = last_round_agents_prices
         other_agent_prices = (
             last_round_agents_prices[:agent_index]
             + last_round_agents_prices[agent_index + 1 :]
@@ -40,9 +42,12 @@ class QAgent(Agent):
                     max_profit = profit
                     best_price = price
 
-            return int(best_price)
+            price = int(best_price)
 
-        return np.random.randint(0, self.actions_spaces)
+        else:
+            price = np.random.randint(0, self.actions_spaces)
+
+        return price
 
     def update(
         self,
@@ -51,10 +56,10 @@ class QAgent(Agent):
     ) -> None:
         self.time += 1
 
-        a1 = last_round_prices[identity_index]
+        a1 = self.last_round_prices[identity_index]
 
         last_round_prices = (
-            last_round_prices[:identity_index] + last_round_prices[identity_index + 1 :]
+            self.last_round_prices[:identity_index] + self.last_round_prices[identity_index + 1 :]
         )
         round_before_last_prices = (
             self.round_before_last_prices[:identity_index]
