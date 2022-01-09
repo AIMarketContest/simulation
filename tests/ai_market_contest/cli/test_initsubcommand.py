@@ -1,4 +1,5 @@
-from ai_market_contest.cli.initsubcommand import (
+from importlib_metadata import pathlib
+from ai_market_contest.cli.utils.project_initialisation_utils import (
     make_main_config_file,
     make_proj_dir,
     make_environment_config_file,
@@ -7,7 +8,7 @@ from ai_market_contest.cli.initsubcommand import (
 )
 
 
-def test_make_and_remove_proj_dir(tmp_path):
+def test_make_and_remove_proj_dir(tmp_path: pathlib.Path):
     make_proj_dir(tmp_path)
     assert (tmp_path / "agents").is_dir()
     assert (tmp_path / "environments").is_dir()
@@ -23,7 +24,7 @@ def test_make_and_remove_proj_dir(tmp_path):
     assert not (tmp_path / "training_configs").is_dir()
 
 
-def test_make_main_config_file(tmp_path):
+def test_make_main_config_file(tmp_path: pathlib.Path):
     make_proj_dir(tmp_path)
     make_main_config_file(tmp_path, ["test_agent"], ["test"])
 
@@ -36,7 +37,7 @@ def test_make_main_config_file(tmp_path):
     )
 
 
-def test_make_environment_config_file(tmp_path):
+def test_make_environment_config_file(tmp_path: pathlib.Path):
     make_proj_dir(tmp_path)
     make_environment_config_file(tmp_path)
 
@@ -46,7 +47,7 @@ def test_make_environment_config_file(tmp_path):
     assert config_file.read_text() == "[environment]\ndemandfunctions = []\n\n"
 
 
-def test_initialise_file_structure_does_all(tmp_path):
+def test_initialise_file_structure_does_all(tmp_path: pathlib.Path):
     initialise_file_structure(tmp_path, ["test_agent"], ["test"])
 
     assert (tmp_path / "agents").is_dir()

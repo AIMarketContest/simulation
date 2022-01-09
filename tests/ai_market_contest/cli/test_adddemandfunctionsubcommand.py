@@ -1,12 +1,14 @@
-from ai_market_contest.cli.initsubcommand import initialise_file_structure
+import pathlib
+from ai_market_contest.cli.utils.project_initialisation_utils import (
+    initialise_file_structure,
+)
 from ai_market_contest.cli.adddemandfunctionsubcommand import (
-    edit_environment_config_file,
     remove_demand_function,
     create_demand_function,
 )
 
 
-def test_create_demand_function(tmp_path):
+def test_create_demand_function(tmp_path: pathlib.Path):
     initialise_file_structure(tmp_path, ["test_agent"], ["test_author"])
     create_demand_function(tmp_path, "test_demand_function")
 
@@ -23,7 +25,7 @@ def test_create_demand_function(tmp_path):
     assert "test_demand_function" in env_config_file.read_text()
 
 
-def test_remove_demand_function(tmp_path):
+def test_remove_demand_function(tmp_path: pathlib.Path):
     initialise_file_structure(tmp_path, ["test_agent"], ["test_author"])
     create_demand_function(tmp_path, "test_demand_function")
     demand_function_file = (
