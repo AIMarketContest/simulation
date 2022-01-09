@@ -120,17 +120,16 @@ def add_demand_function(
 
 @app.command()
 def train(
-    path: Path = typer.Option(Path(f".", exists=True)), showtraceback: bool = False
+    path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)),
+    showtraceback: bool = False,
 ):
-    proj_dir: Path = path / PROJ_DIR_NAME
-    check_path_exists(path)
-    check_proj_dir_exists(proj_dir)
+    check_proj_dir_exists(path)
 
-    agent_names: List[str] = get_agent_names(proj_dir)
+    agent_names: List[str] = get_agent_names(path)
     chosen_agent_name: str = questionary.select(
         "Choose an agent to train.", choices=agent_names
     ).ask()
-    chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, proj_dir)
+    chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
 
     trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
     trained_agents_info: Dict[str, str] = get_trained_agents_info(
@@ -143,7 +142,7 @@ def train(
     chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
         chosen_agent, trained_agents_info[chosen_trained_agent]
     )
-    training_configs: List[str] = get_training_configs(proj_dir)
+    training_configs: List[str] = get_training_configs(path)
     check_configs_exist(training_configs)
     training_config: str = questionary.select(
         "Choose a training config:", choices=training_configs
@@ -153,7 +152,7 @@ def train(
 
     set_up_and_execute_training_routine(
         training_config,
-        proj_dir,
+        path,
         chosen_agent_version,
         trained_agents_info[chosen_trained_agent],
         training_msg,
@@ -161,15 +160,12 @@ def train(
 
 
 @app.command()
-def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
-    proj_dir: Path = path / PROJ_DIR_NAME
-    env_dir = proj_dir / ENVS_DIR_NAME
-    check_path_exists(path)
-    check_proj_dir_exists(proj_dir)
+def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
+    check_proj_dir_exists(path)
 
     agents: Dict[str, ExistingAgentVersion] = {}
 
-    agent_names: List[str] = get_agent_names(proj_dir)
+    agent_names: List[str] = get_agent_names(path)
     agent_names.append("exit")
     agent_count: int = 0
     # TODO check that list is not empty
@@ -182,7 +178,7 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
                 print("Cannot start simulation with no trained agents")
                 continue
             break
-        chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, proj_dir)
+        chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
 
         trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
         trained_agents_info: Dict[str, str] = get_trained_agents_info(
@@ -204,7 +200,7 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
         agent_count += 1
     print(agents)
 
-    evaluation_configs: List[str] = get_evaluation_configs(proj_dir)
+    evaluation_configs: List[str] = get_evaluation_configs(path)
     check_configs_exist(evaluation_configs)
     evaluation_config: str = questionary.select(
         "Choose a training config:", choices=evaluation_configs
@@ -213,7 +209,7 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
     eval_config_parser.optionxform = str
 
     evaluation_config_reader: EvaluationConfigReader = EvaluationConfigReader(
-        get_evaluation_config_path(proj_dir, evaluation_config),
+        get_evaluation_config_path(path, evaluation_config),
         DemandFunctionLocator(env_dir),
         eval_config_parser,
         agent_count,
@@ -222,7 +218,7 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
         evaluation_config_reader.get_num_agents()
     )
 
-    agent_locator: AgentLocator = AgentLocator(proj_dir / AGENTS_DIR_NAME)
+    agent_locator: AgentLocator = AgentLocator(path / AGENTS_DIR_NAME)
 
     evaluator: AgentEvaluator = AgentEvaluator(
         evaluation_config_reader.get_environment(agent_name_maker),
