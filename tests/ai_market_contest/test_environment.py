@@ -1,60 +1,66 @@
-﻿# from unittest import TestCase
-#
-# import numpy as np
-#
-# from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom  # type: ignore
-# from ai_market_contest.demand_function import DemandFunction  # type: ignore
-# from ai_market_contest.demandfunctions.fixed_demand_function import (
-#     FixedDemandFunction,  # type: ignore
-# )
-# from ai_market_contest.environment import Market  # type: ignore
-#
-#
-# class MarketTest(TestCase):
-#     demand_function: DemandFunction = FixedDemandFunction()
-#     simulation_length = 5
-#
-#     def test_to_add_agent(self):
-#         env = Market(self.simulation_length, self.demand_function, 1)
-#         a = FixedAgentRandom()
-#         env.add_agent(a)
-#         assert len(env.possible_agents) == 1
-#
-#     def test_to_add_agents(self):
-#         env = Market(self.simulation_length, self.demand_function, 4)
-#         a = FixedAgentRandom()
-#         b = FixedAgentRandom()
-#         c = FixedAgentRandom()
-#         d = FixedAgentRandom()
-#
-#         env.add_agent(a)
-#         env.add_agent(b)
-#         env.add_agent(c)
-#         env.add_agent(d)
-#         assert len(env.possible_agents) == 4
-#
-#     def test_to_get_results(self):
-#         env = Market(self.simulation_length, self.demand_function, 1)
-#         a = FixedAgentRandom()
-#         env.add_agent(a)
-#         test_set_prices = np.array([[1.00]])
-#         test_sales = np.array([[4]])
-#         env.hist_set_prices = test_set_prices
-#         env.hist_sales_made = test_sales
-#
-#         prices, sales = env.get_results()
-#         assert prices == test_set_prices and sales == test_sales
-#
-#     def test_check_if_runs_simulation_for_correct_duration(self):
-#         env = Market(self.simulation_length, self.demand_function, 0)
-#         with self.assertRaises(IndexError):
-#             for _ in range(6):
-#                 env.step({})
-#
-#     def test_runtime_exception_when_too_many_agents_added(self):
-#         env = Market(self.simulation_length, self.demand_function, 2)
-#         env.add_agent(FixedAgentRandom())
-#         env.add_agent(FixedAgentRandom())
-#
-#         with self.assertRaises(RuntimeError):
-#             env.add_agent(FixedAgentRandom())
+﻿import math
+from unittest import TestCase
+
+import numpy as np
+
+from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom  # type: ignore
+from ai_market_contest.demand_function import DemandFunction  # type: ignore
+from ai_market_contest.demandfunctions.fixed_demand_function import (
+    FixedDemandFunction,  # type: ignore
+)
+from ai_market_contest.environment import Market  # type: ignore
+from ai_market_contest.training.sequential_agent_name_maker import SequentialAgentNameMaker
+
+
+class MarketTest(TestCase):
+    simulation_length = 5
+    num_agents = 2
+
+    demand_function: DemandFunction = FixedDemandFunction()
+    agent_name_maker = SequentialAgentNameMaker(num_agents)
+
+    def test_environment_setup(self):
+        env = Market(self.num_agents, self.demand_function, self.simulation_length, self.agent_name_maker)
+        assert env.reward_range == (-math.inf, math.inf)
+        assert env.done is False
+        assert env.time_step == 0
+
+    def test_environment_reset(self):
+        env = Market(self.num_agents, self.demand_function, self.simulation_length, self.agent_name_maker)
+
+        env.step({"player_0": 1, "player_1": 3})
+        assert env.time_step != 0
+
+        env.reset()
+        assert env.time_step == 0
+
+    def test_environment_handles_step_correctly(self):
+        env = Market(self.num_agents, self.demand_function, self.simulation_length, self.agent_name_maker)
+
+        observations, rewards, dones, infos = env.step({"player_0": 1, "player_1": 3})
+        assert observations == {"player_0": [1, 3], "player_1": [1, 3]}
+        assert rewards == {"player_0": 1, "player_1": 3}
+        assert dones == {"__all__": False}
+        assert infos == {"player_0": {"identity_index": 0}, "player_1": {"identity_index": 1}}
+        observations, rewards, dones, infos = env.step({"player_0": 2, "player_1": 3})
+        assert observations == {"player_0": [2, 3], "player_1": [2, 3]}
+        assert rewards == {"player_0": 2, "player_1": 3}
+        assert dones == {"__all__": False}
+        assert infos == {"player_0": {"identity_index": 0}, "player_1": {"identity_index": 1}}
+        observations, rewards, dones, infos = env.step({"player_0": 2, "player_1": 2})
+        assert observations == {"player_0": [2, 2], "player_1": [2, 2]}
+        assert rewards == {"player_0": 2, "player_1": 2}
+        assert dones == {"__all__": False}
+        assert infos == {"player_0": {"identity_index": 0}, "player_1": {"identity_index": 1}}
+        observations, rewards, dones, infos = env.step({"player_0": 1, "player_1": 2})
+        assert observations == {"player_0": [1, 2], "player_1": [1, 2]}
+        assert rewards == {"player_0": 1, "player_1": 2}
+        assert dones == {"__all__": False}
+        assert infos == {"player_0": {"identity_index": 0}, "player_1": {"identity_index": 1}}
+        observations, rewards, dones, infos = env.step({"player_0": 3, "player_1": 1})
+        assert observations == {"player_0": [3, 1], "player_1": [3, 1]}
+        assert rewards == {"player_0": 3, "player_1": 1}
+        assert dones == {"__all__": True}
+        assert infos == {"player_0": {"identity_index": 0}, "player_1": {"identity_index": 1}}
+
+        assert env.done is True
