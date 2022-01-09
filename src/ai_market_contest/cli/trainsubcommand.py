@@ -2,6 +2,7 @@ import sys
 from typing import List
 from ai_market_contest.cli.utils.hashing import get_shortened_hashes
 
+
 def ask_for_trained_agents(agent: str) -> bool:
     max_count = 3
     count = 0
@@ -53,4 +54,3 @@ def choose_trained_agent(trained_agents: List[str]):
         print("\nOperation Aborted: Invalid hash or index")
         sys.exit(1)
     return trained_agent
-

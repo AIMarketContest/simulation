@@ -14,7 +14,7 @@ def test_initial_price_not_implemented():
 
 def test_policy_not_implemented():
     try:
-        agent.policy([10],0)
+        agent.policy([10], 0)
     except NotImplementedError:
         assert True
         return
@@ -23,7 +23,7 @@ def test_policy_not_implemented():
 
 def test_update_not_implemented():
     try:
-        agent.update(100,0)
+        agent.update(100, 0)
     except NotImplementedError:
         assert True
         return

@@ -1,4 +1,6 @@
-from ai_market_contest.training.sequential_agent_name_maker import SequentialAgentNameMaker
+from ai_market_contest.training.sequential_agent_name_maker import (
+    SequentialAgentNameMaker,
+)
 
 
 def test_get_names_functionality():
@@ -16,7 +18,7 @@ def test_get_names_functionality():
         "player_6",
         "player_7",
         "player_8",
-        "player_9"
+        "player_9",
     ]
 
 
@@ -50,5 +52,3 @@ def test_get_name_validation():
             return
 
     assert False
-
-

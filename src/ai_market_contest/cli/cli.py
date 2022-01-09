@@ -17,9 +17,14 @@ from ai_market_contest.cli.cli_config import (
 )
 from ai_market_contest.cli.initsubcommand import initialise_file_structure
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
-from ai_market_contest.training.sequential_agent_name_maker import SequentialAgentNameMaker
+from ai_market_contest.training.sequential_agent_name_maker import (
+    SequentialAgentNameMaker,
+)
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
-from ai_market_contest.cli.utils.filesystemutils import check_path_exists, check_proj_dir_exists
+from ai_market_contest.cli.utils.filesystemutils import (
+    check_path_exists,
+    check_proj_dir_exists,
+)
 
 from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,

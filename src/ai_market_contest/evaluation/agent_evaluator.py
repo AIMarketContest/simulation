@@ -10,6 +10,7 @@ from ai_market_contest.cli.utils.checkpoint_locator import get_checkpoint_path  
 from ai_market_contest.cli.utils.agent_locator import AgentLocator  # type: ignore
 from ai_market_contest.training.agent_name_maker import AgentNameMaker  # type: ignore
 
+
 class AgentEvaluator:
     def __init__(
         self,

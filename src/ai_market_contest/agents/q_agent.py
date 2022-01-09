@@ -59,7 +59,8 @@ class QAgent(Agent):
         a1 = self.last_round_prices[identity_index]
 
         last_round_prices = (
-            self.last_round_prices[:identity_index] + self.last_round_prices[identity_index + 1 :]
+            self.last_round_prices[:identity_index]
+            + self.last_round_prices[identity_index + 1 :]
         )
         round_before_last_prices = (
             self.round_before_last_prices[:identity_index]
