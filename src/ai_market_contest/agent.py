@@ -1,11 +1,11 @@
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from gym.spaces.space import Space  # type: ignore
 import numpy as np
-from ray.rllib.policy.policy import Policy
-from ray.rllib.utils.typing import TensorStructType, TensorType
-from ray.rllib.policy.sample_batch import SampleBatch
+from gym.spaces.space import Space  # type: ignore
 from ray.rllib.evaluation import Episode
+from ray.rllib.policy.policy import Policy
+from ray.rllib.policy.sample_batch import SampleBatch
+from ray.rllib.utils.typing import TensorStructType, TensorType
 
 from ai_market_contest.typing.types import Price  # type: ignore
 

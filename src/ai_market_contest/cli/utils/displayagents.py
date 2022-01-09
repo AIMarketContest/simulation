@@ -1,7 +1,6 @@
 import pathlib
 
 from ai_market_contest.cli.cli_config import HASH_LENGTH  # type: ignore
-from ai_market_contest.cli.utils.processmetafile import get_trained_agent_metadata
 
 
 def display_trained_agents(agent_dir: pathlib.Path, trained_agents: list[str]):

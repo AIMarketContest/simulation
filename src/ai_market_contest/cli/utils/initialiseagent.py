@@ -1,7 +1,6 @@
 import configparser
 import datetime
 import pathlib
-import sys
 import typing
 from string import Template
 
