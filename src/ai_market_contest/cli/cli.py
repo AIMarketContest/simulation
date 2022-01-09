@@ -186,14 +186,15 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
         chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, proj_dir)
 
         trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
-        trained_agents_info: List[str] = get_trained_agents_info(
+        trained_agents_info: Dict[str, str] = get_trained_agents_info(
             trained_agents, chosen_agent.get_dir()
         )
         chosen_trained_agent: str = questionary.select(
-            "Select which version of the agent to train", choices=trained_agents_info
+            "Select which version of the agent to train",
+            choices=list(trained_agents_info.keys()),
         ).ask()
         chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
-            chosen_agent, chosen_trained_agent
+            chosen_agent, trained_agents_info[chosen_trained_agent]
         )
         agent_given_name: str = questionary.text("Enter unique name for agent").ask()
         while agent_given_name in agents.keys():
