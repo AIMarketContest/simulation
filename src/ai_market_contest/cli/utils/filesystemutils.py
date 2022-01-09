@@ -1,8 +1,9 @@
 import pathlib
 import sys
 
-from ai_market_contest.cli.cli_config import COMMAND_NAME
 import typer
+
+from ai_market_contest.cli.cli_config import COMMAND_NAME
 
 
 def check_directory_exists(directory: pathlib.Path, error_msg: str):

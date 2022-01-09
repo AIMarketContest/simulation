@@ -4,7 +4,6 @@ import configparser
 import pathlib
 
 import typer
-
 from utils.initialisedemandfunction import create_demand_functon_class
 
 from ai_market_contest.cli.cli_config import (  # type: ignore

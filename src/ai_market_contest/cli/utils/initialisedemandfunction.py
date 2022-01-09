@@ -3,6 +3,7 @@ import typing
 from string import Template
 
 from cli_config import DEMAND_FUNCTION_DIR_NAME, DEMAND_FUNCTION_FILE
+
 from ai_market_contest.cli.utils.filesystemutils import check_overwrite
 
 

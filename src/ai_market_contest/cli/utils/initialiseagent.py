@@ -11,10 +11,12 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     TRAINED_AGENTS_DIR_NAME,
 )
-from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
+from ai_market_contest.cli.utils.filesystemutils import (
+    check_config_file_exists,
+    check_overwrite,
+)
 from ai_market_contest.cli.utils.hashing import set_agent_initial_hash
 from ai_market_contest.cli.utils.processmetafile import write_meta_file
-from ai_market_contest.cli.utils.filesystemutils import check_overwrite
 
 
 def set_agent_to_initialised(agent_dir: pathlib.Path):
