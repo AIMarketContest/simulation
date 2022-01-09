@@ -156,7 +156,7 @@ def train(
         training_config,
         proj_dir,
         chosen_agent_version,
-        chosen_trained_agent,
+        trained_agents_info[chosen_trained_agent],
         training_msg,
     )
 
