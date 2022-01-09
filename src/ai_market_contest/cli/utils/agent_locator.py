@@ -14,12 +14,6 @@ class AgentLocator:
     def __init__(self, agents_dir: pathlib.Path):
         self.agents_dir: pathlib.Path = agents_dir
 
-    def _get_agents(self) -> List[str]:
-        config_parser: ConfigParser = ConfigParser()
-        config_parser.read(self.agents_dir / CONFIG_FILENAME)
-        agents: List[str] = literal_eval(config_parser["agent"]["agents"])
-        return agents
-
     def get_agent(self, agent_name: str) -> Agent:
         if agent_name in CUR_AGENTS:
             return CUR_AGENTS[agent_name]
