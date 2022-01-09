@@ -48,7 +48,7 @@ def create_agent_class(
     agent_filename: str = f"{agent_name}.py"
     agent_dir: pathlib.Path = agents_dir / agent_name
 
-    if overwrite_check and not check_overwrite(agent_filename, agent_dir):
+    if agent_dir.exists() and overwrite_check and not check_overwrite(agent_filename, agent_dir):
         return
 
     agent_file: pathlib.Path = agent_dir / agent_filename
