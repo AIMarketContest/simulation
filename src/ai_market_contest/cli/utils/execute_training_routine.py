@@ -97,7 +97,7 @@ def set_up_and_execute_training_routine(
 
 
 def save_new_agent(
-    trainer: Trainer,
+    trainer: AgentTrainer,
     agent_version: ExistingAgentVersion,
     parent_hash: str,
     training_msg: str,
