@@ -60,7 +60,6 @@ def test_add_trained_agent_to_config_file(tmp_path):
     initialise_file_structure(tmp_path, ["test_agent"], ["test_author"])
     add_trained_agent_to_config_file(tmp_path / "agents/test_agent", "some_hexidecimal_code_for_an_agent")
     trained_agents = get_trained_agents(tmp_path / "agents/test_agent")
-    print(trained_agents)
 
     assert "some_hexidecimal_code_for_an_agent" in trained_agents
 
