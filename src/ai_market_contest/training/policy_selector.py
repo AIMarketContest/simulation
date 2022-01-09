@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict  # type: ignore
+from typing import Any, Callable, Dict, Set  # type: ignore
 
 
 class PolicySelector:
@@ -22,21 +22,21 @@ class PolicySelector:
         self_play_number: int = 0,
         naive_agents_counts: Dict[str, int] = {},
     ):
-        self.agent_name = agent_name
-        self.self_play_number = self_play_number
-        self.naive_agents_counts = naive_agents_counts
-        self.opponent_name = self.get_agent_opponent_name()
+        self.agent_name: str = agent_name
+        self.self_play_number: int = self_play_number
+        self.naive_agents_counts: Dict[str, int] = naive_agents_counts
+        self.opponent_name: str = self.get_agent_opponent_name()
 
-    def get_agent_opponent_name(self):
+    def get_agent_opponent_name(self) -> str:
         return self.agent_name + "-opponent"
 
-    def get_agent_name(self):
+    def get_agent_name(self) -> str:
         return self.agent_name
 
-    def has_self_play(self):
+    def has_self_play(self) -> bool:
         return self.self_play_number > 0
 
-    def get_naive_agents_names(self):
+    def get_naive_agents_names(self) -> Set[str]:
         return self.naive_agents_counts.keys()
 
     def get_select_policy_function(self) -> Callable[[str, Any, Any], str]:  # type: ignore
