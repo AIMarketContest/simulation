@@ -38,4 +38,4 @@ class TrainingConfigReader(SimulationConfigReader):
     def write_config_to_file(self, new_agent_dir: pathlib.Path):
         config_file: pathlib.Path = new_agent_dir / CONFIG_FILENAME
         with config_file.open("w") as cfg_file:
-            parsed_config.write(cfg_file)
+            self.parsed_config.write(cfg_file)
