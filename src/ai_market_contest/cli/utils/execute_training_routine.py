@@ -112,5 +112,5 @@ def save_new_agent(
         new_agent_dir, new_agent_hash, cur_datetime, training_msg, parent_hash
     )
     config_reader.write_config_to_file(new_agent_dir)
-    policy_config_maker.save(new_agent_dir)
+    # policy_config_maker.save_multiagent_config(new_agent_dir)
     trainer.save(new_agent_dir)

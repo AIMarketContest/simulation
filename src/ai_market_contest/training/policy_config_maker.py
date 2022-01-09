@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from ray.rllib.policy.policy import PolicySpec
 
-from ai_market_contest.cli.cli_config import MULTIAGENT_CONFIG_FILNAME
+from ai_market_contest.cli.cli_config import MULTIAGENT_CONFIG_FILENAME
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.training.policy_selector import PolicySelector
 
@@ -39,6 +39,6 @@ class PolicyConfigMaker:
         return policy_config
 
     def save_multiagent_config(self, agent_dir: pathlib.Path):
-        multi_agent_config_file = agent_dir / MULTIAGENT_CONFIG_FILNAME
+        multi_agent_config_file = agent_dir / MULTIAGENT_CONFIG_FILENAME
         with multi_agent_config_file.open("wb") as config_file:
             pickle.dump(config_file, self.policy_config)

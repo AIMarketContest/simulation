@@ -7,7 +7,7 @@ from ray.rllib.agents.trainer import Trainer  # type: ignore
 from ray.tune.registry import register_env  # type: ignore
 
 from ai_market_contest.agent import Agent  # type: ignore
-from ai_market_contest.cli.cli_config import CONFIG_FILENAME, MULTIAGENT_CONFIG_FILNAME
+from ai_market_contest.cli.cli_config import CONFIG_FILENAME, MULTIAGENT_CONFIG_FILENAME
 from ai_market_contest.cli.configs.multi_agent_config_getter import (
     get_multi_agent_config,  # type: ignore
 )
@@ -55,7 +55,7 @@ class AgentEvaluator:
         for agent_name, chosen_agent_version in agents.items():
             trainer_cls: Trainer = get_trainer_class(op_algorithm)
             multi_agent_config = get_multi_agent_config(
-                chosen_agent_version.get_dir() / MULTIAGENT_CONFIG_FILNAME
+                chosen_agent_version.get_dir() / MULTIAGENT_CONFIG_FILENAME
             )
             config: Dict[str, Any] = {"num_workers": 1, "explore": False}
             config.update(multi_agent_config)

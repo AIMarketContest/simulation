@@ -1,9 +1,11 @@
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
-import gym  # type: ignore
+from gym.spaces.space import Space  # type: ignore
 import numpy as np
 from ray.rllib.policy.policy import Policy
-from ray.rllib.utils.typing import TensorStructType, TensorType, TrainerConfigDict
+from ray.rllib.utils.typing import TensorStructType, TensorType
+from ray.rllib.policy.sample_batch import SampleBatch
+from ray.rllib.evaluation import Episode
 
 from ai_market_contest.typing.types import Price  # type: ignore
 
@@ -19,7 +21,12 @@ class Agent(Policy):
     For those not familiar with policy-update, see the comments on each function.
     """
 
-    def __init__(self, observation_space=None, action_space=None, config={}):
+    def __init__(
+        self,
+        observation_space: Space,
+        action_space: Space,
+        config: Dict[Any, Any] = {},
+    ):
         super().__init__(observation_space, action_space, config)
         self.w = 1
 
@@ -95,13 +102,12 @@ class Agent(Policy):
         state_batches: Optional[List[TensorType]] = None,
         prev_action_batch: Union[List[TensorStructType], TensorStructType] = None,
         prev_reward_batch: Union[List[TensorStructType], TensorStructType] = None,
-        info_batch: Optional[Dict[str, list]] = None,
+        info_batch: Optional[Dict[str, List[Any]]] = None,
         episodes: Optional[List["Episode"]] = None,
         explore: Optional[bool] = None,
         timestep: Optional[int] = None,
         **kwargs
-    ):
-        identity_index: int = 0
+    ) -> Tuple[List[Price], List[Any], Dict[str, Any]]:
         action_batch: List[Price] = []
         for agent_index in range(len(obs_batch)):
             obs = obs_batch[agent_index]
@@ -121,13 +127,13 @@ class Agent(Policy):
 
         return (action_batch, [], {})
 
-    def learn_on_batch(self, samples):
-        pass
+    def learn_on_batch(self, samples: SampleBatch) -> Dict[str, Any]:
+        return {}
 
     def update_target(self):
         return True
 
-    def set_weights(self, weights):
+    def set_weights(self, weights: Dict[str, int]):
         self.w = weights["w"]
 
     def get_weights(self):
