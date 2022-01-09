@@ -46,7 +46,7 @@ class AgentEvaluator:
         for agent_name, chosen_agent_version in agents.items():
             trainer_cls: Trainer = get_trainer_class(op_algorithm)
             new_trainer: Trainer = trainer_cls(
-                env="marketplace", config={"num_workers": 1, explore: False}
+                env="marketplace", config={"num_workers": 1, "explore": False}
             )
             checkpoint_path: str = get_checkpoint_path(chosen_agent_version.get_dir())
             new_trainer.restore(checkpoint_path)
