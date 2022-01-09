@@ -18,6 +18,3 @@ class RandomAgent(Agent):
 
     def policy(self, last_round_agents_prices: List[Price], identity_index) -> Price:
         return random.randint(0, 99)
-
-    def __str__(self):
-        return "RandomAgent()"
