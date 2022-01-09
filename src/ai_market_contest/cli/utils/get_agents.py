@@ -43,7 +43,7 @@ def get_trained_agents(agent_dir: pathlib.Path) -> list[str]:
 def get_trained_agents_info(
     trained_agents: List[str], agent_dir: pathlib.Path
 ) -> List[str]:
-    trained_agents_information: Dict[str:str] = {}
+    trained_agents_information: Dict[str, str] = {}
     trained_agent: str
     for trained_agent in trained_agents:
         (agent_hash, time, msg, parent_hash) = get_trained_agent_metadata(

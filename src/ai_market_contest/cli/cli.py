@@ -133,7 +133,7 @@ def train(
     chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, proj_dir)
 
     trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
-    trained_agents_info: Dict[str:str] = get_trained_agents_info(
+    trained_agents_info: Dict[str, str] = get_trained_agents_info(
         trained_agents, chosen_agent.get_dir()
     )
     chosen_trained_agent: str = questionary.select(
