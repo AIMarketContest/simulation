@@ -68,7 +68,7 @@ class PolicySelector:
         Set[str]
             A set containing all naive agent names in the simulation.
         """
-        return self.naive_agents_counts.keys()
+        return set(self.naive_agents_counts.keys())
 
     def get_select_policy_function(self) -> Callable[[str, Any, Any], str]:  # type: ignore
         """
