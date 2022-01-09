@@ -74,10 +74,15 @@ class PolicySelector:
         """
         Returns a function that maps an agent_id to a policy name.
 
+        Parameters
+        ----------
+        agent_id: str
+            String holding name given to each instance of each agent.
+
         Returns
         -------
         Callable[[int, Any, Any], str]
-            Function that maps an agent_id to a policy name.
+            Function that maps an agent_id to a policy name. Empty if agent id is not valid.
         """
 
         def select_policy(agent_id: str, *args, **kwargs) -> str:
@@ -89,6 +94,7 @@ class PolicySelector:
             ]:
                 return self.get_agent_opponent_name()
             cur_number_of_agents = self.self_play_number + 1
+
             for naive_agent, count in self.naive_agents_counts.items():
                 if agent_id in [
                     "player_" + str(i)
@@ -98,6 +104,6 @@ class PolicySelector:
                 ]:
                     return naive_agent
                 cur_number_of_agents += count
-            return None
+            return ""
 
         return select_policy
