@@ -2,7 +2,7 @@ import ast
 import configparser
 import pathlib
 import sys
-from typing import List
+from typing import Dict, List
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,

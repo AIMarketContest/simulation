@@ -34,7 +34,7 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAg
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
-from ai_market_contest.cli.utils.getagents import (
+from ai_market_contest.cli.utils.get_agents import (
     get_agent_names,
     get_trained_agents,
     get_trained_agents_info,

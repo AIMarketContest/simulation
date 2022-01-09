@@ -24,7 +24,7 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAg
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
-from ai_market_contest.cli.utils.getagents import (  # type: ignore
+from ai_market_contest.cli.utils.get_agents import (  # type: ignore
     add_trained_agent_to_config_file,
 )
 from ai_market_contest.cli.utils.hashing import hash_string  # type: ignore
