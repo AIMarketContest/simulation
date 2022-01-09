@@ -27,15 +27,47 @@ class PolicySelector:
         self.naive_agents_counts: Dict[str, int] = naive_agents_counts
 
     def get_agent_opponent_name(self) -> str:
+        """
+        Defines name for self play opponent agents.
+
+        Returns
+        -------
+        str
+            Name for self play opponent agents.
+        """
         return self.agent_name + "-opponent"
 
     def get_agent_name(self) -> str:
+        """
+        Returns the name of the agent that is training.
+
+        Returns
+        -------
+        str
+            Name of the agent training.
+        """
         return self.agent_name
 
     def has_self_play(self) -> bool:
+        """
+        Indicates whether the agent is training against any copies of itself.
+
+        Returns
+        -------
+        bool
+            Boolean indicating whether there are any self play agents.
+        """
         return self.self_play_number > 0
 
     def get_naive_agents_names(self) -> Set[str]:
+        """
+        Returns the names of all naive agents.
+
+        Returns
+        -------
+        Set[str]
+            A set containing all naive agent names in the simulation.
+        """
         return self.naive_agents_counts.keys()
 
     def get_select_policy_function(self) -> Callable[[str, Any, Any], str]:  # type: ignore
@@ -66,5 +98,6 @@ class PolicySelector:
                 ]:
                     return naive_agent
                 cur_number_of_agents += count
+            return None
 
         return select_policy
