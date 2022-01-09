@@ -89,10 +89,9 @@ def set_up_and_execute_training_routine(
         agent_version.was_agent_initialised(),
         config_reader.get_optimisation_algorithm(),
     )
+    trainer.train(config_reader.get_num_epochs(), config_reader.print_training())
     if not agent_version.was_agent_initialised():
         trainer.save(agent_version.get_dir())
-    trainer.train(config_reader.get_num_epochs(), config_reader.print_training())
-
     save_new_agent(trainer, agent_version, parent_hash, training_msg, config_reader)
 
 
