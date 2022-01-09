@@ -159,6 +159,10 @@ def train(
     )
 
 
+def validationthing(name):
+    return False
+
+
 @app.command()
 def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
     check_proj_dir_exists(path)
@@ -191,23 +195,22 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
         chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
             chosen_agent, trained_agents_info[chosen_trained_agent]
         )
-        agent_given_name: str = questionary.text("Enter unique name for agent").ask()
-        while agent_given_name in agents.keys():
-            agent_given_name: str = questionary.text(
-                "Name was already taken. Enter unique name for agent"
-            ).ask()
+        agent_given_name: str = questionary.text(
+            "Enter unique name for agent",
+            validate=(lambda name: name and name not in agents.keys()),
+        ).ask()
         agents[agent_given_name] = chosen_agent_version
         agent_count += 1
-    print(agents)
 
     evaluation_configs: List[str] = get_evaluation_configs(path)
     check_configs_exist(evaluation_configs)
     evaluation_config: str = questionary.select(
-        "Choose a training config:", choices=evaluation_configs
+        "Choose an evaluation configuration:", choices=evaluation_configs
     ).ask()
     eval_config_parser: ConfigParser = ConfigParser()
     eval_config_parser.optionxform = str
 
+    env_dir: Path = path / ENVS_DIR_NAME
     evaluation_config_reader: EvaluationConfigReader = EvaluationConfigReader(
         get_evaluation_config_path(path, evaluation_config),
         DemandFunctionLocator(env_dir),
