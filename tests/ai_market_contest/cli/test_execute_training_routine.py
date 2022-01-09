@@ -1,24 +1,11 @@
-import pathlib
-from ai_market_contest.cli.utils.get_agents import (
-    get_agent_names,
-    get_trained_agents,
-    get_trained_agents_info,
-    add_trained_agent_to_config_file
+from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
+    ExistingAgent,
+    ExistingAgentVersion,
 )
-
-from ai_market_contest.cli.utils.agent_manipulation_utils import (
-    remove_agent_dir,
-    create_agent
-)
-
+from ai_market_contest.cli.utils.get_agents import get_trained_agents
 from ai_market_contest.cli.utils.project_initialisation_utils import (
     initialise_file_structure,
 )
-
-from ai_market_contest.cli.utils.existing_agent.existing_agent_version import ExistingAgent
-from ai_market_contest.cli.utils.existing_agent.existing_agent_version import ExistingAgentVersion
-
-from ai_market_contest.cli.utils.execute_training_routine import set_up_and_execute_training_routine, save_new_agent
 
 
 def test_set_up_and_execute_training_routine(tmp_path):

@@ -1,10 +1,11 @@
 import pathlib
+
+from ai_market_contest.cli.adddemandfunctionsubcommand import (
+    create_demand_function,
+    remove_demand_function,
+)
 from ai_market_contest.cli.utils.project_initialisation_utils import (
     initialise_file_structure,
-)
-from ai_market_contest.cli.adddemandfunctionsubcommand import (
-    remove_demand_function,
-    create_demand_function,
 )
 
 

@@ -1,9 +1,9 @@
 import pathlib
-from ai_market_contest.cli.utils.agent_manipulation_utils import (
-    remove_agent_dir,
-    create_agent
-)
 
+from ai_market_contest.cli.utils.agent_manipulation_utils import (
+    create_agent,
+    remove_agent_dir,
+)
 from ai_market_contest.cli.utils.project_initialisation_utils import (
     initialise_file_structure,
 )

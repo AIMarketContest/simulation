@@ -1,8 +1,6 @@
 ﻿import math
 from unittest import TestCase
 
-import numpy as np
-
 from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom  # type: ignore
 from ai_market_contest.demand_function import DemandFunction  # type: ignore
 from ai_market_contest.demandfunctions.fixed_demand_function import (

@@ -52,7 +52,7 @@ TRAIN_CONFIG_FILENAME: Final = "train_config.ini"
 TRAINING_CONFIGS_DIR_NAME: Final = "training_configs"
 EVALUATION_CONFIGS_DIR_NAME: Final = "evaluation_configs"
 CONFIG_FILE_EXTENSION: Final = ".ini"
-MULTIAGENT_CONFIG_FILNAME: Final = "multi_agent_config.py"
+MULTIAGENT_CONFIG_FILENAME: Final = "multi_agent_config.py"
 RLLIB_AGENTS = [
     "AC2",
     "AC3",

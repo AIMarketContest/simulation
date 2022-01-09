@@ -1,13 +1,9 @@
 import importlib.util
 import pathlib
-from ast import literal_eval
-from configparser import ConfigParser
 from types import ModuleType
-from typing import List
 
 from ai_market_contest.agent import Agent
-from ai_market_contest.cli.cli_config import CONFIG_FILENAME, CUR_AGENTS
-from ai_market_contest.demand_function import DemandFunction
+from ai_market_contest.cli.cli_config import CUR_AGENTS
 
 
 class AgentLocator:

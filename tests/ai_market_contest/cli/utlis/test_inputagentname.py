@@ -1,6 +1,6 @@
 from ai_market_contest.cli.utils.inputagentname import (
-    remove_underscores,
     is_valid_agent_name,
+    remove_underscores,
 )
 
 
