@@ -14,8 +14,6 @@ class PolicySelector:
         Number of self-play agents to be trained against.
     naive_agents_counts: Dict[str, int]
         Map from an agent name to the number of that agent to be trained against.
-
-
     """
 
     def __init__(
