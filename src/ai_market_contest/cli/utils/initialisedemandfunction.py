@@ -17,7 +17,7 @@ def create_demand_functon_class(
     demand_function_filename: str = f"{demand_function_name}.py"
     demand_function_file: pathlib.Path = demand_function_dir / demand_function_filename
 
-    if overwrite_check and not check_overwrite(
+    if demand_function_file.exists() and overwrite_check and not check_overwrite(
         demand_function_filename, demand_function_dir
     ):
         return

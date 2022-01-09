@@ -9,6 +9,7 @@ from ai_market_contest.cli.utils.project_initialisation_utils import (
 
 
 def test_make_and_remove_proj_dir(tmp_path: pathlib.Path):
+    tmp_path = tmp_path / "aic"
     make_proj_dir(tmp_path)
     assert (tmp_path / "agents").is_dir()
     assert (tmp_path / "environments").is_dir()
@@ -25,6 +26,7 @@ def test_make_and_remove_proj_dir(tmp_path: pathlib.Path):
 
 
 def test_make_main_config_file(tmp_path: pathlib.Path):
+    tmp_path = tmp_path / "aic"
     make_proj_dir(tmp_path)
     make_main_config_file(tmp_path, ["test_agent"], ["test"])
 
@@ -38,6 +40,7 @@ def test_make_main_config_file(tmp_path: pathlib.Path):
 
 
 def test_make_environment_config_file(tmp_path: pathlib.Path):
+    tmp_path = tmp_path / "aic"
     make_proj_dir(tmp_path)
     make_environment_config_file(tmp_path)
 
@@ -48,6 +51,7 @@ def test_make_environment_config_file(tmp_path: pathlib.Path):
 
 
 def test_initialise_file_structure_does_all(tmp_path: pathlib.Path):
+    tmp_path = tmp_path / "aic"
     initialise_file_structure(tmp_path, ["test_agent"], ["test"])
 
     assert (tmp_path / "agents").is_dir()
