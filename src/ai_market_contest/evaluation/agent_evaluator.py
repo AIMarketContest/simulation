@@ -1,12 +1,16 @@
+from configparser import ConfigParser
 from typing import Any, Dict, Tuple  # type: ignore
 
-import gym  # type: ignore
+import gym
 from ray.rllib.agents.registry import get_trainer_class  # type: ignore
 from ray.rllib.agents.trainer import Trainer  # type: ignore
 from ray.tune.registry import register_env  # type: ignore
 
 from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import CONFIG_FILENAME
+from ai_market_contest.cli.configs.training_config_reader import (
+    TrainingConfigReader,  # type: ignore
+)
 from ai_market_contest.cli.utils.agent_locator import AgentLocator  # type: ignore
 from ai_market_contest.cli.utils.checkpoint_locator import (
     get_checkpoint_path,  # type: ignore
