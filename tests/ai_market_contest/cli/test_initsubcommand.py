@@ -1,4 +1,3 @@
-
 from ai_market_contest.cli.initsubcommand import make_main_config_file, make_proj_dir, make_environment_config_file, \
     remove_proj_dir, initialise_file_structure
 
