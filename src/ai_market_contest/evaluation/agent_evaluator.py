@@ -7,7 +7,10 @@ from ray.rllib.agents.trainer import Trainer  # type: ignore
 from ray.tune.registry import register_env  # type: ignore
 
 from ai_market_contest.agent import Agent  # type: ignore
-from ai_market_contest.cli.cli_config import CONFIG_FILENAME
+from ai_market_contest.cli.cli_config import CONFIG_FILENAME, MULTIAGENT_CONFIG_FILNAME
+from ai_market_contest.cli.configs.multi_agent_config_getter import (
+    get_multi_agent_config,  # type: ignore
+)
 from ai_market_contest.cli.configs.training_config_reader import (
     TrainingConfigReader,  # type: ignore
 )
@@ -32,6 +35,7 @@ class AgentEvaluator:
         agent_name_maker: AgentNameMaker,
     ):
         register_env("marketplace", lambda x: env)
+        self.agent_locator = agent_locator
         self.env = env
         self.naive_agents_map: Dict[str, Tuple[Agent, int]] = {}
         index: int = 0
@@ -50,9 +54,12 @@ class AgentEvaluator:
         self.trainers = {}
         for agent_name, chosen_agent_version in agents.items():
             trainer_cls: Trainer = get_trainer_class(op_algorithm)
-            new_trainer: Trainer = trainer_cls(
-                env="marketplace", config={"num_workers": 1, "explore": False}
+            multi_agent_config = get_multi_agent_config(
+                chosen_agent_version.get_dir() / MULTIAGENT_CONFIG_FILNAME
             )
+            config: Dict[str, Any] = {"num_workers": 1, "explore": False}
+            config.update(multi_agent_config)
+            new_trainer: Trainer = trainer_cls(env="marketplace", config=config)
             training_config_parser: ConfigParser = ConfigParser()
             training_config_parser.optionxform = str
             training_config_path = chosen_agent_version.get_dir() / CONFIG_FILENAME
@@ -81,14 +88,13 @@ class AgentEvaluator:
                 action = naive_agent.policy(obs[env_agent_name], 0)
                 actions[naive_agent_str] = action
                 observed_actions[env_agent_name] = action
-
             for agent_name, trainer in self.trainers.items():
                 env_agent_name = self.agent_name_map[agent_name]
                 action = trainer.compute_action(obs)
                 actions[agent_name] = action
                 observed_actions[env_agent_name] = action
 
-            obs, observed_rewards, dones, infos = env.step(observed_actions)
+            obs, observed_rewards, dones, infos = self.env.step(observed_actions)
             done = dones["__all__"]
             action_arr.append(actions)
             rewards = {
@@ -97,4 +103,4 @@ class AgentEvaluator:
             }
             rewards_arr.append(rewards)
 
-        return action_arr, reward_arr
+        return action_arr, rewards_arr

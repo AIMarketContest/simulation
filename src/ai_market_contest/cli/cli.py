@@ -14,7 +14,7 @@ from cli_config import (
     RLLIB_AGENTS,
 )
 from utils.agent_locator import AgentLocator
-from utils.filesystemutils import check_path_exists, check_proj_dir_exists
+from utils.filesystemutils import check_proj_dir_exists
 
 from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,
@@ -66,7 +66,8 @@ def init(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}"))):
     authors = typer.prompt("Enter name(s) of the author(s)")
 
     agent_type = questionary.select(
-        "What type of agent would you like to start with (you can add more after initialising the project)?",
+        "What type of agent would you like to start with \
+        (you can add more after initialising the project)?",
         choices=["custom", "rllib"],
     ).ask()
 
@@ -114,7 +115,8 @@ def add_demand_function(
     demand_function_name = typer.prompt("Enter custom demand function name")
     create_demand_function(path, demand_function_name)
     typer.echo(
-        f"Demand function located in {path}/environments/demandfunctions/{demand_function_name}.py"
+        f"Demand function located in \
+        {path}/environments/demandfunctions/{demand_function_name}.py"
     )
 
 

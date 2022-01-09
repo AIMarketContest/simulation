@@ -1,15 +1,8 @@
 import datetime
-import importlib.util
 import pathlib
-import pickle
-import sys
 from configparser import ConfigParser
-from importlib.machinery import ModuleSpec
-from io import BufferedReader
-from types import ModuleType
-from typing import Any, Dict, List
+from typing import Any, Dict
 
-from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,
     ENVS_DIR_NAME,
@@ -20,7 +13,6 @@ from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.checkpoint_locator import get_checkpoint_path
 from ai_market_contest.cli.utils.config_utils import get_training_config_path
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
-from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
@@ -28,7 +20,6 @@ from ai_market_contest.cli.utils.get_agents import (  # type: ignore
     add_trained_agent_to_config_file,
 )
 from ai_market_contest.cli.utils.hashing import hash_string  # type: ignore
-from ai_market_contest.cli.utils.pklfileutils import write_pkl_file  # type: ignore
 from ai_market_contest.cli.utils.processmetafile import write_meta_file
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
 from ai_market_contest.training.agent_trainer import AgentTrainer
@@ -93,7 +84,14 @@ def set_up_and_execute_training_routine(
     if not agent_version.was_agent_initialised():
         trainer.save(agent_version.get_dir())
         config_reader.write_config_to_file(agent_version.get_dir())
-    save_new_agent(trainer, agent_version, parent_hash, training_msg, config_reader)
+    save_new_agent(
+        trainer,
+        agent_version,
+        parent_hash,
+        training_msg,
+        config_reader,
+        policy_config_maker,
+    )
 
 
 def save_new_agent(
@@ -102,6 +100,7 @@ def save_new_agent(
     parent_hash: str,
     training_msg: str,
     config_reader: TrainingConfigReader,
+    policy_config_maker: PolicyConfigMaker,
 ):
     cur_datetime: datetime.datetime = datetime.datetime.now()
     agent_dir: pathlib.Path = agent_version.get_agent_dir()
@@ -113,4 +112,5 @@ def save_new_agent(
         new_agent_dir, new_agent_hash, cur_datetime, training_msg, parent_hash
     )
     config_reader.write_config_to_file(new_agent_dir)
+    policy_config_maker.save(new_agent_dir)
     trainer.save(new_agent_dir)
