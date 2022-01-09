@@ -2,4 +2,7 @@
 omit =
     src/ai_market_contest/cli/cli_config.py
     src/ai_market_contest/training/agent_name_maker.py
+    src/ai_market_contest/agent.py
+    src/ai_market_contest/demand_function.py
+    src/ai_market_contest/evaluation/*
     */__init__.py

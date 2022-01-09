@@ -1,8 +1,6 @@
 import pathlib
 from configparser import ConfigParser
 
-from utils.demand_function_locator import DemandFunctionLocator
-
 from ai_market_contest.cli.configs.simulation_config_reader import (
     SimulationConfigReader,
 )
