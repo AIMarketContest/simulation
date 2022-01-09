@@ -215,7 +215,7 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
     evaluation_config_reader: EvaluationConfigReader = EvaluationConfigReader(
         get_evaluation_config_path(proj_dir, evaluation_config),
         DemandFunctionLocator(env_dir),
-        config_parser,
+        eval_config_parser,
         agent_count,
     )
     agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(
