@@ -6,6 +6,7 @@ from ray.rllib.agents.trainer import Trainer  # type: ignore
 from ray.tune.registry import register_env  # type: ignore
 
 from ai_market_contest.agent import Agent  # type: ignore
+from ai_market_contest.cli.cli_config import CONFIG_FILENAME
 from ai_market_contest.cli.utils.agent_locator import AgentLocator  # type: ignore
 from ai_market_contest.cli.utils.checkpoint_locator import (
     get_checkpoint_path,  # type: ignore
@@ -48,8 +49,14 @@ class AgentEvaluator:
             new_trainer: Trainer = trainer_cls(
                 env="marketplace", config={"num_workers": 1, "explore": False}
             )
+            training_config_parser: ConfigParser = ConfigParser()
+            training_config_parser.optionxform = str
+            training_config_path = chosen_agent_version.get_dir() / CONFIG_FILENAME
+            training_config_reader: TrainingConfigReader = TrainingConfigReader(
+                training_config_path, None, training_config_parser
+            )
             checkpoint_path: str = get_checkpoint_path(
-                chosen_agent_version.get_dir(), True
+                chosen_agent_version.get_dir(), True, training_config_reader
             )
             new_trainer.restore(checkpoint_path)
             self.trainers[agent_name] = new_trainer

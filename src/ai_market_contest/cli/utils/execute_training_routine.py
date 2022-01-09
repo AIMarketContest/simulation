@@ -80,7 +80,7 @@ def set_up_and_execute_training_routine(
 
     config: Dict[str, Any] = training_config_maker.make_training_config()
     checkpoint_path = get_checkpoint_path(
-        agent_version.get_dir(), agent_version.was_agent_initialised()
+        agent_version.get_dir(), agent_version.was_agent_initialised(), config_reader
     )
     trainer: AgentTrainer = AgentTrainer(
         config_reader.get_environment(agent_name_maker),
@@ -92,6 +92,7 @@ def set_up_and_execute_training_routine(
     trainer.train(config_reader.get_num_epochs(), config_reader.print_training())
     if not agent_version.was_agent_initialised():
         trainer.save(agent_version.get_dir())
+        config_reader.write_config_to_file(agent_version.get_dir())
     save_new_agent(trainer, agent_version, parent_hash, training_msg, config_reader)
 
 

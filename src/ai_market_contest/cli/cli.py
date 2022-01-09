@@ -151,7 +151,6 @@ def train(
 
     training_msg: str = typer.prompt("Enter training message")
 
-    # TODO replace None with current agent hash (as it becomes the parent)
     set_up_and_execute_training_routine(
         training_config,
         proj_dir,
@@ -210,8 +209,9 @@ def evaluate(path: Path = typer.Option(Path(f".", exists=True))):
     evaluation_config: str = questionary.select(
         "Choose a training config:", choices=evaluation_configs
     ).ask()
-    config_parser: ConfigParser = ConfigParser()
-    config_parser.optionxform = str
+    eval_config_parser: ConfigParser = ConfigParser()
+    eval_config_parser.optionxform = str
+
     evaluation_config_reader: EvaluationConfigReader = EvaluationConfigReader(
         get_evaluation_config_path(proj_dir, evaluation_config),
         DemandFunctionLocator(env_dir),

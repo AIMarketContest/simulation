@@ -1,12 +1,15 @@
 import pathlib
 
+from ai_market_contest.cli.configs.training_config_reader import TrainingConfigReader
 from ai_market_contest.cli.utils.filesystemutils import check_directory_exists
 
 
 def get_checkpoint_path(
-    dir_path: pathlib.Path, checkpoint_should_exist: bool, epochs: int
+    dir_path: pathlib.Path,
+    checkpoint_should_exist: bool,
+    training_config_reader: TrainingConfigReader,
 ) -> str:
-    epochs_str = str(epochs)
+    epochs_str = str(training_config_reader.get_num_epochs())
     checkpoint_path: pathlib.Path = (
         dir_path / "checkpoint_"
         + "0" * (6 - len(epochs_str))
