@@ -16,6 +16,10 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     PROJ_DIR_NAME,
     TRAINING_CONFIGS_DIR_NAME,
 )
+from ai_market_contest.cli.utils.config_utils import (
+    copy_example_evaluation_config_file,
+    copy_example_training_config_file,
+)
 from ai_market_contest.cli.utils.initialiseagent import create_agent_class
 
 
@@ -78,4 +82,6 @@ def initialise_file_structure(
     make_agents_classes(path, agent_names)
     make_main_config_file(path, agent_names, authors)
     make_environment_config_file(path)
+    copy_example_training_config_file(path)
+    copy_example_evaluation_config_file(path)
     atexit.unregister(remove_proj_dir)

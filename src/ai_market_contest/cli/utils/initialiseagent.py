@@ -11,7 +11,10 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     TRAINED_AGENTS_DIR_NAME,
 )
-from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
+from ai_market_contest.cli.utils.filesystemutils import (
+    check_config_file_exists,
+    check_overwrite,
+)
 from ai_market_contest.cli.utils.hashing import set_agent_initial_hash
 from ai_market_contest.cli.utils.processmetafile import write_meta_file
 
@@ -39,34 +42,21 @@ def make_initial_trained_agent(
 
 
 def create_agent_class(
-    agent_name: str, proj_dir: pathlib.Path, check_overwrite: bool = False
+    agent_name: str, proj_dir: pathlib.Path, overwrite_check: bool = False
 ):
     agents_dir = proj_dir / AGENTS_DIR_NAME
     agent_filename: str = f"{agent_name}.py"
     agent_dir: pathlib.Path = agents_dir / agent_name
-    # TODO: Add overwriting functionality again
-    # if check_overwrite:
-    #     check_overwrite_agent(agent_filename, agent_dir)
+
+    if overwrite_check and not check_overwrite(agent_filename, agent_dir):
+        return
+
     agent_file: pathlib.Path = agent_dir / agent_filename
-    agent_dir.mkdir(parents=True)
+    agent_dir.mkdir(parents=True, exist_ok=True)
     agent_file.touch()
     create_new_agent_file(agent_file, agent_name)
     initial_hash: str = set_agent_initial_hash(agent_dir)
     make_initial_trained_agent(agent_dir, agent_name, initial_hash)
-
-
-def check_overwrite_agent(agent_filename: str, agent_dir: pathlib.Path):
-    if agent_dir.is_dir():
-        overwrite = "x"
-        while overwrite != "y" and overwrite != "n":
-            overwrite = input(
-                f"{agent_filename} already exists, are you sure you want"
-                + " to override the existing file? (y/n): "
-            )
-            if overwrite == "y":
-                break
-            if overwrite == "n":
-                sys.exit(0)
 
 
 def make_agent_classname_camelcase(agent_name: str):

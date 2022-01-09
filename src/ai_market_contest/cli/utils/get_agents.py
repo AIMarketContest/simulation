@@ -2,7 +2,7 @@ import ast
 import configparser
 import pathlib
 import sys
-from typing import List
+from typing import Dict, List
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
@@ -42,15 +42,15 @@ def get_trained_agents(agent_dir: pathlib.Path) -> list[str]:
 
 def get_trained_agents_info(
     trained_agents: List[str], agent_dir: pathlib.Path
-) -> List[str]:
-    trained_agents_information: List[str] = []
+) -> Dict[str, str]:
+    trained_agents_information: Dict[str, str] = {}
     trained_agent: str
     for trained_agent in trained_agents:
         (agent_hash, time, msg, parent_hash) = get_trained_agent_metadata(
             agent_dir, trained_agent
         )
         shortened_hash: str = agent_hash[:HASH_LENGTH]
-        trained_agents_information.append(f"\n{shortened_hash} {str(time)} {msg}")
+        trained_agents_information[f"\n{shortened_hash} {str(time)} {msg}"] = agent_hash
     return trained_agents_information
 
 

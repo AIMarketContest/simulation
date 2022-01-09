@@ -33,6 +33,12 @@ ENVS_DIR_NAME: Final = "environments"
 AGENT_FILENAME: Final = "agent.py"
 DEMAND_FUNCTION_DIR_NAME: Final = f"{ENVS_DIR_NAME}/demandfunctions"
 AGENT_FILE: Final = (CLI_DIR / ".." / AGENT_TEMPLATE).resolve()
+CONFIG_DIR_NAME: Final = "configs"
+CONFIG_DIR: Final = (CLI_DIR / f"{CONFIG_DIR_NAME}").resolve()
+EXAMPLE_TRAINING_CONFIG_FILE_NAME: Final = "training_example_config.ini"
+EXAMPLE_TRAINING_CONFIG = CONFIG_DIR / f"{EXAMPLE_TRAINING_CONFIG_FILE_NAME}"
+EXAMPLE_EVALUATION_CONFIG_FILE_NAME: Final = "evaluation_example_config.ini"
+EXAMPLE_EVALUATION_CONFIG = CONFIG_DIR / f"{EXAMPLE_EVALUATION_CONFIG_FILE_NAME}"
 DEMAND_FUNCTION_FILE: Final = (CLI_DIR / ".." / DEMAND_FUNCTION_TEMPLATE).resolve()
 INITIAL_PICKLE_FILE_NAME: Final = "initial_pickle.pkl"
 INITIAL_PICKLER_NAME: Final = "initial_pickler.py"
@@ -46,7 +52,7 @@ TRAIN_CONFIG_FILENAME: Final = "train_config.ini"
 TRAINING_CONFIGS_DIR_NAME: Final = "training_configs"
 EVALUATION_CONFIGS_DIR_NAME: Final = "evaluation_configs"
 CONFIG_FILE_EXTENSION: Final = ".ini"
-
+MULTIAGENT_CONFIG_FILNAME: Final = "multi_agent_config.py"
 RLLIB_AGENTS = [
     "AC2",
     "AC3",

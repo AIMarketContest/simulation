@@ -40,17 +40,6 @@ def remove_agent_dir(agent_name: str, proj_dir: pathlib.Path):
 
 
 def create_agent(path: pathlib.Path, agent_name: str):
-    # TODO: Move these to main cli function
-    # if not path.is_dir():
-    #     typer.echo("Illegal argument: Argument must be an existing directory")
-    #     raise typer.Exit(1)
-    # proj_dir = path / PROJ_DIR_NAME
-    # if not proj_dir.is_dir():
-    #     typer.echo(
-    #         """No project has been initialised in the directory.
-    #         To initialise a project run aicontest init <path>"""
-    #     )
-    #     raise typer.Exit(1)
     atexit.register(remove_agent_dir, agent_name, path)
     create_agent_class(agent_name, path, True)
     edit_project_config_file(agent_name, path)

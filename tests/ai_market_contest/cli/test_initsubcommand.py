@@ -1,5 +1,10 @@
-from ai_market_contest.cli.initsubcommand import make_main_config_file, make_proj_dir, make_environment_config_file, \
-    remove_proj_dir, initialise_file_structure
+from ai_market_contest.cli.initsubcommand import (
+    make_main_config_file,
+    make_proj_dir,
+    make_environment_config_file,
+    remove_proj_dir,
+    initialise_file_structure,
+)
 
 
 def test_make_and_remove_proj_dir(tmp_path):
@@ -27,8 +32,7 @@ def test_make_main_config_file(tmp_path):
 
     assert (
         config_file.read_text()
-        ==
-        "[agent]\nagents = ['test_agent']\nauthors = ['test']\n\n"
+        == "[agent]\nagents = ['test_agent']\nauthors = ['test']\n\n"
     )
 
 
@@ -39,11 +43,7 @@ def test_make_environment_config_file(tmp_path):
     config_file = tmp_path / "environments" / "config.ini"
     assert config_file.exists()
 
-    assert (
-        config_file.read_text()
-        ==
-        "[environment]\ndemandfunctions = []\n\n"
-    )
+    assert config_file.read_text() == "[environment]\ndemandfunctions = []\n\n"
 
 
 def test_initialise_file_structure_does_all(tmp_path):
@@ -58,18 +58,12 @@ def test_initialise_file_structure_does_all(tmp_path):
     env_config_file = tmp_path / "environments" / "config.ini"
     assert env_config_file.exists()
 
-    assert (
-            env_config_file.read_text()
-            ==
-            "[environment]\ndemandfunctions = []\n\n"
-    )
+    assert env_config_file.read_text() == "[environment]\ndemandfunctions = []\n\n"
 
     config_file = tmp_path / "config.ini"
     assert config_file.exists()
 
     assert (
         config_file.read_text()
-        ==
-        "[agent]\nagents = ['test_agent']\nauthors = ['test']\n\n"
+        == "[agent]\nagents = ['test_agent']\nauthors = ['test']\n\n"
     )
-

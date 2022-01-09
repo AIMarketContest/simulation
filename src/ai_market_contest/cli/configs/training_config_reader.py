@@ -3,6 +3,7 @@ from ast import literal_eval
 from configparser import ConfigParser
 from typing import Any, Dict
 
+from ai_market_contest.cli.cli_config import CONFIG_FILENAME
 from ai_market_contest.cli.configs.simulation_config_reader import (
     SimulationConfigReader,
 )
@@ -33,3 +34,8 @@ class TrainingConfigReader(SimulationConfigReader):
     def get_num_epochs(self) -> int:
         # TODO add default value
         return int(self.parsed_config["General"]["epochs"])
+
+    def write_config_to_file(self, new_agent_dir: pathlib.Path):
+        config_file: pathlib.Path = new_agent_dir / CONFIG_FILENAME
+        with config_file.open("w") as cfg_file:
+            self.parsed_config.write(cfg_file)
