@@ -92,11 +92,19 @@ def set_up_and_execute_training_routine(
     if not agent_version.was_agent_initialised():
         trainer.save(agent_version.get_dir())
     trainer.train(config_reader.get_num_epochs(), config_reader.print_training())
-    trainer.save(agent_version.get_dir())
+
+    save_new_agent(trainer, agent_version, parent_hash, training_msg, config_reader)
 
 
-def save_new_agent(new_agent, agent_dir, parent_hash, training_msg, config):
+def save_new_agent(
+    trainer: Trainer,
+    agent_version: ExistingAgentVersion,
+    parent_hash: str,
+    training_msg: str,
+    config_reader: TrainingConfigReader,
+):
     cur_datetime: datetime.datetime = datetime.datetime.now()
+    agent_dir: pathlib.Path = agent_version.get_agent_dir()
     new_agent_hash: str = hash_string(str(cur_datetime))
     new_agent_dir: pathlib.Path = agent_dir / TRAINED_AGENTS_DIR_NAME / new_agent_hash
     new_agent_dir.mkdir()
@@ -104,12 +112,5 @@ def save_new_agent(new_agent, agent_dir, parent_hash, training_msg, config):
     write_meta_file(
         new_agent_dir, new_agent_hash, cur_datetime, training_msg, parent_hash
     )
-    write_pkl_file(new_agent_dir, new_agent)
-    config.write_config_to_file(new_agent_dir)
-
-
-def fetch_instantiated_agent(
-    agent_dir: pathlib.Path, agent_pkl_file: pathlib.Path
-) -> Agent:
-    # TODO replace with restore
-    return None
+    config_reader.write_config_to_file(new_agent_dir)
+    trainer.save(new_agent_dir)
