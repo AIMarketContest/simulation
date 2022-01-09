@@ -25,7 +25,6 @@ class PolicySelector:
         self.agent_name: str = agent_name
         self.self_play_number: int = self_play_number
         self.naive_agents_counts: Dict[str, int] = naive_agents_counts
-        self.opponent_name: str = self.get_agent_opponent_name()
 
     def get_agent_opponent_name(self) -> str:
         return self.agent_name + "-opponent"
@@ -56,7 +55,7 @@ class PolicySelector:
             if agent_id in [
                 "player_" + str(i) for i in range(1, self.self_play_number + 1)
             ]:
-                return self.opponent_name
+                return self.get_agent_opponent_name()
             cur_number_of_agents = self.self_play_number + 1
             for naive_agent, count in self.naive_agents_counts.items():
                 if agent_id in [
