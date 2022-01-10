@@ -11,6 +11,6 @@ def test_remove_underscores():
 
 
 def test_is_valid_agent_name():
-    assert is_valid_agent_name("1_player") == False
-    assert is_valid_agent_name("agent-1") == False
-    assert is_valid_agent_name("agent_1") == True
+    assert is_valid_agent_name("1_player") is False
+    assert is_valid_agent_name("agent-1") is False
+    assert is_valid_agent_name("agent_1") is True

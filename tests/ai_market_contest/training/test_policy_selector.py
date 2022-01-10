@@ -31,6 +31,6 @@ def test_policy_select_function():
         {"a very dumb naive agent": 4},
     )
 
-    select_policy = policy_selector.get_select_policy_function()
+    # select_policy = policy_selector.get_select_policy_function()
 
     # TODO :: test `select_policy`

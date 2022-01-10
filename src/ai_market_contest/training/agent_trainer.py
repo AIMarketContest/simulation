@@ -4,7 +4,6 @@ from typing import Any, Dict  # type: ignore
 import gym  # type: ignore
 from ray.rllib.agents.registry import get_trainer_class  # type: ignore
 from ray.rllib.agents.trainer import Trainer  # type: ignore
-from ray.tune.logger import pretty_print  # type: ignore
 from ray.tune.registry import register_env  # type: ignore
 
 
