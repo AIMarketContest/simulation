@@ -1,7 +1,6 @@
 import configparser
 import datetime
 import pathlib
-import typing
 from string import Template
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
@@ -73,7 +72,7 @@ def make_agent_classname_camelcase(agent_name: str):
 
 
 def create_new_agent_file(agent_file: pathlib.Path, agent_name: str):
-    subs: typing.Dict[str, str] = {
+    subs: dict[str, str] = {
         "agent_classname": make_agent_classname_camelcase(agent_name)
     }
     with AGENT_FILE.open("r") as a_file:

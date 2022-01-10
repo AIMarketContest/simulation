@@ -2,7 +2,6 @@ import atexit
 import configparser
 import pathlib
 import shutil
-from typing import List
 
 import typer
 
@@ -49,7 +48,7 @@ def make_proj_dir(proj_dir: pathlib.Path):
 
 
 def make_main_config_file(
-    proj_dir: pathlib.Path, agents_names: List[str], authors: List[str]
+    proj_dir: pathlib.Path, agents_names: list[str], authors: list[str]
 ):
     config: configparser.ConfigParser = configparser.ConfigParser()
     config["agent"] = {"agents": agents_names, "authors": authors}  # type: ignore
@@ -74,7 +73,7 @@ def remove_proj_dir(proj_dir: pathlib.Path):
 
 
 def initialise_file_structure(
-    path: pathlib.Path, agent_names: List[str], authors: List[str]
+    path: pathlib.Path, agent_names: list[str], authors: list[str]
 ):
     make_proj_dir(path)
     atexit.register(remove_proj_dir, path)

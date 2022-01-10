@@ -1,5 +1,3 @@
-from typing import Dict
-
 from ai_market_contest.demand_function import DemandFunction
 
 
@@ -30,8 +28,8 @@ class FixedDemandFunction(DemandFunction):
         if self.FIXED_QUANTITY < 0:
             raise ValueError("fixed_quantity must be greater than or equal to 0")
 
-    def get_sales(self, current_prices: Dict[str, int]) -> Dict[str, int]:
-        sales: Dict[str, int] = {}
+    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
+        sales: dict[str, int] = {}
 
         for agent, _ in current_prices.items():
             sales[agent] = self.FIXED_QUANTITY

@@ -1,5 +1,4 @@
 import pathlib
-import typing
 from string import Template
 
 from ai_market_contest.cli.cli_config import (
@@ -30,7 +29,7 @@ def create_demand_functon_class(
 def create_new_demand_function_file(
     demand_function_file: pathlib.Path, demand_function_name: str
 ):
-    subs: typing.Dict[str, str] = {"demand_function_classname": demand_function_name}
+    subs: dict[str, str] = {"demand_function_classname": demand_function_name}
     with DEMAND_FUNCTION_FILE.open("r") as a_file:
         src = Template(a_file.read())
     with demand_function_file.open("w") as new_demand_function_file:

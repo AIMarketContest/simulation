@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Dict, List, Sequence
+from typing import Sequence
 
 import numpy as np
 
@@ -12,20 +12,20 @@ class QAgent(Agent):
         super().__init__(observation_space, action_space, config)
         self.cost = 0.3
         self.actions_spaces = 100
-        self.Q: Dict[Sequence[float], Dict[float, float]] = defaultdict(
+        self.Q: dict[Sequence[float], dict[float, float]] = defaultdict(
             lambda: defaultdict(int)
         )
         self.alpha = 0.3
         self.gamma = 0.9
         self.theta = 0.0005
         self.time = 0
-        self.last_round_prices: List[Price] = []
+        self.last_round_prices: list[Price] = []
         self.last_round_profit = 0
 
     def get_initial_price(self) -> Price:
         return 1
 
-    def policy(self, last_round_agents_prices: List[Price], agent_index: int) -> float:
+    def policy(self, last_round_agents_prices: list[Price], agent_index: int) -> float:
         self.last_round_prices = last_round_agents_prices
         other_agent_prices = (
             last_round_agents_prices[:agent_index]

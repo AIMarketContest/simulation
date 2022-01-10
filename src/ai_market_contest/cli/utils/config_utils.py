@@ -1,7 +1,6 @@
 import shutil
 import sys
 from pathlib import Path
-from typing import List
 
 from ai_market_contest.cli.cli_config import (
     CONFIG_FILE_EXTENSION,
@@ -14,7 +13,7 @@ from ai_market_contest.cli.cli_config import (
 )
 
 
-def check_configs_exist(training_configs: List[str]) -> None:
+def check_configs_exist(training_configs: list[str]) -> None:
     if not training_configs:
         print(
             "Operation aborted: no training configs have been defined in training_configs"
@@ -22,7 +21,7 @@ def check_configs_exist(training_configs: List[str]) -> None:
         sys.exit(1)
 
 
-def get_configs(proj_dir: Path, config_directory_name: str) -> List[str]:
+def get_configs(proj_dir: Path, config_directory_name: str) -> list[str]:
     configs_dir = proj_dir / config_directory_name
     configs = []
     for config_file in configs_dir.rglob(f"*{CONFIG_FILE_EXTENSION}"):
@@ -30,11 +29,11 @@ def get_configs(proj_dir: Path, config_directory_name: str) -> List[str]:
     return configs
 
 
-def get_training_configs(proj_dir: Path) -> List[str]:
+def get_training_configs(proj_dir: Path) -> list[str]:
     return get_configs(proj_dir, TRAINING_CONFIGS_DIR_NAME)
 
 
-def get_evaluation_configs(proj_dir: Path) -> List[str]:
+def get_evaluation_configs(proj_dir: Path) -> list[str]:
     return get_configs(proj_dir, EVALUATION_CONFIGS_DIR_NAME)
 
 

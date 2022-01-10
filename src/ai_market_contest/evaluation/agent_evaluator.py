@@ -29,15 +29,15 @@ class AgentEvaluator:
         self,
         env: gym.Env,
         agent_locator: AgentLocator,
-        naive_agents_counts: Dict[str, Any],
-        agents: Dict[str, ExistingAgentVersion],
+        naive_agents_counts: dict[str, Any],
+        agents: dict[str, ExistingAgentVersion],
         op_algorithm: str,
         agent_name_maker: AgentNameMaker,
     ):
         register_env("marketplace", lambda x: env)
         self.agent_locator = agent_locator
         self.env = env
-        self.naive_agents_map: Dict[str, Tuple[Agent, int]] = {}
+        self.naive_agents_map: dict[str, tuple[Agent, int]] = {}
         index: int = 0
         self.agent_name_map = {}
         for agent_name, count in naive_agents_counts.items():
@@ -57,7 +57,7 @@ class AgentEvaluator:
             multi_agent_config = get_multi_agent_config(
                 chosen_agent_version.get_dir() / MULTIAGENT_CONFIG_FILENAME
             )
-            config: Dict[str, Any] = {"num_workers": 1, "explore": False}
+            config: dict[str, Any] = {"num_workers": 1, "explore": False}
             config.update(multi_agent_config)
             new_trainer: Trainer = trainer_cls(env="marketplace", config=config)
             training_config_parser: ConfigParser = ConfigParser()

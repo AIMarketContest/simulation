@@ -1,5 +1,3 @@
-from typing import Dict
-
 from numpy.random import randint
 
 from ai_market_contest.demand_function import DemandFunction
@@ -12,7 +10,7 @@ class NoisyFixedDemandFunction(DemandFunction):
         if self.FIXED_QUANTITY < 0:
             raise ValueError("fixed_quantity must be greater than or equal to 0")
 
-    def get_sales(self, current_prices: Dict[str, int]) -> Dict[str, int]:
+    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
         return {
             agent: int(randint(0, 100) + self.FIXED_QUANTITY)
             for agent in current_prices.keys()

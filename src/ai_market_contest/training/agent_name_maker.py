@@ -1,5 +1,4 @@
 from abc import ABCMeta, abstractmethod
-from typing import List
 
 
 class AgentNameMaker(metaclass=ABCMeta):
@@ -8,7 +7,7 @@ class AgentNameMaker(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def get_names(self) -> List[str]:
+    def get_names(self) -> list[str]:
         """
         Returns the whole list of agent names.
 

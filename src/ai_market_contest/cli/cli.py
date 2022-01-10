@@ -1,7 +1,6 @@
-﻿import shutil
-from configparser import ConfigParser
+﻿from configparser import ConfigParser
 from pathlib import Path
-from typing import Callable, Dict, List
+from typing import Callable
 
 import questionary
 import typer
@@ -17,6 +16,7 @@ from ai_market_contest.cli.cli_config import (
 from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,
 )
+from ai_market_contest.cli.resetsubcommand import remove_proj_dir
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.agent_manipulation_utils import create_agent
 from ai_market_contest.cli.utils.config_utils import (
@@ -25,7 +25,6 @@ from ai_market_contest.cli.utils.config_utils import (
     get_evaluation_configs,
     get_training_configs,
 )
-from ai_market_contest.cli.resetsubcommand import remove_proj_dir
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.execute_training_routine import (
     set_up_and_execute_training_routine,
@@ -55,6 +54,9 @@ app = typer.Typer(context_settings=CONTEXT_SETTINGS)
 
 @app.command()
 def init(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}"))):
+    """
+    Initialises a folder structure for a project
+    """
     # Path validation
     if path.is_dir():
         typer.echo(
@@ -73,7 +75,7 @@ def init(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}"))):
     ).ask()
 
     if agent_type == "custom":
-        agent_names: List[str] = []
+        agent_names: list[str] = []
         agent_names.append(typer.prompt("Enter custom agent name"))
         initialise_file_structure(path, agent_names, authors.split(","))
     elif agent_type == "rllib":
@@ -85,12 +87,17 @@ def init(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}"))):
 
 @app.command()
 def reset(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
-    # TODO: Check folder has a config before deleting
+    """
+    Reset initialised project folder structure
+    """
     remove_proj_dir(path)
 
 
 @app.command()
 def add_agent(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
+    """
+    Adds an agent to an initialised project
+    """
     agent_type = questionary.select(
         "What type of agent would you like add?",
         choices=["custom", "rllib"],
@@ -112,6 +119,9 @@ def add_agent(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
 def add_demand_function(
     path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
 ):
+    """
+    Adds an demand function to an initialised project
+    """
     demand_function_name = typer.prompt("Enter custom demand function name")
     create_demand_function(path, demand_function_name)
     typer.echo(
@@ -121,20 +131,43 @@ def add_demand_function(
 
 
 @app.command()
+def add_training_config(
+    path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
+):
+    """
+    Adds an training config to an initialised project
+    """
+    pass
+
+
+@app.command()
+def add_evaluate_config(
+    path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
+):
+    """
+    Adds an evalutation config to an initialised project
+    """
+    pass
+
+
+@app.command()
 def train(
     path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)),
     showtraceback: bool = False,
 ):
+    """
+    Train an agent within a specified environment
+    """
     check_proj_dir_exists(path)
 
-    agent_names: List[str] = get_agent_names(path)
+    agent_names: list[str] = get_agent_names(path)
     chosen_agent_name: str = questionary.select(
         "Choose an agent to train.", choices=agent_names
     ).ask()
     chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
 
-    trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
-    trained_agents_info: Dict[str, str] = get_trained_agents_info(
+    trained_agents: list[str] = get_trained_agents(chosen_agent.get_dir())
+    trained_agents_info: dict[str, str] = get_trained_agents_info(
         trained_agents, chosen_agent.get_dir()
     )
     chosen_trained_agent: str = questionary.select(
@@ -144,7 +177,7 @@ def train(
     chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
         chosen_agent, trained_agents_info[chosen_trained_agent]
     )
-    training_configs: List[str] = get_training_configs(path)
+    training_configs: list[str] = get_training_configs(path)
     check_configs_exist(training_configs)
     training_config: str = questionary.select(
         "Choose a training config:", choices=training_configs
@@ -163,11 +196,14 @@ def train(
 
 @app.command()
 def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
+    """
+    Evaluate an agent in a specified environment
+    """
     check_proj_dir_exists(path)
 
-    agents: Dict[str, ExistingAgentVersion] = {}
+    agents: dict[str, ExistingAgentVersion] = {}
 
-    agent_names: List[str] = get_agent_names(path)
+    agent_names: list[str] = get_agent_names(path)
     agent_names.append("exit")
     agent_count: int = 0
     # TODO check that list is not empty
@@ -182,8 +218,8 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
             break
         chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
 
-        trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
-        trained_agents_info: Dict[str, str] = get_trained_agents_info(
+        trained_agents: list[str] = get_trained_agents(chosen_agent.get_dir())
+        trained_agents_info: dict[str, str] = get_trained_agents_info(
             trained_agents, chosen_agent.get_dir()
         )
         chosen_trained_agent: str = questionary.select(
@@ -203,7 +239,7 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
         agents[agent_given_name] = chosen_agent_version
         agent_count += 1
 
-    evaluation_configs: List[str] = get_evaluation_configs(path)
+    evaluation_configs: list[str] = get_evaluation_configs(path)
     check_configs_exist(evaluation_configs)
     evaluation_config: str = questionary.select(
         "Choose an evaluation configuration:", choices=evaluation_configs

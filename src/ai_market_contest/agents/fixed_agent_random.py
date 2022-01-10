@@ -1,5 +1,4 @@
 import random
-from typing import List
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.typing.types import Price  # type: ignore
@@ -18,5 +17,5 @@ class FixedAgentRandom(Agent):
     def get_initial_price(self) -> Price:
         return self.FIXED_PRICE
 
-    def get_price(self, last_round_agents_prices: List[Price], identity_index) -> Price:
+    def get_price(self, last_round_agents_prices: list[Price], identity_index) -> Price:
         return self.FIXED_PRICE

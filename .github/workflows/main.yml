@@ -83,5 +83,4 @@ jobs:
       - name: Test
         run: |
           poetry run pytest
-          poetry run pytest --doctest-modules .
           poetry run shopt -s globstar && pyupgrade --py39-plus **/*.py || true

@@ -1,19 +1,17 @@
-from typing import Dict, List
-
 from ray.rllib.policy.policy import Policy
 
 from ai_market_contest.environment import Market
 
 
-def run_contest(env: Market, agents: Dict[Policy, str]):
+def run_contest(env: Market, agents: dict[Policy, str]):
 
-    agent_sales: Dict[Policy, List[float]] = {
+    agent_sales: dict[Policy, list[float]] = {
         agent_name: [] for agent_name in agents.keys()
     }
-    previous_actions: Dict[str, float] = {}
-    current_actions: Dict[str, float] = {}
+    previous_actions: dict[str, float] = {}
+    current_actions: dict[str, float] = {}
 
-    dones: Dict[Policy, bool] = {agent: False for agent in agents.keys()}
+    dones: dict[Policy, bool] = {agent: False for agent in agents.keys()}
     obs = env.reset()
     for agent, agent_id in agents.items():
         previous_actions[agent_id], _ = agent.compute_actions(obs)[0]

@@ -20,11 +20,11 @@ class PolicySelector:
         self,
         agent_name: str = "rl-agent",
         self_play_number: int = 0,
-        naive_agents_counts: Dict[str, int] = {},
+        naive_agents_counts: dict[str, int] = {},
     ):
         self.agent_name: str = agent_name
         self.self_play_number: int = self_play_number
-        self.naive_agents_counts: Dict[str, int] = naive_agents_counts
+        self.naive_agents_counts: dict[str, int] = naive_agents_counts
 
     def get_agent_opponent_name(self) -> str:
         """
@@ -59,7 +59,7 @@ class PolicySelector:
         """
         return self.self_play_number > 0
 
-    def get_naive_agents_names(self) -> Set[str]:
+    def get_naive_agents_names(self) -> set[str]:
         """
         Returns the names of all naive agents.
 
