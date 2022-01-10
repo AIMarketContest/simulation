@@ -1,11 +1,11 @@
-from ai_market_contest.training.policy_config_maker import PolicyConfigMaker
+import pathlib
+
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
-from ai_market_contest.training.policy_selector import PolicySelector
 from ai_market_contest.cli.utils.project_initialisation_utils import (
     initialise_file_structure,
 )
-
-import pathlib
+from ai_market_contest.training.policy_config_maker import PolicyConfigMaker
+from ai_market_contest.training.policy_selector import PolicySelector
 
 
 def test_policy_config_maker(tmp_path: pathlib.Path):

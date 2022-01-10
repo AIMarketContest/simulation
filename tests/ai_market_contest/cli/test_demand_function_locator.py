@@ -18,7 +18,7 @@ def test_get_demand_function(tmp_path):
     returned_demand_function = demand_function_locator.get_demand_function(
         "ADemandFunction"
     )
-    assert returned_demand_function.__class__.__name__ is "ADemandFunction"
+    assert returned_demand_function.__class__.__name__ == "ADemandFunction"
 
     try:
         demand_function_locator.get_demand_function("NotADemandFunction")
