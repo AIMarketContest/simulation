@@ -25,6 +25,7 @@ from ai_market_contest.cli.utils.config_utils import (
     get_evaluation_configs,
     get_training_configs,
 )
+from ai_market_contest.cli.resetsubcommand import remove_proj_dir
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.execute_training_routine import (
     set_up_and_execute_training_routine,
@@ -85,8 +86,7 @@ def init(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}"))):
 @app.command()
 def reset(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
     # TODO: Check folder has a config before deleting
-    check_proj_dir_exists(path)
-    shutil.rmtree(path)
+    remove_proj_dir(path)
 
 
 @app.command()
