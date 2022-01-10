@@ -1,5 +1,3 @@
-from typing import List
-
 from ai_market_contest.training.agent_name_maker import AgentNameMaker  # type: ignore
 
 

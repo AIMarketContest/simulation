@@ -1,5 +1,4 @@
 import sys
-from typing import List
 
 from ai_market_contest.cli.utils.hashing import get_shortened_hashes
 

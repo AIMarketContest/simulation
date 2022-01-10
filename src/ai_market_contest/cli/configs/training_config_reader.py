@@ -1,7 +1,7 @@
 import pathlib
 from ast import literal_eval
 from configparser import ConfigParser
-from typing import Any, Dict
+from typing import Any
 
 from ai_market_contest.cli.cli_config import CONFIG_FILENAME
 from ai_market_contest.cli.configs.simulation_config_reader import (

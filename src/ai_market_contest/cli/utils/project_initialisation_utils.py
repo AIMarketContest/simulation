@@ -2,7 +2,6 @@ import atexit
 import configparser
 import pathlib
 import shutil
-from typing import List
 
 import typer
 

@@ -1,7 +1,7 @@
 import datetime
 import pathlib
 from configparser import ConfigParser
-from typing import Any, Dict
+from typing import Any
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,

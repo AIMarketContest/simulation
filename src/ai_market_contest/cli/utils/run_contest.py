@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 from ray.rllib.policy.policy import Policy
 
 from ai_market_contest.environment import Market

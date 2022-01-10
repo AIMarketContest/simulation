@@ -1,5 +1,4 @@
 from abc import ABCMeta, abstractmethod
-from typing import Dict
 
 
 class DemandFunction(metaclass=ABCMeta):

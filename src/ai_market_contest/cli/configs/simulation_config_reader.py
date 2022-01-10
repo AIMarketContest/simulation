@@ -1,6 +1,5 @@
 import pathlib
 from configparser import ConfigParser
-from typing import Dict
 
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.environment import Market

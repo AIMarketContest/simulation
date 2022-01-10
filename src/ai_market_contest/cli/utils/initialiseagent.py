@@ -1,7 +1,6 @@
 import configparser
 import datetime
 import pathlib
-import typing
 from string import Template
 
 from ai_market_contest.cli.cli_config import (  # type: ignore

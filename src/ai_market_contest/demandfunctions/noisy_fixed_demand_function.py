@@ -1,5 +1,3 @@
-from typing import Dict
-
 from numpy.random import randint
 
 from ai_market_contest.demand_function import DemandFunction

@@ -1,7 +1,6 @@
 import shutil
 import sys
 from pathlib import Path
-from typing import List
 
 from ai_market_contest.cli.cli_config import (
     CONFIG_FILE_EXTENSION,
