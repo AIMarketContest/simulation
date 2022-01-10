@@ -20,6 +20,7 @@ omit =
     src/ai_market_contest/agents/q_agent.py
     src/ai_market_contest/agents/sarsa_agent.py
     src/ai_market_contest/cli/utils/execute_training_routine.py
+    src/ai_market_contest/cli/utils/training.py
     src/ai_market_contest/training/agent_trainer.py
 
     */__init__.py
