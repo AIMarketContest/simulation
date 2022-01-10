@@ -24,15 +24,14 @@ def initialise_agent_pkl_file(agent_dir: pathlib.Path, show_traceback: bool):
             ["python3", initial_pickler_file.resolve()],
             stdout=subprocess.PIPE,
             stdin=subprocess.PIPE,
-            universal_newlines=True,
+            text=True,
         )
     else:
         res = subprocess.run(
             ["python3", initial_pickler_file.resolve()],
-            stdout=subprocess.PIPE,
+            capture_output=True,
             stdin=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True,
+            text=True,
         )
     if res.returncode != 0:
         print(

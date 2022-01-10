@@ -18,5 +18,5 @@ class FixedAgentRandom(Agent):
     def get_initial_price(self) -> Price:
         return self.FIXED_PRICE
 
-    def get_price(self, last_round_agents_prices: List[Price], identity_index) -> Price:
+    def get_price(self, last_round_agents_prices: list[Price], identity_index) -> Price:
         return self.FIXED_PRICE

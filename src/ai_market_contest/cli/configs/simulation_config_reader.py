@@ -18,7 +18,7 @@ class SimulationConfigReader:
         self.parsed_config: ConfigParser = config_parser
         self.demand_function_locator: DemandFunctionLocator = demand_function_locator
 
-    def get_naive_agent_counts(self) -> Dict[str, int]:
+    def get_naive_agent_counts(self) -> dict[str, int]:
         agent_name: str
         agent_count: str
         return {

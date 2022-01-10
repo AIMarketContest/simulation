@@ -11,12 +11,12 @@ class AgentTrainer:
     def __init__(
         self,
         env: gym.Env,
-        training_config: Dict[str, Any],
+        training_config: dict[str, Any],
         checkpoint_path: pathlib.Path,
         restored: bool,
         trainer_str: str = "DQN",
     ):
-        self.training_config: Dict[str, Any] = training_config
+        self.training_config: dict[str, Any] = training_config
         register_env("marketplace", lambda x: env)
         self.training_config["env"] = "marketplace"
         trainer_cls: Trainer = get_trainer_class(trainer_str)
@@ -33,7 +33,7 @@ class AgentTrainer:
     def get_trainer(self):
         return self.trainer
 
-    def pretty_print(self, results: Dict[str, Any], epoch: int) -> None:
+    def pretty_print(self, results: dict[str, Any], epoch: int) -> None:
         status = "epoch {:2d} \nreward min: {:6.2f}\nreward mean: {:6.2f}\nreward max:  {:6.2f}\nmean length: {:4.2f}\n"
         print(
             status.format(

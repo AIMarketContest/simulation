@@ -32,7 +32,7 @@ class GaussianDemandFunction(DemandFunction):
         if not 0 <= self.MU <= 1:
             raise ValueError("mu must be between 0 and 1 (inclusive)")
 
-    def get_sales(self, current_prices: Dict[str, int]) -> Dict[str, int]:
+    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
         gaussian_distribution: "NormalDist" = NormalDist(mu=self.MU, sigma=self.SIGMA)
 
         sales: dict[str, int] = {}

@@ -69,7 +69,7 @@ def set_up_and_execute_training_routine(
         config_reader, policy_config_maker
     )
 
-    config: Dict[str, Any] = training_config_maker.make_training_config()
+    config: dict[str, Any] = training_config_maker.make_training_config()
     checkpoint_path = get_checkpoint_path(
         agent_version.get_dir(), agent_version.was_agent_initialised(), config_reader
     )

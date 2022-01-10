@@ -16,5 +16,5 @@ class RandomAgent(Agent):
     def get_initial_price(self) -> Price:
         return random.randint(0, 99)
 
-    def policy(self, last_round_agents_prices: List[Price], identity_index) -> Price:
+    def policy(self, last_round_agents_prices: list[Price], identity_index) -> Price:
         return random.randint(0, 99)

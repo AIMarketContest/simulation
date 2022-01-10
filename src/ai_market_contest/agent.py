@@ -25,7 +25,7 @@ class Agent(Policy):
         self,
         observation_space: Space = None,
         action_space: Space = None,
-        config: Dict[Any, Any] = {},
+        config: dict[Any, Any] = {},
     ):
         super().__init__(observation_space, action_space, config)
         self.w = 1
@@ -48,7 +48,7 @@ class Agent(Policy):
         raise NotImplementedError
 
     def policy(
-        self, last_round_all_agents_prices: List[Price], identity_index: int
+        self, last_round_all_agents_prices: list[Price], identity_index: int
     ) -> Price:
         """
         Query the agent for the next price to set.
@@ -98,20 +98,20 @@ class Agent(Policy):
 
     def compute_actions(
         self,
-        obs_batch: Union[List[TensorStructType], TensorStructType],
-        state_batches: Optional[List[TensorType]] = None,
-        prev_action_batch: Union[List[TensorStructType], TensorStructType] = None,
-        prev_reward_batch: Union[List[TensorStructType], TensorStructType] = None,
-        info_batch: Optional[Dict[str, List[Any]]] = None,
-        episodes: Optional[List["Episode"]] = None,
+        obs_batch: Union[list[TensorStructType], TensorStructType],
+        state_batches: Optional[list[TensorType]] = None,
+        prev_action_batch: Union[list[TensorStructType], TensorStructType] = None,
+        prev_reward_batch: Union[list[TensorStructType], TensorStructType] = None,
+        info_batch: Optional[dict[str, list[Any]]] = None,
+        episodes: Optional[list["Episode"]] = None,
         explore: Optional[bool] = None,
         timestep: Optional[int] = None,
         **kwargs
-    ) -> Tuple[List[Price], List[Any], Dict[str, Any]]:
-        action_batch: List[Price] = []
+    ) -> tuple[list[Price], list[Any], dict[str, Any]]:
+        action_batch: list[Price] = []
         for agent_index in range(len(obs_batch)):
             obs = obs_batch[agent_index]
-            prices_list: List[Price] = []
+            prices_list: list[Price] = []
             for index in range(100, len(obs) + 1, 100):
                 prices_list.append(np.where(obs[index - 100 : index] == 1)[0][0])
             info = info_batch[agent_index]
@@ -127,13 +127,13 @@ class Agent(Policy):
 
         return (action_batch, [], {})
 
-    def learn_on_batch(self, samples: SampleBatch) -> Dict[str, Any]:
+    def learn_on_batch(self, samples: SampleBatch) -> dict[str, Any]:
         return {}
 
     def update_target(self):
         return True
 
-    def set_weights(self, weights: Dict[str, int]):
+    def set_weights(self, weights: dict[str, int]):
         self.w = weights["w"]
 
     def get_weights(self):

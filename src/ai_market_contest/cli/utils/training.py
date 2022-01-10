@@ -9,8 +9,8 @@ from ray.tune.registry import register_env  # type: ignore
 from ai_market_contest.environment import Market
 
 
-def agent_dict_to_list(agent_dict: Dict[str, int], env: Market) -> List[int]:
-    agent_values: List[int] = []
+def agent_dict_to_list(agent_dict: dict[str, int], env: Market) -> list[int]:
+    agent_values: list[int] = []
     for agent_name in env.possible_agents:
         if agent_name in agent_dict:
             agent_values.append(agent_dict[agent_name])

@@ -9,8 +9,8 @@ class LowestTakesAllDemandFunction(DemandFunction):
     def __init__(self):
         pass
 
-    def get_sales(self, current_prices: Dict[str, int]) -> Dict[str, int]:
-        sales: Dict[str, int] = {agent: 0 for agent in current_prices.keys()}
+    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
+        sales: dict[str, int] = {agent: 0 for agent in current_prices.keys()}
         min_agents = []
         min_price = float("inf")
 

@@ -23,7 +23,7 @@ class Market(MultiAgentEnv):
         simulation_length: int,
         agent_name_maker: AgentNameMaker,
     ):
-        self.agents: List[str] = agent_name_maker.get_names()
+        self.agents: list[str] = agent_name_maker.get_names()
 
         self.observation_space = MultiDiscrete(
             [self.NUMBER_OF_DISCRETE_PRICES for _ in range(num_agents)]
@@ -45,12 +45,12 @@ class Market(MultiAgentEnv):
 
     def step(
         self, action_dict: MultiAgentDict
-    ) -> Tuple[MultiAgentDict, MultiAgentDict, MultiAgentDict, MultiAgentDict]:
+    ) -> tuple[MultiAgentDict, MultiAgentDict, MultiAgentDict, MultiAgentDict]:
         demands = self.demand.get_sales(action_dict)
         self.time_step += 1
         if self.time_step >= self.simulation_length:
             self.done = True
-        last_round_all_agents_prices: List[Price] = [
+        last_round_all_agents_prices: list[Price] = [
             price for _, price in action_dict.items()
         ]
         observations: MultiAgentDict = {}

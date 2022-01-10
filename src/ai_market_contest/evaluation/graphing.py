@@ -19,8 +19,8 @@ matplotlib.use("TkAgg")
 
 
 def plot_average_step(
-    agent_profits: Dict[Policy, List[float]],
-    agent_names: Dict[Policy, str],
+    agent_profits: dict[Policy, list[float]],
+    agent_names: dict[Policy, str],
     step: int = 1,
 ) -> plt:
     """
@@ -62,7 +62,7 @@ def plot_average_step(
 
 
 def graph_profits(
-    agent_profits: Dict[Agent, List[float]], agent_names: Dict[Agent, str]
+    agent_profits: dict[Agent, list[float]], agent_names: dict[Agent, str]
 ) -> plt:
     """
     This function is used to plot the prices of all agents in the
@@ -89,7 +89,7 @@ def graph_profits(
 
 
 def graph_cumulative_profits(
-    agent_profits: Dict[Agent, List[float]], agent_names: Dict[Agent, str]
+    agent_profits: dict[Agent, list[float]], agent_names: dict[Agent, str]
 ) -> plt:
     """
     This function is used to plot the total profit that
@@ -116,7 +116,7 @@ def graph_cumulative_profits(
 
 
 def graph_convergence(
-    agent_profits: Dict[Agent, List[float]], agent_names: Dict[Agent, str]
+    agent_profits: dict[Agent, list[float]], agent_names: dict[Agent, str]
 ):
     """
     This function is used to plot the timesteps the different agents convereged at.
@@ -146,7 +146,7 @@ def graph_convergence(
 
 
 # --------------------- Functions useful for testing  --------------------- #
-def create_agents(num_agents: int) -> List[Agent]:
+def create_agents(num_agents: int) -> list[Agent]:
     """
     Function creates a list of agents of specified length
     :num_agents: number of agents in the output list
@@ -155,7 +155,7 @@ def create_agents(num_agents: int) -> List[Agent]:
     return [FixedAgentRandom() for _ in range(num_agents)]
 
 
-def create_agent_names_dict(agents: List[Agent]) -> Dict[Agent, str]:
+def create_agent_names_dict(agents: list[Agent]) -> dict[Agent, str]:
     """
     function creates agent_names dict for give number of agents
     :agents: list of agents to map in dictionary
@@ -164,14 +164,14 @@ def create_agent_names_dict(agents: List[Agent]) -> Dict[Agent, str]:
     return {agent: f"agent_{i}" for i, agent in enumerate(agents)}
 
 
-def create_agent_profits_dict(agents: List[Agent]) -> Dict[Agent, ndarray]:
+def create_agent_profits_dict(agents: list[Agent]) -> dict[Agent, ndarray]:
     rng = random.default_rng(12345)
     return {agent: rng.integers(low=1, high=100, size=10) for agent in agents}
 
 
 def create_agent_fixed_profits_dict(
-    agents: List[Agent], max_timesteps
-) -> Dict[Agent, List[float]]:
+    agents: list[Agent], max_timesteps
+) -> dict[Agent, list[float]]:
     agent_profits = {}
     rng = random.default_rng(12345)
     for agent in agents:

@@ -15,7 +15,7 @@ def ask_for_trained_agents(agent: str) -> bool:
     sys.exit(1)
 
 
-def choose_training_config(training_configs: List[str]):
+def choose_training_config(training_configs: list[str]):
     print("Choose a training config: ", end="")
     while True:
         chosen_config = input()
@@ -26,7 +26,7 @@ def choose_training_config(training_configs: List[str]):
     return chosen_config
 
 
-def choose_trained_agent(trained_agents: List[str]):
+def choose_trained_agent(trained_agents: list[str]):
     shortened_hashes = get_shortened_hashes(trained_agents)
     max_count = 3
     count = 0

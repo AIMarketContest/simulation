@@ -12,7 +12,7 @@ class SequentialAgentNameMaker(AgentNameMaker):
 
         self.number_of_agents = number_of_agents
 
-    def get_names(self) -> List[str]:
+    def get_names(self) -> list[str]:
         return [f"player_{i}" for i in range(self.number_of_agents)]
 
     def get_name(self, num: int) -> str:

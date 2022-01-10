@@ -10,7 +10,7 @@ class SarsaAgent(Agent):
     def __init__(self):
         self.cost = 0.3
         self.actions_spaces = 100
-        self.Q: Dict[Sequence[float], Dict[float, float]] = defaultdict(
+        self.Q: dict[Sequence[float], dict[float, float]] = defaultdict(
             lambda: defaultdict(float)
         )
         self.alpha = 0.3
@@ -20,7 +20,7 @@ class SarsaAgent(Agent):
         self.round_before_last_prices = []
         self.last_round_prices = []
 
-    def policy(self, last_round_agents_prices: List[float], agent_index: int) -> float:
+    def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
         self.round_before_last_prices = self.last_round_prices
         self.last_round_prices = last_round_agents_prices
         other_agent_prices = (
@@ -47,7 +47,7 @@ class SarsaAgent(Agent):
 
     def update(
         self,
-        last_round_profit: List[float],
+        last_round_profit: list[float],
         identity_index: int,
     ) -> None:
         self.time += 1

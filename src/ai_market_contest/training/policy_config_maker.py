@@ -14,9 +14,9 @@ class PolicyConfigMaker:
         self.policy_selector: PolicySelector = policy_selector
         self.agent_locator: AgentLocator = agent_locator
 
-    def get_policy_config(self) -> Dict[str, Dict[str, Any]]:
+    def get_policy_config(self) -> dict[str, dict[str, Any]]:
         agent_to_train: str = self.policy_selector.get_agent_name()
-        policy_config: Dict[str, Dict[str, Any]] = {"multiagent": {}}
+        policy_config: dict[str, dict[str, Any]] = {"multiagent": {}}
         policy_config["multiagent"]["policies_to_train"] = [agent_to_train]
         policy_config["multiagent"]["policies"] = {}
         policy_config["multiagent"]["policies"][agent_to_train] = PolicySpec(
