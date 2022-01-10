@@ -19,5 +19,6 @@ omit =
     # Ignore non-deterministic code
     src/ai_market_contest/agents/q_agent.py
     src/ai_market_contest/agents/sarsa_agent.py
+    src/ai_market_contest/cli/utils/execute_training_routine.py
 
     */__init__.py
