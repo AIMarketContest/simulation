@@ -54,6 +54,9 @@ app = typer.Typer(context_settings=CONTEXT_SETTINGS)
 
 @app.command()
 def init(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}"))):
+    """
+    Initialises a folder structure for a project
+    """
     # Path validation
     if path.is_dir():
         typer.echo(
@@ -84,12 +87,17 @@ def init(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}"))):
 
 @app.command()
 def reset(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
-    # TODO: Check folder has a config before deleting
+    """
+    Reset initialised project folder structure
+    """
     remove_proj_dir(path)
 
 
 @app.command()
 def add_agent(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
+    """
+    Adds an agent to an initialised project
+    """
     agent_type = questionary.select(
         "What type of agent would you like add?",
         choices=["custom", "rllib"],
@@ -111,6 +119,9 @@ def add_agent(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
 def add_demand_function(
     path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
 ):
+    """
+    Adds an demand function to an initialised project
+    """
     demand_function_name = typer.prompt("Enter custom demand function name")
     create_demand_function(path, demand_function_name)
     typer.echo(
@@ -120,10 +131,33 @@ def add_demand_function(
 
 
 @app.command()
+def add_training_config(
+    path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
+):
+    """
+    Adds an training config to an initialised project
+    """
+    pass
+
+
+@app.command()
+def add_evaluate_config(
+    path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
+):
+    """
+    Adds an evalutation config to an initialised project
+    """
+    pass
+
+
+@app.command()
 def train(
     path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)),
     showtraceback: bool = False,
 ):
+    """
+    Train an agent within a specified environment
+    """
     check_proj_dir_exists(path)
 
     agent_names: list[str] = get_agent_names(path)
@@ -162,6 +196,9 @@ def train(
 
 @app.command()
 def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
+    """
+    Evaluate an agent in a specified environment
+    """
     check_proj_dir_exists(path)
 
     agents: dict[str, ExistingAgentVersion] = {}
