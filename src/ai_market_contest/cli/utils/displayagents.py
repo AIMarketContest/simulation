@@ -1,5 +1,7 @@
 import pathlib
 
+from ai_market_contest.cli.utils.get_agents import get_trained_agents_info
+
 
 def display_trained_agents(agent_dir: pathlib.Path, trained_agents: list[str]):
     trained_agents_info = get_trained_agents_info(trained_agents, agent_dir)
