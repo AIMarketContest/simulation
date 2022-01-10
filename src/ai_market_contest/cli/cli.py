@@ -1,5 +1,4 @@
-﻿import shutil
-from configparser import ConfigParser
+﻿from configparser import ConfigParser
 from pathlib import Path
 from typing import Callable
 
@@ -17,6 +16,7 @@ from ai_market_contest.cli.cli_config import (
 from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,
 )
+from ai_market_contest.cli.resetsubcommand import remove_proj_dir
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.agent_manipulation_utils import create_agent
 from ai_market_contest.cli.utils.config_utils import (
@@ -25,7 +25,6 @@ from ai_market_contest.cli.utils.config_utils import (
     get_evaluation_configs,
     get_training_configs,
 )
-from ai_market_contest.cli.resetsubcommand import remove_proj_dir
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.execute_training_routine import (
     set_up_and_execute_training_routine,
