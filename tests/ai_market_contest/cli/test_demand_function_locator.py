@@ -15,8 +15,10 @@ def test_get_demand_function(tmp_path):
         tmp_path / "environments/demandfunctions"
     )
 
-    returned_agent = demand_function_locator.get_demand_function("ADemandFunction")
-    assert returned_agent.__name__ is "ADemandFunction"
+    returned_demand_function = demand_function_locator.get_demand_function(
+        "ADemandFunction"
+    )
+    assert returned_demand_function.__class__.__name__ is "ADemandFunction"
 
     try:
         demand_function_locator.get_demand_function("NotADemandFunction")
