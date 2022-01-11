@@ -3,6 +3,7 @@ import datetime
 import pathlib
 import sys
 from hashlib import sha1 as hashing_algorithm
+from typing import List
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
@@ -15,7 +16,7 @@ def hash_string(string: str):
     return hashing_algorithm(string.encode()).hexdigest()
 
 
-def get_shortened_hashes(hashes: list[str]):
+def get_shortened_hashes(hashes: List[str]):
     return list(map(lambda hash: hash[:HASH_LENGTH], hashes))
 
 
