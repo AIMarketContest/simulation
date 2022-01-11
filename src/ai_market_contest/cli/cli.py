@@ -146,6 +146,7 @@ def add_train_config(
     config_name = questionary.text(
         "Enter name for training configuration:", validate=(lambda name: len(name) > 0)
     ).ask()
+    check_training_config_exists(path, config_name)
 
 
 @app.command()
@@ -160,6 +161,7 @@ def add_evaluate_config(
         "Enter name for evaluation configuration:",
         validate=(lambda name: len(name) > 0),
     ).ask()
+    check_evaluation_config_exists(path, config_name)
 
 
 @app.command()
