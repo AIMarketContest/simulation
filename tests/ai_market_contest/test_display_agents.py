@@ -2,13 +2,19 @@ from configparser import ConfigParser
 
 from importlib_metadata import pathlib
 
-from ai_market_contest.cli.utils.get_agents import get_trained_agents, get_trained_agents_info
-from ai_market_contest.cli.utils.project_initialisation_utils import initialise_file_structure
 from ai_market_contest.cli.utils.displayagents import (
     display_agents,
+    display_trained_agents,
     display_training_configs,
-    display_trained_agents
 )
+from ai_market_contest.cli.utils.get_agents import (
+    get_trained_agents,
+    get_trained_agents_info,
+)
+from ai_market_contest.cli.utils.project_initialisation_utils import (
+    initialise_file_structure,
+)
+
 
 def test_display_agents(capsys, tmp_path):
     display_agents(["Agent1", "Agent2", "Agent3"])
@@ -16,6 +22,7 @@ def test_display_agents(capsys, tmp_path):
     captured = capsys.readouterr()
 
     assert captured.out == "The current agents are: \n[Agent1, Agent2, Agent3]\n"
+
 
 def test_display_trained_agents(capsys, tmp_path):
     tmp_path = tmp_path / "aic"
@@ -30,4 +37,3 @@ def test_display_trained_agents(capsys, tmp_path):
     captured = capsys.readouterr()
 
     assert captured.out == "\n0 " + list(trained_agents_info.keys())[0] + "\n"
-
