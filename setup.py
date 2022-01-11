@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="ai-market-contest",
+    name="ai_market_contest",
     version="0.0.1",
     author="Yash Yeola, Ibraheem Wazir, Matteo Bongiovanni, Pranav Maganti, Michael Clasby, Jack Benham",
     author_email="gmail.com",
