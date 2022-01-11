@@ -57,16 +57,19 @@ def get_evaluation_config_path(proj_dir: Path, evaluation_config: str) -> Path:
     return evaluation_config_path
 
 
-def copy_example_training_config_file(proj_dir: Path) -> None:
+def copy_example_training_config_file(
+    proj_dir: Path, train_config_file_name=EXAMPLE_TRAINING_CONFIG_FILE_NAME
+) -> None:
     shutil.copyfile(
         EXAMPLE_TRAINING_CONFIG,
-        proj_dir / f"{TRAINING_CONFIGS_DIR_NAME}/{EXAMPLE_TRAINING_CONFIG_FILE_NAME}",
+        proj_dir / f"{TRAINING_CONFIGS_DIR_NAME}/{train_config_file_name}",
     )
 
 
-def copy_example_evaluation_config_file(proj_dir: Path) -> None:
+def copy_example_evaluation_config_file(
+    proj_dir: Path, evaluation_config_file_name=EXAMPLE_EVALUATION_CONFIG_FILE_NAME
+) -> None:
     shutil.copyfile(
         EXAMPLE_EVALUATION_CONFIG,
-        proj_dir
-        / f"{EVALUATION_CONFIGS_DIR_NAME}/{EXAMPLE_EVALUATION_CONFIG_FILE_NAME}",
+        proj_dir / f"{EVALUATION_CONFIGS_DIR_NAME}/{evaluation_config_file_name}",
     )
