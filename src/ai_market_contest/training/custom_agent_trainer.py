@@ -6,7 +6,6 @@ from typing import Dict
 import gym
 
 from ai_market_contest.agent import Agent
-from ai_market_contest.cli.cli_config import AGENT_PKL_FILENAME
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
@@ -36,7 +35,7 @@ class CustomAgentTrainer(AgentTrainer):
             training_agent: Agent = agent_version.get_agent_from_pickle()
         else:
             training_agent: Agent = training_agent_cls()
-        self.agents: Dict[str:Agent] = {agent_name_maker.get_name(0): training_agent}
+        self.agents: Dict[str, Agent] = {agent_name_maker.get_name(0): training_agent}
         self.agent_name_maker = agent_name_maker
         index: int = 1
         print(self.agents["player_0"])

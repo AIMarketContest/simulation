@@ -9,7 +9,7 @@ class OneHotEncoder:
         one_hot_encoded_values: List[Any] = []
         for val in values:
             one_hot_encoded_values += [
-                1 if val == value else 0 for value in discrete_values
+                1 if val == value else 0 for value in self.discrete_values
             ]
 
         return one_hot_encoded_values
