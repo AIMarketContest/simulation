@@ -137,6 +137,7 @@ def add_train_config(
     """
     Adds an training config to an initialised project
     """
+    check_proj_dir_exists(path)
     config_name = questionary.text(
         "Enter name for training configuration:", validate=(lambda name: len(name) > 0)
     ).ask()
@@ -149,7 +150,7 @@ def add_evaluate_config(
     """
     Adds an evalutation config to an initialised project
     """
-    pass
+    check_proj_dir_exists(path)
 
 
 @app.command()
