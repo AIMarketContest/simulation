@@ -1,5 +1,6 @@
 import configparser
 import pathlib
+from typing import List
 
 import typer
 
@@ -19,14 +20,14 @@ from ai_market_contest.cli.utils.config_utils import (
 )
 
 
-def initialise_file_structure(path: pathlib.Path):
+def initialise_file_structure(path: pathlib.Path, authors: List[str]):
     proj_dir: pathlib.Path = path / PROJ_DIR_NAME
     make_proj_dir(proj_dir)
     make_environment_config_file(proj_dir)
     make_agents_config_file(proj_dir)
     copy_example_training_config_file(proj_dir)
     copy_example_evaluation_config_file(proj_dir)
-    make_main_config_file(proj_dir)
+    make_main_config_file(proj_dir, authors)
 
 
 def make_proj_dir(proj_dir: pathlib.Path):
@@ -60,16 +61,16 @@ def make_environment_config_file(proj_dir: pathlib.Path):
 
 def make_agents_config_file(proj_dir: pathlib.Path):
     config: configparser.ConfigParser = configparser.ConfigParser()
-    config["general"] = {"customagents": [], "rllibagents": []}  # type: ignore
+    config["agents"] = {"customagents": [], "rllibagents": []}  # type: ignore
     c_file: pathlib.Path = proj_dir / AGENTS_DIR_NAME / CONFIG_FILENAME
     c_file.touch()
     with c_file.open("w") as config_file:
         config.write(config_file)
 
 
-def make_main_config_file(proj_dir: pathlib.Path):
+def make_main_config_file(proj_dir: pathlib.Path, authors: List[str]):
     config: configparser.ConfigParser = configparser.ConfigParser()
-    config["general"] = {"authors": []}  # type: ignore
+    config["general"] = {"authors": authors}  # type: ignore
     c_file: pathlib.Path = proj_dir / CONFIG_FILENAME
     c_file.touch()
     with c_file.open("w") as config_file:

@@ -9,11 +9,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     TRAINED_AGENTS_DIR_NAME,
 )
-
-from ai_market_contest.cli.utils.filesystemutils import (
-    check_config_file_exists,
-)
-
+from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 from ai_market_contest.cli.utils.processmetafile import write_meta_file
 
 
