@@ -248,7 +248,8 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
         agent_name_maker,
     )
 
-    print(evaluator.evaluate())
+    plot_average_step(evaluator.evaluate)
+    graph_cumulative_profits(evaluator.evaluate())
 
 
 if __name__ == "__main__":

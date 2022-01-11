@@ -22,6 +22,11 @@ from ai_market_contest.cli.utils.checkpoint_locator import (
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,  # type: ignore
 )
+from ai_market_contest.evaluation.graphing import (  # type: ignore
+    graph_cumulative_profits,
+    graph_profits,
+    plot_average_step,
+)
 from ai_market_contest.evaluation.one_hot_encoder import OneHotEncoder  # type: ignore
 from ai_market_contest.training.agent_name_maker import AgentNameMaker  # type: ignore
 
@@ -115,4 +120,4 @@ class AgentEvaluator:
             for agent_name, reward in rewards.items():
                 rewards_arr[agent_name].append(reward)
 
-        return action_arr, rewards_arr
+        return rewards_arr
