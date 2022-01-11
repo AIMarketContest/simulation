@@ -148,7 +148,7 @@ def add_evaluate_config(
     path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
 ):
     """
-    Adds an evalutation config to an initialised project
+    Adds an evaluation config to an initialised project
     """
     check_proj_dir_exists(path)
     config_name = questionary.text(
