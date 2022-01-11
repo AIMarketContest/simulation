@@ -8,8 +8,8 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     TRAINED_AGENTS_DIR_NAME,
 )
 from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
-    assert_file_exists,
     assert_directory_exists,
+    assert_file_exists,
 )
 
 

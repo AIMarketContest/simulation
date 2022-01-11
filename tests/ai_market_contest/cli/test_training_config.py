@@ -14,7 +14,7 @@ from ai_market_contest.training.policy_config_maker import PolicyConfigMaker
 from ai_market_contest.training.sequential_agent_name_maker import (
     SequentialAgentNameMaker,
 )
-from src.ai_market_contest.training.training_config_maker import TrainingConfigMaker
+from ai_market_contest.training.training_config_maker import TrainingConfigMaker
 
 
 def test_training_config(tmp_path):
