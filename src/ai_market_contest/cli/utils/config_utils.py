@@ -77,3 +77,19 @@ def copy_example_evaluation_config_file(
         proj_dir
         / f"{EVALUATION_CONFIGS_DIR_NAME}/{evaluation_config_file_name}.{EVALUATION_CONFIG_EXTENSION}",
     )
+
+
+def check_training_config_exists(proj_dir: Path, training_config_name: str) -> bool:
+    return (
+        proj_dir
+        / TRAINING_CONFIGS_DIR_NAME
+        / f"{training_config_name}.{TRAINING_CONFIG_EXTENSION}"
+    ).is_file()
+
+
+def check_evaluation_config_exists(proj_dir: Path, evaluation_config_name: str) -> bool:
+    return (
+        proj_dir
+        / EVALUATION_CONFIGS_DIR_NAME
+        / f"{evaluation_config_name}.{EVALUATION_CONFIG_EXTENSION}"
+    ).is_file()
