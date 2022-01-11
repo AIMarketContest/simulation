@@ -20,7 +20,7 @@ from ai_market_contest.cli.resetsubcommand import remove_proj_dir
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.agent_manipulation_utils import create_agent
 from ai_market_contest.cli.utils.config_utils import (
-    check_configs_exist,
+    assert_configs_exist,
     get_evaluation_config_path,
     get_evaluation_configs,
     get_training_configs,
@@ -180,7 +180,7 @@ def train(
         chosen_agent, trained_agents_info[chosen_trained_agent]
     )
     training_configs: list[str] = get_training_configs(path)
-    check_configs_exist(training_configs)
+    assert_configs_exist(training_configs)
     training_config: str = questionary.select(
         "Choose a training config:", choices=training_configs
     ).ask()
@@ -242,7 +242,7 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
         agent_count += 1
 
     evaluation_configs: list[str] = get_evaluation_configs(path)
-    check_configs_exist(evaluation_configs)
+    assert_configs_exist(evaluation_configs)
     evaluation_config: str = questionary.select(
         "Choose an evaluation configuration:", choices=evaluation_configs
     ).ask()

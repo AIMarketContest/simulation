@@ -13,7 +13,7 @@ from ai_market_contest.cli.cli_config import (
 )
 
 
-def check_configs_exist(training_configs: list[str]) -> None:
+def assert_configs_exist(training_configs: list[str]) -> None:
     if not training_configs:
         print(
             "Operation aborted: no training configs have been defined in training_configs"
