@@ -14,9 +14,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
 )
 from ai_market_contest.cli.configs.training_config_reader import TrainingConfigReader
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
-from ai_market_contest.cli.utils.checkpoint_locator import (
-    get_checkpoint_path,
-)
+from ai_market_contest.cli.utils.checkpoint_locator import get_checkpoint_path
 from ai_market_contest.cli.utils.config_utils import get_training_config_path
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (

@@ -16,7 +16,9 @@ class TrainingConfigReader(SimulationConfigReader):
         return int(self.parsed_config["General"]["number_of_self_play_agents"])
 
     def get_num_agents(self) -> int:
-        return 1 + self.get_self_play_num() + sum(self.get_naive_agent_counts().values())
+        return (
+            1 + self.get_self_play_num() + sum(self.get_naive_agent_counts().values())
+        )
 
     def get_other_config(self) -> Dict[str, Any]:
         return {

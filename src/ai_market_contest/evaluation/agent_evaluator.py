@@ -2,6 +2,7 @@ from configparser import ConfigParser
 from typing import Any, Dict, Tuple  # type: ignore
 
 import gym
+import numpy as np
 from ray.rllib.agents.registry import get_trainer_class  # type: ignore
 from ray.rllib.agents.trainer import Trainer  # type: ignore
 from ray.tune.registry import register_env  # type: ignore
@@ -21,6 +22,7 @@ from ai_market_contest.cli.utils.checkpoint_locator import (
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,  # type: ignore
 )
+from ai_market_contest.evaluation.one_hot_encoder import OneHotEncoder  # type: ignore
 from ai_market_contest.training.agent_name_maker import AgentNameMaker  # type: ignore
 
 
@@ -76,21 +78,39 @@ class AgentEvaluator:
             index += 1
 
     def evaluate(self) -> None:
+        OHE = OneHotEncoder([i for i in range(100)])
         done = False
         action_arr = []
         rewards_arr = []
+        observed_rewards = {
+            agent_id: 0 for agent_id in list(self.agent_name_map.values())
+        }
+        observed_actions = {
+            agent_id: 0 for agent_id in list(self.agent_name_map.values())
+        }
+        infos = {agent_id: 0 for agent_id in list(self.agent_name_map.values())}
+
         obs = self.env.reset()
         while not done:
             actions = {}
             observed_actions = {}
             for naive_agent_str, naive_agent in self.naive_agents_map.items():
                 env_agent_name = self.agent_name_map[naive_agent_str]
-                action = naive_agent.policy(obs[env_agent_name], 0)
+                action = naive_agent.policy(
+                    obs[env_agent_name],
+                    identity_index=0,
+                )
                 actions[naive_agent_str] = action
                 observed_actions[env_agent_name] = action
-            for agent_name, trainer in self.trainers.items():
+
+            for agent_name, (agent_cls_name, trainer) in self.trainers.items():
                 env_agent_name = self.agent_name_map[agent_name]
-                action = trainer.compute_action(obs)
+                [action], _, _ = trainer.get_policy(agent_cls_name).compute_actions(
+                    np.array([OHE.one_hot_encode(obs[env_agent_name])]),
+                    info_batch=[infos[env_agent_name]],
+                    prev_action_batch=[observed_actions[env_agent_name]],
+                    prev_reward_batch=[observed_rewards[env_agent_name]],
+                )
                 actions[agent_name] = action
                 observed_actions[env_agent_name] = action
 
@@ -99,8 +119,9 @@ class AgentEvaluator:
             action_arr.append(actions)
             rewards = {
                 self.reversed_agent_name_map[env_agent_name]: reward
-                for (env_agent_name, reward) in observed_rewards
+                for (env_agent_name, reward) in observed_rewards.items()
             }
-            rewards_arr.append(rewards)
+            for agent_name, reward in rewards.items():
+                rewards_arr[agent_name].append(reward)
 
         return action_arr, rewards_arr

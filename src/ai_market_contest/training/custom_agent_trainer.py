@@ -1,18 +1,20 @@
 import pathlib
 import pickle
-from typing import Dict
 import sys
+from typing import Dict
+
 import gym
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.cli.cli_config import AGENT_PKL_FILENAME
+from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
-from ai_market_contest.cli.utils.agent_locator import AgentLocator
+from ai_market_contest.cli.utils.pklfileutils import write_pkl_file
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
 from ai_market_contest.training.agent_trainer import AgentTrainer
-from ai_market_contest.cli.utils.pklfileutils import write_pkl_file
+
 
 class CustomAgentTrainer(AgentTrainer):
     def __init__(
