@@ -12,7 +12,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/AIMarketContest/simulation.git",
-    packages=setuptools.find_packages(),
+    packages=["ai_market_contest"],
     scripts=["src/ai_market_contest/cli/aic"],
     classifiers=[
         "Programming Language :: Python :: 3.9",
