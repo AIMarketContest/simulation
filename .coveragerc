@@ -1,0 +1,26 @@
+[run]
+omit =
+    # Ignore config files
+    src/ai_market_contest/cli/cli_config.py
+
+    # Ignore the CLI which can't be tested due to inputs needed
+    src/ai_market_contest/cli/trainsubcommand.py
+    src/ai_market_contest/cli/cli.py
+
+
+    # Ignore interface / abstract classes
+    src/ai_market_contest/training/agent_name_maker.py
+    src/ai_market_contest/agent.py
+    src/ai_market_contest/demand_function.py
+
+    # Ignore code which is not ready for testing
+    src/ai_market_contest/evaluation/*
+
+    # Ignore non-deterministic code
+    src/ai_market_contest/agents/q_agent.py
+    src/ai_market_contest/agents/sarsa_agent.py
+    src/ai_market_contest/cli/utils/execute_training_routine.py
+    src/ai_market_contest/cli/utils/training.py
+    src/ai_market_contest/training/agent_trainer.py
+
+    */__init__.py

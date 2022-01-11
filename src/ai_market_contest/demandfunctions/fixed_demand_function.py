@@ -4,7 +4,6 @@ from ai_market_contest.demand_function import DemandFunction
 class FixedDemandFunction(DemandFunction):
     """
     A demand function which gives the same price every round.
-
     Attributes
     ----------
     fixed_quantity: int
@@ -12,27 +11,27 @@ class FixedDemandFunction(DemandFunction):
         agent every round.
     """
 
-    def __init__(self, fixed_quantity: int = 1):
+    FIXED_QUANTITY: int = 1
+
+    def __init__(self):
         """
         Parameters
         ----------
         fixed_quantity: int, default=1
             A positive integer representing the quantity to demand from each agent.
-
         Raises
         ______
         ValueError
             When quantity given is less than 0.
         """
 
-        if fixed_quantity < 0:
+        if self.FIXED_QUANTITY < 0:
             raise ValueError("fixed_quantity must be greater than or equal to 0")
 
-        self.fixed_quantity: int = fixed_quantity
+    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
+        sales: dict[str, int] = {}
 
-    def get_sales(self, current_prices: list[float]) -> list[int]:
-        demand_list = [self.fixed_quantity] * len(current_prices)
-        return demand_list
+        for agent, _ in current_prices.items():
+            sales[agent] = self.FIXED_QUANTITY
 
-    def __str__(self):
-        return f"FixeddemandFunction(fixed quantity: {self.fixed_quantity})"
+        return sales

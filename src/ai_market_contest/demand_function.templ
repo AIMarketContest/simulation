@@ -1,0 +1,30 @@
+from typing import Dict
+
+from ai_market_contest.demand_function import DemandFunction
+
+
+class ${demand_function_classname}(DemandFunction):
+    """
+    The demand function is a map of the price of a product to its sales.
+    The demand function must give the quantity of the product
+    that will be sold by any agent in the market at a given price.
+    """
+
+    def get_sales(self, current_prices: Dict[str, int]) -> Dict[str, int]:
+        """
+        Calculates the quantity of the product that will be sold at a given
+        price for each agent.
+
+        Parameters
+        ----------
+        current_prices : list[float]
+            The current price of the product set by all agents.
+
+        Returns
+        ------
+        list[int]
+            The quantity of item sold by each agent, indexed by where their
+            price appeared in `current_prices` argument.
+        """
+
+        raise NotImplementedError

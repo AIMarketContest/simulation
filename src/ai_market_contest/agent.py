@@ -1,7 +1,16 @@
-from abc import ABCMeta, abstractmethod
+from typing import Any, Optional, Union
+
+import numpy as np
+from gym.spaces.space import Space  # type: ignore
+from ray.rllib.evaluation import Episode
+from ray.rllib.policy.policy import Policy
+from ray.rllib.policy.sample_batch import SampleBatch
+from ray.rllib.utils.typing import TensorStructType, TensorType
+
+from ai_market_contest.typing.types import Price  # type: ignore
 
 
-class Agent(metaclass=ABCMeta):
+class Agent(Policy):
     """
     Agent interface - an agent represents a firm selling a product in the market.
 
@@ -12,10 +21,35 @@ class Agent(metaclass=ABCMeta):
     For those not familiar with policy-update, see the comments on each function.
     """
 
-    @abstractmethod
+    def __init__(
+        self,
+        observation_space: Space = None,
+        action_space: Space = None,
+        config: dict[Any, Any] = {},
+    ):
+        super().__init__(observation_space, action_space, config)
+        self.w = 1
+
+    def get_initial_price(self) -> Price:
+        """
+        Query the agent for the initial price to set.
+
+        Returns
+        -------
+        float
+            Price of the product set by the agent at the current timestep,
+            discretised within [0,100].
+
+        Raises
+        ------
+        NotImplementedError
+            If concrete class does not override method.
+        """
+        raise NotImplementedError
+
     def policy(
-        self, last_round_agents_prices: list[float], identity_index: int
-    ) -> float:
+        self, last_round_all_agents_prices: list[Price], identity_index: int
+    ) -> Price:
         """
         Query the agent for the next price to set.
 
@@ -31,24 +65,7 @@ class Agent(metaclass=ABCMeta):
         -------
         float
             Price of the product set by the agent at the current timestep,
-            discretised within [0,1].
-
-        Raises
-        ------
-        NotImplementedError
-            If concrete class does not override method.
-        """
-
-        raise NotImplementedError
-
-    @abstractmethod
-    def learning_has_converged(self):
-        """
-        Check if the agent's learning has converged.
-
-        Returns
-        -------
-        bool : True if the agent learning has converged, False otherwise.
+            discretised within [0,100].
 
         Raises
         ------
@@ -57,31 +74,16 @@ class Agent(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
-    def update(
-        self,
-        last_round_prices: list[float],
-        last_round_sales: int,
-        round_before_last_prices: list[float],
-        round_before_last_sales: int,
-        identity_index: int,
-    ) -> None:
+    def update(self, last_round_profit: Price, identity_index: int) -> None:
         """
         Feeds data from the previous timestep into the agent allowing it
         to adjust it's strategy.
 
         Parameters
         ----------
-        last_round_prices : list of float
-            List of all the prices set by all agents in the previous timestep.
-        last_round_sales: int
-            A positive integer representing the number of sales the agent
+        last_round_profit: int
+            A positive integer representing the profit the agent
             made in the previous timestep.
-        round_before_last_prices : list of float
-            List of all the prices set by all agents in the timestep before last.
-        round_before_last_sales: int
-            A positive integer representing the number of sales the agent
-            made in the timestep before last.
         identity_index: int
             A positive integer that holds the index in the list corresponding to
             the current agent.
@@ -90,21 +92,52 @@ class Agent(metaclass=ABCMeta):
         ------
         NotImplementedError
             If concrete class does not override method.
+
         """
         raise NotImplementedError
 
-    @classmethod
-    def __subclasshook__(cls, subclass):
-        return (
-            all(
-                [
-                    hasattr(subclass, "policy"),
-                    callable(subclass.policy),
-                    hasattr(subclass, "update"),
-                    callable(subclass.update),
-                    hasattr(subclass, "learning_has_converged"),
-                    callable(subclass.learning_has_converged),
-                ]
-            )
-            or NotImplemented
-        )
+    def compute_actions(
+        self,
+        obs_batch: Union[list[TensorStructType], TensorStructType],
+        state_batches: Optional[list[TensorType]] = None,
+        prev_action_batch: Union[list[TensorStructType], TensorStructType] = None,
+        prev_reward_batch: Union[list[TensorStructType], TensorStructType] = None,
+        info_batch: Optional[dict[str, list[Any]]] = None,
+        episodes: Optional[list["Episode"]] = None,
+        explore: Optional[bool] = None,
+        timestep: Optional[int] = None,
+        **kwargs
+    ) -> tuple[list[Price], list[Any], dict[str, Any]]:
+        action_batch: list[Price] = []
+        for agent_index in range(len(obs_batch)):
+            obs = obs_batch[agent_index]
+            prices_list: list[Price] = []
+            for index in range(100, len(obs) + 1, 100):
+                prices_list.append(np.where(obs[index - 100 : index] == 1)[0][0])
+            info = info_batch[agent_index]
+            if info == 0:
+                if prev_action_batch[agent_index] == 0:
+                    action_batch.append(self.get_initial_price())
+                else:
+                    action_batch.append(prev_action_batch[agent_index])
+                continue
+            identity_index: int = info["identity_index"]
+            self.update(prev_action_batch[agent_index], identity_index)
+            action_batch.append(self.policy(prices_list, identity_index))
+
+        return (action_batch, [], {})
+
+    def learn_on_batch(self, samples: SampleBatch) -> dict[str, Any]:
+        return {}
+
+    def update_target(self):
+        return True
+
+    def set_weights(self, weights: dict[str, int]):
+        self.w = weights["w"]
+
+    def get_weights(self):
+        return {"w": self.w}
+
+    # def get_state(self):
+    #     return {"weights": self.get_weights()}

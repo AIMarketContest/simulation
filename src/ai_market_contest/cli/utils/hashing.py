@@ -8,7 +8,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     HASH_LENGTH,
 )
-from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
+from ai_market_contest.cli.utils.filesystemutils import assert_config_file_exists
 
 
 def hash_string(string: str):
@@ -35,7 +35,7 @@ def set_agent_initial_hash(agent_dir: pathlib.Path):
 
 def get_agent_initial_hash(chosen_agent_dir: pathlib.Path):
     agent_config_file: pathlib.Path = chosen_agent_dir / CONFIG_FILENAME
-    check_config_file_exists(agent_config_file)
+    assert_config_file_exists(agent_config_file)
     config: configparser.ConfigParser = configparser.ConfigParser()
     config.read(agent_config_file)
     try:

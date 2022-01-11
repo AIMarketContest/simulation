@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Dict, Sequence
+from typing import Sequence
 
 import numpy as np
 
@@ -7,18 +7,22 @@ from ai_market_contest.agent import Agent
 
 
 class SarsaAgent(Agent):
-    def __init__(self, action_spaces: int):
+    def __init__(self):
         self.cost = 0.3
-        self.actions_spaces = action_spaces
-        self.Q: Dict[Sequence[float], Dict[float, float]] = defaultdict(
+        self.actions_spaces = 100
+        self.Q: dict[Sequence[float], dict[float, float]] = defaultdict(
             lambda: defaultdict(float)
         )
         self.alpha = 0.3
         self.gamma = 0.9
         self.theta = 0.001
         self.time = 0
+        self.round_before_last_prices = []
+        self.last_round_prices = []
 
     def policy(self, last_round_agents_prices: list[float], agent_index: int) -> float:
+        self.round_before_last_prices = self.last_round_prices
+        self.last_round_prices = last_round_agents_prices
         other_agent_prices = (
             last_round_agents_prices[:agent_index]
             + last_round_agents_prices[agent_index + 1 :]
@@ -43,27 +47,25 @@ class SarsaAgent(Agent):
 
     def update(
         self,
-        last_round_prices: list[float],
-        last_round_sales: int,
-        round_before_last_prices: list[float],
-        round_before_last_sales: int,
+        last_round_profit: list[float],
         identity_index: int,
     ) -> None:
         self.time += 1
 
-        a1 = last_round_prices[identity_index]
-        a2 = round_before_last_prices[identity_index]
+        a1 = self.last_round_prices[identity_index]
+        a2 = self.round_before_last_prices[identity_index]
 
         last_round_prices = (
-            last_round_prices[:identity_index] + last_round_prices[identity_index + 1 :]
+            self.last_round_prices[:identity_index]
+            + self.last_round_prices[identity_index + 1 :]
         )
         round_before_last_prices = (
-            round_before_last_prices[:identity_index]
-            + round_before_last_prices[identity_index + 1 :]
+            self.round_before_last_prices[:identity_index]
+            + self.round_before_last_prices[identity_index + 1 :]
         )
 
         self.Q[tuple(last_round_prices)][a1] += self.alpha * (
-            (last_round_sales * a1)
+            (self.last_round_prices * a1)
             + self.gamma * self.Q[tuple(round_before_last_prices)][a2]
             - self.Q[tuple(last_round_prices)][a1]
         )
