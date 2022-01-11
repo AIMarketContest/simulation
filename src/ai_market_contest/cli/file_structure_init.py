@@ -20,8 +20,7 @@ from ai_market_contest.cli.utils.config_utils import (
 )
 
 
-def initialise_file_structure(path: pathlib.Path, authors: List[str]):
-    proj_dir: pathlib.Path = path / PROJ_DIR_NAME
+def initialise_file_structure(proj_dir: pathlib.Path, authors: List[str]):
     make_proj_dir(proj_dir)
     make_environment_config_file(proj_dir)
     make_agents_config_file(proj_dir)

@@ -29,6 +29,7 @@ from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,
 )
 from ai_market_contest.cli.file_structure_init import initialise_file_structure
+from ai_market_contest.cli.utils.agent_manipulation_utils import create_agent
 from ai_market_contest.cli.utils.config_utils import (
     check_configs_exist,
     get_evaluation_config_path,
@@ -44,7 +45,8 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
 from ai_market_contest.cli.utils.get_agents import (
-    get_agent_names,
+    get_custom_agent_names,
+    get_rllib_agents,
     get_trained_agents,
     get_trained_agents_info,
 )
@@ -59,7 +61,7 @@ app = typer.Typer(context_settings=CONTEXT_SETTINGS)
 
 
 @app.command()
-def init(path: Path = typer.Option(Path("."))):
+def init(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}"))):
     # Path validation
     if path.is_dir():
         typer.echo(
@@ -92,14 +94,14 @@ def init(path: Path = typer.Option(Path("."))):
 
 
 @app.command()
-def reset(path: Path = typer.Option(Path(".", exists=True))):
+def reset(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
     # TODO: Check folder has a config before deleting
     check_proj_dir_exists(path)
     shutil.rmtree(path)
 
 
 @app.command()
-def add_agent(path: Path = typer.Option(Path(".", exists=True))):
+def add_agent(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
     agent_type = questionary.select(
         "What type of agent would you like add?",
         choices=["custom", "rllib"],
@@ -120,7 +122,9 @@ def add_agent(path: Path = typer.Option(Path(".", exists=True))):
 
 
 @app.command()
-def add_demand_function(path: Path = typer.Option(Path(".", exists=True))):
+def add_demand_function(
+    path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
+):
     demand_function_name = typer.prompt("Enter custom demand function name")
     create_demand_function(path, demand_function_name)
     typer.echo(
@@ -131,12 +135,13 @@ def add_demand_function(path: Path = typer.Option(Path(".", exists=True))):
 
 @app.command()
 def train(
-    path: Path = typer.Option(Path(".", exists=True)),
+    path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)),
     showtraceback: bool = False,
 ):
     check_proj_dir_exists(path)
 
-    agent_names: List[str] = get_agent_names(path)
+    custom_agent_names: List[str] = get_custom_agent_names(path)
+    rllib_agents: List[str] = get_rllib_agents(path)
     chosen_agent_name: str = questionary.select(
         "Choose an agent to train.", choices=agent_names
     ).ask()
@@ -175,7 +180,7 @@ def validationthing(name):
 
 
 @app.command()
-def evaluate(path: Path = typer.Option(Path(".", exists=True))):
+def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))):
     check_proj_dir_exists(path)
 
     agents: Dict[str, ExistingAgentVersion] = {}
