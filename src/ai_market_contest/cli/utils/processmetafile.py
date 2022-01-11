@@ -9,7 +9,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
 )
 from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
     assert_file_exists,
-    check_directory_exists,
+    assert_directory_exists,
 )
 
 
@@ -92,7 +92,7 @@ def get_trained_agent_metadata(agent_dir: pathlib.Path, trained_agent_name: str)
     trained_agents_dir: pathlib.Path = agent_dir / TRAINED_AGENTS_DIR_NAME
     trained_agent_dir: pathlib.Path = trained_agents_dir / trained_agent_name
     error_msg: str = f"Error: no folder exists for {trained_agent_name}"
-    check_directory_exists(trained_agent_dir, error_msg)
+    assert_directory_exists(trained_agent_dir, error_msg)
     meta_file: pathlib.Path = trained_agent_dir / META_FILENAME
     error_msg = f"Error: no meta file exists for {trained_agent_name}"
     assert_file_exists(meta_file, error_msg)

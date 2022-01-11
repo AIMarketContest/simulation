@@ -21,6 +21,8 @@ from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.agent_manipulation_utils import create_agent
 from ai_market_contest.cli.utils.config_utils import (
     assert_configs_exist,
+    check_evaluation_config_exists,
+    check_training_config_exists,
     get_evaluation_config_path,
     get_evaluation_configs,
     get_training_configs,
@@ -33,7 +35,10 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAg
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
-from ai_market_contest.cli.utils.filesystemutils import check_proj_dir_exists
+from ai_market_contest.cli.utils.filesystemutils import (
+    assert_config_file_exists,
+    assert_proj_dir_exists,
+)
 from ai_market_contest.cli.utils.get_agents import (
     get_agent_names,
     get_trained_agents,
@@ -137,7 +142,7 @@ def add_train_config(
     """
     Adds an training config to an initialised project
     """
-    check_proj_dir_exists(path)
+    assert_proj_dir_exists(path)
     config_name = questionary.text(
         "Enter name for training configuration:", validate=(lambda name: len(name) > 0)
     ).ask()
@@ -150,7 +155,7 @@ def add_evaluate_config(
     """
     Adds an evaluation config to an initialised project
     """
-    check_proj_dir_exists(path)
+    assert_proj_dir_exists(path)
     config_name = questionary.text(
         "Enter name for evaluation configuration:",
         validate=(lambda name: len(name) > 0),
@@ -165,7 +170,7 @@ def train(
     """
     Train an agent within a specified environment
     """
-    check_proj_dir_exists(path)
+    assert_proj_dir_exists(path)
 
     agent_names: list[str] = get_agent_names(path)
     chosen_agent_name: str = questionary.select(
@@ -206,7 +211,7 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
     """
     Evaluate an agent in a specified environment
     """
-    check_proj_dir_exists(path)
+    assert_proj_dir_exists(path)
 
     agents: dict[str, ExistingAgentVersion] = {}
 

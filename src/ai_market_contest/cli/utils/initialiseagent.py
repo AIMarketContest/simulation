@@ -10,7 +10,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     TRAINED_AGENTS_DIR_NAME,
 )
 from ai_market_contest.cli.utils.filesystemutils import (
-    check_config_file_exists,
+    assert_config_file_exists,
     check_overwrite,
 )
 from ai_market_contest.cli.utils.hashing import set_agent_initial_hash
@@ -19,7 +19,7 @@ from ai_market_contest.cli.utils.processmetafile import write_meta_file
 
 def set_agent_to_initialised(agent_dir: pathlib.Path):
     config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
-    check_config_file_exists(config_file)
+    assert_config_file_exists(config_file)
     config: configparser.ConfigParser = configparser.ConfigParser()
     config.read(config_file)
     config["training"]["initialised"] = "True"

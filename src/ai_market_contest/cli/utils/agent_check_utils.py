@@ -4,14 +4,14 @@ from pathlib import Path
 
 from ai_market_contest.cli.cli_config import CONFIG_FILENAME
 from ai_market_contest.cli.utils.filesystemutils import (
-    check_config_file_exists,
-    check_directory_exists,
+    assert_config_file_exists,
+    assert_directory_exists,
 )
 
 
 def check_agent_is_initialised(agent_dir: Path) -> bool:
     config_file: Path = agent_dir / CONFIG_FILENAME
-    check_config_file_exists(config_file)
+    assert_config_file_exists(config_file)
     config: configparser.ConfigParser = configparser.ConfigParser()
     config.read(config_file)
     try:
@@ -24,4 +24,4 @@ def check_agent_is_initialised(agent_dir: Path) -> bool:
 
 def check_directory_exists_for_agent(chosen_agent: str, chosen_agent_dir: Path) -> None:
     error_msg: str = f"Error: no directory exists for {chosen_agent}"
-    check_directory_exists(chosen_agent_dir, error_msg)
+    assert_directory_exists(chosen_agent_dir, error_msg)

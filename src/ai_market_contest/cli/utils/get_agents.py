@@ -7,14 +7,14 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     HASH_LENGTH,
 )
-from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
+from ai_market_contest.cli.utils.filesystemutils import assert_config_file_exists
 from ai_market_contest.cli.utils.processmetafile import get_trained_agent_metadata
 
 
 def get_agent_names(proj_dir: pathlib.Path) -> list[str]:
     config: configparser.ConfigParser = configparser.ConfigParser()
     config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
-    check_config_file_exists(config_file)
+    assert_config_file_exists(config_file)
     config.read(config_file)
     try:
         agents: list[str] = ast.literal_eval(config["agent"]["agents"])
@@ -27,7 +27,7 @@ def get_agent_names(proj_dir: pathlib.Path) -> list[str]:
 def get_trained_agents(agent_dir: pathlib.Path) -> list[str]:
     agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
     config: configparser.ConfigParser = configparser.ConfigParser()
-    check_config_file_exists(agent_config_file)
+    assert_config_file_exists(agent_config_file)
     config.read(agent_config_file)
     try:
         trained_agents: list[str] = ast.literal_eval(
@@ -55,7 +55,7 @@ def get_trained_agents_info(
 
 def add_trained_agent_to_config_file(agent_dir: pathlib.Path, trained_agent_name: str):
     config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
-    check_config_file_exists(config_file)
+    assert_config_file_exists(config_file)
     config: configparser.ConfigParser = configparser.ConfigParser()
     config.read(config_file)
     try:
