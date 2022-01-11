@@ -16,9 +16,19 @@ from cli_config import (
 from utils.agent_locator import AgentLocator
 from utils.filesystemutils import check_proj_dir_exists
 
+from ai_market_contest.cli.agent_creators.agent_creator import (
+    AgentCreator,  # type: ignore
+)
+from ai_market_contest.cli.agent_creators.custom_agent_creator import (
+    CustomAgentCreator,  # type: ignore
+)
+from ai_market_contest.cli.agent_creators.rllib_agent_creator import (
+    RLlibAgentCreator,  # type: ignore
+)
 from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,
 )
+from ai_market_contest.cli.file_structure_init import initialise_file_structure
 from ai_market_contest.cli.utils.agent_manipulation_utils import create_agent
 from ai_market_contest.cli.utils.config_utils import (
     check_configs_exist,
@@ -38,9 +48,6 @@ from ai_market_contest.cli.utils.get_agents import (
     get_agent_names,
     get_trained_agents,
     get_trained_agents_info,
-)
-from ai_market_contest.cli.utils.project_initialisation_utils import (
-    initialise_file_structure,
 )
 from ai_market_contest.evaluation.agent_evaluator import AgentEvaluator
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
@@ -70,16 +77,19 @@ def init(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}"))):
         (you can add more after initialising the project)?",
         choices=["custom", "rllib"],
     ).ask()
-
     if agent_type == "custom":
         agent_names: List[str] = []
         agent_names.append(typer.prompt("Enter custom agent name"))
-        initialise_file_structure(path, agent_names, authors.split(","))
+        agent_creator: AgentCreator = CustomAgentCreator(path, agent_names)
     elif agent_type == "rllib":
         rllib_agent = questionary.select(
             "What rllib agent would you like to use?",
             choices=RLLIB_AGENTS,
         ).ask()
+        agent_creator: AgentCreator = RLlibAgentCreator(path, [rllib_agent])
+    
+    initialise_file_structure(path, authors.split(","))
+    agent_creator.create_agents()
 
 
 @app.command()
@@ -98,14 +108,16 @@ def add_agent(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
 
     if agent_type == "custom":
         agent_name = typer.prompt("Enter custom agent name")
-        create_agent(path, agent_name)
+        agent_creator: AgentCreator = CustomAgentCreator(path, [agent_name])
         typer.echo(f"Agent located in {path}/agents/{agent_name} directory")
     elif agent_type == "rllib":
         rllib_agent = questionary.select(
             "What rllib agent would you like to use?",
             choices=RLLIB_AGENTS,
         ).ask()
-        # TODO: Implement this
+        agent_creator: AgentCreator = RLlibAgentCreator(path, [rllib_agent])
+
+    agent_creator.create_agents()
 
 
 @app.command()
