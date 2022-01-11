@@ -5,9 +5,10 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAg
 
 
 class ExistingAgentVersion:
-    def __init__(self, agent: ExistingAgent, version: str):
+    def __init__(self, agent: ExistingAgent, version: str, is_rllib: bool):
         self.agent = agent
         self.dir = agent.get_dir() / TRAINED_AGENTS_DIR_NAME / version
+        self.is_rllib = is_rllib
 
     def get_agent_name(self) -> str:
         return self.agent.get_name()
@@ -20,3 +21,6 @@ class ExistingAgentVersion:
 
     def get_dir(self) -> pathlib.Path:
         return self.dir
+
+    def is_rllib(self) -> bool:
+        return self.rllib

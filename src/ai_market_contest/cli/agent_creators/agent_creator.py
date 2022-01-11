@@ -1,10 +1,7 @@
 import pathlib
 from typing import List
 
-from ai_market_contest.cli.cli_config import (
-    AGENTS_DIR_NAME,
-    CONFIG_FILENAME,
-)
+from ai_market_contest.cli.cli_config import AGENTS_DIR_NAME, CONFIG_FILENAME
 
 
 class AgentCreator:

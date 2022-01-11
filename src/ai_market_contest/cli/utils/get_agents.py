@@ -7,18 +7,32 @@ from typing import Dict, List
 from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     HASH_LENGTH,
+    PROJ_DIR_NAME,
 )
 from ai_market_contest.cli.utils.filesystemutils import check_config_file_exists
 from ai_market_contest.cli.utils.processmetafile import get_trained_agent_metadata
 
 
-def get_agent_names(proj_dir: pathlib.Path) -> list[str]:
+def get_custom_agent_names(proj_dir: pathlib.Path) -> list[str]:
     config: configparser.ConfigParser = configparser.ConfigParser()
     config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
     check_config_file_exists(config_file)
     config.read(config_file)
     try:
-        agents: list[str] = ast.literal_eval(config["agent"]["agents"])
+        agents: list[str] = ast.literal_eval(config["agents"]["customagents"])
+    except KeyError:
+        print("Error: config file needs an agents attribute")
+        sys.exit(1)
+    return agents
+
+
+def get_rllib_agents(proj_dir: pathlib.Path) -> list[str]:
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
+    check_config_file_exists(config_file)
+    config.read(config_file)
+    try:
+        agents: list[str] = ast.literal_eval(config["agents"]["rllibagents"])
     except KeyError:
         print("Error: config file needs an agents attribute")
         sys.exit(1)

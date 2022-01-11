@@ -143,8 +143,9 @@ def train(
     custom_agent_names: List[str] = get_custom_agent_names(path)
     rllib_agents: List[str] = get_rllib_agents(path)
     chosen_agent_name: str = questionary.select(
-        "Choose an agent to train.", choices=agent_names
+        "Choose an agent to train.", choices=custom_agent_names + rllib_agents
     ).ask()
+
     chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
 
     trained_agents: List[str] = get_trained_agents(chosen_agent.get_dir())
@@ -156,7 +157,9 @@ def train(
         choices=list(trained_agents_info.keys()),
     ).ask()
     chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
-        chosen_agent, trained_agents_info[chosen_trained_agent]
+        chosen_agent,
+        trained_agents_info[chosen_trained_agent],
+        chosen_agent_name in rllib_agents,
     )
     training_configs: List[str] = get_training_configs(path)
     check_configs_exist(training_configs)
@@ -185,7 +188,7 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
 
     agents: Dict[str, ExistingAgentVersion] = {}
 
-    agent_names: List[str] = get_agent_names(path)
+    agent_names: List[str] = get_custom_agent_names(path)
     agent_names.append("exit")
     agent_count: int = 0
     # TODO check that list is not empty
