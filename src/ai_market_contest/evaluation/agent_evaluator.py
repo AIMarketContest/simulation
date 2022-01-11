@@ -56,18 +56,14 @@ class AgentEvaluator:
         self.trainers = {}
         for agent_name, chosen_agent_version in agents.items():
             trainer_cls: Trainer = get_trainer_class(op_algorithm)
-            multi_agent_config = get_multi_agent_config(
-                chosen_agent_version.get_dir() / MULTIAGENT_CONFIG_FILENAME
-            )
-            config: Dict[str, Any] = {"num_workers": 1, "explore": False}
-            config.update(multi_agent_config)
-            new_trainer: Trainer = trainer_cls(env="marketplace", config=config)
+            training_config_path = chosen_agent_version.get_dir() / CONFIG_FILENAME
             training_config_parser: ConfigParser = ConfigParser()
             training_config_parser.optionxform = str
-            training_config_path = chosen_agent_version.get_dir() / CONFIG_FILENAME
             training_config_reader: TrainingConfigReader = TrainingConfigReader(
                 training_config_path, None, training_config_parser
             )
+            config: Dict[str, Any] = trainer_cls.get_default_config()
+            new_trainer: Trainer = trainer_cls(env="marketplace", config=config)
             checkpoint_path: str = get_checkpoint_path(
                 chosen_agent_version.get_dir(), True, training_config_reader
             )
@@ -105,12 +101,7 @@ class AgentEvaluator:
 
             for agent_name, (agent_cls_name, trainer) in self.trainers.items():
                 env_agent_name = self.agent_name_map[agent_name]
-                [action], _, _ = trainer.get_policy(agent_cls_name).compute_actions(
-                    np.array([OHE.one_hot_encode(obs[env_agent_name])]),
-                    info_batch=[infos[env_agent_name]],
-                    prev_action_batch=[observed_actions[env_agent_name]],
-                    prev_reward_batch=[observed_rewards[env_agent_name]],
-                )
+                action = trainer.compute_actions(obs)
                 actions[agent_name] = action
                 observed_actions[env_agent_name] = action
 

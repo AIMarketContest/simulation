@@ -58,26 +58,26 @@ from ai_market_contest.training.sequential_agent_name_maker import (
 )
 
 path = pathlib.Path.cwd() / "aicontest"
-# authors = ["Ibby", "Matteo"]
+authors = ["Ibby", "Matteo"]
 # custom_agents = ["XAgent", "YAgent"]
 # agent_creator = CustomAgentCreator(path, custom_agents)
-# initialise_file_structure(path, authors)
-# agent_creator.create_agents()
 
-# # rllib_agent = ["PPO"]
-# # agent_creator = RLlibAgentCreator(path, rllib_agent)
 
+rllib_agent = ["PPO"]
+agent_creator = RLlibAgentCreator(path, rllib_agent)
+initialise_file_structure(path, authors)
+agent_creator.create_agents()
 # print(get_custom_agent_names(path))
 # print(get_rllib_agents(path))
 
-chosen_agent_name = "XAgent"
+chosen_agent_name = "PPO"
 
 chosen_agent = ExistingAgent(chosen_agent_name, path)
 trained_agents = get_trained_agents(chosen_agent.get_dir())
 trained_agents_info = get_trained_agents_info(trained_agents, chosen_agent.get_dir())
 chosen_trained_agent = list(trained_agents_info.keys())[0]
 chosen_agent_version = ExistingAgentVersion(
-    chosen_agent, trained_agents_info[chosen_trained_agent], False
+    chosen_agent, trained_agents_info[chosen_trained_agent], True
 )
 training_configs = get_training_configs(path)
 print(training_configs)
