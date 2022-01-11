@@ -131,13 +131,15 @@ def add_demand_function(
 
 
 @app.command()
-def add_training_config(
+def add_train_config(
     path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
 ):
     """
     Adds an training config to an initialised project
     """
-    pass
+    config_name = questionary.text(
+        "Enter name for training configuration:", validate=(lambda name: len(name) > 0)
+    ).ask()
 
 
 @app.command()
