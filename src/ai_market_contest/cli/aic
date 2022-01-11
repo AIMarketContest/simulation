@@ -42,11 +42,6 @@ from ai_market_contest.cli.utils.execute_training_routine import (
 from ai_market_contest.cli.utils.filesystemutils import (
     assert_proj_dir_exists,
     check_overwrite,
-    check_path_exists,
-    check_proj_dir_exists,
-)
-from ai_market_contest.cli.utils.initialisedemandfunction import (
-    create_demand_functon_class,
 )
 from ai_market_contest.cli.utils.project_initialisation_utils import (
     initialise_file_structure,
@@ -307,5 +302,5 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
     print(evaluator.evaluate())
 
 
-if __name__ == "__main__":
+def run():
     app()
