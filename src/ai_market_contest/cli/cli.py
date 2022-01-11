@@ -10,8 +10,12 @@ from ai_market_contest.cli.cli_config import (
     AGENTS_DIR_NAME,
     COMMAND_NAME,
     ENVS_DIR_NAME,
+    EVALUATION_CONFIG_EXTENSION,
+    EVALUATION_CONFIGS_DIR_NAME,
     PROJ_DIR_NAME,
     RLLIB_AGENTS,
+    TRAINING_CONFIG_EXTENSION,
+    TRAINING_CONFIGS_DIR_NAME,
 )
 from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,
@@ -23,6 +27,8 @@ from ai_market_contest.cli.utils.config_utils import (
     assert_configs_exist,
     check_evaluation_config_exists,
     check_training_config_exists,
+    copy_example_evaluation_config_file,
+    copy_example_training_config_file,
     get_evaluation_config_path,
     get_evaluation_configs,
     get_training_configs,
@@ -38,6 +44,7 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
 from ai_market_contest.cli.utils.filesystemutils import (
     assert_config_file_exists,
     assert_proj_dir_exists,
+    check_overwrite,
 )
 from ai_market_contest.cli.utils.get_agents import (
     get_agent_names,
@@ -146,7 +153,15 @@ def add_train_config(
     config_name = questionary.text(
         "Enter name for training configuration:", validate=(lambda name: len(name) > 0)
     ).ask()
-    check_training_config_exists(path, config_name)
+    if check_training_config_exists(path, config_name) and not check_overwrite(
+        f"{config_name}.{TRAINING_CONFIG_EXTENSION}", path / TRAINING_CONFIGS_DIR_NAME
+    ):
+        return
+    copy_example_training_config_file(path, config_name)
+    typer.echo(
+        f"Training configuration file located in \
+        {path}/{TRAINING_CONFIGS_DIR_NAME}/{config_name}.{TRAINING_CONFIG_EXTENSION}"
+    )
 
 
 @app.command()
@@ -161,7 +176,16 @@ def add_evaluate_config(
         "Enter name for evaluation configuration:",
         validate=(lambda name: len(name) > 0),
     ).ask()
-    check_evaluation_config_exists(path, config_name)
+    if check_evaluation_config_exists(path, config_name) and not check_overwrite(
+        f"{config_name}.{EVALUATION_CONFIG_EXTENSION}",
+        path / EVALUATION_CONFIGS_DIR_NAME,
+    ):
+        return
+    copy_example_evaluation_config_file(path, config_name)
+    typer.echo(
+        f"Evaluation configuration file located in \
+        {path}/{EVALUATION_CONFIGS_DIR_NAME}/{config_name}.{EVALUATION_CONFIG_EXTENSION}"
+    )
 
 
 @app.command()
