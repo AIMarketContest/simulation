@@ -4,11 +4,13 @@ from pathlib import Path
 
 from ai_market_contest.cli.cli_config import (
     CONFIG_FILE_EXTENSION,
+    EVALUATION_CONFIG_EXTENSION,
     EVALUATION_CONFIGS_DIR_NAME,
     EXAMPLE_EVALUATION_CONFIG,
     EXAMPLE_EVALUATION_CONFIG_FILE_NAME,
     EXAMPLE_TRAINING_CONFIG,
     EXAMPLE_TRAINING_CONFIG_FILE_NAME,
+    TRAINING_CONFIG_EXTENSION,
     TRAINING_CONFIGS_DIR_NAME,
 )
 
@@ -62,7 +64,8 @@ def copy_example_training_config_file(
 ) -> None:
     shutil.copyfile(
         EXAMPLE_TRAINING_CONFIG,
-        proj_dir / f"{TRAINING_CONFIGS_DIR_NAME}/{train_config_file_name}",
+        proj_dir
+        / f"{TRAINING_CONFIGS_DIR_NAME}/{train_config_file_name}.{TRAINING_CONFIG_EXTENSION}",
     )
 
 
@@ -71,5 +74,6 @@ def copy_example_evaluation_config_file(
 ) -> None:
     shutil.copyfile(
         EXAMPLE_EVALUATION_CONFIG,
-        proj_dir / f"{EVALUATION_CONFIGS_DIR_NAME}/{evaluation_config_file_name}",
+        proj_dir
+        / f"{EVALUATION_CONFIGS_DIR_NAME}/{evaluation_config_file_name}.{EVALUATION_CONFIG_EXTENSION}",
     )
