@@ -82,7 +82,8 @@ class PolicySelector:
         Returns
         -------
         Callable[[int, Any, Any], str]
-            Function that maps an agent_id to a policy name. Empty if agent id is not valid.
+            Function that maps an agent_id to a policy name.
+            Empty if agent id is not valid.
         """
 
         def select_policy(agent_id: str, *args, **kwargs) -> str:

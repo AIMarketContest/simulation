@@ -16,7 +16,7 @@ class TrainingConfigReader(SimulationConfigReader):
         return int(self.parsed_config["General"]["number_of_self_play_agents"])
 
     def get_num_agents(self) -> int:
-        return self.get_self_play_num() + sum(self.get_naive_agent_counts().values())
+        return 1 + self.get_self_play_num() + sum(self.get_naive_agent_counts().values())
 
     def get_other_config(self) -> Dict[str, Any]:
         return {
@@ -30,9 +30,7 @@ class TrainingConfigReader(SimulationConfigReader):
 
     def get_num_epochs(self) -> int:
         # TODO add default value
-        return int(self.parsed_config["General"]["epochs"])
+        return int(self.parsed_config["General"].get("epochs", 20))
 
-    def write_config_to_file(self, new_agent_dir: pathlib.Path):
-        config_file: pathlib.Path = new_agent_dir / CONFIG_FILENAME
-        with config_file.open("w") as cfg_file:
-            self.parsed_config.write(cfg_file)
+    def get_model(self) -> Dict[str, Any]:
+        return literal_eval(self.parsed_config["General"].get("model", "{'model': {}}"))

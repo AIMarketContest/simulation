@@ -13,8 +13,10 @@ class ${agent_classname}(Agent):
     For those not familiar with policy-update, see the comments on each function.
     """
 
-    def __init__(self, observation_space=None, action_space=None, config={}):
-        super().__init__(observation_space, action_space, config)
+    def __init__(
+        self,
+    ):
+        pass
 
     def get_initial_price(self) -> Price:
         """
@@ -25,6 +27,11 @@ class ${agent_classname}(Agent):
         float
             Price of the product set by the agent at the current timestep,
             discretised within [0,100].
+
+        Raises
+        ------
+        NotImplementedError
+            If concrete class does not override method.
         """
         raise NotImplementedError
 
@@ -47,6 +54,11 @@ class ${agent_classname}(Agent):
         float
             Price of the product set by the agent at the current timestep,
             discretised within [0,100].
+
+        Raises
+        ------
+        NotImplementedError
+            If concrete class does not override method.
         """
         raise NotImplementedError
 
@@ -54,7 +66,7 @@ class ${agent_classname}(Agent):
         """
         Feeds data from the previous timestep into the agent allowing it
         to adjust it's strategy.
-        
+
         Parameters
         ----------
         last_round_profit: int
@@ -63,8 +75,11 @@ class ${agent_classname}(Agent):
         identity_index: int
             A positive integer that holds the index in the list corresponding to
             the current agent.
-            
+
+        Raises
+        ------
+        NotImplementedError
+            If concrete class does not override method.
+
         """
-        pass
-    
-    
+        raise NotImplementedError

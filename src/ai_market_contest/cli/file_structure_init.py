@@ -30,7 +30,8 @@ def initialise_file_structure(proj_dir: pathlib.Path, authors: List[str]):
 
 
 def make_proj_dir(proj_dir: pathlib.Path):
-    if proj_dir.is_dir():
+    config_file: pathlib.Path = proj_dir / CONFIG_FILENAME
+    if config_file.is_file():
         typer.echo(
             f"""{PROJ_DIR_NAME} project already initialised in the given directory
             To delete the current project run {COMMAND_NAME} reset <path>
@@ -42,6 +43,8 @@ def make_proj_dir(proj_dir: pathlib.Path):
     demand_function_dir: pathlib.Path = proj_dir / DEMAND_FUNCTION_DIR_NAME
     training_configs_dir: pathlib.Path = proj_dir / TRAINING_CONFIGS_DIR_NAME
     evaluation_configs_dir: pathlib.Path = proj_dir / EVALUATION_CONFIGS_DIR_NAME
+    if not proj_dir.is_dir():
+        proj_dir.mkdir(parents=True)
     agents_dir.mkdir(parents=True)
     environments_dir.mkdir(parents=True)
     demand_function_dir.mkdir(parents=True)

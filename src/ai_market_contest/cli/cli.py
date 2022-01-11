@@ -5,7 +5,6 @@ from typing import Dict, List
 
 import questionary
 import typer
-from adddemandfunctionsubcommand import create_demand_function
 from cli_config import (
     AGENTS_DIR_NAME,
     COMMAND_NAME,
@@ -13,9 +12,8 @@ from cli_config import (
     PROJ_DIR_NAME,
     RLLIB_AGENTS,
 )
-from utils.agent_locator import AgentLocator
-from utils.filesystemutils import check_proj_dir_exists
 
+from ai_market_contest.cli.adddemandfunctionsubcommand import create_demand_function
 from ai_market_contest.cli.agent_creators.agent_creator import (
     AgentCreator,  # type: ignore
 )
@@ -29,7 +27,7 @@ from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,
 )
 from ai_market_contest.cli.file_structure_init import initialise_file_structure
-from ai_market_contest.cli.utils.agent_manipulation_utils import create_agent
+from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.config_utils import (
     check_configs_exist,
     get_evaluation_config_path,
@@ -44,6 +42,7 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAg
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
+from ai_market_contest.cli.utils.filesystemutils import check_proj_dir_exists
 from ai_market_contest.cli.utils.get_agents import (
     get_custom_agent_names,
     get_rllib_agents,
@@ -156,10 +155,12 @@ def train(
         "Select which version of the agent to train",
         choices=list(trained_agents_info.keys()),
     ).ask()
-    chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
-        chosen_agent,
-        trained_agents_info[chosen_trained_agent],
-        chosen_agent_name in rllib_agents,
+    chosen_agent_version: ExistingAgentVersion = (
+        ExistingAgentVersion(
+            chosen_agent,
+            trained_agents_info[chosen_trained_agent],
+            chosen_agent_name in rllib_agents,
+        ),
     )
     training_configs: List[str] = get_training_configs(path)
     check_configs_exist(training_configs)
@@ -176,10 +177,6 @@ def train(
         trained_agents_info[chosen_trained_agent],
         training_msg,
     )
-
-
-def validationthing(name):
-    return False
 
 
 @app.command()
