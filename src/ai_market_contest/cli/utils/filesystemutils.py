@@ -12,7 +12,7 @@ def check_directory_exists(directory: pathlib.Path, error_msg: str):
         sys.exit(2)
 
 
-def check_file_exists(file_path: pathlib.Path, error_msg: str):
+def assert_file_exists(file_path: pathlib.Path, error_msg: str):
     if not file_path.is_file():
         print(error_msg)
         sys.exit(2)
@@ -33,7 +33,7 @@ def check_path_exists(path: pathlib.Path):
 
 def check_config_file_exists(config_file: pathlib.Path):
     error_msg: str = "Error: config file does not exist"
-    check_file_exists(config_file, error_msg)
+    assert_file_exists(config_file, error_msg)
 
 
 def check_overwrite(filename: str, dir: pathlib.Path):
