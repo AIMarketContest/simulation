@@ -13,7 +13,7 @@ from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
 )
 
 
-def write_meta_file(
+def write_custom_agent_meta_file(
     path: pathlib.Path,
     trained_agent_hash: str,
     time: datetime.datetime,

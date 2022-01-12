@@ -1,6 +1,9 @@
+from configparser import ConfigParser
+import pathlib
 import shutil
 import sys
 from pathlib import Path
+from typing import Any, Dict
 
 from ai_market_contest.cli.cli_config import (
     CONFIG_FILE_EXTENSION,
@@ -13,6 +16,7 @@ from ai_market_contest.cli.cli_config import (
     TRAINING_CONFIG_EXTENSION,
     TRAINING_CONFIGS_DIR_NAME,
 )
+from ai_market_contest.cli.utils.filesystemutils import assert_config_file_exists
 
 
 def assert_configs_exist(training_configs: list[str]) -> None:
@@ -93,3 +97,17 @@ def check_evaluation_config_exists(proj_dir: Path, evaluation_config_name: str) 
         / EVALUATION_CONFIGS_DIR_NAME
         / f"{evaluation_config_name}.{EVALUATION_CONFIG_EXTENSION}"
     ).is_file()
+
+
+def get_config_dict(path: pathlib.Path):
+    config: Dict[str, Dict[str, str]] = {}
+
+    config_parser = ConfigParser()
+    config_parser.optionxform = str
+    assert_config_file_exists(path)
+    config_parser.read(path)
+
+    for section in config_parser.sections():
+        config[section] = dict(config_parser.items(section))
+
+    return config

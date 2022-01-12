@@ -7,6 +7,7 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAg
 class ExistingAgentVersion:
     def __init__(self, agent: ExistingAgent, version: str):
         self.agent = agent
+        self.version = version
         self.dir = agent.get_dir() / TRAINED_AGENTS_DIR_NAME / version
 
     def get_agent_name(self) -> str:

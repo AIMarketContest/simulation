@@ -1,5 +1,6 @@
 from typing import Any, Optional, Union
 
+import dill
 import numpy as np
 from gym.spaces.space import Space  # type: ignore
 from ray.rllib.evaluation import Episode
@@ -138,6 +139,14 @@ class Agent(Policy):
 
     def get_weights(self):
         return {"w": self.w}
+
+    def load(self, file):
+        tmp_dict = dill.load(file)
+
+        self.__dict__.update(tmp_dict)
+
+    def save(self, file):
+        dill.dump(self.__dict__, file, 2)
 
     # def get_state(self):
     #     return {"weights": self.get_weights()}

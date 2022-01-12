@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import shutil
 from configparser import ConfigParser
 from pathlib import Path
 from typing import Callable
@@ -7,6 +6,7 @@ from typing import Callable
 import questionary
 import typer
 
+from ast import literal_eval
 from ai_market_contest.cli.adddemandfunctionsubcommand import create_demand_function
 from ai_market_contest.cli.cli_config import (
     AGENTS_DIR_NAME,
@@ -24,7 +24,10 @@ from ai_market_contest.cli.configs.evaluation_config_reader import (
 )
 from ai_market_contest.cli.resetsubcommand import remove_proj_dir
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
-from ai_market_contest.cli.utils.agent_manipulation_utils import create_agent
+from ai_market_contest.cli.utils.agent_manipulation_utils import (
+    create_custom_agent,
+    create_rllib_agent,
+)
 from ai_market_contest.cli.utils.config_utils import (
     assert_configs_exist,
     check_evaluation_config_exists,
@@ -39,9 +42,17 @@ from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLo
 from ai_market_contest.cli.utils.execute_training_routine import (
     set_up_and_execute_training_routine,
 )
+from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
+from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
+    ExistingAgentVersion,
+)
 from ai_market_contest.cli.utils.filesystemutils import (
     assert_proj_dir_exists,
     check_overwrite,
+)
+from ai_market_contest.cli.utils.get_agents import (
+    get_agent_names,
+    get_trained_agents,
 )
 from ai_market_contest.cli.utils.project_initialisation_utils import (
     initialise_file_structure,
@@ -71,22 +82,24 @@ def init(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}"))):
         raise typer.Exit(code=1)
 
     authors = typer.prompt("Enter name(s) of the author(s)")
+    initialise_file_structure(path, authors.split(","))
 
     agent_type = questionary.select(
-        "What type of agent would you like to start with \
-        (you can add more after initialising the project)?",
+        "What type of agent would you like to start with (you can add more after initialising the project)?",
         choices=["custom", "rllib"],
     ).ask()
 
     if agent_type == "custom":
-        agent_names: list[str] = []
-        agent_names.append(typer.prompt("Enter custom agent name"))
-        initialise_file_structure(path, agent_names, authors.split(","))
+        custom_agent_name = typer.prompt("Enter custom agent name")
+        create_custom_agent(path, custom_agent_name)
+
     elif agent_type == "rllib":
         rllib_agent = questionary.select(
-            "What rllib agent would you like to use?",
+            "What rllib agent would like to start with (you can add more after initialising the project)?",
             choices=RLLIB_AGENTS,
         ).ask()
+        rllib_agent_name = typer.prompt("Enter a name to identify this agent")
+        create_rllib_agent(path, rllib_agent, rllib_agent_name)
 
 
 @app.command()
@@ -109,14 +122,15 @@ def add_agent(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
 
     if agent_type == "custom":
         agent_name = typer.prompt("Enter custom agent name")
-        create_agent(path, agent_name)
+        create_custom_agent(path, agent_name)
         typer.echo(f"Agent located in {path}/agents/{agent_name} directory")
     elif agent_type == "rllib":
         rllib_agent = questionary.select(
-            "What rllib agent would you like to use?",
+            "What rllib agent would like to start with (you can add more after initialising the project)?",
             choices=RLLIB_AGENTS,
         ).ask()
-        # TODO: Implement this
+        rllib_agent_name = typer.prompt("Enter a name to identify this agent")
+        create_rllib_agent(path, rllib_agent, rllib_agent_name)
 
 
 @app.command()
@@ -195,33 +209,41 @@ def train(
         "Choose an agent to train.", choices=agent_names
     ).ask()
     chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
+    agent_config = chosen_agent.get_config()
 
-    trained_agents: list[str] = get_trained_agents(chosen_agent.get_dir())
-    trained_agents_info: dict[str, str] = get_trained_agents_info(
-        trained_agents, chosen_agent.get_dir()
-    )
-    chosen_trained_agent: str = questionary.select(
-        "Select which version of the agent to train",
-        choices=list(trained_agents_info.keys()),
-    ).ask()
-    chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
-        chosen_agent, trained_agents_info[chosen_trained_agent]
-    )
-    training_configs: list[str] = get_training_configs(path)
-    assert_configs_exist(training_configs)
-    training_config: str = questionary.select(
-        "Choose a training config:", choices=training_configs
-    ).ask()
+    try:
+        trained_agents: list[str] = literal_eval(
+            agent_config["training"]["trained-agents"]
+        )
 
-    training_msg: str = typer.prompt("Enter training message")
+        trained_agents_info: dict[str, str] = chosen_agent.get_trained_agents_info(
+            trained_agents
+        )
+        chosen_trained_agent: str = questionary.select(
+            "Select which version of the agent to train",
+            choices=list(trained_agents_info.keys()),
+        ).ask()
 
-    set_up_and_execute_training_routine(
-        training_config,
-        path,
-        chosen_agent_version,
-        trained_agents_info[chosen_trained_agent],
-        training_msg,
-    )
+        chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
+            chosen_agent, trained_agents_info[chosen_trained_agent]
+        )
+        training_configs: list[str] = get_training_configs(path)
+        assert_configs_exist(training_configs)
+        training_config: str = questionary.select(
+            "Choose a training config:", choices=training_configs
+        ).ask()
+        training_msg: str = typer.prompt("Enter training message")
+
+        set_up_and_execute_training_routine(
+            training_config,
+            path,
+            chosen_agent_version,
+            trained_agents_info[chosen_trained_agent],
+            training_msg,
+        )
+
+    except KeyError:
+        typer.echo("Chosen agent's config is malformed or missing")
 
 
 @app.command()
@@ -231,43 +253,25 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
     """
     assert_proj_dir_exists(path)
 
-    agents: dict[str, ExistingAgentVersion] = {}
-
     agent_names: list[str] = get_agent_names(path)
-    agent_names.append("exit")
-    agent_count: int = 0
-    # TODO check that list is not empty
-    while True:
-        chosen_agent_name: str = questionary.select(
-            "Choose an agent to train.", choices=agent_names
-        ).ask()
-        if chosen_agent_name == "exit":
-            if not agents:
-                print("Cannot start simulation with no trained agents")
-                continue
-            break
-        chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
 
-        trained_agents: list[str] = get_trained_agents(chosen_agent.get_dir())
-        trained_agents_info: dict[str, str] = get_trained_agents_info(
-            trained_agents, chosen_agent.get_dir()
-        )
-        chosen_trained_agent: str = questionary.select(
-            "Select which version of the agent to train",
-            choices=list(trained_agents_info.keys()),
-        ).ask()
-        chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
-            chosen_agent, trained_agents_info[chosen_trained_agent]
-        )
-        name_validation: Callable[[str], bool] = (
-            lambda name: name is not None and name not in agents.keys()
-        )
-        agent_given_name: str = questionary.text(
-            "Enter unique name for agent",
-            validate=name_validation,
-        ).ask()
-        agents[agent_given_name] = chosen_agent_version
-        agent_count += 1
+    chosen_agent_name: str = questionary.select(
+        "Choose an agent to evaluate", choices=agent_names
+    ).ask()
+    chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
+
+    trained_agents: list[str] = get_trained_agents(chosen_agent.get_dir())
+    trained_agents_info: dict[str, str] = chosen_agent.get_trained_agents_info(
+        trained_agents
+    )
+    chosen_trained_agent: str = questionary.select(
+        "Select which version of the agent to train",
+        choices=list(trained_agents_info.keys()),
+    ).ask()
+    chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
+        chosen_agent, trained_agents_info[chosen_trained_agent]
+    )
+
 
     evaluation_configs: list[str] = get_evaluation_configs(path)
     assert_configs_exist(evaluation_configs)
@@ -302,5 +306,5 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
     print(evaluator.evaluate())
 
 
-def run():
+if __name__ == "__main__":
     app()

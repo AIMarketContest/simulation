@@ -1,26 +1,54 @@
 import pathlib
+from configparser import ConfigParser
+from typing import Any, Dict, List
 
-from ai_market_contest.cli.cli_config import AGENTS_DIR_NAME
+from ai_market_contest.cli.cli_config import (
+    AGENTS_DIR_NAME,
+    CONFIG_FILENAME,
+    HASH_LENGTH,
+)
 from ai_market_contest.cli.utils.agent_check_utils import (
     check_agent_is_initialised,
     check_directory_exists_for_agent,
 )
+from ai_market_contest.cli.utils.config_utils import get_config_dict
+from ai_market_contest.cli.utils.filesystemutils import assert_config_file_exists
+from ai_market_contest.cli.utils.processmetafile import get_trained_agent_metadata
 
 
 class ExistingAgent:
-    def __init__(self, agent_name, project_directory: pathlib.Path):
+    def __init__(self, agent_name: str, project_directory: pathlib.Path):
         self.agent_name: str = agent_name
-        self.agent_directory: pathlib.Path = (
+        self.agent_dir: pathlib.Path = (
             project_directory / AGENTS_DIR_NAME / self.get_name()
         )
-        check_directory_exists_for_agent(self.agent_name, self.agent_directory)
-        self.initialised: bool = check_agent_is_initialised(self.agent_directory)
+        check_directory_exists_for_agent(self.agent_name, self.agent_dir)
+        self.initialised: bool = check_agent_is_initialised(self.agent_dir)
 
     def get_name(self) -> str:
         return self.agent_name
 
     def get_dir(self) -> pathlib.Path:
-        return self.agent_directory
+        return self.agent_dir
 
     def is_initialised(self) -> bool:
         return self.initialised
+
+    def get_config(self) -> Dict[str, Any]:
+        return get_config_dict(self.agent_dir / CONFIG_FILENAME)
+
+    def get_trained_agents_info(self, trained_agents: List[str]) -> dict[str, str]:
+        trained_agents_information: dict[str, str] = {}
+        trained_agent: str
+        print(trained_agents)
+        for trained_agent in trained_agents:
+            print(self.agent_dir, trained_agent)
+            (agent_hash, time, msg, _) = get_trained_agent_metadata(
+                self.agent_dir, trained_agent
+            )
+            shortened_hash: str = agent_hash[:HASH_LENGTH]
+            trained_agents_information[
+                f"{shortened_hash} {str(time)} {msg}"
+            ] = agent_hash
+
+        return trained_agents_information

@@ -16,7 +16,12 @@ class TrainingConfigReader(SimulationConfigReader):
         return int(self.parsed_config["General"]["number_of_self_play_agents"])
 
     def get_num_agents(self) -> int:
-        return self.get_self_play_num() + sum(self.get_naive_agent_counts().values())
+        return (
+            self.get_self_play_num()
+            + sum(self.get_naive_agent_counts().values())
+            + sum(map(lambda x: x[1], self.get_trained_agent_counts().values()))
+            + 1
+        )
 
     def get_other_config(self) -> dict[str, Any]:
         return {
@@ -25,6 +30,9 @@ class TrainingConfigReader(SimulationConfigReader):
         }
 
     def print_training(self) -> bool:
+        if "print_training" not in self.parsed_config["General"]:
+            return False
+
         # TODO add default value
         return bool(self.parsed_config["General"]["print_training"])
 
