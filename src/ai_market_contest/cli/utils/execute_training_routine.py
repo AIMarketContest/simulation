@@ -72,7 +72,7 @@ def set_up_and_execute_training_routine(
         for _ in range(env.simulation_length):
             current_prices = get_agent_price_dict(agents, env, current_prices)
             _, rewards, _, _ = env.step(current_prices)
-            for index, agent in enumerate(agents):
+            for index, agent in enumerate(self_play_agents):
                 agent.update(rewards[env.agents[index]], index)
 
             cumulative_profit += rewards[env.agents[0]]

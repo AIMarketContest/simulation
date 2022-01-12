@@ -1,5 +1,5 @@
 import pathlib
-from typing import Dict, List, Tuple
+from typing import Dict
 
 from ai_market_contest.cli.cli_config import AGENTS_DIR_NAME, ENVS_DIR_NAME
 from ai_market_contest.cli.configs.evaluation_config_reader import (
@@ -12,6 +12,12 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
 from ai_market_contest.cli.utils.training import get_agent_price_dict
+from ai_market_contest.evaluation.graphing import graph_cumulative_profits
+from ai_market_contest.evaluation.ranking import (
+    cumulative_profit_ranking,
+    get_agent_name_mapping,
+    print_rankings,
+)
 from ai_market_contest.training.sequential_agent_name_maker import (
     SequentialAgentNameMaker,
 )
@@ -61,11 +67,7 @@ def execute_evaluation_routine(
         for agent_name, reward in rewards.items():
             results["rewards"][agent_name].append(reward)
 
-    cumulative_rewards: List[Tuple[str, int]] = []
-    for agent_name in results["rewards"].keys():
-        cumulative_rewards.append((agent_name, sum(results["rewards"][agent_name])))
-
-    cumulative_rewards.sort(key=lambda x: x[1], reverse=True)
-
-    for item in cumulative_rewards:
-        print(f"{item[0]}: {item[1]}")
+    cumulative_rewards = cumulative_profit_ranking(results["rewards"])
+    print_rankings(agents, env.agents, cumulative_rewards)
+    agent_name_mapping = get_agent_name_mapping(agents, env.agents)
+    graph_cumulative_profits(results["rewards"], agent_name_mapping)
