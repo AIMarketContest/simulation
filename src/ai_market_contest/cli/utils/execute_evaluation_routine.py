@@ -1,5 +1,4 @@
 import pathlib
-from typing import Dict
 
 from ai_market_contest.cli.cli_config import AGENTS_DIR_NAME, ENVS_DIR_NAME
 from ai_market_contest.cli.configs.evaluation_config_reader import (
@@ -48,12 +47,12 @@ def execute_evaluation_routine(
     agent_name_maker = SequentialAgentNameMaker(len(agents))
     env = evaluation_config_reader.get_environment(agent_name_maker)
 
-    results: Dict[str, Dict[str, list[int]]] = {
+    results: dict[str, dict[str, list[int]]] = {
         "prices": {agent_name: [] for agent_name in env.agents},
         "rewards": {agent_name: [] for agent_name in env.agents},
     }
 
-    current_prices: Dict[str, int] = {}
+    current_prices: dict[str, int] = {}
     for (agent, agent_name) in zip(agents, env.agents):
         current_prices[agent_name] = agent.get_initial_price()
 

@@ -1,8 +1,6 @@
-import copy
 import datetime
 import pathlib
 import shutil
-from typing import Dict, List
 
 import typer
 
@@ -60,10 +58,10 @@ def set_up_and_execute_training_routine(
     agent_name_maker = SequentialAgentNameMaker(len(agents))
     env = training_config_reader.get_environment(agent_name_maker)
 
-    cumulative_profits: List[int] = []
+    cumulative_profits: list[int] = []
 
     for epoch in range(epochs):
-        current_prices: Dict[str, int] = {}
+        current_prices: dict[str, int] = {}
 
         for (agent, agent_name) in zip(agents, env.agents):
             current_prices[agent_name] = agent.get_initial_price()

@@ -13,8 +13,8 @@ class AgentNameMaker(metaclass=ABCMeta):
 
         Returns
         _______
-        List[str]
-            List of agent names.
+        list[str]
+            list of agent names.
 
         Raises
         ______

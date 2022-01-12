@@ -2,7 +2,7 @@ import copy
 import pathlib
 from ast import literal_eval
 from configparser import ConfigParser
-from typing import Any, List
+from typing import Any
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.cli.cli_config import CONFIG_FILENAME
@@ -20,8 +20,8 @@ class TrainingConfigReader(SimulationConfigReader):
     def get_self_play_num(self) -> int:
         return int(self.parsed_config["General"]["number_of_self_play_agents"])
 
-    def get_self_play_agents(self, agent_version: ExistingAgentVersion) -> List[Agent]:
-        agents: List[Agent] = []
+    def get_self_play_agents(self, agent_version: ExistingAgentVersion) -> list[Agent]:
+        agents: list[Agent] = []
         main_agent = self.agent_locator.get_agent_class_or_pickle(agent_version)
 
         for _ in range(self.get_self_play_num()):

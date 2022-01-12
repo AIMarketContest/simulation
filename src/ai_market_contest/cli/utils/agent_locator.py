@@ -3,8 +3,6 @@ import pathlib
 from abc import ABCMeta
 from types import ModuleType
 
-import dill
-
 from ai_market_contest.agent import Agent
 from ai_market_contest.cli.cli_config import CUR_AGENTS, TRAINED_PICKLE_FILENAME
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
