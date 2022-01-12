@@ -1,5 +1,3 @@
-from typing import Dict
-
 from ai_market_contest.demand_function import DemandFunction
 
 
@@ -10,7 +8,7 @@ class ${demand_function_classname}(DemandFunction):
     that will be sold by any agent in the market at a given price.
     """
 
-    def get_sales(self, current_prices: Dict[str, int]) -> Dict[str, int]:
+    def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
         """
         Calculates the quantity of the product that will be sold at a given
         price for each agent.

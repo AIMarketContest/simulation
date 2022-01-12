@@ -1,5 +1,5 @@
 import pathlib  # type: ignore
-from typing import Any, Dict  # type: ignore
+from typing import Any  # type: ignore
 
 import gym  # type: ignore
 from ray.rllib.agents.registry import get_trainer_class  # type: ignore

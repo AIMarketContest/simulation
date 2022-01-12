@@ -1,5 +1,4 @@
 import math  # type: ignore
-from typing import List, Tuple  # type: ignore
 
 from gym.spaces.discrete import Discrete  # type: ignore
 from gym.spaces.multi_discrete import MultiDiscrete  # type: ignore

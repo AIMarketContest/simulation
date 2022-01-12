@@ -9,8 +9,6 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
 )
 from ai_market_contest.cli.utils.initialiseagent import (
-    create_agent_config,
-    create_agent_dir,
     create_custom_agent_class,
     create_rllib_agent_config,
 )

@@ -260,8 +260,10 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
 
     execute_evaluation_routine(evaluation_config, path, chosen_agent_version)
 
+
 def run():
     app()
-    
+
+
 if __name__ == "__main__":
     app()

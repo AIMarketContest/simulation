@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Set  # type: ignore
+from typing import Any, Callable  # type: ignore
 
 
 class PolicySelector:
@@ -12,7 +12,7 @@ class PolicySelector:
         A string representing the name of the agent to be trained.
     self_play_number: int
         Number of self-play agents to be trained against.
-    naive_agents_counts: Dict[str, int]
+    naive_agents_counts: dict[str, int]
         Map from an agent name to the number of that agent to be trained against.
     """
 
