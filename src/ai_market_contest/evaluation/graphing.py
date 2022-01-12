@@ -62,7 +62,7 @@ def plot_average_step(
 
 def graph_profits(
     agent_profits: dict[Agent, list[float]], agent_names: dict[Agent, str]
-) -> plt:
+):
     """
     This function is used to plot the prices of all agents in the
     input on the same graph against timestep.
@@ -84,12 +84,11 @@ def graph_profits(
     plt.ylabel("Profit")
 
     plt.show()
-    return plt
 
 
 def graph_cumulative_profits(
-    agent_profits: dict[Agent, list[float]], agent_names: dict[Agent, str]
-) -> plt:
+    agent_profits: dict[str, list[int]], agent_names: dict[str, str]
+):
     """
     This function is used to plot the total profit that
     each agent makes during a simulation.
@@ -104,14 +103,13 @@ def graph_cumulative_profits(
     ):  # for loop cycles through the agents and corresponding keys
         x_axis = range(1, len(profits) + 1)
         cum_profits = np.cumsum(profits)
-        plt.plot(x_axis, cum_profits, label=agent_names.get(agent))
+        plt.plot(x_axis, cum_profits, label=agent_names[agent])
     plt.legend(loc="upper left")
     plt.xlabel("Time step")
     plt.ylabel("Cumulative Profit")
     plt.title("Cumulative profit over time")
 
     plt.show()
-    return plt
 
 
 def graph_convergence(
