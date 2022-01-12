@@ -141,9 +141,7 @@ class Agent(Policy):
         return {"w": self.w}
 
     def load(self, file):
-        tmp_dict = dill.load(file)
-
-        self.__dict__.update(tmp_dict)
+        self.__dict__.update(dill.load(file))
 
     def save(self, file):
         dill.dump(self.__dict__, file, 2)
