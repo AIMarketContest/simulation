@@ -15,6 +15,7 @@ class SimulationConfigReader:
         demand_function_locator: DemandFunctionLocator,
         config_parser: ConfigParser = ConfigParser(),
     ):
+        config_parser.optionxform = str
         config_parser.read(config_file_path)
         self.parsed_config: ConfigParser = config_parser
         self.demand_function_locator: DemandFunctionLocator = demand_function_locator
