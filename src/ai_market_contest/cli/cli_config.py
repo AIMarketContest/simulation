@@ -22,6 +22,7 @@ AGENT_PKL_FILENAME: Final = "agent.pkl"
 AGENTS_DIR_NAME: Final = "agents"
 DEMAND_FUNCTION_TEMPLATE = "demand_function.templ"
 HASH_LENGTH: Final = 6
+DEFAULT_INITIAL_AGENT_PRICE = 50
 TRAINED_AGENTS_DIR_NAME: Final = "trained-agents"
 TRAINED_PICKLE_FILENAME: Final = "trained.pkl"
 TRAINED_CONFIG_FILENAME: Final = "trained_config.ini"

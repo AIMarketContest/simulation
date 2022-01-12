@@ -24,7 +24,7 @@ class TrainingConfigReader(SimulationConfigReader):
         agents: list[Agent] = []
         main_agent = self.agent_locator.get_agent_class_or_pickle(agent_version)
 
-        for _ in range(self.get_self_play_num()):
+        for _ in range(self.get_self_play_num() + 1):
             agents.append(copy.deepcopy(main_agent))
 
         return agents
