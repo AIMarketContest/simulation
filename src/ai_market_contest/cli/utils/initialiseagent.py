@@ -2,7 +2,7 @@ import configparser
 import datetime
 import pathlib
 from string import Template
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENT_FILE,
@@ -14,9 +14,7 @@ from ai_market_contest.cli.utils.filesystemutils import (
     assert_config_file_exists,
     check_overwrite,
 )
-from ai_market_contest.cli.utils.hashing import (
-    get_agent_hash,
-)
+from ai_market_contest.cli.utils.hashing import get_agent_hash
 from ai_market_contest.cli.utils.processmetafile import write_custom_agent_meta_file
 
 
@@ -30,9 +28,7 @@ def set_agent_to_initialised(agent_dir: pathlib.Path):
         config.write(c_file)
 
 
-def make_initial_trained_agent(
-    agent_dir: pathlib.Path, agent_name: str, initial_hash: str
-):
+def make_initial_trained_agent(agent_dir: pathlib.Path, initial_hash: str):
     trained_agents_dir = agent_dir / TRAINED_AGENTS_DIR_NAME
     initial_trained_agent_dir = trained_agents_dir / initial_hash
     initial_trained_agent_dir.mkdir(parents=True)
@@ -68,39 +64,54 @@ def create_agent_config(
     return initial_hash
 
 
+def create_agent_dir(
+    proj_dir: pathlib.Path, agent_name: str, overwrite_check: bool
+) -> Optional[pathlib.Path]:
+    agents_dir = proj_dir / AGENTS_DIR_NAME
+    agent_dir: pathlib.Path = agents_dir / agent_name
+
+    if agent_dir.exists() and overwrite_check:
+        return None
+
+    agent_dir.mkdir(parents=True, exist_ok=True)
+
+    return agent_dir
+
+
 def create_custom_agent_class(
     agent_name: str, proj_dir: pathlib.Path, overwrite_check: bool = False
 ):
-    agents_dir = proj_dir / AGENTS_DIR_NAME
-    agent_filename: str = f"{agent_name}.py"
-    agent_dir: pathlib.Path = agents_dir / agent_name
+    agent_dir = create_agent_dir(proj_dir, agent_name, overwrite_check)
 
-    if (
-        agent_dir.exists()
-        and overwrite_check
-        and not check_overwrite(agent_filename, agent_dir)
-    ):
+    if agent_dir is None:
         return
 
+    agent_filename: str = f"{agent_name}.py"
     agent_file: pathlib.Path = agent_dir / agent_filename
-    agent_dir.mkdir(parents=True, exist_ok=True)
     agent_file.touch()
     create_new_agent_file(agent_file, agent_name)
     initial_hash: str = get_agent_hash()
     create_agent_config(agent_dir, initial_hash, "custom")
-    make_initial_trained_agent(agent_dir, agent_name, initial_hash)
+    make_initial_trained_agent(agent_dir, initial_hash)
 
 
-def create_rllib_agent(proj_dir: pathlib.Path, type: str, name: str):
-    agents_dir = proj_dir / AGENTS_DIR_NAME
-    agent_dir: pathlib.Path = agents_dir / name
+def create_rllib_agent_config(proj_dir: pathlib.Path, type: str, name: str):
+    agent_dir = create_agent_dir(proj_dir, name, False)
 
-    if agent_dir.exists():
+    if agent_dir is None:
         return
 
-    agent_dir.mkdir(parents=True, exist_ok=True)
     initial_hash: str = get_agent_hash()
-    create_agent_config(agent_dir, initial_hash, "rllib")
+    create_agent_config(
+        agent_dir,
+        initial_hash,
+        "rllib",
+        {
+            "rllib": {
+                "agent_type": type,
+            }
+        },
+    )
 
 
 def make_agent_classname_camelcase(agent_name: str):
