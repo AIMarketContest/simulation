@@ -53,7 +53,7 @@ def test_make_environment_config_file(tmp_path: pathlib.Path):
 
 def test_initialise_file_structure_does_all(tmp_path: pathlib.Path):
     tmp_path = tmp_path / "aic"
-    initialise_file_structure(tmp_path, ["test_agent"], ["test"])
+    initialise_file_structure(tmp_path, ["test"])
 
     assert (tmp_path / "agents").is_dir()
     assert (tmp_path / "environments").is_dir()
@@ -68,8 +68,3 @@ def test_initialise_file_structure_does_all(tmp_path: pathlib.Path):
 
     config_file = tmp_path / "config.ini"
     assert config_file.exists()
-
-    assert (
-        config_file.read_text()
-        == "[agent]\nagents = ['test_agent']\nauthors = ['test']\n\n"
-    )
