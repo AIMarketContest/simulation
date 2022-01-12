@@ -12,7 +12,7 @@ from ai_market_contest.training.sequential_agent_name_maker import (
 
 def test_training_config(tmp_path):
     tmp_path = tmp_path / "aic"
-    initialise_file_structure(tmp_path, ["TestAgent"], ["TestAuthor"])
+    initialise_file_structure(tmp_path, ["TestAuthor"])
 
     demand_function_locator = DemandFunctionLocator(tmp_path)
     config_parser = ConfigParser()

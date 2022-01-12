@@ -8,7 +8,7 @@ from ai_market_contest.cli.utils.project_initialisation_utils import (
 def test_get_demand_function(tmp_path):
     tmp_path = tmp_path / "aic"
 
-    initialise_file_structure(tmp_path, ["TestAgent"], ["test_author"])
+    initialise_file_structure(tmp_path, ["test_author"])
     create_demand_function(tmp_path, "ADemandFunction")
 
     demand_function_locator = DemandFunctionLocator(
