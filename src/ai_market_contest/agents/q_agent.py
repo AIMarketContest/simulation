@@ -5,6 +5,7 @@ import numpy as np
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.typing.types import Price
+from functools import partial
 
 
 class QAgent(Agent):
@@ -13,7 +14,7 @@ class QAgent(Agent):
         self.cost = 0.3
         self.actions_spaces = 100
         self.Q: dict[Sequence[float], dict[float, float]] = defaultdict(
-            lambda: defaultdict(int)
+            partial(defaultdict, int)
         )
         self.alpha = 0.3
         self.gamma = 0.9
@@ -25,11 +26,13 @@ class QAgent(Agent):
     def get_initial_price(self) -> Price:
         return 1
 
-    def policy(self, last_round_agents_prices: list[Price], agent_index: int) -> float:
-        self.last_round_prices = last_round_agents_prices
+    def policy(
+        self, last_round_all_agents_prices: list[Price], identity_index: int
+    ) -> Price:
+        self.last_round_prices = last_round_all_agents_prices
         other_agent_prices = (
-            last_round_agents_prices[:agent_index]
-            + last_round_agents_prices[agent_index + 1 :]
+            last_round_all_agents_prices[:identity_index]
+            + last_round_all_agents_prices[identity_index + 1 :]
         )
 
         if (
@@ -45,12 +48,9 @@ class QAgent(Agent):
                     max_profit = profit
                     best_price = price
 
-            price = int(best_price)
+            return int(best_price)
 
-        else:
-            price = np.random.randint(0, self.actions_spaces)
-
-        return price
+        return np.random.randint(0, self.actions_spaces)
 
     def update(
         self,
@@ -59,8 +59,6 @@ class QAgent(Agent):
     ) -> None:
         if not self.last_round_prices:
             return
-
-        self.time += 1
 
         a1 = self.last_round_prices[identity_index]
 

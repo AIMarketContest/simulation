@@ -23,6 +23,7 @@ tensorboard = "^2.7.0"
 GPUtil = "^1.4.0"
 typer = {extras = ["all"], version = "^0.4.0"}
 questionary = "^1.10.0"
+dill = "^0.3.4"
 
 
 [tool.poetry.dev-dependencies]
