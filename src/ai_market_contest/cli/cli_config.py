@@ -63,26 +63,22 @@ EVALUATION_CONFIGS_DIR_NAME: Final = "evaluation_configs"
 CONFIG_FILE_EXTENSION: Final = ".ini"
 MULTIAGENT_CONFIG_FILENAME: Final = "multi_agent_config.py"
 RLLIB_AGENTS = [
-    "AC2",
-    "AC3",
+    "A2C",
+    "A3C",
+    "APPO",
     "BC",
-    "DDPG",
-    "TD3",
-    "APEX-DDPG",
-    "DQN",
-    "Rainbow",
-    "APEX-DQN",
-    "IMPALA",
-    "MARWIL",
+    # "DDPG",
+    # "TD3",
+    # "DQN",
+    # "IMPALA",
+    # ? "MARWIL",
     "PG",
     "PPO",
-    "APPO",
-    "R2D2",
+    # ? "R2D2",
     "SAC",
-    "LinUCB",
-    "LinTS",
-    "QMIX",
-    "MADDPG",
+    "contrib/LinUCB",
+    "contrib/LinTS",
+    # "contrib/MADDPG",
 ]
 
 CUR_DEMAND_FUNCTIONS: Final = {

@@ -10,7 +10,6 @@ from ray.rllib.agents.registry import get_trainer_class
 from ray.rllib.agents.trainer import Trainer
 from ray.tune.registry import register_env
 
-from ai_market_contest.cli.configs.agent_config_reader import AgentConfigReader
 from ai_market_contest.agent import Agent
 from ai_market_contest.cli.cli_config import CUR_AGENTS, TRAINED_PICKLE_FILENAME
 from ai_market_contest.cli.configs.agent_config_reader import AgentConfigReader
@@ -54,9 +53,9 @@ class AgentLocator:
         agent_config_reader: AgentConfigReader,
     ) -> Optional[Trainer]:
         register_env("marketplace", lambda x: env)
-        agent_paths: List[pathlib.Path] = list(agent_version.get_dir().iter_dir())
+        agent_paths: List[pathlib.Path] = list(agent_version.get_dir().iterdir())
         agent_checkpoint_dirs: List[pathlib.Path] = list(
-            filter(lambda x: x.startswith("checkpoint"), agent_paths)
+            filter(lambda x: x.name.startswith("checkpoint"), agent_paths)
         )
         rllib_type: Optional[str] = agent_config_reader.get_rllib_type()
 
@@ -69,12 +68,13 @@ class AgentLocator:
         )
         if agent_checkpoint_dirs:
             agent_checkpoint_dir = agent_checkpoint_dirs[0]
-            agent_checkpoints = list(agent_checkpoint_dir.iter_dir())
+            agent_checkpoints = list(agent_checkpoint_dir.iterdir())
             agent_checkpoint_files = list(
-                filter(lambda x: re.match("checkpoint-[0-9]*", x), agent_checkpoints)
+                filter(
+                    lambda x: re.match("checkpoint-[0-9]*$", x.name), agent_checkpoints
+                )
             )
             if agent_checkpoint_files:
                 agent_checkpoint_file = agent_checkpoint_files[0]
-                with agent_checkpoint_file.open("w") as agent_checkpoint_file:
-                    trainer.restore(str(agent_checkpoint_file.resolve()))
+                trainer.restore(str(agent_checkpoint_file.resolve()))
         return trainer

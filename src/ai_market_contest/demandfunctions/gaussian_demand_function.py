@@ -1,5 +1,7 @@
 from statistics import NormalDist
 
+import numpy as np
+
 from ai_market_contest.demand_function import DemandFunction
 
 
@@ -13,9 +15,9 @@ class GaussianDemandFunction(DemandFunction):
         from an agent selling the product at price = 0.
     """
 
-    MAX_SALES_SCALE_FACTOR: int = 1000
-    MU: float = 0
-    SIGMA: float = 1
+    MAX_SALES_SCALE_FACTOR: int = 100
+    MU: float = 50
+    SIGMA: float = np.sqrt(sum(np.square(np.array([i for i in range(101)]) - MU)) / 100)
 
     def __init__(self):
         """
@@ -28,17 +30,20 @@ class GaussianDemandFunction(DemandFunction):
             raise ValueError("max_sales_scale_factor must be greater than 0")
         if self.SIGMA <= 0:
             raise ValueError("sigma must be greater than 0")
-        if not 0 <= self.MU <= 1:
-            raise ValueError("mu must be between 0 and 1 (inclusive)")
 
     def get_sales(self, current_prices: dict[str, int]) -> dict[str, int]:
         gaussian_distribution: "NormalDist" = NormalDist(mu=self.MU, sigma=self.SIGMA)
 
-        sales: dict[str, int] = {}
+        demand: dict[str, float] = {}
+        total_demand = 0
+        for agent, price in current_prices.items():
+            demand[agent] = 1 - gaussian_distribution.cdf(price)
+            total_demand += demand[agent]
 
+        sales: dict[str, int] = {}
         for agent, price in current_prices.items():
             sales[agent] = int(
-                (1 - gaussian_distribution.cdf(price)) * self.MAX_SALES_SCALE_FACTOR
+                self.MAX_SALES_SCALE_FACTOR * (demand[agent] / total_demand)
             )
 
         return sales
