@@ -5,10 +5,8 @@ import sys
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
-    HASH_LENGTH,
 )
 from ai_market_contest.cli.utils.filesystemutils import assert_config_file_exists
-from ai_market_contest.cli.utils.processmetafile import get_trained_agent_metadata
 
 
 def get_agent_names(proj_dir: pathlib.Path) -> list[str]:
