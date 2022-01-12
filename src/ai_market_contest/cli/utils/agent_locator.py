@@ -1,6 +1,6 @@
-from abc import ABCMeta
 import importlib.util
 import pathlib
+from abc import ABCMeta
 from types import ModuleType
 
 import dill
