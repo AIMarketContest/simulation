@@ -109,6 +109,7 @@ def create_rllib_agent_config(proj_dir: pathlib.Path, type: str, name: str):
             }
         },
     )
+    make_initial_trained_agent(agent_dir, initial_hash)
 
 
 def make_agent_classname_camelcase(agent_name: str):
