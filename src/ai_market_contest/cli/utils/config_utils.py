@@ -1,7 +1,7 @@
-from configparser import ConfigParser
 import pathlib
 import shutil
 import sys
+from configparser import ConfigParser
 from pathlib import Path
 from typing import Any, Dict
 
