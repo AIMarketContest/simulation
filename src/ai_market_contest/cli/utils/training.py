@@ -5,8 +5,8 @@ import ray
 from ray.rllib import agents  # type: ignore
 from ray.tune.logger import pretty_print  # type: ignore
 from ray.tune.registry import register_env
-from ai_market_contest.agent import Agent  # type: ignore
 
+from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.environment import Market
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
 

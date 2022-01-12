@@ -1,11 +1,11 @@
 from collections import defaultdict
+from functools import partial
 from typing import Sequence
 
 import numpy as np
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.typing.types import Price
-from functools import partial
 
 
 class QAgent(Agent):
