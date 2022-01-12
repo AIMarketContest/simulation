@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import pathlib
 from ast import literal_eval
 from pathlib import Path
 
@@ -111,7 +112,7 @@ def add_agent(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True))
         typer.echo(f"Agent located in {path}/agents/{agent_name} directory")
     elif agent_type == "rllib":
         rllib_agent = questionary.select(
-            "What rllib agent would like to start with (you can add more after initialising the project)?",
+            "What rllib agent would like use?",
             choices=RLLIB_AGENTS,
         ).ask()
         rllib_agent_name = typer.prompt("Enter a name to identify this agent")
@@ -179,6 +180,37 @@ def add_evaluate_config(
     )
 
 
+def get_chosen_agent_version(path: pathlib.Path, action: str):
+    agent_names: list[str] = get_agent_names(path)
+    chosen_agent_name: str = questionary.select(
+        f"Choose an agent to {action}.", choices=agent_names
+    ).ask()
+    chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
+    agent_config = chosen_agent.get_config()
+
+    try:
+        trained_agents: list[str] = literal_eval(
+            agent_config["training"]["trained-agents"]
+        )
+
+        trained_agents_info: dict[str, str] = chosen_agent.get_trained_agents_info(
+            trained_agents
+        )
+        chosen_trained_agent: str = questionary.select(
+            f"Select which version of the agent would you like to {action}",
+            choices=list(trained_agents_info.keys()),
+        ).ask()
+
+        chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
+            chosen_agent, trained_agents_info[chosen_trained_agent]
+        )
+
+        return chosen_agent_version
+    except KeyError:
+        typer.echo("Chosen agent's config is malformed or missing")
+        return None
+
+
 @app.command()
 def train(
     path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)),
@@ -189,46 +221,24 @@ def train(
     """
     assert_proj_dir_exists(path)
 
-    agent_names: list[str] = get_agent_names(path)
-    chosen_agent_name: str = questionary.select(
-        "Choose an agent to train.", choices=agent_names
+    chosen_agent_version = get_chosen_agent_version(path, "train")
+
+    if chosen_agent_version is None:
+        return
+
+    training_configs: list[str] = get_training_configs(path)
+    assert_configs_exist(training_configs)
+    training_config: str = questionary.select(
+        "Choose a training config:", choices=training_configs
     ).ask()
-    chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
-    agent_config = chosen_agent.get_config()
+    training_msg: str = typer.prompt("Enter training message")
 
-    try:
-        trained_agents: list[str] = literal_eval(
-            agent_config["training"]["trained-agents"]
-        )
-
-        trained_agents_info: dict[str, str] = chosen_agent.get_trained_agents_info(
-            trained_agents
-        )
-        chosen_trained_agent: str = questionary.select(
-            "Select which version of the agent to train",
-            choices=list(trained_agents_info.keys()),
-        ).ask()
-
-        chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
-            chosen_agent, trained_agents_info[chosen_trained_agent]
-        )
-        training_configs: list[str] = get_training_configs(path)
-        assert_configs_exist(training_configs)
-        training_config: str = questionary.select(
-            "Choose a training config:", choices=training_configs
-        ).ask()
-        training_msg: str = typer.prompt("Enter training message")
-
-        set_up_and_execute_training_routine(
-            training_config,
-            path,
-            chosen_agent_version,
-            trained_agents_info[chosen_trained_agent],
-            training_msg,
-        )
-
-    except KeyError:
-        typer.echo("Chosen agent's config is malformed or missing")
+    set_up_and_execute_training_routine(
+        training_config,
+        path,
+        chosen_agent_version,
+        training_msg,
+    )
 
 
 @app.command()
@@ -238,40 +248,18 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
     """
     assert_proj_dir_exists(path)
 
-    agent_names: list[str] = get_agent_names(path)
-    chosen_agent_name: str = questionary.select(
-        "Choose an agent to train.", choices=agent_names
+    chosen_agent_version = get_chosen_agent_version(path, "evaluate")
+
+    if chosen_agent_version is None:
+        return
+
+    evaluation_configs: list[str] = get_evaluation_configs(path)
+    assert_configs_exist(evaluation_configs)
+    evaluation_config: str = questionary.select(
+        "Choose an evaluation configuration:", choices=evaluation_configs
     ).ask()
-    chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
-    agent_config = chosen_agent.get_config()
 
-    try:
-        trained_agents: list[str] = literal_eval(
-            agent_config["training"]["trained-agents"]
-        )
-
-        trained_agents_info: dict[str, str] = chosen_agent.get_trained_agents_info(
-            trained_agents
-        )
-        chosen_trained_agent: str = questionary.select(
-            "Select which version of the agent would you like to evaluate",
-            choices=list(trained_agents_info.keys()),
-        ).ask()
-
-        chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
-            chosen_agent, trained_agents_info[chosen_trained_agent]
-        )
-
-        evaluation_configs: list[str] = get_evaluation_configs(path)
-        assert_configs_exist(evaluation_configs)
-        evaluation_config: str = questionary.select(
-            "Choose an evaluation configuration:", choices=evaluation_configs
-        ).ask()
-
-        execute_evaluation_routine(evaluation_config, path, chosen_agent_version)
-
-    except KeyError:
-        typer.echo("Chosen agent's config is malformed or missing")
+    execute_evaluation_routine(evaluation_config, path, chosen_agent_version)
 
 
 if __name__ == "__main__":
