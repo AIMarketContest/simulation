@@ -79,7 +79,7 @@ class SimulationConfigReader:
                 agent = self.agent_locator.get_agent_class_or_pickle(
                     trained_agent_version
                 )
-                
+
             for _ in range(num):
                 agents.append(copy.deepcopy(agent))
 

@@ -2,8 +2,8 @@ import pathlib
 from typing import Union
 
 from ray.rllib.agents.trainer import Trainer
-from ai_market_contest.agent import Agent
 
+from ai_market_contest.agent import Agent
 from ai_market_contest.cli.cli_config import (
     AGENTS_DIR_NAME,
     DEFAULT_INITIAL_AGENT_PRICE,
