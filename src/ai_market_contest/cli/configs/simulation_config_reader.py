@@ -84,7 +84,3 @@ class SimulationConfigReader:
             int(self.parsed_config["General"]["simulation_length"]),
             agent_name_maker,
         )
-
-    def get_optimisation_algorithm(self) -> str:
-        # TODO: Check optimisation algorithm is valid
-        return self.parsed_config["General"]["optimisation_algorithm"]

@@ -48,15 +48,13 @@ def set_up_and_execute_training_routine(
     )
 
     epochs = training_config_reader.get_epochs()
-
+    agent_name_maker = SequentialAgentNameMaker(training_config_reader.get_num_agents())
+    env = training_config_reader.get_environment(agent_name_maker)
     self_play_agents = training_config_reader.get_self_play_agents(agent_version)
     naive_agents = training_config_reader.get_naive_agents()
-    trained_agents = training_config_reader.get_trained_agents(proj_dir)
+    trained_agents = training_config_reader.get_trained_agents(proj_dir, env)
 
     agents = self_play_agents + naive_agents + trained_agents
-
-    agent_name_maker = SequentialAgentNameMaker(len(agents))
-    env = training_config_reader.get_environment(agent_name_maker)
 
     cumulative_profits: list[int] = []
 
