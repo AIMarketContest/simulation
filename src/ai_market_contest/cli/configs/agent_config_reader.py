@@ -29,7 +29,7 @@ class AgentConfigReader:
     def get_initial_hash(self) -> str:
         return self.config_parser["training"]["initial_hash"]
 
-    def get_trained_agents(self) -> List[str]:
+    def get_trained_agents(self) -> list[str]:
         return literal_eval(self.config_parser["training"]["trained_agents"])
 
     def agent_is_initialised(self) -> bool:

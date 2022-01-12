@@ -16,9 +16,6 @@ def test_get_agent(tmp_path):
     returned_agent = agent_locator.get_agent("TestAgent")
     assert returned_agent.__name__ == "TestAgent"
 
-    returned_agent = agent_locator.get_agent("TestAgent-opponent")
-    assert returned_agent.__name__ == "TestAgent"
-
     try:
         agent_locator.get_agent("NotAnAgent")
         assert False
