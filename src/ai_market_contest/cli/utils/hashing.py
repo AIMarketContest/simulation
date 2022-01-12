@@ -18,8 +18,10 @@ def hash_string(string: str):
 def get_shortened_hashes(hashes: list[str]):
     return list(map(lambda hash: hash[:HASH_LENGTH], hashes))
 
+
 def get_agent_hash():
     return hash_string(str(datetime.datetime.now()))
+
 
 def get_agent_initial_hash(chosen_agent_dir: pathlib.Path):
     agent_config_file: pathlib.Path = chosen_agent_dir / CONFIG_FILENAME

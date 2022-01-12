@@ -1,17 +1,13 @@
 #!/usr/bin/env python3
-from configparser import ConfigParser
+from ast import literal_eval
 from pathlib import Path
-from typing import Callable
 
 import questionary
 import typer
 
-from ast import literal_eval
 from ai_market_contest.cli.adddemandfunctionsubcommand import create_demand_function
 from ai_market_contest.cli.cli_config import (
-    AGENTS_DIR_NAME,
     COMMAND_NAME,
-    ENVS_DIR_NAME,
     EVALUATION_CONFIG_EXTENSION,
     EVALUATION_CONFIGS_DIR_NAME,
     PROJ_DIR_NAME,
@@ -19,11 +15,7 @@ from ai_market_contest.cli.cli_config import (
     TRAINING_CONFIG_EXTENSION,
     TRAINING_CONFIGS_DIR_NAME,
 )
-from ai_market_contest.cli.configs.evaluation_config_reader import (
-    EvaluationConfigReader,
-)
 from ai_market_contest.cli.resetsubcommand import remove_proj_dir
-from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.agent_manipulation_utils import (
     create_custom_agent,
     create_rllib_agent,
@@ -34,11 +26,12 @@ from ai_market_contest.cli.utils.config_utils import (
     check_training_config_exists,
     copy_example_evaluation_config_file,
     copy_example_training_config_file,
-    get_evaluation_config_path,
     get_evaluation_configs,
     get_training_configs,
 )
-from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
+from ai_market_contest.cli.utils.execute_evaluation_routine import (
+    execute_evaluation_routine,
+)
 from ai_market_contest.cli.utils.execute_training_routine import (
     set_up_and_execute_training_routine,
 )
@@ -50,17 +43,9 @@ from ai_market_contest.cli.utils.filesystemutils import (
     assert_proj_dir_exists,
     check_overwrite,
 )
-from ai_market_contest.cli.utils.get_agents import (
-    get_agent_names,
-    get_trained_agents,
-)
+from ai_market_contest.cli.utils.get_agents import get_agent_names
 from ai_market_contest.cli.utils.project_initialisation_utils import (
     initialise_file_structure,
-)
-from ai_market_contest.evaluation.agent_evaluator import AgentEvaluator
-from ai_market_contest.training.agent_name_maker import AgentNameMaker
-from ai_market_contest.training.sequential_agent_name_maker import (
-    SequentialAgentNameMaker,
 )
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
@@ -254,56 +239,39 @@ def evaluate(path: Path = typer.Option(Path(f"./{PROJ_DIR_NAME}", exists=True)))
     assert_proj_dir_exists(path)
 
     agent_names: list[str] = get_agent_names(path)
-
     chosen_agent_name: str = questionary.select(
-        "Choose an agent to evaluate", choices=agent_names
+        "Choose an agent to train.", choices=agent_names
     ).ask()
     chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
+    agent_config = chosen_agent.get_config()
 
-    trained_agents: list[str] = get_trained_agents(chosen_agent.get_dir())
-    trained_agents_info: dict[str, str] = chosen_agent.get_trained_agents_info(
-        trained_agents
-    )
-    chosen_trained_agent: str = questionary.select(
-        "Select which version of the agent to train",
-        choices=list(trained_agents_info.keys()),
-    ).ask()
-    chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
-        chosen_agent, trained_agents_info[chosen_trained_agent]
-    )
+    try:
+        trained_agents: list[str] = literal_eval(
+            agent_config["training"]["trained-agents"]
+        )
 
+        trained_agents_info: dict[str, str] = chosen_agent.get_trained_agents_info(
+            trained_agents
+        )
+        chosen_trained_agent: str = questionary.select(
+            "Select which version of the agent would you like to evaluate",
+            choices=list(trained_agents_info.keys()),
+        ).ask()
 
-    evaluation_configs: list[str] = get_evaluation_configs(path)
-    assert_configs_exist(evaluation_configs)
-    evaluation_config: str = questionary.select(
-        "Choose an evaluation configuration:", choices=evaluation_configs
-    ).ask()
-    eval_config_parser: ConfigParser = ConfigParser()
-    eval_config_parser.optionxform = str
+        chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
+            chosen_agent, trained_agents_info[chosen_trained_agent]
+        )
 
-    env_dir: Path = path / ENVS_DIR_NAME
-    evaluation_config_reader: EvaluationConfigReader = EvaluationConfigReader(
-        get_evaluation_config_path(path, evaluation_config),
-        DemandFunctionLocator(env_dir),
-        eval_config_parser,
-        agent_count,
-    )
-    agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(
-        evaluation_config_reader.get_num_agents()
-    )
+        evaluation_configs: list[str] = get_evaluation_configs(path)
+        assert_configs_exist(evaluation_configs)
+        evaluation_config: str = questionary.select(
+            "Choose an evaluation configuration:", choices=evaluation_configs
+        ).ask()
 
-    agent_locator: AgentLocator = AgentLocator(path / AGENTS_DIR_NAME)
+        execute_evaluation_routine(evaluation_config, path, chosen_agent_version)
 
-    evaluator: AgentEvaluator = AgentEvaluator(
-        evaluation_config_reader.get_environment(agent_name_maker),
-        agent_locator,
-        evaluation_config_reader.get_naive_agent_counts(),
-        agents,
-        evaluation_config_reader.get_optimisation_algorithm(),
-        agent_name_maker,
-    )
-
-    print(evaluator.evaluate())
+    except KeyError:
+        typer.echo("Chosen agent's config is malformed or missing")
 
 
 if __name__ == "__main__":

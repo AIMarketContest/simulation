@@ -20,7 +20,6 @@ from ai_market_contest.cli.utils.config_utils import (
     get_training_config_path,
 )
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
-from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
@@ -45,8 +44,6 @@ def set_up_and_execute_training_routine(
     training_msg: str,
 ):
     # Assumes agent to train is always first in the list
-    agents: List[Agent] = []
-
     agent_locator: AgentLocator = AgentLocator(proj_dir / AGENTS_DIR_NAME)
     demand_function_locator = DemandFunctionLocator(proj_dir / ENVS_DIR_NAME)
 
@@ -54,34 +51,16 @@ def set_up_and_execute_training_routine(
         proj_dir, training_config_name
     )
     training_config_reader = TrainingConfigReader(
-        training_config_path, demand_function_locator
+        training_config_path, demand_function_locator, agent_locator
     )
 
     epochs = training_config_reader.get_epochs()
 
-    # Adding one here as we must always have the agent to train
+    self_play_agents = training_config_reader.get_self_play_agents(agent_version)
+    naive_agents = training_config_reader.get_naive_agents()
+    trained_agents = training_config_reader.get_trained_agents(proj_dir)
 
-    main_agent = agent_locator.get_agent_class_or_pickle(agent_version)
-
-    for _ in range(training_config_reader.get_self_play_num()):
-        agents.append(copy.deepcopy(main_agent))
-
-    for (agent_name, num) in training_config_reader.get_naive_agent_counts().items():
-        agent = agent_locator.get_agent(agent_name)
-        for _ in range(int(num)):
-            agents.append(copy.deepcopy(agent()))
-
-    for (
-        agent_name,
-        (agent_hash, num),
-    ) in training_config_reader.get_trained_agent_counts().items():
-        trained_exisiting_agent = ExistingAgent(agent_name, proj_dir)
-        trained_agent_version = ExistingAgentVersion(
-            trained_exisiting_agent, agent_hash
-        )
-        agent = agent_locator.get_agent_class_or_pickle(trained_agent_version)
-        for _ in range(num):
-            agents.append(copy.deepcopy(agent))
+    agents = self_play_agents + naive_agents + trained_agents
 
     agent_name_maker = SequentialAgentNameMaker(len(agents))
     env = training_config_reader.get_environment(agent_name_maker)
@@ -118,66 +97,6 @@ def set_up_and_execute_training_routine(
             )
 
 
-    # def set_up_and_execute_training_routine(
-    #     training_config: str,
-    #     proj_dir: pathlib.Path,
-    #     agent_version: ExistingAgentVersion,
-    #     parent_hash: str,
-    #     training_msg: str,
-    # ):
-    #     training_config_path: pathlib.Path = get_training_config_path(
-    #         proj_dir, training_config
-    #     )
-    #     config_parser: ConfigParser = ConfigParser()
-    #     config_parser.optionxform = str
-    #     env_dir = proj_dir / ENVS_DIR_NAME
-    # demand_function_locator: DemandFunctionLocator = DemandFunctionLocator(env_dir)
-    # agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(
-    #     config_reader.get_num_agents()
-    # )
-
-
-# policy_selector: PolicySelector = PolicySelector(
-#     agent_version.get_agent_name(),
-#     config_reader.get_self_play_num(),
-#     config_reader.get_naive_agent_counts(),
-# )
-
-# agent_locator: AgentLocator = AgentLocator(proj_dir / AGENTS_DIR_NAME)
-
-#     policy_config_maker: PolicyConfigMaker = PolicyConfigMaker(
-#         agent_locator, policy_selector
-#     )
-
-#     training_config_maker: TrainingConfigMaker = TrainingConfigMaker(
-#         config_reader, policy_config_maker
-#     )
-
-#     config: dict[str, Any] = training_config_maker.make_training_config()
-#     checkpoint_path = get_checkpoint_path(
-#         agent_version.get_dir(), agent_version.was_agent_initialised(), config_reader
-#     )
-#     trainer: AgentTrainer = AgentTrainer(
-#         config_reader.get_environment(agent_name_maker),
-#         config,
-#         checkpoint_path,
-#         agent_version.was_agent_initialised(),
-#         config_reader.get_optimisation_algorithm(),
-#     )
-#     trainer.train(config_reader.get_num_epochs(), config_reader.print_training())
-#     if not agent_version.was_agent_initialised():
-#         trainer.save(agent_version.get_dir())
-#         config_reader.write_config_to_file(agent_version.get_dir())
-#     save_new_agent(
-#         trainer,
-#         agent_version,
-#         parent_hash,
-#         training_msg,
-#         config_reader,
-#         policy_config_maker,
-#     )
-
-
 def save_new_custom_agent(
     new_agent: Agent,
     old_agent_version: ExistingAgentVersion,
@@ -198,6 +117,5 @@ def save_new_custom_agent(
         old_agent_version.version,
     )
     shutil.copy(training_config_path, new_agent_dir / TRAINED_CONFIG_FILENAME)
-    # policy_config_maker.save_multiagent_config(new_agent_dir)
     with open(new_agent_dir / TRAINED_PICKLE_FILENAME, "wb") as pickle_file:
         new_agent.save(pickle_file)
