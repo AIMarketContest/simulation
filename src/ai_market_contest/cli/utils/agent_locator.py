@@ -3,13 +3,16 @@ import pathlib
 import re
 from abc import ABCMeta
 from types import ModuleType
+from typing import List, Optional
 
 import gym
 from ray.rllib.agents.registry import get_trainer_class
+from ray.rllib.agents.trainer import Trainer
 from ray.tune.registry import register_env
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.cli.cli_config import CUR_AGENTS, TRAINED_PICKLE_FILENAME
+from ai_market_contest.cli.configs.agent_config_reader import AgentConfigReader
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
@@ -23,7 +26,7 @@ class AgentLocator:
         if agent_name in CUR_AGENTS:
             return CUR_AGENTS[agent_name]
         agent_dir: pathlib.Path = self.agents_dir / agent_name
-        agent_file: str = agent_dir / (agent_name + ".py")
+        agent_file = agent_dir / (agent_name + ".py")
         spec = importlib.util.spec_from_file_location(agent_name, agent_file)
         if spec.loader is None:
             raise Exception("Error in finding the required agent")
@@ -48,13 +51,17 @@ class AgentLocator:
         agent_version: ExistingAgentVersion,
         env: gym.Env,
         agent_config_reader: AgentConfigReader,
-    ):
+    ) -> Optional[Trainer]:
         register_env("marketplace", lambda x: env)
-        agent_paths = list(agent_version.get_dir().iter_dir())
-        agent_checkpoint_dirs = list(
+        agent_paths: List[pathlib.Path] = list(agent_version.get_dir().iter_dir())
+        agent_checkpoint_dirs: List[pathlib.Path] = list(
             filter(lambda x: x.startswith("checkpoint"), agent_paths)
         )
-        rllib_type: str = agent_config_reader.get_rllib_type()
+        rllib_type: Optional[str] = agent_config_reader.get_rllib_type()
+
+        if rllib_type is None:
+            return None
+
         trainer_cls = get_trainer_class(rllib_type)
         trainer = trainer_cls(
             config=trainer_cls.get_default_config(), env="marketplace"

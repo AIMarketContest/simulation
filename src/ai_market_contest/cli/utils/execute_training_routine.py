@@ -9,6 +9,7 @@ from ray.rllib.agents.trainer import Trainer
 from ai_market_contest.agent import Agent
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,
+    DEFAULT_INITIAL_AGENT_PRICE,
     ENVS_DIR_NAME,
     TRAINED_AGENTS_DIR_NAME,
     TRAINED_CONFIG_FILENAME,
@@ -51,23 +52,23 @@ def set_up_and_execute_training_routine(
 
     epochs = training_config_reader.get_epochs()
     agent_name_maker = SequentialAgentNameMaker(training_config_reader.get_num_agents())
+
     env = training_config_reader.get_environment(agent_name_maker)
     self_play_agents = training_config_reader.get_self_play_agents(agent_version)
     naive_agents = training_config_reader.get_naive_agents()
     trained_agents = training_config_reader.get_trained_agents(proj_dir, env)
 
-    agents: list[Union[Agent, Trainer]] = (
-        self_play_agents + naive_agents + trained_agents
-    )
+    agents: list[Union[Agent, Trainer]] = []
+    agents.extend(self_play_agents + naive_agents)
+    agents.extend(trained_agents)
 
     cumulative_profits: list[int] = []
-    DEFAULT_INITIAL_PRICE = 50
     for epoch in range(epochs):
         current_prices: dict[str, int] = {}
 
         for (agent, agent_name) in zip(agents, env.agents):
             if isinstance(agent, Trainer):
-                current_prices[agent_name] = DEFAULT_INITIAL_PRICE
+                current_prices[agent_name] = DEFAULT_INITIAL_AGENT_PRICE
             else:
                 current_prices[agent_name] = agent.get_initial_price()
 
@@ -94,7 +95,9 @@ def set_up_and_execute_training_routine(
                 )
             )
 
-    save_new_custom_agent(agents[0], agent_version, training_msg, training_config_path)
+    save_new_custom_agent(
+        self_play_agents[0], agent_version, training_msg, training_config_path
+    )
 
 
 def save_new_custom_agent(
