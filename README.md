@@ -1,6 +1,8 @@
 
 
 # Simulation
+[![codecov](https://codecov.io/gh/AIMarketContest/simulation/branch/code-cov/graph/badge.svg?token=T232TJMI22)](https://codecov.io/gh/AIMarketContest/simulation)
+
 AI contests for deep reinforcement learning bots in online markets
 
 ## Prerequisites
