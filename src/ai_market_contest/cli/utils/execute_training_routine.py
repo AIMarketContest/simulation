@@ -1,9 +1,9 @@
 import copy
 import datetime
 import pathlib
+import shutil
 from typing import Dict, List
 
-import shutil
 import typer
 
 from ai_market_contest.agent import Agent
@@ -16,9 +16,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
 )
 from ai_market_contest.cli.configs.training_config_reader import TrainingConfigReader
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
-from ai_market_contest.cli.utils.config_utils import (
-    get_training_config_path,
-)
+from ai_market_contest.cli.utils.config_utils import get_training_config_path
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
@@ -26,9 +24,7 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
 from ai_market_contest.cli.utils.get_agents import (  # type: ignore
     add_trained_agent_to_config_file,
 )
-from ai_market_contest.cli.utils.hashing import (  # type: ignore
-    get_agent_hash,
-)
+from ai_market_contest.cli.utils.hashing import get_agent_hash  # type: ignore
 from ai_market_contest.cli.utils.processmetafile import write_custom_agent_meta_file
 from ai_market_contest.cli.utils.training import get_agent_price_dict
 from ai_market_contest.training.sequential_agent_name_maker import (
@@ -40,7 +36,6 @@ def set_up_and_execute_training_routine(
     training_config_name: str,
     proj_dir: pathlib.Path,
     agent_version: ExistingAgentVersion,
-    parent_hash: str,
     training_msg: str,
 ):
     # Assumes agent to train is always first in the list
@@ -95,6 +90,8 @@ def set_up_and_execute_training_routine(
                     env.simulation_length,
                 )
             )
+
+    save_new_custom_agent(agents[0], agent_version, training_msg, training_config_path)
 
 
 def save_new_custom_agent(
