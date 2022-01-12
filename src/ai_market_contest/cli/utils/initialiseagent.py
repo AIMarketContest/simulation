@@ -2,7 +2,7 @@ import configparser
 import datetime
 import pathlib
 from string import Template
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENT_FILE,
@@ -10,10 +10,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     TRAINED_AGENTS_DIR_NAME,
 )
-from ai_market_contest.cli.utils.filesystemutils import (
-    assert_config_file_exists,
-    check_overwrite,
-)
+from ai_market_contest.cli.utils.filesystemutils import assert_config_file_exists
 from ai_market_contest.cli.utils.hashing import get_agent_hash
 from ai_market_contest.cli.utils.processmetafile import write_custom_agent_meta_file
 
@@ -42,7 +39,7 @@ def create_agent_config(
     agent_dir: pathlib.Path,
     initial_hash: str,
     type: str,
-    extra_config: Dict[Any, Any] = {},
+    extra_config: dict[Any, Any] = {},
 ):
     agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
     config: configparser.ConfigParser = configparser.ConfigParser()

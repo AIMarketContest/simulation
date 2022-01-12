@@ -3,7 +3,6 @@ import shutil
 import sys
 from configparser import ConfigParser
 from pathlib import Path
-from typing import Any, Dict
 
 from ai_market_contest.cli.cli_config import (
     CONFIG_FILE_EXTENSION,
@@ -100,7 +99,7 @@ def check_evaluation_config_exists(proj_dir: Path, evaluation_config_name: str) 
 
 
 def get_config_dict(path: pathlib.Path):
-    config: Dict[str, Dict[str, str]] = {}
+    config: dict[str, dict[str, str]] = {}
 
     config_parser = ConfigParser()
     config_parser.optionxform = str

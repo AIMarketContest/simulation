@@ -1,20 +1,13 @@
 from configparser import ConfigParser
 
-from importlib_metadata import pathlib
-
-from ai_market_contest.cli.configs.simulation_config_reader import (
-    SimulationConfigReader,
-)
 from ai_market_contest.cli.configs.training_config_reader import TrainingConfigReader
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.project_initialisation_utils import (
     initialise_file_structure,
 )
-from ai_market_contest.training.policy_config_maker import PolicyConfigMaker
 from ai_market_contest.training.sequential_agent_name_maker import (
     SequentialAgentNameMaker,
 )
-from ai_market_contest.training.training_config_maker import TrainingConfigMaker
 
 
 def test_training_config(tmp_path):

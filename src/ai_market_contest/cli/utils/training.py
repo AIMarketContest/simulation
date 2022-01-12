@@ -1,5 +1,4 @@
 import shutil
-from typing import Dict, List
 
 import ray
 from ray.rllib import agents  # type: ignore
@@ -8,7 +7,6 @@ from ray.tune.registry import register_env
 
 from ai_market_contest.agent import Agent  # type: ignore
 from ai_market_contest.environment import Market
-from ai_market_contest.training.agent_name_maker import AgentNameMaker
 
 
 def agent_dict_to_list(agent_dict: dict[str, int], env: Market) -> list[int]:
@@ -22,11 +20,11 @@ def agent_dict_to_list(agent_dict: dict[str, int], env: Market) -> list[int]:
 
 
 def get_agent_price_dict(
-    agents: List[Agent],
+    agents: list[Agent],
     env: Market,
-    last_round_prices: Dict[str, int],
-) -> Dict[str, int]:
-    agent_dict: Dict[str, int] = {}
+    last_round_prices: dict[str, int],
+) -> dict[str, int]:
+    agent_dict: dict[str, int] = {}
     last_round_prices_list = agent_dict_to_list(last_round_prices, env)
 
     for index, (agent, agent_name) in enumerate(zip(agents, env.agents)):

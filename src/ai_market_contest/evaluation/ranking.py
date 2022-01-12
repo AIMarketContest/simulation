@@ -1,5 +1,4 @@
 from collections import defaultdict
-from typing import Dict, List, Tuple
 
 import numpy as np
 import pytest
@@ -12,8 +11,8 @@ from ai_market_contest.evaluation.graphing import (
 
 
 def cumulative_profit_ranking(
-    agent_profits: Dict[str, List[int]]
-) -> list[Tuple[str, int]]:
+    agent_profits: dict[str, list[int]]
+) -> list[tuple[str, int]]:
     cum_profits = get_cumulative_profits(agent_profits)
     cum_profit_items_sorted = sorted(
         cum_profits.items(), key=lambda pair: pair[1], reverse=True
@@ -21,8 +20,8 @@ def cumulative_profit_ranking(
     return cum_profit_items_sorted
 
 
-def get_cumulative_profits(agent_profits: Dict[str, List[int]]) -> Dict[str, int]:
-    profits: Dict[str, int] = {}
+def get_cumulative_profits(agent_profits: dict[str, list[int]]) -> dict[str, int]:
+    profits: dict[str, int] = {}
     for (
         agent,
         agent_profit,
@@ -36,7 +35,7 @@ def get_cumulative_profits(agent_profits: Dict[str, List[int]]) -> Dict[str, int
 
 
 def print_rankings(
-    agents: List[Agent], names: List[str], rankings: list[Tuple[str, int]]
+    agents: list[Agent], names: list[str], rankings: list[tuple[str, int]]
 ):
 
     agent_name_mapping = get_agent_name_mapping(agents, names)
@@ -44,9 +43,9 @@ def print_rankings(
         print(f"{agent_name_mapping[agent_name]} - {cum_profit}")
 
 
-def get_agent_name_mapping(agents: List[Agent], names: List[str]):
-    agent_name_mapping: Dict[str, str] = {}
-    name_counts: Dict[str, int] = defaultdict(int)
+def get_agent_name_mapping(agents: list[Agent], names: list[str]):
+    agent_name_mapping: dict[str, str] = {}
+    name_counts: dict[str, int] = defaultdict(int)
 
     for agent, agent_name in zip(agents, names):
         agent_class_name = type(agent).__name__

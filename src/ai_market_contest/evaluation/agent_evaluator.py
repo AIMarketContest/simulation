@@ -1,5 +1,5 @@
 from configparser import ConfigParser
-from typing import Any, Dict, Tuple  # type: ignore
+from typing import Any  # type: ignore
 
 import gym
 from ray.rllib.agents.registry import get_trainer_class  # type: ignore
