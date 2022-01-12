@@ -2,6 +2,7 @@ import copy
 import pathlib
 from ast import literal_eval
 from configparser import ConfigParser
+from typing import Union
 
 from ray.rllib.agents.trainer import Trainer
 
@@ -58,8 +59,7 @@ class SimulationConfigReader:
         return agents
 
     def get_trained_agents(self, proj_dir: pathlib.Path, env: gym.Env) -> list[Agent]:
-        custom_agents: list[Agent] = []
-        rllib_agents: list[Trainer] = []
+        agents: list[Union[Agent, Trainer]] = []
         for (agent_name, (agent_hash, num)) in self.get_trained_agent_counts().items():
             trained_exisiting_agent = ExistingAgent(agent_name, proj_dir)
             trained_agent_version = ExistingAgentVersion(
@@ -72,16 +72,14 @@ class SimulationConfigReader:
                 agent = self.agent_locator.get_trainer(
                     trained_agent_version, env, agent_config_reader
                 )
-                for _ in range(num):
-                    rllib_agents.append(copy.deepcopy(agent))
             else:
                 agent = self.agent_locator.get_agent_class_or_pickle(
                     trained_agent_version
                 )
-                for _ in range(num):
-                    custom_agents.append(copy.deepcopy(agent))
+            for _ in range(num):
+                agents.append(copy.deepcopy(agent))
 
-        return (custom_agents, rllib_agents)
+        return agents
 
     def get_epochs(self) -> int:
         return int(self.parsed_config["General"]["epochs"])

@@ -1,7 +1,9 @@
 import shutil
+from typing import Union
 
 import ray
-from ray.rllib import agents  # type: ignore
+from ray.rllib import agents
+from ray.rllib.agents.trainer import Trainer  # type: ignore
 from ray.tune.logger import pretty_print  # type: ignore
 from ray.tune.registry import register_env
 
@@ -20,7 +22,7 @@ def agent_dict_to_list(agent_dict: dict[str, int], env: Market) -> list[int]:
 
 
 def get_agent_price_dict(
-    agents: list[Agent],
+    agents: list[Union[Agent, Trainer]],
     env: Market,
     last_round_prices: dict[str, int],
 ) -> dict[str, int]:
@@ -28,7 +30,10 @@ def get_agent_price_dict(
     last_round_prices_list = agent_dict_to_list(last_round_prices, env)
 
     for index, (agent, agent_name) in enumerate(zip(agents, env.agents)):
-        agent_dict[agent_name] = agent.policy(last_round_prices_list, index)
+        if isinstance(agent, Trainer):
+            agent_dict[agent_name] = agent.compute_actions(last_round_prices)
+        else:
+            agent_dict[agent_name] = agent.policy(last_round_prices_list, index)
 
     return agent_dict
 

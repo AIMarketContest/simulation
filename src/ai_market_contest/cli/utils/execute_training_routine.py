@@ -1,8 +1,10 @@
 import datetime
 import pathlib
 import shutil
+from typing import Union
 
 import typer
+from ray.rllib.agents.trainer import Trainer
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.cli.cli_config import (  # type: ignore
@@ -54,15 +56,20 @@ def set_up_and_execute_training_routine(
     naive_agents = training_config_reader.get_naive_agents()
     trained_agents = training_config_reader.get_trained_agents(proj_dir, env)
 
-    agents = self_play_agents + naive_agents + trained_agents
+    agents: list[Union[Agent, Trainer]] = (
+        self_play_agents + naive_agents + trained_agents
+    )
 
     cumulative_profits: list[int] = []
-
+    DEFAULT_INITIAL_PRICE = 50
     for epoch in range(epochs):
         current_prices: dict[str, int] = {}
 
         for (agent, agent_name) in zip(agents, env.agents):
-            current_prices[agent_name] = agent.get_initial_price()
+            if isinstance(agent, Trainer):
+                current_prices[agent_name] = DEFAULT_INITIAL_PRICE
+            else:
+                current_prices[agent_name] = agent.get_initial_price()
 
         cumulative_profit = 0
         for _ in range(env.simulation_length):
