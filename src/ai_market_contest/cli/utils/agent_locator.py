@@ -1,18 +1,18 @@
 import importlib.util
 import pathlib
 import re
-import gym
 from abc import ABCMeta
 from types import ModuleType
 
+import gym
+from ray.rllib.agents.registry import get_trainer_class
+from ray.tune.registry import register_env
+
 from ai_market_contest.agent import Agent
 from ai_market_contest.cli.cli_config import CUR_AGENTS, TRAINED_PICKLE_FILENAME
-from ai_market_contest.cli.configs.agent_config_reader import AgentConfigReader
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
-from ray.rllib.agents.registry import get_trainer_class
-from ray.tune.registry import register_env
 
 
 class AgentLocator:
@@ -43,9 +43,13 @@ class AgentLocator:
 
         return agent
 
-    def get_trainer(self, agent_version: ExistingAgentVersion, env: gym.Env):
+    def get_trainer(
+        self,
+        agent_version: ExistingAgentVersion,
+        env: gym.Env,
+        agent_config_reader: AgentConfigReader,
+    ):
         register_env("marketplace", lambda x: env)
-        agent_config_reader: AgentConfigReader = AgentConfigReader(agent_version)
         agent_paths = list(agent_version.get_dir().iter_dir())
         agent_checkpoint_dirs = list(
             filter(lambda x: x.startswith("checkpoint"), agent_paths)

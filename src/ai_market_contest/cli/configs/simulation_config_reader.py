@@ -3,7 +3,10 @@ import pathlib
 from ast import literal_eval
 from configparser import ConfigParser
 
+from ray.rllib.agents.trainer import Trainer
+
 from ai_market_contest.agent import Agent
+from ai_market_contest.cli.configs.agent_config_reader import AgentConfigReader
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
@@ -54,20 +57,31 @@ class SimulationConfigReader:
 
         return agents
 
-    def get_trained_agents(self, proj_dir: pathlib.Path) -> list[Agent]:
-        agents: list[Agent] = []
-
+    def get_trained_agents(self, proj_dir: pathlib.Path, env: gym.Env) -> list[Agent]:
+        custom_agents: list[Agent] = []
+        rllib_agents: list[Trainer] = []
         for (agent_name, (agent_hash, num)) in self.get_trained_agent_counts().items():
             trained_exisiting_agent = ExistingAgent(agent_name, proj_dir)
             trained_agent_version = ExistingAgentVersion(
                 trained_exisiting_agent, agent_hash
             )
+            agent_config_reader: AgentConfigReader = AgentConfigReader(
+                trained_agent_version
+            )
+            if agent_config_reader.get_agent_type() == "rllib":
+                agent = self.agent_locator.get_trainer(
+                    trained_agent_version, env, agent_config_reader
+                )
+                for _ in range(num):
+                    rllib_agents.append(copy.deepcopy(agent))
+            else:
+                agent = self.agent_locator.get_agent_class_or_pickle(
+                    trained_agent_version
+                )
+                for _ in range(num):
+                    custom_agents.append(copy.deepcopy(agent))
 
-            agent = self.agent_locator.get_agent_class_or_pickle(trained_agent_version)
-            for _ in range(num):
-                agents.append(copy.deepcopy(agent))
-
-        return agents
+        return (custom_agents, rllib_agents)
 
     def get_epochs(self) -> int:
         return int(self.parsed_config["General"]["epochs"])
