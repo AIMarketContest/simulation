@@ -39,10 +39,8 @@ class ExistingAgent:
 
     def get_trained_agents_info(self, trained_agents: List[str]) -> dict[str, str]:
         trained_agents_information: dict[str, str] = {}
-        trained_agent: str
-        print(trained_agents)
+
         for trained_agent in trained_agents:
-            print(self.agent_dir, trained_agent)
             (agent_hash, time, msg, _) = get_trained_agent_metadata(
                 self.agent_dir, trained_agent
             )
