@@ -10,7 +10,6 @@ from ray.rllib.agents.registry import get_trainer_class
 from ray.rllib.agents.trainer import Trainer
 from ray.tune.registry import register_env
 
-from ai_market_contest.cli.configs.agent_config_reader import AgentConfigReader
 from ai_market_contest.agent import Agent
 from ai_market_contest.cli.cli_config import CUR_AGENTS, TRAINED_PICKLE_FILENAME
 from ai_market_contest.cli.configs.agent_config_reader import AgentConfigReader

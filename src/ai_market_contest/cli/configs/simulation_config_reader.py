@@ -1,7 +1,5 @@
 import copy
 import pathlib
-import gym
-
 from ast import literal_eval
 from configparser import ConfigParser
 from typing import Union

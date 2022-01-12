@@ -1,7 +1,7 @@
 import pathlib
 from ast import literal_eval
 from configparser import ConfigParser
-from typing import List, Optional
+from typing import Optional
 
 from ai_market_contest.cli.cli_config import CONFIG_FILENAME
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (

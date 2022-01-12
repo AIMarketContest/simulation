@@ -82,5 +82,10 @@ jobs:
 
       - name: Test
         run: |
-          poetry run pytest
+          poetry run pytest --cov=./ --cov-report=xml
           poetry run shopt -s globstar && pyupgrade --py39-plus **/*.py || true
+      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          fail_ci_if_error: false
