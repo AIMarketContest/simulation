@@ -1,6 +1,5 @@
 import pathlib
-from configparser import ConfigParser
-from typing import Any, Dict, List
+from typing import Any
 
 from ai_market_contest.cli.cli_config import (
     AGENTS_DIR_NAME,
@@ -12,7 +11,6 @@ from ai_market_contest.cli.utils.agent_check_utils import (
     check_directory_exists_for_agent,
 )
 from ai_market_contest.cli.utils.config_utils import get_config_dict
-from ai_market_contest.cli.utils.filesystemutils import assert_config_file_exists
 from ai_market_contest.cli.utils.processmetafile import get_trained_agent_metadata
 
 
@@ -34,10 +32,10 @@ class ExistingAgent:
     def is_initialised(self) -> bool:
         return self.initialised
 
-    def get_config(self) -> Dict[str, Any]:
+    def get_config(self) -> dict[str, Any]:
         return get_config_dict(self.agent_dir / CONFIG_FILENAME)
 
-    def get_trained_agents_info(self, trained_agents: List[str]) -> dict[str, str]:
+    def get_trained_agents_info(self, trained_agents: list[str]) -> dict[str, str]:
         trained_agents_information: dict[str, str] = {}
 
         for trained_agent in trained_agents:

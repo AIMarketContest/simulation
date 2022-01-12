@@ -1,7 +1,6 @@
 import pathlib
 import shutil
 
-from ai_market_contest.cli.cli_config import PROJ_DIR_NAME  # type: ignore
 from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
     assert_proj_dir_exists,
 )

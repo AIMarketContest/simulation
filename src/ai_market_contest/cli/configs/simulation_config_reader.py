@@ -2,7 +2,6 @@ import copy
 import pathlib
 from ast import literal_eval
 from configparser import ConfigParser
-from typing import Dict, List, Tuple
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.cli.utils.agent_locator import AgentLocator
@@ -38,7 +37,7 @@ class SimulationConfigReader:
             for agent_name, agent_count in self.parsed_config["Naive Agents"].items()
         }
 
-    def get_trained_agent_counts(self) -> Dict[str, Tuple[str, int]]:
+    def get_trained_agent_counts(self) -> dict[str, tuple[str, int]]:
         if "Trained Agents" not in self.parsed_config:
             return {}
         return {
@@ -46,8 +45,8 @@ class SimulationConfigReader:
             for agent_name, hash_and_num in self.parsed_config["Trained Agents"].items()
         }
 
-    def get_naive_agents(self) -> List[Agent]:
-        agents: List[Agent] = []
+    def get_naive_agents(self) -> list[Agent]:
+        agents: list[Agent] = []
         for (agent_name, num) in self.get_naive_agent_counts().items():
             agent = self.agent_locator.get_agent(agent_name)
             for _ in range(int(num)):
@@ -55,8 +54,8 @@ class SimulationConfigReader:
 
         return agents
 
-    def get_trained_agents(self, proj_dir: pathlib.Path) -> List[Agent]:
-        agents: List[Agent] = []
+    def get_trained_agents(self, proj_dir: pathlib.Path) -> list[Agent]:
+        agents: list[Agent] = []
 
         for (agent_name, (agent_hash, num)) in self.get_trained_agent_counts().items():
             trained_exisiting_agent = ExistingAgent(agent_name, proj_dir)
