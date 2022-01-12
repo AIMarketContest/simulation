@@ -2,12 +2,17 @@
 name = "ai_market_contest"
 version = "0.1.0"
 description = "AI contests for deep reinforcement learning bots in online markets"
+license = "MIT"
 authors = ["Matteo Bongiovanni <mgb58@hotmail.co.uk>",
            "Ibraheem Wazir <ibraheem.wazir.uk@gmail.com>",
            "Jack Benham <jack.benham34@gmail.com>",
            "Pranav Maganti <pranav.magnati@gmail.com>",
            "Michael Clasby <michaelclasby@hotmail.com>",
            "Yash Yeola <yeolayash101@gmail.com>"]
+readme = "README.md"
+repository = "https://github.com/AIMarketContest/simulation"
+documentation = "https://github.com/AIMarketContest/simulation/tree/main/docs"
+keywords = ["ai", "market", "contest", "simulation", "rl"]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.10"
@@ -45,3 +50,6 @@ build-backend = "poetry.core.masonry.api"
 [tool.isort]
 profile = "black"
 multi_line_output = 3
+
+[tool.poetry.scripts]
+aic = "ai_market_contest.cli.aic:run"
