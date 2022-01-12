@@ -1,7 +1,9 @@
 from collections import defaultdict
+from typing import Union
 
 import numpy as np
 import pytest
+from ray.rllib.agents.trainer import Trainer
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.evaluation.graphing import (
@@ -34,16 +36,12 @@ def get_cumulative_profits(agent_profits: dict[str, list[int]]) -> dict[str, int
     return profits
 
 
-def print_rankings(
-    agents: list[Agent], names: list[str], rankings: list[tuple[str, int]]
-):
-
-    agent_name_mapping = get_agent_name_mapping(agents, names)
+def print_rankings(rankings: list[tuple[str, int]], agent_name_mapping: dict[str, str]):
     for (agent_name, cum_profit) in rankings:
         print(f"{agent_name_mapping[agent_name]} - {cum_profit}")
 
 
-def get_agent_name_mapping(agents: list[Agent], names: list[str]):
+def get_agent_name_mapping(agents: list[Union[Agent, Trainer]], names: list[str]):
     agent_name_mapping: dict[str, str] = {}
     name_counts: dict[str, int] = defaultdict(int)
 

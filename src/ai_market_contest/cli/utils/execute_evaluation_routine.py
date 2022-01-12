@@ -1,6 +1,15 @@
 import pathlib
+from typing import Union
 
-from ai_market_contest.cli.cli_config import AGENTS_DIR_NAME, ENVS_DIR_NAME
+from ray.rllib.agents.trainer import Trainer
+from ai_market_contest.agent import Agent
+
+from ai_market_contest.cli.cli_config import (
+    AGENTS_DIR_NAME,
+    DEFAULT_INITIAL_AGENT_PRICE,
+    ENVS_DIR_NAME,
+)
+from ai_market_contest.cli.configs.agent_config_reader import AgentConfigReader
 from ai_market_contest.cli.configs.evaluation_config_reader import (
     EvaluationConfigReader,
 )
@@ -38,13 +47,27 @@ def execute_evaluation_routine(
         evaluation_config_path, demand_function_locator, agent_locator
     )
 
+    agent_name_maker = SequentialAgentNameMaker(
+        evaluation_config_reader.get_num_agents()
+    )
+
+    agent_config_reader = AgentConfigReader(agent_version)
+
+    env = evaluation_config_reader.get_environment(agent_name_maker)
     naive_agents = evaluation_config_reader.get_naive_agents()
-    trained_agents = evaluation_config_reader.get_trained_agents(proj_dir)
+    trained_agents = evaluation_config_reader.get_trained_agents(proj_dir, env)
 
-    main_agent = agent_locator.get_agent_class_or_pickle(agent_version)
-    agents = [main_agent] + naive_agents + trained_agents
+    if agent_config_reader.get_agent_type() == "rllib":
+        main_agent = agent_locator.get_trainer(agent_version, env, agent_config_reader)
+        if main_agent is None:
+            return
+    else:
+        main_agent = agent_locator.get_agent_class_or_pickle(agent_version)
 
-    agent_name_maker = SequentialAgentNameMaker(len(agents))
+    agents: list[Union[Agent, Trainer]] = [main_agent]
+    agents.extend(naive_agents)
+    agents.extend(trained_agents)
+
     env = evaluation_config_reader.get_environment(agent_name_maker)
 
     results: dict[str, dict[str, list[int]]] = {
@@ -54,7 +77,10 @@ def execute_evaluation_routine(
 
     current_prices: dict[str, int] = {}
     for (agent, agent_name) in zip(agents, env.agents):
-        current_prices[agent_name] = agent.get_initial_price()
+        if isinstance(agent, Trainer):
+            current_prices[agent_name] = DEFAULT_INITIAL_AGENT_PRICE
+        else:
+            current_prices[agent_name] = agent.get_initial_price()
 
     for _ in range(env.simulation_length):
         current_prices = get_agent_price_dict(agents, env, current_prices)
@@ -67,6 +93,7 @@ def execute_evaluation_routine(
             results["rewards"][agent_name].append(reward)
 
     cumulative_rewards = cumulative_profit_ranking(results["rewards"])
-    print_rankings(agents, env.agents, cumulative_rewards)
     agent_name_mapping = get_agent_name_mapping(agents, env.agents)
+
+    print_rankings(cumulative_rewards, agent_name_mapping)
     graph_cumulative_profits(results["rewards"], agent_name_mapping)

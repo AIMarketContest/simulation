@@ -4,6 +4,7 @@ from ast import literal_eval
 from configparser import ConfigParser
 from typing import Union
 
+import gym
 from ray.rllib.agents.trainer import Trainer
 
 from ai_market_contest.agent import Agent
@@ -58,7 +59,9 @@ class SimulationConfigReader:
 
         return agents
 
-    def get_trained_agents(self, proj_dir: pathlib.Path, env: gym.Env) -> list[Agent]:
+    def get_trained_agents(
+        self, proj_dir: pathlib.Path, env: gym.Env
+    ) -> list[Union[Agent, Trainer]]:
         agents: list[Union[Agent, Trainer]] = []
         for (agent_name, (agent_hash, num)) in self.get_trained_agent_counts().items():
             trained_exisiting_agent = ExistingAgent(agent_name, proj_dir)
@@ -76,6 +79,7 @@ class SimulationConfigReader:
                 agent = self.agent_locator.get_agent_class_or_pickle(
                     trained_agent_version
                 )
+                
             for _ in range(num):
                 agents.append(copy.deepcopy(agent))
 
