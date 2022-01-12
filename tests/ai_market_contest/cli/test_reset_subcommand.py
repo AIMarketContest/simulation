@@ -6,7 +6,7 @@ from ai_market_contest.cli.utils.project_initialisation_utils import (
 
 def test_remove_proj_dir(tmp_path):
     tmp_path = tmp_path / "aic"
-    initialise_file_structure(tmp_path, ["TestAgent"], ["Test"])
+    initialise_file_structure(tmp_path, ["Test"])
 
     assert tmp_path.exists()
 

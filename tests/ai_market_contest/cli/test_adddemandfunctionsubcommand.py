@@ -11,7 +11,7 @@ from ai_market_contest.cli.utils.project_initialisation_utils import (
 
 def test_create_demand_function(tmp_path: pathlib.Path):
     tmp_path = tmp_path / "aic"
-    initialise_file_structure(tmp_path, ["test_agent"], ["test_author"])
+    initialise_file_structure(tmp_path, ["test_author"])
 
     create_demand_function(tmp_path, "test_demand_function")
 
@@ -29,7 +29,7 @@ def test_create_demand_function(tmp_path: pathlib.Path):
 
 
 def test_remove_demand_function(tmp_path: pathlib.Path):
-    initialise_file_structure(tmp_path, ["test_agent"], ["test_author"])
+    initialise_file_structure(tmp_path, ["test_author"])
     create_demand_function(tmp_path, "test_demand_function")
     demand_function_file = (
         tmp_path / "environments" / "demandfunctions" / "test_demand_function.py"

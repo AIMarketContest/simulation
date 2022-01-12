@@ -1,7 +1,7 @@
 import pathlib
 
 from ai_market_contest.cli.utils.agent_manipulation_utils import (
-    create_agent,
+    create_custom_agent,
     remove_agent_dir,
 )
 from ai_market_contest.cli.utils.project_initialisation_utils import (
@@ -11,9 +11,9 @@ from ai_market_contest.cli.utils.project_initialisation_utils import (
 
 def test_create_agent(tmp_path: pathlib.Path):
     tmp_path = tmp_path / "aic"
-    initialise_file_structure(tmp_path, ["test_agent"], ["test_author"])
-
-    create_agent(tmp_path, "another_test_agent")
+    initialise_file_structure(tmp_path, ["test_author"])
+    create_custom_agent(tmp_path, "test_agent")
+    create_custom_agent(tmp_path, "another_test_agent")
 
     agent_dir = tmp_path / "agents" / "another_test_agent"
     agent_file = agent_dir / "another_test_agent.py"
@@ -26,8 +26,8 @@ def test_create_agent(tmp_path: pathlib.Path):
 
 def test_remove_agent(tmp_path: pathlib.Path):
     tmp_path = tmp_path / "aic"
-    initialise_file_structure(tmp_path, ["test_agent"], ["test_author"])
-
+    initialise_file_structure(tmp_path, ["test_author"])
+    create_custom_agent(tmp_path, "test_agent")
     remove_agent_dir("test_agent", tmp_path)
 
     assert not (tmp_path / "agents" / "test_agent").exists()
