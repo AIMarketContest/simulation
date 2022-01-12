@@ -27,5 +27,3 @@ def test_policy_config_maker(tmp_path: pathlib.Path):
     assert "policy_mapping_fn" in multiagent
     assert "TestAgent" in multiagent["policies"]
     assert multiagent["policies"]["TestAgent"][0].__name__ == "TestAgent"
-    assert "TestAgent-opponent" in multiagent["policies"]
-    assert multiagent["policies"]["TestAgent-opponent"][0].__name__ == "TestAgent"
