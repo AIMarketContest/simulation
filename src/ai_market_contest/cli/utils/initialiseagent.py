@@ -2,6 +2,7 @@ import configparser
 import datetime
 import pathlib
 from string import Template
+from typing import Any, Dict
 
 from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENT_FILE,
@@ -13,8 +14,10 @@ from ai_market_contest.cli.utils.filesystemutils import (
     assert_config_file_exists,
     check_overwrite,
 )
-from ai_market_contest.cli.utils.hashing import set_agent_initial_hash
-from ai_market_contest.cli.utils.processmetafile import write_meta_file
+from ai_market_contest.cli.utils.hashing import (
+    get_agent_hash,
+)
+from ai_market_contest.cli.utils.processmetafile import write_custom_agent_meta_file
 
 
 def set_agent_to_initialised(agent_dir: pathlib.Path):
@@ -34,12 +37,38 @@ def make_initial_trained_agent(
     initial_trained_agent_dir = trained_agents_dir / initial_hash
     initial_trained_agent_dir.mkdir(parents=True)
     msg = "Initial untrained agent"
-    write_meta_file(
+    write_custom_agent_meta_file(
         initial_trained_agent_dir, initial_hash, datetime.datetime.now(), msg
     )
 
 
-def create_agent_class(
+def create_agent_config(
+    agent_dir: pathlib.Path,
+    initial_hash: str,
+    type: str,
+    extra_config: Dict[Any, Any] = {},
+):
+    agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
+    config: configparser.ConfigParser = configparser.ConfigParser()
+    config["general"] = {
+        "type": type,
+    }
+
+    config["training"] = {
+        "initial-hash": initial_hash,
+        "trained-agents": str([initial_hash]),
+        "initialised": "False",
+    }
+
+    for key, value in extra_config.items():
+        config[key] = value
+
+    with agent_config_file.open("w") as acf:
+        config.write(acf)
+    return initial_hash
+
+
+def create_custom_agent_class(
     agent_name: str, proj_dir: pathlib.Path, overwrite_check: bool = False
 ):
     agents_dir = proj_dir / AGENTS_DIR_NAME
@@ -57,8 +86,21 @@ def create_agent_class(
     agent_dir.mkdir(parents=True, exist_ok=True)
     agent_file.touch()
     create_new_agent_file(agent_file, agent_name)
-    initial_hash: str = set_agent_initial_hash(agent_dir)
+    initial_hash: str = get_agent_hash()
+    create_agent_config(agent_dir, initial_hash, "custom")
     make_initial_trained_agent(agent_dir, agent_name, initial_hash)
+
+
+def create_rllib_agent(proj_dir: pathlib.Path, type: str, name: str):
+    agents_dir = proj_dir / AGENTS_DIR_NAME
+    agent_dir: pathlib.Path = agents_dir / name
+
+    if agent_dir.exists():
+        return
+
+    agent_dir.mkdir(parents=True, exist_ok=True)
+    initial_hash: str = get_agent_hash()
+    create_agent_config(agent_dir, initial_hash, "rllib")
 
 
 def make_agent_classname_camelcase(agent_name: str):

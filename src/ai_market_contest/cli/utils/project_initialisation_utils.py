@@ -19,12 +19,6 @@ from ai_market_contest.cli.utils.config_utils import (
     copy_example_evaluation_config_file,
     copy_example_training_config_file,
 )
-from ai_market_contest.cli.utils.initialiseagent import create_agent_class
-
-
-def make_agents_classes(proj_dir: pathlib.Path, agents_names: list[str]):
-    for agent_name in agents_names:
-        create_agent_class(agent_name, proj_dir)
 
 
 def make_proj_dir(proj_dir: pathlib.Path):
@@ -72,14 +66,11 @@ def remove_proj_dir(proj_dir: pathlib.Path):
         shutil.rmtree(proj_dir)
 
 
-def initialise_file_structure(
-    path: pathlib.Path, agent_names: list[str], authors: list[str]
-):
+def initialise_file_structure(path: pathlib.Path, authors: list[str]):
     make_proj_dir(path)
     atexit.register(remove_proj_dir, path)
 
-    make_agents_classes(path, agent_names)
-    make_main_config_file(path, agent_names, authors)
+    make_main_config_file(path, [], authors)
     make_environment_config_file(path)
     copy_example_training_config_file(path)
     copy_example_evaluation_config_file(path)

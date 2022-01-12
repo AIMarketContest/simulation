@@ -39,20 +39,6 @@ def get_trained_agents(agent_dir: pathlib.Path) -> list[str]:
     return trained_agents
 
 
-def get_trained_agents_info(
-    trained_agents: list[str], agent_dir: pathlib.Path
-) -> dict[str, str]:
-    trained_agents_information: dict[str, str] = {}
-    trained_agent: str
-    for trained_agent in trained_agents:
-        (agent_hash, time, msg, parent_hash) = get_trained_agent_metadata(
-            agent_dir, trained_agent
-        )
-        shortened_hash: str = agent_hash[:HASH_LENGTH]
-        trained_agents_information[f"\n{shortened_hash} {str(time)} {msg}"] = agent_hash
-    return trained_agents_information
-
-
 def add_trained_agent_to_config_file(agent_dir: pathlib.Path, trained_agent_name: str):
     config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
     assert_config_file_exists(config_file)

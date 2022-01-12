@@ -8,7 +8,10 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     AGENTS_DIR_NAME,
     CONFIG_FILENAME,
 )
-from ai_market_contest.cli.utils.initialiseagent import create_agent_class
+from ai_market_contest.cli.utils.initialiseagent import (
+    create_agent_config,
+    create_custom_agent_class,
+)
 
 
 def edit_project_config_file(agent_name: str, proj_dir: pathlib.Path):
@@ -39,8 +42,26 @@ def remove_agent_dir(agent_name: str, proj_dir: pathlib.Path):
         config.write(c_file)
 
 
-def create_agent(path: pathlib.Path, agent_name: str):
+def create_custom_agent(path: pathlib.Path, agent_name: str):
     atexit.register(remove_agent_dir, agent_name, path)
-    create_agent_class(agent_name, path, True)
+    create_custom_agent_class(agent_name, path, True)
+    edit_project_config_file(agent_name, path)
+    atexit.unregister(remove_agent_dir)
+
+
+def create_rllib_agent(path: pathlib.Path, agent_type: str, agent_name: str):
+    agents_dir = path / AGENTS_DIR_NAME
+
+    atexit.register(remove_agent_dir, agent_name, path)
+    create_agent_config(
+        agents_dir,
+        agent_name,
+        "rllib",
+        {
+            "rllib": {
+                "agent_type": agent_type,
+            }
+        },
+    )
     edit_project_config_file(agent_name, path)
     atexit.unregister(remove_agent_dir)

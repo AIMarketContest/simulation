@@ -18,20 +18,8 @@ def hash_string(string: str):
 def get_shortened_hashes(hashes: list[str]):
     return list(map(lambda hash: hash[:HASH_LENGTH], hashes))
 
-
-def set_agent_initial_hash(agent_dir: pathlib.Path):
-    agent_config_file: pathlib.Path = agent_dir / CONFIG_FILENAME
-    config: configparser.ConfigParser = configparser.ConfigParser()
-    initial_hash = hash_string(str(datetime.datetime.now()))
-    config["training"] = {
-        "initial-hash": initial_hash,
-        "trained-agents": str([initial_hash]),
-        "initialised": "False",
-    }
-    with agent_config_file.open("w") as acf:
-        config.write(acf)
-    return initial_hash
-
+def get_agent_hash():
+    return hash_string(str(datetime.datetime.now()))
 
 def get_agent_initial_hash(chosen_agent_dir: pathlib.Path):
     agent_config_file: pathlib.Path = chosen_agent_dir / CONFIG_FILENAME

@@ -1,5 +1,7 @@
+from ast import literal_eval
 import pathlib
 from configparser import ConfigParser
+from typing import Dict, Tuple
 
 from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.environment import Market
@@ -18,12 +20,24 @@ class SimulationConfigReader:
         self.demand_function_locator: DemandFunctionLocator = demand_function_locator
 
     def get_naive_agent_counts(self) -> dict[str, int]:
-        agent_name: str
-        agent_count: str
+        if "Naive Agents" not in self.parsed_config:
+            return {}
+
         return {
             agent_name: int(agent_count)
             for agent_name, agent_count in self.parsed_config["Naive Agents"].items()
         }
+
+    def get_trained_agent_counts(self) -> Dict[str, Tuple[str, int]]:
+        if "Trained Agents" not in self.parsed_config:
+            return {}
+        return {
+            agent_name: literal_eval(hash_and_num)
+            for agent_name, hash_and_num in self.parsed_config["Trained Agents"].items()
+        }
+
+    def get_epochs(self) -> int:
+        return int(self.parsed_config["General"]["epochs"])
 
     def get_num_agents(self) -> int:
         raise NotImplementedError("Must be implemented by a subclass")
