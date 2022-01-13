@@ -14,21 +14,7 @@ pip install git+https://github.com/AIMarketContest/simulation.git
 
 You will then interface with the package through the `aic` command.
 ## For devs
-If you wish to clone the project and manually install dependencies, giving you access to the code, you can follow the instructions below. You may also be interested in contributing, so we encourage you to check out the [Contribution guide](docs/contributing.md)
-
-Dependencies can be found in the `pyproject.toml` file.
-Poetry is used to install all dependencies in a virtual environment.
-
-To make use of this you should:
-1. Download [poetry](https://python-poetry.org/)
-2. Run `poetry install` to first install all dependencies
-3. Run `poetry shell` to enter the virtual environment with access to the
-   dependencies
-
-We recommend setting up an alias and running all commands from the root directory as follows:
-```
-alias aic="python3 src/ai_market_contest/cli/aic.py"
-```
+If you wish to clone the project and manually install dependencies, giving you access to the code, you can follow the instructions in the [Contribution guide](docs/contributing.md).
 
 # Running the program
 
