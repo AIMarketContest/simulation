@@ -4,6 +4,7 @@ from string import Template
 from ai_market_contest.cli.cli_config import (
     DEMAND_FUNCTION_DIR_NAME,
     DEMAND_FUNCTION_FILE,
+    ENVS_DIR_NAME,
 )
 from ai_market_contest.cli.utils.filesystemutils import check_overwrite
 
@@ -11,7 +12,7 @@ from ai_market_contest.cli.utils.filesystemutils import check_overwrite
 def create_demand_functon_class(
     demand_function_name: str, proj_dir: pathlib.Path, overwrite_check: bool = False
 ):
-    demand_function_dir = proj_dir / DEMAND_FUNCTION_DIR_NAME
+    demand_function_dir = proj_dir / ENVS_DIR_NAME / DEMAND_FUNCTION_DIR_NAME
     demand_function_filename: str = f"{demand_function_name}.py"
     demand_function_file: pathlib.Path = demand_function_dir / demand_function_filename
 
