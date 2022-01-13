@@ -1,6 +1,9 @@
 
 
 # Simulation
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![codecov](https://codecov.io/gh/AIMarketContest/simulation/branch/main/graph/badge.svg?token=T232TJMI22)](https://codecov.io/gh/AIMarketContest/simulation)
+
 AI contests for deep reinforcement learning bots in online markets
 
 ## Install
