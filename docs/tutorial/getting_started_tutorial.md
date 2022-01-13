@@ -1,10 +1,12 @@
+# Getting Started Tutorial
+
 Here we give a top-level introduction on how to get started with the AI Contests toolbox.
 
 Firstly ensure that you have correctly set up the dependencies as described in the README.
 
 
 
-# Creating the project directory
+## Creating the project directory
 
 First we must have a directory to hold the structure of the toolbox. This can be created simply with the following command:
 
@@ -42,9 +44,9 @@ The `environments` folder will allow you to store any custom demand functions.
 
 
 
-# Agents
+## Agents
 
-## Main agent file
+### Main agent file
 
 Now let's have a look at (a trimmed down version of) the file `AgentX.py`:
 
@@ -114,7 +116,7 @@ class AgentX(Agent):
 
 We now have a basic agent.
 
-## Pickler
+### Pickler
 
 The project also requires you to implement a basic file that can instantiate your agent. A template can be found in `initial_pickler.py` and should be edited to be specific to your new agent. In this case the program has correctly written the file for you and we shall see a specific example of when a more complicated instantiation should take place.
 
@@ -135,7 +137,7 @@ with pickle_file.open("wb") as pkl:
 
 ```
 
-## Initialisation
+### Initialisation
 
 Now that a *pickler* has been defined we can initialise our new agent. We must type in the following command where `{path}` is the path to the directory that holds the `aicontest` project folder.
 
@@ -156,9 +158,9 @@ If we look at the `trained-agents` directory we can see that it now contains a p
 
 The agent is now ready to train.
 
-# Training
+## Training
 
-## Configuring the training session
+### Configuring the training session
 
 Create a new document in `aicontest/training_configs` called `our_naive_train_config.py`.
 
@@ -194,7 +196,7 @@ The most important aspect of this file is that it defines a `get_config()`method
 
 In this training session we chose to go with a naive agent training session, there is also a self play training session.
 
-## Running the training session
+### Running the training session
 
 Now that we have a valid training configuration, we can run the training session. Replacing path to the folder that holds the `aicontest` folder, type in the command:
 
@@ -245,7 +247,7 @@ aicontest/
 
 Notice that AgentX now has a second hash in `trained-agents` containing the trained agent's pkl file, metadata about the training (such as the time and generation it has been trained from) and the configuration used to train that generation. Feel free to explore those files.
 
-## Training a new generation
+### Training a new generation
 
 Now suppose we wanted to further improve the training of our agent with some self play training.
 
@@ -331,7 +333,7 @@ aicontest/
     └── our_self_play_train_config.py
 ```
 
-# Adding a new agent
+## Adding a new agent
 
 Now that we have trained our first agent, we want to add in a new agent to train.
 
