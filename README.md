@@ -7,7 +7,10 @@
 AI contests for deep reinforcement learning bots in online markets
 
 ## Install
-You can install the package through [pip](https://pip.pypa.io/en/stable/) using `pip install git+https://github.com/AIMarketContest/simulation.git`
+You can install the package through [pip](https://pip.pypa.io/en/stable/) using 
+```
+pip install git+https://github.com/AIMarketContest/simulation.git
+```
 
 You will then interface with the package through the `aic` command.
 ## For devs
