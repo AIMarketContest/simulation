@@ -3,9 +3,15 @@
 # Simulation
 AI contests for deep reinforcement learning bots in online markets
 
-## Prerequisites
+## Install
+You can install the package through [pip](https://pip.pypa.io/en/stable/) using `pip install git+https://github.com/AIMarketContest/simulation.git`
+
+You will then interface with the package through the `aic` command.
+## For devs
+If you wish to clone the project and manually install dependencies, giving you access to the code, you can follow the instructions below. You may also be interested in contributing, so we encourage you to check out the [Contribution guide](docs/contributing.md)
+
 Dependencies can be found in the `pyproject.toml` file.
-Poetry has been set up to install all dependencies in a virtual environment.
+Poetry is used to install all dependencies in a virtual environment.
 
 To make use of this you should:
 1. Download [poetry](https://python-poetry.org/)
@@ -13,10 +19,9 @@ To make use of this you should:
 3. Run `poetry shell` to enter the virtual environment with access to the
    dependencies
 
-Until the package is properly installed, we recommend setting up an alias and
-running all commands from the root directory as follows:
+We recommend setting up an alias and running all commands from the root directory as follows:
 ```
-alias aic="python3 src/ai_market_contest/cli/cli.py"
+alias aic="python3 src/ai_market_contest/cli/aic.py"
 ```
 
 # Running the program
@@ -25,7 +30,7 @@ Here is a brief overview of the toolbox's workflow:
 
 <img src="docs/tutorial/aic_workflow.png" alt="Workflow">
 
-A more in depth explanation and tutorial can be found [here](https://github.com/AIMarketContest/simulation/blob/add-tutorial/docs/tutorial/getting_started_tutorial.md).
+A more in depth explanation and tutorial can be found [here](docs/tutorial/getting_started_tutorial.md).
 
 ## Developer tools
 
