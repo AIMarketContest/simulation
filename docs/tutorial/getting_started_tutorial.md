@@ -11,12 +11,12 @@ First we must have a directory to hold the structure of the toolbox. This can be
 
 `aic init`
 
-You will then be prompted to enter a name for an initial agent and author. Fill them in as follows:
+You will then be prompted to enter an author name. The next step is to create an initial agent, select custom from the options and then call it AgentX. You should see the following:
 
-# TODO: Change the order of the print statements
 ```
-Enter name of agent 1: AgentX
-Enter name(s) of the author(s): Jane Doe
+Enter name(s) of the author(s): Jane Doe 
+? What type of agent would you like to start with (you can add more after initialising the project)? custom
+Enter custom agent name: AgentX
 ```
 
 Your project structure should now be:
@@ -28,24 +28,26 @@ aicontest/
 │   └── AgentX
 │       ├── AgentX.py
 │       ├── config.ini
-│       ├── initial_pickler.py
 │       └── trained-agents
-│           └── c4cc5ef3a97ebc149e47c32f3d095f2d85995e2f
+│           └── 00a11e938af2edefacceffe60ea22fbb1e9e34b7
 │               └── metadata.ini
 ├── config.ini
 ├── environments
+│   ├── config.ini
+│   └── demandfunctions
+├── evaluation_configs
+│   └── evaluation_example_config.ini
 └── training_configs
+    └── training_example_config.ini
 ```
 
 **Note:** The hash in `trained-agents` will be different.
 
 The `agents` folder will be where all custom agents are coded and their trained derivatives will be stored.
 
-# TODO: check spelling of folder name
-The `environments` folder will allow you to store any custom demand functions. These can be found in the `demand_functions` folder inside.
+The `environments` folder will allow you to store any custom demand functions. These can be found in the `demandfunctions` folder inside.
 
-# Check current spelling name
-We have the directories for `training_config` and `evaluation_config`. These directories hold the configuration files in use.
+We have the directories for `training_configs` and `evaluation_configs`. These directories hold the configuration files in use.
 
 ## Agents
 
@@ -53,7 +55,6 @@ We have the directories for `training_config` and `evaluation_config`. These dir
 
 Now let's have a look at (a trimmed down version of) the file `AgentX.py`:
 
-# TODO: Fix import order and whitespace of template and replace
 ```python
 class AgentX(Agent):
 
@@ -91,6 +92,7 @@ import numpy as np
 
 from ai_market_contest.agent import Agent
 from ai_market_contest.typing.types import Price
+
 
 class AgentX(Agent):
     def __init__(self, observation_space=None, action_space=None, config={}):
@@ -160,6 +162,9 @@ class AgentX(Agent):
 
     def probability_exploration(self):
         return (1 - self.theta) ** self.time
+
+    def learning_has_converged(self):
+        return True
 ```
 
 We now have a basic agent.
@@ -168,8 +173,7 @@ We now have a basic agent.
 
 ### Configuring the training session
 
-# TODO: fact check this
-If we look in `aicontest/training_configs` we already see a training configuration file called called `example_training_config.ini` there. Let's take a look at it:
+If we look in `training_configs` we already see a training configuration file called called `training_example_config.ini` there. Let's take a look at it:
 
 ```ini
 [General]
@@ -192,12 +196,10 @@ As we can see here the file contains three main sections.
 
 The section `General` contains important information about the simulation that will train our agents. We see the number of self play agents (how many copies of the agent you are trying to train should be included in the simulation), the demand function to use and more.
 Please see the documentation on configurations to learn more about the options available.
-# TODO: documentation on configurations.
 For now, let's change the demand function from `Fixed` to `Gaussian`. The project comes with a few predefined demand functions for you already and later we will also demonstrate how to define your own.
 
 The section `Naive Agents` defines which pre-defined non-learning agents should be included in the simulations and their counts. In this file we are including 3 FixedFifty agents and 1 Random agent.
-For more detail on the given agents please see the specific configuration.
-# TODO: documentation on the given agents
+For more detail on the given agents please see the documentation on configuration files.
 
 The `other` section helps interface with RLlib directly and configure their training routines. This helps give you better control over more complex training routines. Changing this section is outside the scope of this tutorial.
 
@@ -211,47 +213,29 @@ aic train
 ```
 Then choose an agent to train (`AgentX`), the version of agent to train (the first and only one) and the training configuration to run the training (`example_training_config`). We can fill in the training message to keep track of why we trained the agent as we did at each step, we will write "Initial training with Gaussian demand function, 2 FixedFifty agents and a Random agents". Do not worry about writing all the details down, the program will store the exact configuration along with your agent!
 
-# TODO: Add exact program output
-```
-The current agents are:
-[AgentX]
-Choose an agent to train: AgentX
-
-0 c4cc5e 2021-11-24 12:28:00.619215 Initial untrained agent
-
-Input the hash or index of the version of the agent to be trained: 0
-The current training configs are:
-[our_naive_train_config]
-Choose a training config: our_naive_train_config
-(Optional) Enter training message: Initial training with naive fixed price and random priced bots
-```
-
 With that our agent should be training. Once we have finished we look at the project tree directory and see
 
-# TODO: update
 ```
 aicontest/
 ├── agents
 │   └── AgentX
 │       ├── AgentX.py
-│       ├── __pycache__
-│       │   └── AgentX.cpython-39.pyc
 │       ├── config.ini
-│       ├── initial_pickler.py
 │       └── trained-agents
-│           ├── 3fab47c53198e2cb4d1a17c406cfb9f411767f03
-│           │   ├── agent_pickle.pkl
-│           │   ├── metadata.ini
-│           │   └── train_config.ini
-│           └── c4cc5ef3a97ebc149e47c32f3d095f2d85995e2f
-│               ├── agent_pickle.pkl
-│               └── metadata.ini
+│           ├── 00a11e938af2edefacceffe60ea22fbb1e9e34b7
+│           │   └── metadata.ini
+│           └── 9321a549940764b1abd394600619b7d87a0365dd
+│               ├── metadata.ini
+│               ├── trained_config.ini
+│               └── trained.pkl
 ├── config.ini
 ├── environments
+│   ├── config.ini
+│   └── demandfunctions
+├── evaluation_configs
+│   └── evaluation_example_config.ini
 └── training_configs
-    ├── __pycache__
-    │   └── our_naive_train_config.cpython-39.pyc
-    └── our_naive_train_config.py
+    └── training_example_config.ini
 ```
 
 Notice that AgentX now has a second hash in `trained-agents` containing some checkpoints, a configuration file and some metadata. If we look at the metadata we see information about the training, including when the agent was trained, the message written and which version it is a derivative of. If we look at the configuration file we see the exact configuration used to train the agent.
@@ -272,6 +256,9 @@ When prompted we add the name `LowestGreedy`.
 
 Now open up the file and implement as follows:
 ```python
+from ai_market_contest.demand_function import DemandFunction
+
+
 class LowestGreedy(DemandFunction):
     MAX_SALES_SCALE_FACTOR: int = 1000
 
@@ -341,11 +328,7 @@ aic add-train-config
 Call the configuration file, `rllib_triple_self_play`.
 
 Now let us edit the configuration.
-Firstly, at the top of general we want to add this line:
-# TODO: is this line correct? do we need to add it to the custom agents too
-```
-type = rllib
-```
+
 You **cannot** train RLlib agents with other agents, only via self play, so delete the `Naive Agents` section.
 Now as the name of the file suggests, let's change the number of self play agents to 3.
 
@@ -371,12 +354,12 @@ Let's keep the naive agents in the simulation as well, we just want to add `RLli
 
 Copy this section, converting to your program as necessary, into your configuration file:
 
-# TODO: add in the correct hash
-
 ```
 [Trained Agents]
-RLlibTest = {HASH, 3}
+RLlibTest = ('55b8f4fkkkk4833856df2f435c0c2073d9eece2d5ab2', 3)
 ```
+
+**Be sure to change the hash to your trained agent hash in single quotes**
 
 We see that the key is name of the agent to load, the first element of the set is the hash of the trained agent to load, and the second number is the count.
 
