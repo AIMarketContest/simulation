@@ -41,7 +41,7 @@ def get_agent_name_mapping(agents: list[Union[Agent, Trainer]], names: list[str]
     name_counts: dict[str, int] = defaultdict(int)
 
     for agent, agent_name in zip(agents, names):
-        agent_class_name = agent.__name__
+        agent_class_name = agent.__class__.__name__
         name_counts[agent_class_name] += 1
         agent_name_mapping[
             agent_name

@@ -31,7 +31,9 @@ def make_proj_dir(proj_dir: pathlib.Path):
         typer.Exit(code=1)
     agents_dir: pathlib.Path = proj_dir / AGENTS_DIR_NAME
     environments_dir: pathlib.Path = proj_dir / ENVS_DIR_NAME
-    demand_function_dir: pathlib.Path = proj_dir / DEMAND_FUNCTION_DIR_NAME
+    demand_function_dir: pathlib.Path = (
+        proj_dir / ENVS_DIR_NAME / DEMAND_FUNCTION_DIR_NAME
+    )
     training_configs_dir: pathlib.Path = proj_dir / TRAINING_CONFIGS_DIR_NAME
     evaluation_configs_dir: pathlib.Path = proj_dir / EVALUATION_CONFIGS_DIR_NAME
     agents_dir.mkdir(parents=True)

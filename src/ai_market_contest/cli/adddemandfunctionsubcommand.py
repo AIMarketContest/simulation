@@ -28,7 +28,7 @@ def edit_environment_config_file(env_name: str, proj_dir: pathlib.Path):
 
 
 def remove_demand_function(demand_function_name: str, proj_dir: pathlib.Path):
-    demand_function_dir = proj_dir / DEMAND_FUNCTION_DIR_NAME
+    demand_function_dir = proj_dir / ENVS_DIR_NAME / DEMAND_FUNCTION_DIR_NAME
     target_demand_function = demand_function_dir / f"{demand_function_name}.py"
 
     if target_demand_function.exists():

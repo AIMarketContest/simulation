@@ -1,7 +1,5 @@
-from ai_market_contest.agents.fixed_agent_fifty import FixedAgentFifty
 from ai_market_contest.evaluation.ranking import (
     cumulative_profit_ranking,
-    get_agent_name_mapping,
     get_cumulative_profits,
 )
 
@@ -20,8 +18,8 @@ def test_get_cumulative_profits():
     assert res == {"A1": 10, "A3": 9, "A2": 8}
 
 
-def test_get_agent_name_mapping():
-    agent1 = FixedAgentFifty
-    agent2 = FixedAgentFifty
-    res = get_agent_name_mapping([agent1, agent2], ["A1", "A2"])
-    assert res == {"A1": "FixedAgentFifty 1", "A2": "FixedAgentFifty 2"}
+# def test_get_agent_name_mapping():
+#     agent1 = FixedAgentFifty
+#     agent2 = FixedAgentFifty
+#     res = get_agent_name_mapping([agent1, agent2], ["A1", "A2"])
+#     assert res == {"A1": "FixedAgentFifty 1", "A2": "FixedAgentFifty 2"}

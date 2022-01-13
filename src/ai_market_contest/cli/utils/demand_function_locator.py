@@ -2,7 +2,10 @@ import importlib.util
 import pathlib
 from types import ModuleType
 
-from ai_market_contest.cli.cli_config import CUR_DEMAND_FUNCTIONS
+from ai_market_contest.cli.cli_config import (
+    CUR_DEMAND_FUNCTIONS,
+    DEMAND_FUNCTION_DIR_NAME,
+)
 from ai_market_contest.demand_function import DemandFunction
 
 
@@ -13,7 +16,9 @@ class DemandFunctionLocator:
     def get_demand_function(self, demand_function_name: str) -> DemandFunction:
         if demand_function_name in CUR_DEMAND_FUNCTIONS:
             return CUR_DEMAND_FUNCTIONS[demand_function_name]()
-        demand_function_file: str = self.env_dir / (demand_function_name + ".py")
+        demand_function_file = (
+            self.env_dir / DEMAND_FUNCTION_DIR_NAME / (demand_function_name + ".py")
+        )
         spec = importlib.util.spec_from_file_location(
             demand_function_name, demand_function_file
         )
