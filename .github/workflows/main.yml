@@ -64,7 +64,7 @@ jobs:
 
       - name: Test
         run: |
-          poetry run pytest
+          poetry run pytest --cov=./ --cov-report=xml
           shopt -s globstar && poetry run pyupgrade --py39-plus **/*.py || true
           
       - name: Upload coverage to Codecov
