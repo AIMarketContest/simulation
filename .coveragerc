@@ -5,16 +5,15 @@ omit =
 
     # Ignore the CLI which can't be tested due to inputs needed
     src/ai_market_contest/cli/trainsubcommand.py
-    src/ai_market_contest/cli/cli.py
+    src/ai_market_contest/cli/aic.py
 
+    # Ignore graphing which cant't be tested due to TK package errors
+    src/ai_market_contest/evaluation/graphing.py
 
     # Ignore interface / abstract classes
     src/ai_market_contest/training/agent_name_maker.py
     src/ai_market_contest/agent.py
     src/ai_market_contest/demand_function.py
-
-    # Ignore code which is not ready for testing
-    src/ai_market_contest/evaluation/*
 
     # Ignore non-deterministic code
     src/ai_market_contest/agents/q_agent.py

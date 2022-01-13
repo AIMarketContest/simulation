@@ -6,10 +6,6 @@ import pytest
 from ray.rllib.agents.trainer import Trainer
 
 from ai_market_contest.agent import Agent
-from ai_market_contest.evaluation.graphing import (
-    create_agent_profits_dict,
-    create_agents,
-)
 
 
 def cumulative_profit_ranking(
@@ -46,17 +42,10 @@ def get_agent_name_mapping(agents: list[Union[Agent, Trainer]], names: list[str]
     name_counts: dict[str, int] = defaultdict(int)
 
     for agent, agent_name in zip(agents, names):
-        agent_class_name = type(agent).__name__
+        agent_class_name = agent.__name__
         name_counts[agent_class_name] += 1
         agent_name_mapping[
             agent_name
         ] = f"{agent_class_name} {name_counts[agent_class_name]}"
 
     return agent_name_mapping
-
-
-@pytest.mark.parametrize("num_agents", [124])
-def test_graph_profits(num_agents):
-    agents = create_agents(num_agents)
-    agent_profits = create_agent_profits_dict(agents)
-    cumulative_profit_ranking(agent_profits)
