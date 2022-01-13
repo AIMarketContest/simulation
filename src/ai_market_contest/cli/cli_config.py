@@ -67,18 +67,13 @@ RLLIB_AGENTS = [
     "A3C",
     "APPO",
     "BC",
-    # "DDPG",
-    # "TD3",
-    # "DQN",
-    # "IMPALA",
-    # ? "MARWIL",
+    "DQN",
+    "IMPALA",
     "PG",
     "PPO",
-    # ? "R2D2",
     "SAC",
     "contrib/LinUCB",
     "contrib/LinTS",
-    # "contrib/MADDPG",
 ]
 
 CUR_DEMAND_FUNCTIONS: Final = {
