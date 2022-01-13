@@ -1,6 +1,6 @@
 import copy
 import pathlib
-from ast import Num, literal_eval
+from ast import literal_eval
 from configparser import ConfigParser
 from typing import Any, Union
 
