@@ -6,7 +6,6 @@ from statistics import mean
 import matplotlib  # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
-import pytest
 from matplotlib.ticker import MaxNLocator  # type: ignore
 from numpy import ndarray, random
 from ray.rllib.policy.policy import Policy
@@ -140,74 +139,3 @@ def graph_convergence(
     plt.title("Time step at which agents converge")
     print(y_points)
     plt.show()
-
-
-# --------------------- Functions useful for testing  --------------------- #
-def create_agents(num_agents: int) -> list[Agent]:
-    """
-    Function creates a list of agents of specified length
-    :num_agents: number of agents in the output list
-    :agents: list of agents
-    """
-    return [FixedAgentRandom() for _ in range(num_agents)]
-
-
-def create_agent_names_dict(agents: list[Agent]) -> dict[Agent, str]:
-    """
-    function creates agent_names dict for give number of agents
-    :agents: list of agents to map in dictionary
-    :output: agent_names is dictionary mapping agent to agent name
-    """
-    return {agent: f"agent_{i}" for i, agent in enumerate(agents)}
-
-
-def create_agent_profits_dict(agents: list[Agent]) -> dict[Agent, ndarray]:
-    rng = random.default_rng(12345)
-    return {agent: rng.integers(low=1, high=100, size=10) for agent in agents}
-
-
-def create_agent_fixed_profits_dict(
-    agents: list[Agent], max_timesteps
-) -> dict[Agent, list[float]]:
-    agent_profits = {}
-    rng = random.default_rng(12345)
-    for agent in agents:
-        timestep = rng.integers(low=1, high=max_timesteps, size=1)
-        profits = rng.integers(low=1, high=101, size=timestep)
-        fixed_profits = rng.integers(low=1, high=101, size=1).tolist() * (int)(
-            max_timesteps - timestep
-        )
-        agent_profits[agent] = profits.tolist() + fixed_profits
-    return agent_profits
-
-
-@pytest.mark.parametrize("num_agents", [3, 10, 204, 18])
-def test_graph_profits(num_agents):
-    agents = create_agents(num_agents)
-    agent_names = create_agent_names_dict(agents)
-    agent_profits = create_agent_profits_dict(agents)
-    plot = graph_profits(agent_profits, agent_names)
-    plot.show()
-
-
-@pytest.mark.parametrize("num_agents,step", [(3, 5), (10, 3), (24, 1)])
-def test_graph_average_profits(num_agents, step):
-    agents = create_agents(num_agents)
-    agent_names = create_agent_names_dict(agents)
-    agent_profits = create_agent_profits_dict(agents)
-    plot = plot_average_step(agent_profits, agent_names, step)
-    plot.show()
-
-
-def test_graph_convergence(num_agents=5):
-    agents = create_agents(num_agents)
-    agent_names = create_agent_names_dict(agents)
-    agent_profits = create_agent_fixed_profits_dict(agents, 20)
-    graph_convergence(agent_profits, agent_names)
-
-
-def test_graph_cumulative_profit(num_agents=5):
-    agents = create_agents(num_agents)
-    agent_names = create_agent_names_dict(agents)
-    agent_profits = create_agent_fixed_profits_dict(agents, 20)
-    graph_cumulative_profits(agent_profits, agent_names)
