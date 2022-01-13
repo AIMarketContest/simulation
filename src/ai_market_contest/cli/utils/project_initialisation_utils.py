@@ -13,6 +13,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     ENVS_DIR_NAME,
     EVALUATION_CONFIGS_DIR_NAME,
     PROJ_DIR_NAME,
+    QUICK_START_FILE,
     TRAINING_CONFIGS_DIR_NAME,
 )
 from ai_market_contest.cli.utils.config_utils import (
@@ -61,6 +62,10 @@ def make_environment_config_file(proj_dir: pathlib.Path):
         config.write(config_file)
 
 
+def copy_quick_start(proj_dir: pathlib.Path):
+    shutil.copy(QUICK_START_FILE, proj_dir / "README.md")
+
+
 def remove_proj_dir(proj_dir: pathlib.Path):
     if proj_dir.is_dir():
         shutil.rmtree(proj_dir)
@@ -74,4 +79,5 @@ def initialise_file_structure(path: pathlib.Path, authors: list[str]):
     make_environment_config_file(path)
     copy_example_training_config_file(path)
     copy_example_evaluation_config_file(path)
+    copy_quick_start(path)
     atexit.unregister(remove_proj_dir)
