@@ -36,6 +36,9 @@ ENVS_DIR_NAME: Final = "environments"
 AGENT_FILENAME: Final = "agent.py"
 DEMAND_FUNCTION_DIR_NAME: Final = f"{ENVS_DIR_NAME}/demandfunctions"
 AGENT_FILE: Final = (CLI_DIR / ".." / AGENT_TEMPLATE).resolve()
+QUICK_START_FILE: Final = (
+    CLI_DIR / ".." / ".." / ".." / "docs" / "tutorial" / "getting_started_tutorial.md"
+).resolve()
 CONFIG_DIR_NAME: Final = "configs"
 CONFIG_DIR: Final = (CLI_DIR / f"{CONFIG_DIR_NAME}").resolve()
 EXAMPLE_TRAINING_CONFIG_FILE_NAME: Final = "training_example_config"
