@@ -58,7 +58,12 @@ def execute_evaluation_routine(
     trained_agents = evaluation_config_reader.get_trained_agents(proj_dir, env)
 
     if agent_config_reader.get_agent_type() == "rllib":
-        main_agent = agent_locator.get_trainer(agent_version, env, agent_config_reader)
+        main_agent = agent_locator.get_trainer(
+            agent_version,
+            env,
+            agent_config_reader,
+            evaluation_config_reader.get_other_config(),
+        )
         if main_agent is None:
             return
     else:

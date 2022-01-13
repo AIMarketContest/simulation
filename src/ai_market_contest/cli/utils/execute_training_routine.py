@@ -85,7 +85,9 @@ def set_up_and_execute_custom_training_routine(
     env = training_config_reader.get_environment(agent_name_maker)
     self_play_agents = training_config_reader.get_self_play_agents(agent_version)
     naive_agents = training_config_reader.get_naive_agents()
-    trained_agents = training_config_reader.get_trained_agents(proj_dir, env)
+    trained_agents = training_config_reader.get_trained_agents(
+        proj_dir, env, training_config_reader
+    )
 
     agents: list[Union[Agent, Trainer]] = []
     agents.extend(self_play_agents + naive_agents)
@@ -152,7 +154,12 @@ def set_up_and_execute_rllib_training_routine(
 
     env = training_config_reader.get_environment(agent_name_maker)
 
-    trainer = agent_locator.get_trainer(agent_version, env, agent_config_reader)
+    trainer = agent_locator.get_trainer(
+        agent_version,
+        env,
+        agent_config_reader,
+        training_config_reader.get_other_config(),
+    )
 
     for epoch in range(epochs):
         results = trainer.train()

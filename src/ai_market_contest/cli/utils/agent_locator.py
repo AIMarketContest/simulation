@@ -3,7 +3,7 @@ import pathlib
 import re
 from abc import ABCMeta
 from types import ModuleType
-from typing import List, Optional
+from typing import Any, List, Optional
 
 import gym
 from ray.rllib.agents.registry import get_trainer_class
@@ -51,6 +51,7 @@ class AgentLocator:
         agent_version: ExistingAgentVersion,
         env: gym.Env,
         agent_config_reader: AgentConfigReader,
+        other_config: dict[str, Any],
     ) -> Optional[Trainer]:
         register_env("marketplace", lambda x: env)
         agent_paths: List[pathlib.Path] = list(agent_version.get_dir().iterdir())
@@ -63,9 +64,11 @@ class AgentLocator:
             return None
 
         trainer_cls = get_trainer_class(rllib_type)
-        trainer = trainer_cls(
-            config=trainer_cls.get_default_config(), env="marketplace"
-        )
+
+        config = trainer_cls.get_default_config()
+        config.update(other_config)
+
+        trainer = trainer_cls(config=config, env="marketplace")
         if agent_checkpoint_dirs:
             agent_checkpoint_dir = agent_checkpoint_dirs[0]
             agent_checkpoints = list(agent_checkpoint_dir.iterdir())

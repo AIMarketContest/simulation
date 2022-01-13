@@ -37,12 +37,6 @@ class TrainingConfigReader(SimulationConfigReader):
             + 1
         )
 
-    def get_other_config(self) -> dict[str, Any]:
-        return {
-            setting_name: literal_eval(setting_value)
-            for setting_name, setting_value in self.parsed_config["Other"].items()
-        }
-
     def print_training(self) -> bool:
         if "print_training" not in self.parsed_config["General"]:
             return False
