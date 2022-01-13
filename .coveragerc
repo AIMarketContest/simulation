@@ -6,6 +6,10 @@ omit =
     # Ignore the CLI which can't be tested due to inputs needed
     src/ai_market_contest/cli/trainsubcommand.py
     src/ai_market_contest/cli/aic.py
+    src/ai_market_contest/cli/utils/execute_evaluation_routine.py
+    src/ai_market_contest/cli/utils/config_utils.py
+    src/ai_market_contest/cli/utils/agent_locator.py
+    src/ai_market_contest/cli/configs/simulation_config_reader.py
 
     # Ignore graphing which cant't be tested due to TK package errors
     src/ai_market_contest/evaluation/graphing.py
