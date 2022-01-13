@@ -2,7 +2,6 @@ from collections import defaultdict
 from typing import Union
 
 import numpy as np
-import pytest
 from ray.rllib.agents.trainer import Trainer
 
 from ai_market_contest.agent import Agent

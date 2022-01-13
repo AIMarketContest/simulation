@@ -7,11 +7,9 @@ import matplotlib  # type: ignore
 import matplotlib.pyplot as plt  # type: ignore
 import numpy as np
 from matplotlib.ticker import MaxNLocator  # type: ignore
-from numpy import ndarray, random
 from ray.rllib.policy.policy import Policy
 
 from ai_market_contest.agent import Agent
-from ai_market_contest.agents.fixed_agent_random import FixedAgentRandom
 
 matplotlib.use("TkAgg")
 
