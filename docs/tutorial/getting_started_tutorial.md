@@ -20,8 +20,6 @@ Enter custom agent name: AgentX
 ```
 
 Your project structure should now be:
-
-# TODO: update the tree
 ```
 aicontest/
 ├── agents
@@ -251,7 +249,6 @@ First we run
 aic add-demand-function
 ```
 
-# TODO: check
 When prompted we add the name `LowestGreedy`.
 
 Now open up the file and implement as follows:
