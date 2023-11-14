@@ -32,7 +32,7 @@ def get_cumulative_profits(agent_profits: dict[str, list[int]]) -> dict[str, int
 
 
 def print_rankings(rankings: list[tuple[str, int]], agent_name_mapping: dict[str, str]):
-    for (agent_name, cum_profit) in rankings:
+    for agent_name, cum_profit in rankings:
         print(f"{agent_name_mapping[agent_name]} - {cum_profit}")
 
 

@@ -52,7 +52,7 @@ class SimulationConfigReader:
 
     def get_naive_agents(self) -> list[Agent]:
         agents: list[Agent] = []
-        for (agent_name, num) in self.get_naive_agent_counts().items():
+        for agent_name, num in self.get_naive_agent_counts().items():
             agent = self.agent_locator.get_agent(agent_name)
             for _ in range(int(num)):
                 agents.append(copy.deepcopy(agent()))
@@ -65,7 +65,7 @@ class SimulationConfigReader:
         env: gym.Env,
     ) -> list[Union[Agent, Trainer]]:
         agents: list[Union[Agent, Trainer]] = []
-        for (agent_name, (agent_hash, num)) in self.get_trained_agent_counts().items():
+        for agent_name, (agent_hash, num) in self.get_trained_agent_counts().items():
             trained_exisiting_agent = ExistingAgent(agent_name, proj_dir)
             trained_agent_version = ExistingAgentVersion(
                 trained_exisiting_agent, agent_hash

@@ -81,7 +81,7 @@ def execute_evaluation_routine(
     }
 
     current_prices: dict[str, int] = {}
-    for (agent, agent_name) in zip(agents, env.agents):
+    for agent, agent_name in zip(agents, env.agents):
         if isinstance(agent, Trainer):
             current_prices[agent_name] = DEFAULT_INITIAL_AGENT_PRICE
         else:
