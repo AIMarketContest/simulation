@@ -5,6 +5,7 @@ from pathlib import Path
 import questionary
 import typer
 
+import ai_market_contest.cli.user_interactions.questionary_interactions as ask_user_to
 from ai_market_contest.cli.adddemandfunctionsubcommand import create_demand_function
 from ai_market_contest.cli.cli_config import (
     COMMAND_NAME,
@@ -219,6 +220,35 @@ def train(
     Train an agent within a specified environment
     """
     assert_proj_dir_exists(path)
+
+    agent_names: list[str] = get_agent_names(path)
+
+    chosen_agent_name: str = ask_user_to.choose_an_agent_to("train", agent_names)
+    if not chosen_agent_name:
+        return
+    chosen_agent: ExistingAgent = ExistingAgent(chosen_agent_name, path)
+    agent_config = chosen_agent.get_config()
+
+    try:
+        trained_agents: list[str] = literal_eval(
+            agent_config["training"]["trained-agents"]
+        )
+
+        trained_agents_info: dict[str, str] = chosen_agent.get_trained_agents_info(
+            trained_agents
+        )
+        chosen_trained_agent: str = questionary.select(
+            f"Select which version of the agent would you like to {action}",
+            choices=list(trained_agents_info.keys()),
+        ).ask()
+
+        chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
+            chosen_agent, trained_agents_info[chosen_trained_agent]
+        )
+
+    except KeyError:
+        typer.echo("Chosen agent's config is malformed or missing")
+        return None
 
     chosen_agent_version = get_chosen_agent_version(path, "train")
 
