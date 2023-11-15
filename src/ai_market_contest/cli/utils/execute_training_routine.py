@@ -36,31 +36,6 @@ from ai_market_contest.training.sequential_agent_name_maker import (
 )
 
 
-def set_up_and_execute_training_routine(
-    training_config_name: str,
-    proj_dir: pathlib.Path,
-    agent_version: ExistingAgentVersion,
-    training_msg: str,
-):
-    agent_config_reader: AgentConfigReader = AgentConfigReader(agent_version)
-    if agent_config_reader.get_agent_type() == "rllib":
-        set_up_and_execute_rllib_training_routine(
-            training_config_name,
-            proj_dir,
-            agent_version,
-            training_msg,
-            agent_config_reader,
-        )
-    else:
-        set_up_and_execute_custom_training_routine(
-            training_config_name,
-            proj_dir,
-            agent_version,
-            training_msg,
-            agent_config_reader,
-        )
-
-
 def set_up_and_execute_custom_training_routine(
     training_config_name: str,
     proj_dir: pathlib.Path,

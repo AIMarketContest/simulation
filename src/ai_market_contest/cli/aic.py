@@ -33,9 +33,6 @@ from ai_market_contest.cli.utils.config_utils import (
 from ai_market_contest.cli.utils.execute_evaluation_routine import (
     execute_evaluation_routine,
 )
-from ai_market_contest.cli.utils.execute_training_routine import (
-    set_up_and_execute_training_routine,
-)
 from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
