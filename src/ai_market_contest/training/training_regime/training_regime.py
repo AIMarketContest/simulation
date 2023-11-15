@@ -1,2 +1,3 @@
 class TrainingRegime:
-    pass
+    def execute(self) -> None:
+        raise NotImplementedError("Implement in subclass.")

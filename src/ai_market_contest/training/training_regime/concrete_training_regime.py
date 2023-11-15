@@ -1,5 +1,8 @@
 import pathlib
 
+from ai_market_contest.cli.utils.execute_training_routine import (
+    set_up_and_execute_training_routine,
+)
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
@@ -18,3 +21,11 @@ class ConcreteTrainingRegime(TrainingRegime):
         self.project_dir = project_dir
         self.agent_version = agent_version
         self.training_msg = training_msg
+
+    def execute(self) -> None:
+        set_up_and_execute_training_routine(
+            self.training_config_name,
+            self.project_dir,
+            self.agent_version,
+            self.training_msg,
+        )

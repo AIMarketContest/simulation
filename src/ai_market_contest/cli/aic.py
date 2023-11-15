@@ -48,6 +48,10 @@ from ai_market_contest.cli.utils.get_agents import get_agent_names
 from ai_market_contest.cli.utils.project_initialisation_utils import (
     initialise_file_structure,
 )
+from ai_market_contest.training.training_regime.training_regime import TrainingRegime
+from ai_market_contest.training.training_regime.training_regime_factory import (
+    TrainingRegimeFactory,
+)
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 app = typer.Typer(context_settings=CONTEXT_SETTINGS)
@@ -231,12 +235,10 @@ def train(
 
     training_msg: str = typer.prompt("Enter training message")
 
-    set_up_and_execute_training_routine(
-        training_config_name,
-        path,
-        chosen_agent_version,
-        training_msg,
+    training_regime: TrainingRegime = TrainingRegimeFactory.create_training_regime(
+        training_config_name, path, chosen_agent_version, training_msg
     )
+    training_regime.execute()
 
 
 @app.command()
