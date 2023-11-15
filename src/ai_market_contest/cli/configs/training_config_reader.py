@@ -34,8 +34,10 @@ class TrainingConfigReader(SimulationConfigReader):
     def from_name(name: str, path: pathlib.Path):
         training_config_path: pathlib.Path = get_training_config_path(path, name)
 
-        agent_locator: AgentLocator = AgentLocator(path / AGENTS_DIR_NAME)
-        demand_function_locator = DemandFunctionLocator(path / ENVS_DIR_NAME)
+        agent_locator: AgentLocator = AgentLocator.from_path(path)
+        demand_function_locator: DemandFunctionLocator = (
+            DemandFunctionLocator.from_path(path)
+        )
         training_config = TrainingConfigReader(
             training_config_path, demand_function_locator, agent_locator
         )
