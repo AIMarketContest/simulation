@@ -18,3 +18,10 @@ def choose_an_agent_version_from(
         choices=agent_versions,
     ).ask()
     return chosen_trained_agent
+
+
+def choose_a_training_configuration(training_configs: str) -> Optional[str]:
+    training_config: str = questionary.select(
+        "Choose a training config:", choices=training_configs
+    ).ask()
+    return training_config

@@ -6,7 +6,6 @@ from typing import Optional
 import questionary
 import typer
 
-import ai_market_contest.cli.user_interactions.questionary_interactions as ask_user_to
 import ai_market_contest.cli.user_transactions.questionary_transactions as user_transaction
 from ai_market_contest.cli.adddemandfunctionsubcommand import create_demand_function
 from ai_market_contest.cli.cli_config import (
@@ -30,7 +29,6 @@ from ai_market_contest.cli.utils.config_utils import (
     copy_example_evaluation_config_file,
     copy_example_training_config_file,
     get_evaluation_configs,
-    get_training_configs,
 )
 from ai_market_contest.cli.utils.execute_evaluation_routine import (
     execute_evaluation_routine,
@@ -227,15 +225,14 @@ def train(
     if chosen_agent_version is None:
         return
 
-    training_configs: list[str] = get_training_configs(path)
-    assert_configs_exist(training_configs)
-    training_config: str = questionary.select(
-        "Choose a training config:", choices=training_configs
-    ).ask()
+    training_config_name: Optional[
+        str
+    ] = user_transaction.select_training_configuration_name(path)
+
     training_msg: str = typer.prompt("Enter training message")
 
     set_up_and_execute_training_routine(
-        training_config,
+        training_config_name,
         path,
         chosen_agent_version,
         training_msg,

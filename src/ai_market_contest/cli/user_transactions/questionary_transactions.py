@@ -1,6 +1,10 @@
 from typing import Optional
 
 import ai_market_contest.cli.user_interactions.questionary_interactions as ask_user_to
+from ai_market_contest.cli.utils.config_utils import (
+    assert_configs_exist,
+    get_training_configs,
+)
 from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
@@ -45,3 +49,12 @@ def select_agent_version(agent: ExistingAgent) -> ExistingAgentVersion:
         agent, trained_agents_info[chosen_trained_agent]
     )
     return chosen_agent_version
+
+
+def select_training_configuration_name(path: str) -> Optional[str]:
+    training_configs: list[str] = get_training_configs(path)
+    assert_configs_exist(training_configs)
+    training_config: Optional[str] = ask_user_to.choose_a_training_configuration(
+        training_configs
+    )
+    return training_config
