@@ -122,7 +122,7 @@ class SimulationConfigReader:
         return Market(
             self.get_num_agents(),
             demand_function,
-            self.get_simulation_length,
+            self.get_simulation_length(),
             agent_name_maker,
         )
 

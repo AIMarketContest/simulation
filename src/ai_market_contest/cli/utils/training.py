@@ -28,11 +28,11 @@ def get_agent_price_dict(
 ) -> dict[str, int]:
     agent_dict: dict[str, int] = {}
     last_round_prices_list = agent_dict_to_list(last_round_prices, env)
-    test = {agent_name: last_round_prices_list for agent_name in env.agents}
+    observations = {agent_name: last_round_prices_list for agent_name in env.agents}
 
     for index, (agent, agent_name) in enumerate(zip(agents, env.agents)):
         if isinstance(agent, Trainer):
-            agent_dict[agent_name] = agent.compute_actions(test)["player_0"]
+            agent_dict[agent_name] = agent.compute_actions(observations)["player_0"]
         else:
             agent_dict[agent_name] = agent.policy(last_round_prices_list, index)
 
