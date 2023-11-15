@@ -58,3 +58,17 @@ class ExistingAgent:
             return trained_agents
         except ValueError:
             return
+
+    def get_all_trained_agents_information(self) -> Optional[dict[str, str]]:
+        trained_agents: list[str] = self.get_trained_agents()
+        if not trained_agents:
+            return
+
+        try:
+            trained_agents_info: dict[str, str] = self.get_trained_agents_info(
+                trained_agents
+            )
+        except ValueError:
+            return
+
+        return trained_agents_info

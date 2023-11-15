@@ -221,35 +221,9 @@ def train(
     """
     Train an agent within a specified environment
     """
-    chosen_agent: Optional[ExistingAgent] = user_transaction.select_existing_agent(path)
-    if not chosen_agent:
-        return
-
-    trained_agents: list[str] = chosen_agent.get_trained_agents()
-    if not trained_agents:
-        return
-
-    action = "train"
-
-    try:
-        trained_agents_info: dict[str, str] = chosen_agent.get_trained_agents_info(
-            trained_agents
-        )
-        chosen_trained_agent: str = questionary.select(
-            f"Select which version of the agent would you like to {action}",
-            choices=list(trained_agents_info.keys()),
-        ).ask()
-
-        chosen_agent_version: ExistingAgentVersion = ExistingAgentVersion(
-            chosen_agent, trained_agents_info[chosen_trained_agent]
-        )
-
-    except KeyError:
-        typer.echo("Chosen agent's config is malformed or missing")
-        return None
-
-    chosen_agent_version = get_chosen_agent_version(path, "train")
-
+    chosen_agent_version: Optional[
+        ExistingAgentVersion
+    ] = user_transaction.select_trained_agent(path)
     if chosen_agent_version is None:
         return
 
