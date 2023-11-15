@@ -232,8 +232,12 @@ def train(
     training_config_name: Optional[
         str
     ] = user_transaction.select_training_configuration_name(path)
+    if not training_config_name:
+        return
 
     training_msg: str = typer.prompt("Enter training message")
+    if not training_msg:
+        return
 
     training_regime: TrainingRegime = TrainingRegimeFactory.create_training_regime(
         training_config_name, path, chosen_agent_version, training_msg
