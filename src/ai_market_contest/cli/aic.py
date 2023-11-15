@@ -33,9 +33,6 @@ from ai_market_contest.cli.utils.config_utils import (
 from ai_market_contest.cli.utils.execute_evaluation_routine import (
     execute_evaluation_routine,
 )
-from ai_market_contest.cli.utils.execute_training_routine import (
-    set_up_and_execute_training_routine,
-)
 from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
@@ -47,6 +44,10 @@ from ai_market_contest.cli.utils.filesystemutils import (
 from ai_market_contest.cli.utils.get_agents import get_agent_names
 from ai_market_contest.cli.utils.project_initialisation_utils import (
     initialise_file_structure,
+)
+from ai_market_contest.training.training_regime.training_regime import TrainingRegime
+from ai_market_contest.training.training_regime.training_regime_factory import (
+    TrainingRegimeFactory,
 )
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
@@ -228,15 +229,17 @@ def train(
     training_config_name: Optional[
         str
     ] = user_transaction.select_training_configuration_name(path)
+    if not training_config_name:
+        return
 
     training_msg: str = typer.prompt("Enter training message")
+    if not training_msg:
+        return
 
-    set_up_and_execute_training_routine(
-        training_config_name,
-        path,
-        chosen_agent_version,
-        training_msg,
+    training_regime: TrainingRegime = TrainingRegimeFactory.create_training_regime(
+        training_config_name, path, chosen_agent_version, training_msg
     )
+    training_regime.execute()
 
 
 @app.command()
