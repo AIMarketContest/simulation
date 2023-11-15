@@ -15,6 +15,7 @@ from ai_market_contest.cli.cli_config import (
     TRAINING_CONFIG_EXTENSION,
     TRAINING_CONFIGS_DIR_NAME,
 )
+from ai_market_contest.cli.utils.error_codes import ErrorCodes
 from ai_market_contest.cli.utils.filesystemutils import assert_config_file_exists
 
 
@@ -23,7 +24,7 @@ def assert_configs_exist(training_configs: list[str]) -> None:
         print(
             "Operation aborted: no training configs have been defined in training_configs"
         )
-        sys.exit(1)
+        sys.exit(ErrorCodes.NO_TRAINING_CONFIGS)
 
 
 def get_configs(proj_dir: Path, config_directory_name: str) -> list[str]:
