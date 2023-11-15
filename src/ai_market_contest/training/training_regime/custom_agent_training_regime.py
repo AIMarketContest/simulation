@@ -29,13 +29,13 @@ from ai_market_contest.training.training_regime.training_regime import TrainingR
 class CustomAgentTrainingRegime(TrainingRegime):
     def __init__(
         self,
-        training_config_name: str,
+        training_config: TrainingConfigReader,
         project_dir: pathlib.Path,
         agent_version: ExistingAgentVersion,
         training_msg: str,
         agent_config_reader: AgentConfigReader,
     ):
-        self.training_config_name = training_config_name
+        self.training_config_reader = training_config
         self.project_dir = project_dir
         self.agent_version = agent_version
         self.training_msg = training_msg
@@ -43,29 +43,17 @@ class CustomAgentTrainingRegime(TrainingRegime):
 
     def execute(self) -> None:
         # Assumes agent to train is always first in the list
-        agent_locator: AgentLocator = AgentLocator(self.project_dir / AGENTS_DIR_NAME)
-        demand_function_locator = DemandFunctionLocator(
-            self.project_dir / ENVS_DIR_NAME
-        )
-
-        training_config_path: pathlib.Path = get_training_config_path(
-            self.project_dir, self.training_config_name
-        )
-        training_config_reader = TrainingConfigReader(
-            training_config_path, demand_function_locator, agent_locator
-        )
-
-        epochs = training_config_reader.get_epochs()
+        epochs = self.training_config_reader.get_epochs()
         agent_name_maker = SequentialAgentNameMaker(
-            training_config_reader.get_num_agents()
+            self.training_config_reader.get_num_agents()
         )
 
-        env = training_config_reader.get_environment(agent_name_maker)
-        self_play_agents = training_config_reader.get_self_play_agents(
+        env = self.training_config_reader.get_environment(agent_name_maker)
+        self_play_agents = self.training_config_reader.get_self_play_agents(
             self.agent_version
         )
-        naive_agents = training_config_reader.get_naive_agents()
-        trained_agents = training_config_reader.get_trained_agents(
+        naive_agents = self.training_config_reader.get_naive_agents()
+        trained_agents = self.training_config_reader.get_trained_agents(
             self.project_dir, env
         )
 
@@ -94,7 +82,7 @@ class CustomAgentTrainingRegime(TrainingRegime):
 
             cumulative_profits.append(cumulative_profit)
 
-            if training_config_reader.print_training():
+            if self.training_config_reader.print_training():
                 status = "epoch {:2d} \nreward min: {:6.2f}\nreward mean: {:6.2f}\nreward max:  {:6.2f}\nmean length: {:4.2f}\n"
                 typer.echo(
                     status.format(
@@ -110,5 +98,5 @@ class CustomAgentTrainingRegime(TrainingRegime):
             self_play_agents[0],
             self.agent_version,
             self.training_msg,
-            training_config_path,
+            self.training_config_reader.get_config_file_path(),
         )

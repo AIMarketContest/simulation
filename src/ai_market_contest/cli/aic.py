@@ -17,6 +17,7 @@ from ai_market_contest.cli.cli_config import (
     TRAINING_CONFIG_EXTENSION,
     TRAINING_CONFIGS_DIR_NAME,
 )
+from ai_market_contest.cli.configs.training_config_reader import TrainingConfigReader
 from ai_market_contest.cli.resetsubcommand import remove_proj_dir
 from ai_market_contest.cli.utils.agent_manipulation_utils import (
     create_custom_agent,
@@ -226,10 +227,10 @@ def train(
     if chosen_agent_version is None:
         return
 
-    training_config_name: Optional[
-        str
-    ] = user_transaction.select_training_configuration_name(path)
-    if not training_config_name:
+    training_config: Optional[
+        TrainingConfigReader
+    ] = user_transaction.select_training_configuration(path)
+    if not training_config:
         return
 
     training_msg: str = typer.prompt("Enter training message")
@@ -237,7 +238,7 @@ def train(
         return
 
     training_regime: TrainingRegime = TrainingRegimeFactory.create_training_regime(
-        training_config_name, path, chosen_agent_version, training_msg
+        training_config, path, chosen_agent_version, training_msg
     )
     training_regime.execute()
 

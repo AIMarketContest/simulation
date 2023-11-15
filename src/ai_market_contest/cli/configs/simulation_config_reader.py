@@ -27,6 +27,7 @@ class SimulationConfigReader:
         agent_locator: AgentLocator,
         config_parser: ConfigParser = ConfigParser(),
     ):
+        self.config_file_path = config_file_path
         config_parser.optionxform = str
         config_parser.read(config_file_path)
         self.parsed_config: ConfigParser = config_parser
@@ -114,3 +115,6 @@ class SimulationConfigReader:
             int(self.parsed_config["General"]["simulation_length"]),
             agent_name_maker,
         )
+
+    def get_config_file_path(self) -> pathlib.Path:
+        return self.config_file_path

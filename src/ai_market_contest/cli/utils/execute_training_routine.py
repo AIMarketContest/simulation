@@ -37,29 +37,19 @@ from ai_market_contest.training.sequential_agent_name_maker import (
 
 
 def set_up_and_execute_rllib_training_routine(
-    training_config_name: str,
+    training_config_reader: TrainingConfigReader,
     proj_dir: pathlib.Path,
     agent_version: ExistingAgentVersion,
     training_msg: str,
     agent_config_reader: AgentConfigReader,
 ):
     # Assumes agent to train is always first in the list
-    agent_locator: AgentLocator = AgentLocator(proj_dir / AGENTS_DIR_NAME)
-    demand_function_locator = DemandFunctionLocator(proj_dir / ENVS_DIR_NAME)
-
-    training_config_path: pathlib.Path = get_training_config_path(
-        proj_dir, training_config_name
-    )
-    training_config_reader = TrainingConfigReader(
-        training_config_path, demand_function_locator, agent_locator
-    )
-
     epochs = training_config_reader.get_epochs()
     agent_name_maker = SequentialAgentNameMaker(training_config_reader.get_num_agents())
 
     env = training_config_reader.get_environment(agent_name_maker)
 
-    trainer = agent_locator.get_trainer(
+    trainer = training_config_reader.agent_locator.get_trainer(
         agent_version,
         env,
         agent_config_reader,
@@ -81,7 +71,12 @@ def set_up_and_execute_rllib_training_routine(
                 )
             )
 
-    save_new_rllib_trainer(trainer, agent_version, training_msg, training_config_path)
+    save_new_rllib_trainer(
+        trainer,
+        agent_version,
+        training_msg,
+        training_config_reader.get_config_file_path(),
+    )
 
 
 def create_trained_agent_dir(
