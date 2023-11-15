@@ -71,15 +71,8 @@ def select_training_configuration(path: str) -> Optional[TrainingConfigReader]:
     if not training_config_name:
         return
 
-    training_config_path: pathlib.Path = get_training_config_path(
-        path, training_config_name
-    )
-
-    agent_locator: AgentLocator = AgentLocator(path / AGENTS_DIR_NAME)
-    demand_function_locator = DemandFunctionLocator(path / ENVS_DIR_NAME)
-
-    training_config = TrainingConfigReader(
-        training_config_path, demand_function_locator, agent_locator
+    training_config: TrainingConfigReader = TrainingConfigReader.from_name(
+        training_config_name, path
     )
 
     return training_config
