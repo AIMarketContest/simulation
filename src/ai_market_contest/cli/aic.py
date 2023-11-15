@@ -221,7 +221,6 @@ def train(
     """
     Train an agent within a specified environment
     """
-    assert_proj_dir_exists(path)
     chosen_agent: Optional[ExistingAgent] = user_transaction.select_existing_agent(path)
     if not chosen_agent:
         return
