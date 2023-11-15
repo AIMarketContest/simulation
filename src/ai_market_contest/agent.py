@@ -3,15 +3,11 @@ from typing import Any, Optional, Union
 import dill
 import numpy as np
 from gym.spaces.space import Space  # type: ignore
-from ray.rllib.evaluation import Episode
-from ray.rllib.policy.policy import Policy
-from ray.rllib.policy.sample_batch import SampleBatch
-from ray.rllib.utils.typing import TensorStructType, TensorType
 
 from ai_market_contest.typing.types import Price  # type: ignore
 
 
-class Agent(Policy):
+class Agent():
     """
     Agent interface - an agent represents a firm selling a product in the market.
 
@@ -28,8 +24,9 @@ class Agent(Policy):
         action_space: Space = None,
         config: dict[Any, Any] = {},
     ):
-        super().__init__(observation_space, action_space, config)
-        self.w = 1
+        self.observation_space = observation_space
+        self.action_space = action_space
+        self.config = config
 
     def get_initial_price(self) -> Price:
         """
@@ -97,54 +94,8 @@ class Agent(Policy):
         """
         raise NotImplementedError
 
-    def compute_actions(
-        self,
-        obs_batch: Union[list[TensorStructType], TensorStructType],
-        state_batches: Optional[list[TensorType]] = None,
-        prev_action_batch: Union[list[TensorStructType], TensorStructType] = None,
-        prev_reward_batch: Union[list[TensorStructType], TensorStructType] = None,
-        info_batch: Optional[dict[str, list[Any]]] = None,
-        episodes: Optional[list["Episode"]] = None,
-        explore: Optional[bool] = None,
-        timestep: Optional[int] = None,
-        **kwargs
-    ) -> tuple[list[Price], list[Any], dict[str, Any]]:
-        action_batch: list[Price] = []
-        for agent_index in range(len(obs_batch)):
-            obs = obs_batch[agent_index]
-            prices_list: list[Price] = []
-            for index in range(100, len(obs) + 1, 100):
-                prices_list.append(np.where(obs[index - 100 : index] == 1)[0][0])
-            info = info_batch[agent_index]
-            if info == 0:
-                if prev_action_batch[agent_index] == 0:
-                    action_batch.append(self.get_initial_price())
-                else:
-                    action_batch.append(prev_action_batch[agent_index])
-                continue
-            identity_index: int = info["identity_index"]
-            self.update(prev_action_batch[agent_index], identity_index)
-            action_batch.append(self.policy(prices_list, identity_index))
-
-        return (action_batch, [], {})
-
-    def learn_on_batch(self, samples: SampleBatch) -> dict[str, Any]:
-        return {}
-
-    def update_target(self):
-        return True
-
-    def set_weights(self, weights: dict[str, int]):
-        self.w = weights["w"]
-
-    def get_weights(self):
-        return {"w": self.w}
-
     def load(self, file):
         self.__dict__.update(dill.load(file))
 
     def save(self, file):
         dill.dump(self.__dict__, file, 2)
-
-    # def get_state(self):
-    #     return {"weights": self.get_weights()}

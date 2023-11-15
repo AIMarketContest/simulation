@@ -17,7 +17,6 @@ class Market(MultiAgentEnv):
 
     def __init__(
         self,
-        num_agents: int,
         demand_function: DemandFunction,
         simulation_length: int,
         agent_name_maker: AgentNameMaker,
@@ -25,7 +24,7 @@ class Market(MultiAgentEnv):
         self.agents: list[str] = agent_name_maker.get_names()
 
         self.observation_space = MultiDiscrete(
-            [self.NUMBER_OF_DISCRETE_PRICES for _ in range(num_agents)]
+            [self.NUMBER_OF_DISCRETE_PRICES for _ in range(len(self.agents))]
         )
         self.action_space = Discrete(self.NUMBER_OF_DISCRETE_PRICES)
 

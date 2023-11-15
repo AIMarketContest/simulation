@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings("ignore")
+
 import pathlib
 from ast import literal_eval
 from pathlib import Path
