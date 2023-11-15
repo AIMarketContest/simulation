@@ -15,6 +15,7 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAg
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
+from ai_market_contest.demand_function import DemandFunction
 from ai_market_contest.environment import Market
 from ai_market_contest.training.agent_name_maker import AgentNameMaker
 
@@ -27,6 +28,7 @@ class SimulationConfigReader:
         agent_locator: AgentLocator,
         config_parser: ConfigParser = ConfigParser(),
     ):
+        self.config_file_path = config_file_path
         config_parser.optionxform = str
         config_parser.read(config_file_path)
         self.parsed_config: ConfigParser = config_parser
@@ -105,12 +107,24 @@ class SimulationConfigReader:
     def get_num_agents(self) -> int:
         raise NotImplementedError("Must be implemented by a subclass")
 
+    def get_simulation_length(self) -> int:
+        return int(self.parsed_config["General"]["simulation_length"])
+
+    def get_demand_function_name(self) -> str:
+        return self.parsed_config["General"]["demand_function"]
+
     def get_environment(self, agent_name_maker: AgentNameMaker) -> Market:
+        demand_function_name: str = self.get_demand_function_name()
+        demand_function: DemandFunction = (
+            self.demand_function_locator.get_demand_function(demand_function_name)
+        )
+
         return Market(
             self.get_num_agents(),
-            self.demand_function_locator.get_demand_function(
-                self.parsed_config["General"]["demand_function"]
-            ),
-            int(self.parsed_config["General"]["simulation_length"]),
+            demand_function,
+            self.get_simulation_length,
             agent_name_maker,
         )
+
+    def get_config_file_path(self) -> pathlib.Path:
+        return self.config_file_path

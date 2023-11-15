@@ -11,7 +11,11 @@ from ray.rllib.agents.trainer import Trainer
 from ray.tune.registry import register_env
 
 from ai_market_contest.agent import Agent
-from ai_market_contest.cli.cli_config import CUR_AGENTS, TRAINED_PICKLE_FILENAME
+from ai_market_contest.cli.cli_config import (
+    AGENTS_DIR_NAME,
+    CUR_AGENTS,
+    TRAINED_PICKLE_FILENAME,
+)
 from ai_market_contest.cli.configs.agent_config_reader import AgentConfigReader
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
@@ -21,6 +25,11 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
 class AgentLocator:
     def __init__(self, agents_dir: pathlib.Path):
         self.agents_dir: pathlib.Path = agents_dir
+
+    @staticmethod
+    def from_path(path: str) -> "AgentLocator":
+        agent_locator: AgentLocator = AgentLocator(path / AGENTS_DIR_NAME)
+        return agent_locator
 
     def get_agent(self, agent_name: str) -> ABCMeta:
         if agent_name in CUR_AGENTS:

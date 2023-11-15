@@ -1,10 +1,16 @@
+import pathlib
 from typing import Optional
 
 import ai_market_contest.cli.user_interactions.questionary_interactions as ask_user_to
+from ai_market_contest.cli.cli_config import AGENTS_DIR_NAME, ENVS_DIR_NAME
+from ai_market_contest.cli.configs.training_config_reader import TrainingConfigReader
+from ai_market_contest.cli.utils.agent_locator import AgentLocator
 from ai_market_contest.cli.utils.config_utils import (
     assert_configs_exist,
+    get_training_config_path,
     get_training_configs,
 )
+from ai_market_contest.cli.utils.demand_function_locator import DemandFunctionLocator
 from ai_market_contest.cli.utils.existing_agent.existing_agent import ExistingAgent
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
@@ -57,4 +63,16 @@ def select_training_configuration_name(path: str) -> Optional[str]:
     training_config: Optional[str] = ask_user_to.choose_a_training_configuration(
         training_configs
     )
+    return training_config
+
+
+def select_training_configuration(path: str) -> Optional[TrainingConfigReader]:
+    training_config_name: Optional[str] = select_training_configuration_name(path)
+    if not training_config_name:
+        return
+
+    training_config: TrainingConfigReader = TrainingConfigReader.from_name(
+        training_config_name, path
+    )
+
     return training_config
