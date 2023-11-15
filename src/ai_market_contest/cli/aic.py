@@ -225,13 +225,14 @@ def train(
     chosen_agent: Optional[ExistingAgent] = user_transaction.select_existing_agent(path)
     if not chosen_agent:
         return
-    agent_config = chosen_agent.get_config()
+
+    trained_agents: list[str] = chosen_agent.get_trained_agents()
+    if not trained_agents:
+        return
+
+    action = "train"
 
     try:
-        trained_agents: list[str] = literal_eval(
-            agent_config["training"]["trained-agents"]
-        )
-
         trained_agents_info: dict[str, str] = chosen_agent.get_trained_agents_info(
             trained_agents
         )
