@@ -20,6 +20,7 @@ from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
 from ai_market_contest.cli.utils.training import get_agent_price_dict
+from ai_market_contest.training.agent_name_maker import AgentNameMaker
 from ai_market_contest.training.sequential_agent_name_maker import (
     SequentialAgentNameMaker,
 )
@@ -44,7 +45,7 @@ class CustomAgentTrainingRegime(TrainingRegime):
     def execute(self) -> None:
         # Assumes agent to train is always first in the list
         epochs = self.training_config_reader.get_epochs()
-        agent_name_maker = SequentialAgentNameMaker(
+        agent_name_maker: AgentNameMaker = SequentialAgentNameMaker(
             self.training_config_reader.get_num_agents()
         )
 
