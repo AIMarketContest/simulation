@@ -1,5 +1,6 @@
 import pathlib
-from typing import Any
+from ast import literal_eval
+from typing import Any, Optional
 
 from ai_market_contest.cli.cli_config import (
     AGENTS_DIR_NAME,
@@ -48,3 +49,26 @@ class ExistingAgent:
             ] = agent_hash
 
         return trained_agents_information
+
+    def get_trained_agents(self) -> Optional[list[str]]:
+        try:
+            trained_agents: list[str] = literal_eval(
+                self.get_config()["training"]["trained-agents"]
+            )
+            return trained_agents
+        except ValueError:
+            return
+
+    def get_all_trained_agents_information(self) -> Optional[dict[str, str]]:
+        trained_agents: list[str] = self.get_trained_agents()
+        if not trained_agents:
+            return
+
+        try:
+            trained_agents_info: dict[str, str] = self.get_trained_agents_info(
+                trained_agents
+            )
+        except ValueError:
+            return
+
+        return trained_agents_info

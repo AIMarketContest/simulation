@@ -4,18 +4,19 @@ import sys
 import typer
 
 from ai_market_contest.cli.cli_config import COMMAND_NAME
+from ai_market_contest.cli.utils.error_codes import ErrorCodes
 
 
 def assert_directory_exists(directory: pathlib.Path, error_msg: str):
     if not directory.is_dir():
         print(error_msg)
-        sys.exit(2)
+        sys.exit(ErrorCodes.DIRECTORY_DOES_NOT_EXIST)
 
 
 def assert_file_exists(file_path: pathlib.Path, error_msg: str):
     if not file_path.is_file():
         print(error_msg)
-        sys.exit(2)
+        sys.exit(ErrorCodes.FILE_DOES_NOT_EXIST)
 
 
 def assert_proj_dir_exists(proj_dir: pathlib.Path):

@@ -1,10 +1,13 @@
 import pathlib
 from ast import literal_eval
 from pathlib import Path
+from typing import Optional
 
 import questionary
 import typer
 
+import ai_market_contest.cli.user_interactions.questionary_interactions as ask_user_to
+import ai_market_contest.cli.user_transactions.questionary_transactions as user_transaction
 from ai_market_contest.cli.adddemandfunctionsubcommand import create_demand_function
 from ai_market_contest.cli.cli_config import (
     COMMAND_NAME,
@@ -218,10 +221,9 @@ def train(
     """
     Train an agent within a specified environment
     """
-    assert_proj_dir_exists(path)
-
-    chosen_agent_version = get_chosen_agent_version(path, "train")
-
+    chosen_agent_version: Optional[
+        ExistingAgentVersion
+    ] = user_transaction.select_trained_agent(path)
     if chosen_agent_version is None:
         return
 
