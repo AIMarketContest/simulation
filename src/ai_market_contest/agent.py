@@ -7,7 +7,7 @@ from gym.spaces.space import Space  # type: ignore
 from ai_market_contest.typing.types import Price  # type: ignore
 
 
-class Agent():
+class Agent:
     """
     Agent interface - an agent represents a firm selling a product in the market.
 
@@ -17,16 +17,6 @@ class Agent():
     As is standard for ML models, it uses the policy-update format.
     For those not familiar with policy-update, see the comments on each function.
     """
-
-    def __init__(
-        self,
-        observation_space: Space = None,
-        action_space: Space = None,
-        config: dict[Any, Any] = {},
-    ):
-        self.observation_space = observation_space
-        self.action_space = action_space
-        self.config = config
 
     def get_initial_price(self) -> Price:
         """
@@ -53,7 +43,7 @@ class Agent():
 
         Parameters
         ----------
-        last_round_all_agents_prices : list of float
+        last_round_all_agents_prices : list of int
             List of all the prices set by all agents in the previous timestep.
         identity_index: int
             A positive integer that tells the agent which index in the list
@@ -61,7 +51,7 @@ class Agent():
 
         Returns
         -------
-        float
+        int
             Price of the product set by the agent at the current timestep,
             discretised within [0,100].
 

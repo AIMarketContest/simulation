@@ -90,7 +90,6 @@ def create_trained_agent_dir(
     return new_agent_dir
 
 
-
 def save_new_rllib_trainer(
     new_trainer: Trainer,
     old_agent_version: ExistingAgentVersion,
