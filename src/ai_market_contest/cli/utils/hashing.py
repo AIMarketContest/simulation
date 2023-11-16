@@ -8,6 +8,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     CONFIG_FILENAME,
     HASH_LENGTH,
 )
+from ai_market_contest.cli.utils.error_codes import ErrorCodes
 from ai_market_contest.cli.utils.filesystemutils import assert_config_file_exists
 
 
@@ -32,5 +33,5 @@ def get_agent_initial_hash(chosen_agent_dir: pathlib.Path):
         initial_hash = config["training"]["initial-hash"]
     except KeyError:
         print("Error: agent config missing an initial hash")
-        sys.exit(1)
+        sys.exit(ErrorCodes.MISSING_INITIAL_HASH)
     return initial_hash
