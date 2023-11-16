@@ -7,6 +7,7 @@ from ai_market_contest.cli.cli_config import (  # type: ignore
     META_FILENAME,
     TRAINED_AGENTS_DIR_NAME,
 )
+from ai_market_contest.cli.utils.error_codes import ErrorCodes
 from ai_market_contest.cli.utils.filesystemutils import (  # type: ignore
     assert_directory_exists,
     assert_file_exists,
@@ -58,23 +59,23 @@ def read_meta_file(meta_file: pathlib.Path):
         sys.exit(1)
     except ValueError:
         print("Error: time attribute must only contain numbers")
-        sys.exit(1)
+        sys.exit(ErrorCodes.TIME_ATTRIBUTE_CONTAINS_NON_NUMBER_CHARACTERS)
 
     try:
         time = datetime.datetime(year, month, day, hour, minute, second, microsecond)
     except ValueError:
         print("Error: date time in meta file represents an invalid datetime")
-        sys.exit(1)
+        sys.exit(ErrorCodes.INVALID_DATE_TIME)
 
     if "trained-agent" not in config:
         print("Error: Meta file missing trained agent data")
-        sys.exit(1)
+        sys.exit(ErrorCodes.MISSING_TRAINED_AGENT_DATA)
 
     if "hash" in config["trained-agent"]:
         trained_agent_hash = config["trained-agent"]["hash"]
     else:
         print("Error: Meta file missing the trained agent hash")
-        sys.exit(1)
+        sys.exit(ErrorCodes.MISSING_TRAINED_AGENT_HASH)
 
     if "message" in config["trained-agent"]:
         message = config["trained-agent"]["message"]
