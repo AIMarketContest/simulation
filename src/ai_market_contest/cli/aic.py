@@ -1,5 +1,4 @@
 import warnings
-
 warnings.filterwarnings("ignore")
 
 from silence_tensorflow import silence_tensorflow

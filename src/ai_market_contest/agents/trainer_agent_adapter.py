@@ -30,5 +30,4 @@ class TrainerAgentAdapter(Agent):
             agent_name: last_round_all_agents_prices
             for agent_name in self.agents_in_simulation
         }
-        trainer_name: str = self.agents_in_simulation[identity_index]
-        return self.trainer.compute_actions(observations)[trainer_name]
+        return self.trainer.compute_actions(observations)["player_0"]

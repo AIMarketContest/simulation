@@ -68,7 +68,7 @@ class TrainingConfigReader(SimulationConfigReader):
             return False
 
         # TODO add default value
-        return bool(self.parsed_config["General"]["print_training"])
+        return self.parsed_config["General"]["print_training"] == "True"
 
     def get_num_epochs(self) -> int:
         # TODO add default value

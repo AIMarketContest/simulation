@@ -9,9 +9,7 @@ from ai_market_contest.agents.trainer_agent_adapter import TrainerAgentAdapter
 from ai_market_contest.cli.cli_config import TRAINED_PICKLE_FILENAME
 from ai_market_contest.cli.configs.agent_config_reader import AgentConfigReader
 from ai_market_contest.cli.configs.training_config_reader import TrainingConfigReader
-from ai_market_contest.cli.utils.execute_training_routine import (
-    create_trained_agent_dir,
-)
+from ai_market_contest.cli.utils.execute_training_routine import create_trained_agent_dir
 from ai_market_contest.cli.utils.existing_agent.existing_agent_version import (
     ExistingAgentVersion,
 )
@@ -156,9 +154,7 @@ class CustomAgentTrainingRegime(TrainingRegime):
 
     def _save_new_custom_agent(self, new_agent: Agent) -> None:
         new_agent_dir = create_trained_agent_dir(
-            self.agent_version,
-            self.training_msg,
-            self.training_config_reader.get_config_file_path(),
+            self.agent_version, self.training_msg, self.training_config_reader.get_config_file_path()
         )
         with open(new_agent_dir / TRAINED_PICKLE_FILENAME, "wb") as pickle_file:
             new_agent.save(pickle_file)
