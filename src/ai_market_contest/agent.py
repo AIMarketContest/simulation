@@ -34,7 +34,7 @@ class Agent():
 
         Returns
         -------
-        float
+        int
             Price of the product set by the agent at the current timestep,
             discretised within [0,100].
 
@@ -53,7 +53,7 @@ class Agent():
 
         Parameters
         ----------
-        last_round_all_agents_prices : list of float
+        last_round_all_agents_prices : list of int
             List of all the prices set by all agents in the previous timestep.
         identity_index: int
             A positive integer that tells the agent which index in the list
@@ -61,7 +61,7 @@ class Agent():
 
         Returns
         -------
-        float
+        int
             Price of the product set by the agent at the current timestep,
             discretised within [0,100].
 
