@@ -20,7 +20,6 @@ class MarketTest(TestCase):
 
     def test_environment_setup(self):
         env = Market(
-            self.num_agents,
             self.demand_function,
             self.simulation_length,
             self.agent_name_maker,
@@ -31,7 +30,6 @@ class MarketTest(TestCase):
 
     def test_environment_reset(self):
         env = Market(
-            self.num_agents,
             self.demand_function,
             self.simulation_length,
             self.agent_name_maker,
@@ -45,7 +43,6 @@ class MarketTest(TestCase):
 
     def test_environment_handles_step_correctly(self):
         env = Market(
-            self.num_agents,
             self.demand_function,
             self.simulation_length,
             self.agent_name_maker,

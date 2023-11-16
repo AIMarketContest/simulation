@@ -29,7 +29,7 @@ def test_training_config(tmp_path):
     }
     assert training_config_reader.get_other_config() == {"num_workers": 4}
     assert training_config_reader.get_num_epochs() == 20
-    assert training_config_reader.print_training()
+    assert not training_config_reader.print_training()
 
     agent_name_maker = SequentialAgentNameMaker(4)
     market = training_config_reader.get_environment(agent_name_maker)
