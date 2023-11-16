@@ -7,7 +7,7 @@ from gym.spaces.space import Space  # type: ignore
 from ai_market_contest.typing.types import Price  # type: ignore
 
 
-class Agent():
+class Agent:
     """
     Agent interface - an agent represents a firm selling a product in the market.
 
