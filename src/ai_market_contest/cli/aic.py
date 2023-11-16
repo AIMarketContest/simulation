@@ -2,6 +2,9 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+from silence_tensorflow import silence_tensorflow
+silence_tensorflow()
+
 import pathlib
 from ast import literal_eval
 from pathlib import Path
